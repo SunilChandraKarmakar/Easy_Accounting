@@ -1,0 +1,15 @@
+D:\Easy_Accounting\EasyAccountingAPI\src\EasyAccountingAPI.Shared\bin\Debug\net9.0\EasyAccountingAPI.Shared.deps.json
+D:\Easy_Accounting\EasyAccountingAPI\src\EasyAccountingAPI.Shared\bin\Debug\net9.0\EasyAccountingAPI.Shared.dll
+D:\Easy_Accounting\EasyAccountingAPI\src\EasyAccountingAPI.Shared\bin\Debug\net9.0\EasyAccountingAPI.Shared.pdb
+D:\Easy_Accounting\EasyAccountingAPI\src\EasyAccountingAPI.Shared\obj\Debug\net9.0\EasyAccountingAPI.Shared.GeneratedMSBuildEditorConfig.editorconfig
+D:\Easy_Accounting\EasyAccountingAPI\src\EasyAccountingAPI.Shared\obj\Debug\net9.0\EasyAccountingAPI.Shared.AssemblyInfoInputs.cache
+D:\Easy_Accounting\EasyAccountingAPI\src\EasyAccountingAPI.Shared\obj\Debug\net9.0\EasyAccountingAPI.Shared.AssemblyInfo.cs
+D:\Easy_Accounting\EasyAccountingAPI\src\EasyAccountingAPI.Shared\obj\Debug\net9.0\EasyAccountingAPI.Shared.csproj.CoreCompileInputs.cache
+D:\Easy_Accounting\EasyAccountingAPI\src\EasyAccountingAPI.Shared\obj\Debug\net9.0\EasyAccountingAPI.Shared.sourcelink.json
+D:\Easy_Accounting\EasyAccountingAPI\src\EasyAccountingAPI.Shared\obj\Debug\net9.0\EasyAccountingAPI.Shared.dll
+D:\Easy_Accounting\EasyAccountingAPI\src\EasyAccountingAPI.Shared\obj\Debug\net9.0\refint\EasyAccountingAPI.Shared.dll
+D:\Easy_Accounting\EasyAccountingAPI\src\EasyAccountingAPI.Shared\obj\Debug\net9.0\EasyAccountingAPI.Shared.pdb
+D:\Easy_Accounting\EasyAccountingAPI\src\EasyAccountingAPI.Shared\obj\Debug\net9.0\ref\EasyAccountingAPI.Shared.dll
+D:\Easy_Accounting\EasyAccountingAPI\src\EasyAccountingAPI.Shared\bin\Debug\net9.0\EasyAccountingAPI.Shared.runtimeconfig.json
+D:\Easy_Accounting\EasyAccountingAPI\src\EasyAccountingAPI.Shared\obj\Debug\net9.0\EasyAccountingAPI.Shared.csproj.AssemblyReference.cache
+D:\Easy_Accounting\EasyAccountingAPI\src\EasyAccountingAPI.Shared\obj\Debug\net9.0\EasyAccountingAPI.Shared.genruntimeconfig.cache
