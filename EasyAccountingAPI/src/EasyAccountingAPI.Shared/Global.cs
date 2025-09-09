@@ -1,0 +1,10 @@
+﻿global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.Extensions.DependencyInjection;
+global using FluentValidation.Results;
+global using Newtonsoft.Json;
+global using Newtonsoft.Json.Serialization;
+global using System.Net;
+global using Microsoft.AspNetCore.Builder;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.Extensions.Logging;
+global using EasyAccountingAPI.Shared.Models;
