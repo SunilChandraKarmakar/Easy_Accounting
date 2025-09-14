@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EasyAccountingAPI.Shared.Mappings
+﻿namespace EasyAccountingAPI.Shared.Mappings
 {
-    internal interface IDelatableEntity
+    public interface IDelatableEntity
     {
+        public bool IsDeleted { get; set; }
+        public DateTime? DeletedDateTime { get; set; }
     }
 }

@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyAccountingAPI.Model", "src\EasyAccountingAPI.Model\EasyAccountingAPI.Model.csproj", "{B37BF871-97B7-4B12-8516-E562EAB84156}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,12 +24,17 @@ Global
 		{F676DDDB-4C10-4B4F-A20A-8A99F4C0F99F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F676DDDB-4C10-4B4F-A20A-8A99F4C0F99F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F676DDDB-4C10-4B4F-A20A-8A99F4C0F99F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B37BF871-97B7-4B12-8516-E562EAB84156}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B37BF871-97B7-4B12-8516-E562EAB84156}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B37BF871-97B7-4B12-8516-E562EAB84156}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B37BF871-97B7-4B12-8516-E562EAB84156}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F676DDDB-4C10-4B4F-A20A-8A99F4C0F99F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{B37BF871-97B7-4B12-8516-E562EAB84156} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BC76EAD6-7FA0-423E-9AB4-F5BC59F984D9}
