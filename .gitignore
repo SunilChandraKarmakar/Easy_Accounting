@@ -1,0 +1,55 @@
+# From .NET Core 3.0 you can use the command: `dotnet new gitignore` to generate a customizable .gitignore file
+DSLFactoryERP/DSLFactoryERP.Api/bin
+DSLFactoryERP/DSLFactoryERP.Api/obj
+DSLFactoryERP/DSLFactoryERP.Api/wwwroot
+DSLFactoryERP/DSLFactoryERP.Application/bin
+DSLFactoryERP/DSLFactoryERP.Application/obj
+DSLFactoryERP/DSLFactoryERP.Database/obj
+DSLFactoryERP/DSLFactoryERP.Database/bin
+DSLFactoryERP/DSLFactoryERP.Manager/bin
+DSLFactoryERP/DSLFactoryERP.Manager/obj
+DSLFactoryERP/DSLFactoryERP.Model/obj
+DSLFactoryERP/DSLFactoryERP.Model/bin
+DSLFactoryERP/DSLFactoryERP.Repository/bin
+DSLFactoryERP/DSLFactoryERP.Repository/obj
+DSLFactoryERP/DSLFactoryERP.Shared/obj
+DSLFactoryERP/DSLFactoryERP.Shared/bin
+DSLFactoryERP/.vs
+/DSLFactoryERP/DSLFactoryERP.Api/appsettings.json
+/DSLFactoryERP/DSLFactoryERP.Api/nswag.json
+
+*.swp
+*.*~
+project.lock.json
+.DS_Store
+*.pyc
+
+# Visual Studio Code
+.vscode
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# Visual Studio 2015
+.vs/
+/DSLFactoryERP/.idea/.idea.DSLFactoryERP/.idea
+DSLFactoryERP/.idea/config/applicationhost.config
+/DSLFactoryERP/DSLFactoryERP.Api/specification.json
