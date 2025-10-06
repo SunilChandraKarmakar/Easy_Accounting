@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "ef1JG3YacJ4=",
+  "dgSpecHash": "VkPavFIsG68=",
   "success": true,
   "projectFilePath": "D:\\Easy_Accounting\\EasyAccountingAPI\\src\\EasyAccountingAPI.Shared\\EasyAccountingAPI.Shared.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Sunil Karmakar\\.nuget\\packages\\automapper\\6.1.1\\automapper.6.1.1.nupkg.sha512",
     "C:\\Users\\Sunil Karmakar\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Sunil Karmakar\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
+    "C:\\Users\\Sunil Karmakar\\.nuget\\packages\\bogus\\35.6.3\\bogus.35.6.3.nupkg.sha512",
     "C:\\Users\\Sunil Karmakar\\.nuget\\packages\\castle.core\\5.1.1\\castle.core.5.1.1.nupkg.sha512",
     "C:\\Users\\Sunil Karmakar\\.nuget\\packages\\efcore.bulkextensions\\9.0.1\\efcore.bulkextensions.9.0.1.nupkg.sha512",
     "C:\\Users\\Sunil Karmakar\\.nuget\\packages\\efcore.bulkextensions.core\\9.0.1\\efcore.bulkextensions.core.9.0.1.nupkg.sha512",

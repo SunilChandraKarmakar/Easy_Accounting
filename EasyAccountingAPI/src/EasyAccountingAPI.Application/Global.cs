@@ -1,0 +1,9 @@
+﻿global using AutoMapper;
+global using EasyAccountingAPI.Shared.Mappings;
+global using System.Reflection;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.Extensions.DependencyInjection;
+global using EasyAccountingAPI.Manager.Contracts.Global;
+global using EasyAccountingAPI.Manager.Manager.Global;
+global using EasyAccountingAPI.Repository.Contracts.Global;
+global using EasyAccountingAPI.Repository.Repository.Global;

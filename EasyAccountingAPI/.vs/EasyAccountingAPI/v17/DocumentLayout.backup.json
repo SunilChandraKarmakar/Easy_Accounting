@@ -3,12 +3,8 @@
   "WorkspaceRootPath": "D:\\Easy_Accounting\\EasyAccountingAPI\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B37BF871-97B7-4B12-8516-E562EAB84156}|src\\EasyAccountingAPI.Model\\EasyAccountingAPI.Model.csproj|d:\\easy_accounting\\easyaccountingapi\\src\\easyaccountingapi.model\\globalmodels\\city.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B37BF871-97B7-4B12-8516-E562EAB84156}|src\\EasyAccountingAPI.Model\\EasyAccountingAPI.Model.csproj|solutionrelative:src\\easyaccountingapi.model\\globalmodels\\city.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B37BF871-97B7-4B12-8516-E562EAB84156}|src\\EasyAccountingAPI.Model\\EasyAccountingAPI.Model.csproj|d:\\easy_accounting\\easyaccountingapi\\src\\easyaccountingapi.model\\globalmodels\\country.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B37BF871-97B7-4B12-8516-E562EAB84156}|src\\EasyAccountingAPI.Model\\EasyAccountingAPI.Model.csproj|solutionrelative:src\\easyaccountingapi.model\\globalmodels\\country.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C71D7650-5664-48E4-92E4-D9F7DF03C679}|src\\EasyAccountingAPI.Repository\\EasyAccountingAPI.Repository.csproj|d:\\easy_accounting\\easyaccountingapi\\src\\easyaccountingapi.repository\\base\\baserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C71D7650-5664-48E4-92E4-D9F7DF03C679}|src\\EasyAccountingAPI.Repository\\EasyAccountingAPI.Repository.csproj|solutionrelative:src\\easyaccountingapi.repository\\base\\baserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -23,27 +19,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "City.cs",
-              "DocumentMoniker": "D:\\Easy_Accounting\\EasyAccountingAPI\\src\\EasyAccountingAPI.Model\\GlobalModels\\City.cs",
-              "RelativeDocumentMoniker": "src\\EasyAccountingAPI.Model\\GlobalModels\\City.cs",
-              "ToolTip": "D:\\Easy_Accounting\\EasyAccountingAPI\\src\\EasyAccountingAPI.Model\\GlobalModels\\City.cs",
-              "RelativeToolTip": "src\\EasyAccountingAPI.Model\\GlobalModels\\City.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAABAAAAAAAAAA==",
+              "Title": "BaseRepository.cs",
+              "DocumentMoniker": "D:\\Easy_Accounting\\EasyAccountingAPI\\src\\EasyAccountingAPI.Repository\\Base\\BaseRepository.cs",
+              "RelativeDocumentMoniker": "src\\EasyAccountingAPI.Repository\\Base\\BaseRepository.cs",
+              "ToolTip": "D:\\Easy_Accounting\\EasyAccountingAPI\\src\\EasyAccountingAPI.Repository\\Base\\BaseRepository.cs",
+              "RelativeToolTip": "src\\EasyAccountingAPI.Repository\\Base\\BaseRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-14T17:50:19.842Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Country.cs",
-              "DocumentMoniker": "D:\\Easy_Accounting\\EasyAccountingAPI\\src\\EasyAccountingAPI.Model\\GlobalModels\\Country.cs",
-              "RelativeDocumentMoniker": "src\\EasyAccountingAPI.Model\\GlobalModels\\Country.cs",
-              "ToolTip": "D:\\Easy_Accounting\\EasyAccountingAPI\\src\\EasyAccountingAPI.Model\\GlobalModels\\Country.cs",
-              "RelativeToolTip": "src\\EasyAccountingAPI.Model\\GlobalModels\\Country.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAywBoAAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-14T17:39:22.597Z",
+              "WhenOpened": "2025-09-20T16:12:09.118Z",
               "EditorCaption": ""
             }
           ]
