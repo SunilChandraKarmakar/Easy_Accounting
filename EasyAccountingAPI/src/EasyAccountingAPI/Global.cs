@@ -1,0 +1,15 @@
+﻿global using EasyAccountingAPI.Database.DatabaseContexts;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.IdentityModel.Tokens;
+global using System.Text;
+global using EasyAccountingAPI.Model.GlobalModels;
+global using NSwag.Generation.Processors;
+global using NSwag.Generation.Processors.Contexts;
+global using EasyAccountingAPI.Application.Configurations;
+global using EasyAccountingAPI.Extensions;
+global using EasyAccountingAPI.Shared.Exceptions;
+global using EasyAccountingAPI.Shared.Models;
+global using Microsoft.AspNetCore.HttpOverrides;

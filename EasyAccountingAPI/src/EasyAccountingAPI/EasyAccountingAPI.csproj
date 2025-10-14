@@ -8,6 +8,33 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
+    <PackageReference Include="NSwag.Annotations" Version="14.5.0" />
+    <PackageReference Include="NSwag.AspNetCore" Version="14.5.0" />
+    <PackageReference Include="NSwag.Core" Version="14.6.1" />
+    <PackageReference Include="NSwag.MSBuild" Version="14.6.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+  </ItemGroup>
+
+	<Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
+		<Copy SourceFiles="@(Reference)" DestinationFolder="$(OutDir)References" />
+		<Exec Command="$(NSwagExe_Net90) run nswag.json /variables:Configuration=$(Configuration)" />
+		<RemoveDir Directories="$(OutDir)References" />
+	</Target>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EasyAccountingAPI.Application\EasyAccountingAPI.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="nswag.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="specification.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
