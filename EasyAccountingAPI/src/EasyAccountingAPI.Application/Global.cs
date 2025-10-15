@@ -7,3 +7,8 @@ global using EasyAccountingAPI.Manager.Contracts.Global;
 global using EasyAccountingAPI.Manager.Manager.Global;
 global using EasyAccountingAPI.Repository.Contracts.Global;
 global using EasyAccountingAPI.Repository.Repository.Global;
+global using EasyAccountingAPI.Model.GlobalModels;
+global using System.ComponentModel.DataAnnotations;
+global using System.ComponentModel.DataAnnotations.Schema;
+global using EasyAccountingAPI.Application.ApplicationLogics.Global.CountryLogic.Model;
+global using MediatR;

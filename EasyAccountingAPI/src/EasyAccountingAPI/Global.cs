@@ -13,3 +13,8 @@ global using EasyAccountingAPI.Extensions;
 global using EasyAccountingAPI.Shared.Exceptions;
 global using EasyAccountingAPI.Shared.Models;
 global using Microsoft.AspNetCore.HttpOverrides;
+global using EasyAccountingAPI.Application.ApplicationLogics.Global.CountryLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.Global.CountryLogic.Model;
+global using EasyAccountingAPI.Application.ApplicationLogics.Global.CountryLogic.Queries;
+global using EasyAccountingAPI.Shared.Base;
+global using Microsoft.AspNetCore.Mvc;

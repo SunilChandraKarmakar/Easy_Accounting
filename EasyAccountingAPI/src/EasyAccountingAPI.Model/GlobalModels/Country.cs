@@ -21,6 +21,7 @@
         [StringLength(10, ErrorMessage = "Country code cannot exceed 10 characters.", MinimumLength = 1)]
         public string Code { get; set; }
 
+        public string? Icon { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime? DeletedDateTime { get; set; }
 

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -17,12 +17,6 @@
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
   </ItemGroup>
-
-	<Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
-		<Copy SourceFiles="@(Reference)" DestinationFolder="$(OutDir)References" />
-		<Exec Command="$(NSwagExe_Net90) run nswag.json /variables:Configuration=$(Configuration)" />
-		<RemoveDir Directories="$(OutDir)References" />
-	</Target>
 
   <ItemGroup>
     <ProjectReference Include="..\EasyAccountingAPI.Application\EasyAccountingAPI.Application.csproj" />
