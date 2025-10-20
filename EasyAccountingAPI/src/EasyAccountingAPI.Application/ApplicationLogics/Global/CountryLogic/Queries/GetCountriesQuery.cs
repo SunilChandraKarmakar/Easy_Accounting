@@ -1,8 +1,8 @@
 ﻿namespace EasyAccountingAPI.Application.ApplicationLogics.Global.CountryLogic.Queries
 {
-    public class GetCountriesQuery : IRequest<IEnumerable<CountryGridModel>>
+    public class GetCountriesQuery : IRequest<ICollection<CountryGridModel>>
     {
-        public class Handler : IRequestHandler<GetCountriesQuery, IEnumerable<CountryGridModel>>
+        public class Handler : IRequestHandler<GetCountriesQuery, ICollection<CountryGridModel>>
         {
             private readonly ICountryManager _countryManager;
             private readonly IMapper _mapper;
@@ -13,14 +13,14 @@
                 _mapper = mapper;
             }
 
-            public async Task<IEnumerable<CountryGridModel>> Handle(GetCountriesQuery request, 
+            public async Task<ICollection<CountryGridModel>> Handle(GetCountriesQuery request, 
                 CancellationToken cancellationToken)
             {
                 // Get countries and map to grid model
-                var getCountries = await _countryManager.GetAllAsync();
-                var mapCountries = _mapper.Map<IEnumerable<CountryGridModel>>(getCountries);
-                
-                return mapCountries;
+                // var getCountries = await _countryManager.GetAllAsync();
+                // var mapCountries = _mapper.Map<IEnumerable<CountryGridModel>>(getCountries);
+
+                return new List<CountryGridModel>();
             }
         }
     }

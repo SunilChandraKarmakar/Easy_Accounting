@@ -5,7 +5,7 @@
         protected readonly DatabaseContext db;
         protected BaseRepository(DatabaseContext databaseContext) => db = databaseContext;
 
-        public virtual async Task<IEnumerable<T>> GetAllAsync()
+        public virtual async Task<ICollection<T>> GetAllAsync()
         {
             var getAllAsync = await db.Set<T>().ToListAsync();
             return getAllAsync;

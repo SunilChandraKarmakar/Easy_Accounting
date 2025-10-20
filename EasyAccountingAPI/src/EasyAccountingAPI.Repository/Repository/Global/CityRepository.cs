@@ -4,7 +4,7 @@
     {
         public CityRepository(DatabaseContext databaseContext) : base(databaseContext) { }
 
-        public override async Task<IEnumerable<City>> GetAllAsync()
+        public override async Task<ICollection<City>> GetAllAsync()
         {
             var cities = db.Cities
                 .Where(c => !c.IsDeleted)

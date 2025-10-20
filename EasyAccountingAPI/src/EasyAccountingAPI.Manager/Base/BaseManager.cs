@@ -5,7 +5,7 @@
         private readonly IBaseRepository<T> _baseRepository;
         public BaseManager(IBaseRepository<T> baseRepository) => _baseRepository = baseRepository;
 
-        public virtual async Task<IEnumerable<T>> GetAllAsync()
+        public virtual async Task<ICollection<T>> GetAllAsync()
         {
             return await _baseRepository.GetAllAsync();
         }

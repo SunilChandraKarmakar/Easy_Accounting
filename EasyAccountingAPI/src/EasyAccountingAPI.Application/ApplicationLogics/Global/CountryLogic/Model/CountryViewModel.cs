@@ -23,8 +23,8 @@
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<CountryCreateModel, Country>();
             profile.CreateMap<Country, CountryCreateModel>();
+            profile.CreateMap<CountryCreateModel, Country>();
         }
     }
 
@@ -46,8 +46,8 @@
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<CountryUpdateModel, Country>();
             profile.CreateMap<Country, CountryUpdateModel>();
+            profile.CreateMap<CountryUpdateModel, Country>();            
         }
     }
 
@@ -61,6 +61,7 @@
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Country, CountryGridModel>();
+            profile.CreateMap<CountryGridModel, Country>(); 
         }
     }
 }

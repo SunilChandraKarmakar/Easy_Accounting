@@ -4,7 +4,7 @@
     {
         public static IServiceCollection AddApplicationService(this IServiceCollection services)
         {
-            // AutoMapper (only need one registration)
+            // AutoMapper
             services.AddAutoMapper(cfg =>
             {
                 cfg.AddProfile<AutomapperMappingProfile>();

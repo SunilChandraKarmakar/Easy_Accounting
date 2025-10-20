@@ -4,7 +4,7 @@
     {
         public CountryRepository(DatabaseContext databaseContext) : base(databaseContext) { }
 
-        public override async Task<IEnumerable<Country>> GetAllAsync()
+        public override async Task<ICollection<Country>> GetAllAsync()
         {
             var countries = db.Countries
                 .Where(c => !c.IsDeleted)
