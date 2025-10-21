@@ -15,11 +15,11 @@
 
             public async Task<bool> Handle(CreateCountryCommand request, CancellationToken cancellationToken)
             {
-                //var createdCountry = _mapper.Map<Country>(request);
-                //createdCountry = await _countryManager.CreateAsync(createdCountry);
+                var createdCountry = _mapper.Map<Country>(request);
+                createdCountry = await _countryManager.CreateAsync(createdCountry);
 
-                //if(createdCountry is not null && createdCountry.Id > 0)
-                //    return true;
+                if (createdCountry is not null && createdCountry.Id > 0)
+                    return true;
 
                 return false;
             }

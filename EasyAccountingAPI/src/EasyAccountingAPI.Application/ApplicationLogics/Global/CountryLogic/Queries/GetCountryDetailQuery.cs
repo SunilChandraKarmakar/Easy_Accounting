@@ -17,21 +17,19 @@
 
             public async Task<CountryUpdateModel> Handle(GetCountryDetailQuery request, CancellationToken cancellationToken)
             {
-                //// Check, id is valid
-                //if (request.Id <= 0)
-                //    return new CountryUpdateModel();
+                // Check, id is valid
+                if (request.Id <= 0)
+                    return new CountryUpdateModel();
 
-                //// Get country by id
-                //var getCountry = await _countryManager.GetByIdAsync(request.Id);
+                // Get country by id
+                var getCountry = await _countryManager.GetByIdAsync(request.Id);
 
-                //if (getCountry is null)
-                //    return new CountryUpdateModel();
+                if (getCountry is null)
+                    return new CountryUpdateModel();
 
-                //// Map country
-                //var mapCountry = _mapper.Map<CountryUpdateModel>(getCountry);
-                //return mapCountry;
-
-                return new CountryUpdateModel();
+                // Map country
+                var mapCountry = _mapper.Map<CountryUpdateModel>(getCountry);
+                return mapCountry;
             }
         }
     }

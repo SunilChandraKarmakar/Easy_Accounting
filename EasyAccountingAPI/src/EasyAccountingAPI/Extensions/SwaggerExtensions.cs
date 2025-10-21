@@ -9,8 +9,8 @@
             // Register the Swagger generator
             services.AddOpenApiDocument(config =>
             {
-                config.DocumentName = "Easy Accounting Solution API";
-                config.Title = "Easy Accounting Solution";
+                config.DocumentName = "v1";
+                config.Title = "Easy Accounting Solution API";
                 config.Version = "v1";
 
                 // Add the processor to sort paths alphabetically
@@ -42,9 +42,9 @@
             app.UseOpenApi();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Easy Accounting Solution V1");
-                c.DefaultModelsExpandDepth(2); 
-                c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None); 
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Easy Accounting Solution API V1");
+                c.DefaultModelsExpandDepth(2); // Set the default depth for expanding models
+                c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None); // Change default expansion to uncollapsed
             });
 
             return app;

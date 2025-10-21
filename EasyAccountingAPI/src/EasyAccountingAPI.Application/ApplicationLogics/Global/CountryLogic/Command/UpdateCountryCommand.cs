@@ -15,22 +15,22 @@
 
             public async Task<bool> Handle(UpdateCountryCommand request, CancellationToken cancellationToken)
             {
-                //// Check, id is valid
-                //if (request.Id <= 0)
-                //    return false;
+                // Check, id is valid
+                if (request.Id <= 0)
+                    return false;
 
-                //// Get exist country
-                //var getCountry = await _countryManager.GetByIdAsync(request.Id);
+                // Get exist country
+                var getCountry = await _countryManager.GetByIdAsync(request.Id);
 
-                //if (getCountry is null)
-                //    return false;
+                if (getCountry is null)
+                    return false;
 
-                //// Map and update country
-                //getCountry = _mapper.Map((CountryUpdateModel)request, getCountry);
-                //getCountry = await _countryManager.UpdateAsync(getCountry);
+                // Map and update country
+                getCountry = _mapper.Map((CountryUpdateModel)request, getCountry);
+                getCountry = await _countryManager.UpdateAsync(getCountry);
 
-                //if(getCountry is not null && getCountry.Id > 0)
-                //    return true;
+                if (getCountry is not null && getCountry.Id > 0)
+                    return true;
 
                 return false;
             }

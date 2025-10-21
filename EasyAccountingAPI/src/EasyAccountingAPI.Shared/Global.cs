@@ -9,3 +9,7 @@ global using Microsoft.AspNetCore.Http;
 global using Microsoft.Extensions.Logging;
 global using EasyAccountingAPI.Shared.Models;
 global using AutoMapper;
+global using MediatR;
+global using Microsoft.AspNetCore.Authorization;
+global using System.Security.Cryptography; 
+global using System.Text;

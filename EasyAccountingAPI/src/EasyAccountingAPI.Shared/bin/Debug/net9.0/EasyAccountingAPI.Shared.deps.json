@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v9.0": {
       "EasyAccountingAPI.Shared/1.0.0": {
         "dependencies": {
+          "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.0",
           "Bogus": "35.6.3",
           "EFCore.BulkExtensions": "9.0.1",
           "FluentValidation.DependencyInjectionExtensions": "12.0.0",
@@ -26,7 +27,6 @@
           "NSwag.AspNetCore": "14.5.0",
           "NSwag.Core": "14.5.0",
           "Newtonsoft.Json": "13.0.3",
-          "SyrianBallaS.AutoMapper.Extensions.Microsoft.DependencyInjection.Signed": "3.2.0",
           "System.Data.SqlClient": "4.9.0",
           "System.Drawing.Common": "9.0.8"
         },
@@ -34,11 +34,23 @@
           "EasyAccountingAPI.Shared.dll": {}
         }
       },
-      "AutoMapper/6.1.1": {
+      "AutoMapper/12.0.0": {
         "runtime": {
-          "lib/netstandard1.3/AutoMapper.dll": {
-            "assemblyVersion": "6.1.1.0",
-            "fileVersion": "6.1.1.0"
+          "lib/netstandard2.1/AutoMapper.dll": {
+            "assemblyVersion": "12.0.0.0",
+            "fileVersion": "12.0.0.0"
+          }
+        }
+      },
+      "AutoMapper.Extensions.Microsoft.DependencyInjection/12.0.0": {
+        "dependencies": {
+          "AutoMapper": "12.0.0",
+          "Microsoft.Extensions.Options": "9.0.8"
+        },
+        "runtime": {
+          "lib/netstandard2.1/AutoMapper.Extensions.Microsoft.DependencyInjection.dll": {
+            "assemblyVersion": "12.0.0.0",
+            "fileVersion": "12.0.0.0"
           }
         }
       },
@@ -1373,19 +1385,6 @@
           }
         }
       },
-      "SyrianBallaS.AutoMapper.Extensions.Microsoft.DependencyInjection.Signed/3.2.0": {
-        "dependencies": {
-          "AutoMapper": "6.1.1",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.8",
-          "Microsoft.Extensions.DependencyModel": "9.0.8"
-        },
-        "runtime": {
-          "lib/netstandard2.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "3.2.0.0"
-          }
-        }
-      },
       "System.ClientModel/1.0.0": {
         "dependencies": {
           "System.Memory.Data": "1.0.2"
@@ -1607,12 +1606,19 @@
       "serviceable": false,
       "sha512": ""
     },
-    "AutoMapper/6.1.1": {
+    "AutoMapper/12.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-A+6PAblvzmkXPS20nFBQJvlNSW5oEdyfN5+cxT/Du35fTNyuP5pNDXT64KT/jBgxt7CPduOM0Y7oLnNe0E5IXg==",
-      "path": "automapper/6.1.1",
-      "hashPath": "automapper.6.1.1.nupkg.sha512"
+      "sha512": "sha512-0Rmg0zI5AFu1O/y//o9VGyhxKjhggWpk9mOA1tp0DEVx40c61bs+lnQv+0jUq8XbniF7FKgIVvI1perqiMtLrA==",
+      "path": "automapper/12.0.0",
+      "hashPath": "automapper.12.0.0.nupkg.sha512"
+    },
+    "AutoMapper.Extensions.Microsoft.DependencyInjection/12.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XCJ4E3oKrbRl1qY9Mr+7uyC0xZj1+bqQjmQRWTiTKiVuuXTny+7YFWHi20tPjwkMukLbicN6yGlDy5PZ4wyi1w==",
+      "path": "automapper.extensions.microsoft.dependencyinjection/12.0.0",
+      "hashPath": "automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512"
     },
     "Azure.Core/1.38.0": {
       "type": "package",
@@ -2250,13 +2256,6 @@
       "sha512": "sha512-Ii8JCbC7oiVclaE/mbDEK000EFIJ+ShRPwAvvV89GOZhQ+ZLtlnSWl6ksCNMKu/VGXA4Nfi2B7LhN/QFN9oBcw==",
       "path": "sqlitepclraw.core/2.1.10",
       "hashPath": "sqlitepclraw.core.2.1.10.nupkg.sha512"
-    },
-    "SyrianBallaS.AutoMapper.Extensions.Microsoft.DependencyInjection.Signed/3.2.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-8bx8z4tUBhribjzrWSFHPOnoRzGSdCzsQqSVLQUc2vA0t08YcktXtk9IjwAmNeFmdoYbJ6OuIVyNpD0f7JyrIA==",
-      "path": "syrianballas.automapper.extensions.microsoft.dependencyinjection.signed/3.2.0",
-      "hashPath": "syrianballas.automapper.extensions.microsoft.dependencyinjection.signed.3.2.0.nupkg.sha512"
     },
     "System.ClientModel/1.0.0": {
       "type": "package",

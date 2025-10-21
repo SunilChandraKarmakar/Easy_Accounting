@@ -1,7 +1,4 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-namespace EasyAccountingAPI.Shared.Base
+﻿namespace EasyAccountingAPI.Shared.Base
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
