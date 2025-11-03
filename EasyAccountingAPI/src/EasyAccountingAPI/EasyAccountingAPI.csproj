@@ -30,11 +30,13 @@
     <ProjectReference Include="..\EasyAccountingAPI.Application\EasyAccountingAPI.Application.csproj" />
   </ItemGroup>
 
-	<Target Name="NSwag" AfterTargets="Build">
+	<Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
+		<Copy SourceFiles="@(Reference)" DestinationFolder="$(OutDir)References" />
 		<Exec Command="$(NSwagExe_Net90) run nswag.json /variables:Configuration=$(Configuration)" />
+		<RemoveDir Directories="$(OutDir)References" />
 	</Target>
-	
-  <ItemGroup>
+
+	<ItemGroup>
     <Content Update="nswag.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
