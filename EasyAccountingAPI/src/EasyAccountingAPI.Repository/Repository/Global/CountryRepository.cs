@@ -21,5 +21,23 @@
 
             return country!;
         }
+
+        public async Task<FilterPagedResult<Country>> GetCountriesFilterAsync(int pageNumber, int pageSize)
+        {
+            // Get countries
+            var countries = db.Countries.Where(c => !c.IsDeleted).OrderBy(c => c.Id);
+
+            // Get total count of countries
+            var totalCountCountries = await countries.CountAsync();
+
+            // Get filtered countries
+            var filterCountries = await countries
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return new FilterPagedResult<Country>(filterCountries, totalCountCountries, pageNumber, pageSize);
+        }
     }
 }

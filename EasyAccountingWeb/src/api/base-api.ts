@@ -19,6 +19,7 @@ export interface ICountryService {
     delete(id: number): Observable<boolean>;
     getAll(): Observable<CountryGridModel[]>;
     getById(id: number): Observable<CountryViewModel>;
+    getFilterCountries(pageNumber: number, pageSize: number): Observable<FilterPagedResultOfCountryGridModel>;
     update(countryUpdateModel: CountryUpdateModel): Observable<CountryUpdateModel>;
 }
 
@@ -244,6 +245,60 @@ export class CountryService implements ICountryService {
         return _observableOf(null as any);
     }
 
+    getFilterCountries(pageNumber: number, pageSize: number): Observable<FilterPagedResultOfCountryGridModel> {
+        let url_ = this.baseUrl + "/api/Country/GetFilterCountries/{pageNumber},{pageSize}";
+        if (pageNumber === undefined || pageNumber === null)
+            throw new globalThis.Error("The parameter 'pageNumber' must be defined.");
+        url_ = url_.replace("{pageNumber}", encodeURIComponent("" + pageNumber));
+        if (pageSize === undefined || pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' must be defined.");
+        url_ = url_.replace("{pageSize}", encodeURIComponent("" + pageSize));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFilterCountries(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFilterCountries(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FilterPagedResultOfCountryGridModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FilterPagedResultOfCountryGridModel>;
+        }));
+    }
+
+    protected processGetFilterCountries(response: HttpResponseBase): Observable<FilterPagedResultOfCountryGridModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FilterPagedResultOfCountryGridModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
     update(countryUpdateModel: CountryUpdateModel): Observable<CountryUpdateModel> {
         let url_ = this.baseUrl + "/api/Country/Update";
         url_ = url_.replace(/[?&]$/, "");
@@ -286,71 +341,6 @@ export class CountryService implements ICountryService {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = CountryUpdateModel.fromJS(resultData200);
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf(null as any);
-    }
-}
-
-export interface ITestService {
-    getAll(): Observable<boolean>;
-}
-
-@Injectable()
-export class TestService implements ITestService {
-    private http: HttpClient;
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
-        this.http = http;
-        this.baseUrl = baseUrl ?? "";
-    }
-
-    getAll(): Observable<boolean> {
-        let url_ = this.baseUrl + "/api/Test/GetAll";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAll(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetAll(response_ as any);
-                } catch (e) {
-                    return _observableThrow(e) as any as Observable<boolean>;
-                }
-            } else
-                return _observableThrow(response_) as any as Observable<boolean>;
-        }));
-    }
-
-    protected processGetAll(response: HttpResponseBase): Observable<boolean> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (response as any).error instanceof Blob ? (response as any).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : null as any;
-    
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -408,6 +398,62 @@ export interface ICountryGridModel {
     name?: string;
     code?: string;
     icon?: string | undefined;
+}
+
+export class FilterPagedResultOfCountryGridModel implements IFilterPagedResultOfCountryGridModel {
+    items?: CountryGridModel[];
+    totalCount?: number;
+    pageNumber?: number;
+    pageSize?: number;
+
+    constructor(data?: IFilterPagedResultOfCountryGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(CountryGridModel.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+            this.pageNumber = _data["pageNumber"];
+            this.pageSize = _data["pageSize"];
+        }
+    }
+
+    static fromJS(data: any): FilterPagedResultOfCountryGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPagedResultOfCountryGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item ? item.toJSON() : undefined as any);
+        }
+        data["totalCount"] = this.totalCount;
+        data["pageNumber"] = this.pageNumber;
+        data["pageSize"] = this.pageSize;
+        return data;
+    }
+}
+
+export interface IFilterPagedResultOfCountryGridModel {
+    items?: CountryGridModel[];
+    totalCount?: number;
+    pageNumber?: number;
+    pageSize?: number;
 }
 
 export class CountryViewModel implements ICountryViewModel {

@@ -2,7 +2,7 @@
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class BaseController : ControllerBase
     {
         private IMediator? _mediator;

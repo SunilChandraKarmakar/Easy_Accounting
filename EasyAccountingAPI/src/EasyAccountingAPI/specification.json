@@ -125,6 +125,48 @@
         }
       }
     },
+    "/api/Country/GetFilterCountries/{pageNumber},{pageSize}": {
+      "get": {
+        "tags": [
+          "Country"
+        ],
+        "operationId": "Country_GetFilterCountries",
+        "parameters": [
+          {
+            "name": "pageNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "pageSize",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilterPagedResultOfCountryGridModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Country/Update": {
       "put": {
         "tags": [
@@ -156,26 +198,6 @@
           }
         }
       }
-    },
-    "/api/Test/GetAll": {
-      "get": {
-        "tags": [
-          "Test"
-        ],
-        "operationId": "Test_GetAll",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -197,6 +219,30 @@
           "icon": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "FilterPagedResultOfCountryGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CountryGridModel"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

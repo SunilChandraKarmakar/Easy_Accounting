@@ -9,9 +9,9 @@ builder.Services.AddApplicationService();
 // Add identity handler services and configure identity services
 builder.Services.AddSwaggerExplorer()
     .InjectDbContext(builder.Configuration)
-    .AddIdentityHandlersAndStores()
-    .ConfigureIdentityOptions()
-    .AddIdentityAuth(builder.Configuration);
+    //.AddIdentityHandlersAndStores()
+    .ConfigureIdentityOptions();
+    //.AddIdentityAuth(builder.Configuration);
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 

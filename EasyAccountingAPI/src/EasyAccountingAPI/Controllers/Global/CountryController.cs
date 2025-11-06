@@ -10,6 +10,17 @@
             return Ok(getCountries);
         }
 
+        [HttpGet("{pageNumber},{pageSize}")]
+        [ProducesResponseType(typeof(FilterPagedResult<CountryGridModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<FilterPagedResult<CountryGridModel>>> GetFilterCountriesAsync(int pageNumber, 
+            int pageSize)
+        {
+            var getFilterCountries = 
+                await Mediator.Send(new GetFilterCountryQuery { PageNumber = pageNumber, PageSize = pageSize });
+
+            return Ok(getFilterCountries);
+        }
+
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(CountryViewModel), StatusCodes.Status200OK)]
         public async Task<ActionResult<CountryViewModel>> GetByIdAsync(int id)

@@ -18,9 +18,9 @@
             {
                 // Get countries and map to grid model
                 var getCountries = await _countryManager.GetAllAsync();
-                var mapCountries = _mapper.Map<IEnumerable<CountryGridModel>>(getCountries);
+                var mapCountries = _mapper.Map<ICollection<CountryGridModel>>(getCountries);
 
-                return new List<CountryGridModel>();
+                return mapCountries;
             }
         }
     }

@@ -12,3 +12,4 @@ global using System.ComponentModel.DataAnnotations;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using EasyAccountingAPI.Application.ApplicationLogics.Global.CountryLogic.Model;
 global using MediatR;
+global using EasyAccountingAPI.Shared.Models;

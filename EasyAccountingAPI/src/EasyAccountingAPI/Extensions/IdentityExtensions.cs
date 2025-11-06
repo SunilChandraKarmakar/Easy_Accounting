@@ -25,7 +25,7 @@
             return services;
         }
 
-        // Auth = Authentaction + Authorization
+        // Auth = Authentication + Authorization
         public static IServiceCollection AddIdentityAuth(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
