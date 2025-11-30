@@ -1,0 +1,32 @@
+/* Make submenu visible */
+.sidebar-submenu {
+  display: block; /* Ensure it is forced to block */
+  padding-left: 20px;
+  animation: fadeIn 0.3s; /* Optional: Helps you see when it appears */
+}
+
+/* Clickable menu */
+.menu-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 8px 12px;
+  user-select: none; /* Prevents text highlighting on quick clicks */
+}
+
+/* Indent nested submenus */
+.sidebar-submenu .menu-link {
+  padding-left: 32px;
+}
+
+/* Ensure nested items do not overlap */
+.menu-item {
+  display: block;
+}
+
+/* Add a simple animation to verify it's rendering */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}

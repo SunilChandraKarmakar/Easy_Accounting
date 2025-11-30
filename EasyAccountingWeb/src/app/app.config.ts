@@ -1,14 +1,40 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { DefaultUrlSerializer, provideRouter, UrlSerializer, UrlTree, withComponentInputBinding } from '@angular/router';
+import { provideToastr } from "ngx-toastr";
 
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideClientHydration } from '@angular/platform-browser';
+import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
+import { API_BASE_URL } from '../api/base-api';
+import { environment } from '../environments/environment.prod';
+
+export class LowerCaseUrlSerializer extends DefaultUrlSerializer {
+  override parse(url: string): UrlTree {
+    return super.parse(url.toLowerCase());
+  }
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
+    provideRouter(routes, withComponentInputBinding()),
+    // provideClientHydration(),
+    provideHttpClient(withFetch(), withInterceptorsFromDi()),
+    provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
-    provideAnimations() 
+
+    provideToastr({
+      timeOut: 3000, 
+      positionClass: "toast-bottom-right", 
+      closeButton: true,
+      progressBar: true, 
+      preventDuplicates: true,
+      newestOnTop: true
+    }),
+
+    { provide: UrlSerializer, useClass: LowerCaseUrlSerializer },
+    // { provide: HTTP_INTERCEPTORS, useClass: IdentityInterceptor, multi: true },
+    { provide: API_BASE_URL, useValue: environment.coreBaseUrl }
   ]
 };

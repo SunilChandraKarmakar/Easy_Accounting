@@ -1,0 +1,72 @@
+<aside class="sidebar" id="sidebar">
+    <nav class="sidebar-menu">
+        <div class="menu-section">
+            <div class="section-title">Main</div>
+            <div class="menu-item">
+                <a class="menu-link active" href="#">
+                    <i class="fas fa-home menu-icon"></i>
+                    <span class="menu-text">Dashboard</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a class="menu-link" href="#">
+                    <i class="fas fa-chart-pie menu-icon"></i>
+                    <span class="menu-text">Analytics</span>
+                </a>
+            </div>
+        </div>
+        <div class="menu-section">
+            <div class="section-title">Management</div>
+            <div class="menu-item">
+                <div class="menu-link" (click)="toggleMenu('users')">
+                    <i class="fas fa-users menu-icon"></i>
+                    <span class="menu-text">Users</span>
+                    <i class="fas fa-chevron-down menu-arrow"></i>
+                </div>
+                <div class="sidebar-submenu" *ngIf="openMenus['users']">
+                    <a class="menu-link" href="#">All Users</a>
+                    <div class="menu-link" (click)="toggleMenu('userGroups')">
+                        <span class="menu-text">User Groups</span>
+                        <i class="fas fa-chevron-down menu-arrow"></i>
+                    </div>
+                    <div class="sidebar-submenu" *ngIf="openMenus['userGroups']">
+                        <a class="menu-link" href="#">Members</a>
+                        <div class="menu-link" (click)="toggleMenu('permissions')">
+                            <span class="menu-text">Permissions</span>
+                            <i class="fas fa-chevron-down menu-arrow"></i>
+                        </div>
+                        <div class="sidebar-submenu" *ngIf="openMenus['permissions']">
+                            <a class="menu-link" href="#">Role Management</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="menu-section">
+            <div class="section-title">System</div>
+            <div class="menu-item">
+                <div class="menu-link" (click)="toggleMenu('settings')">
+                    <i class="fas fa-cog menu-icon"></i>
+                    <span class="menu-text">Settings</span>
+                    <i class="fas fa-chevron-down menu-arrow"></i>
+                </div>
+                <div class="sidebar-submenu" *ngIf="openMenus['settings']">
+                    <a class="menu-link" routerLink="/app/countries">Country</a>
+                    <a class="menu-link" routerLink="/app/cities">City</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a class="menu-link" href="#">
+                    <i class="fas fa-life-ring menu-icon"></i>
+                    <span class="menu-text">Help & Support</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a class="menu-link" href="#">
+                    <i class="fas fa-book menu-icon"></i>
+                    <span class="menu-text">Documentation</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+</aside>
