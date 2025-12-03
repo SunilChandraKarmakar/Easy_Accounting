@@ -7,9 +7,9 @@
         public CountryManager(ICountryRepository countryRepository) : base(countryRepository) 
             => _countryRepository = countryRepository;
 
-        public async Task<FilterPagedResult<Country>> GetCountriesFilterAsync(int pageNumber, int pageSize)
+        public async Task<FilterPageResultModel<Country>> GetCountriesByFilterAsync(FilterPageModel filterPageModel)
         {
-            return await _countryRepository.GetCountriesFilterAsync(pageNumber, pageSize);
+            return await _countryRepository.GetCountriesByFilterAsync(filterPageModel);
         }
     }
 }

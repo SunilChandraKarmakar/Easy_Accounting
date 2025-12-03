@@ -2,6 +2,6 @@
 {
     public interface ICountryManager : IBaseManager<Country>
     {
-        Task<FilterPagedResult<Country>> GetCountriesFilterAsync(int pageNumber, int pageSize);
+        Task<FilterPageResultModel<Country>> GetCountriesByFilterAsync(FilterPageModel filterPageModel);
     }
 }

@@ -125,41 +125,31 @@
         }
       }
     },
-    "/api/Country/GetFilterCountries/{pageNumber},{pageSize}": {
+    "/api/Country/GetFilterCountries": {
       "get": {
         "tags": [
           "Country"
         ],
         "operationId": "Country_GetFilterCountries",
-        "parameters": [
-          {
-            "name": "pageNumber",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
+        "requestBody": {
+          "x-name": "getCountriesByFilterQuery",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetCountriesByFilterQuery"
+              }
+            }
           },
-          {
-            "name": "pageSize",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 2
-          }
-        ],
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FilterPagedResultOfCountryGridModel"
+                  "$ref": "#/components/schemas/FilterPageResultModelOfCountryGridModel"
                 }
               }
             }
@@ -219,10 +209,14 @@
           "icon": {
             "type": "string",
             "nullable": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
-      "FilterPagedResultOfCountryGridModel": {
+      "FilterPageResultModelOfCountryGridModel": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -235,14 +229,43 @@
           "totalCount": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "GetCountriesByFilterQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FilterPageModel"
           },
-          "pageNumber": {
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "FilterPageModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "pageIndex": {
             "type": "integer",
             "format": "int32"
           },
           "pageSize": {
             "type": "integer",
             "format": "int32"
+          },
+          "sortColumn": {
+            "type": "string",
+            "nullable": true
+          },
+          "sortOrder": {
+            "type": "string",
+            "nullable": true
+          },
+          "filterValue": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

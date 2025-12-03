@@ -1,32 +1,46 @@
-/* Make submenu visible */
-.sidebar-submenu {
-  display: block; /* Ensure it is forced to block */
-  padding-left: 20px;
-  animation: fadeIn 0.3s; /* Optional: Helps you see when it appears */
+.sidebar {
+  width: 260px;
+  background: #fff;
+  height: 100vh;
+  overflow-y: auto;
+  position: fixed;
+  top: 60px;
+  left: 0;
 }
 
-/* Clickable menu */
+.sidebar-menu {
+  padding: 10px 0;
+}
+
+.section-title {
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
 .menu-link {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
   cursor: pointer;
-  padding: 8px 12px;
-  user-select: none; /* Prevents text highlighting on quick clicks */
+  color: #374151;
+  transition: all 0.2s;
+  text-decoration: none;
 }
 
-/* Indent nested submenus */
-.sidebar-submenu .menu-link {
-  padding-left: 32px;
+.menu-link:hover {
+  background: #f1f5f9;
 }
 
-/* Ensure nested items do not overlap */
-.menu-item {
-  display: block;
+.menu-link.active {
+  background: #40A9FF;
+  font-weight: 600;
+  color: white;
 }
 
-/* Add a simple animation to verify it's rendering */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-5px); }
-  to { opacity: 1; transform: translateY(0); }
+.sidebar-submenu {
+  padding-left: 20px;
 }

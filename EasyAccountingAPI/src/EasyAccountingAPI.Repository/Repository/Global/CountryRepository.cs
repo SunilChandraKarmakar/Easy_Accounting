@@ -1,4 +1,6 @@
-﻿namespace EasyAccountingAPI.Repository.Repository.Global
+﻿using System.Drawing.Printing;
+
+namespace EasyAccountingAPI.Repository.Repository.Global
 {
     public class CountryRepository : BaseRepository<Country>, ICountryRepository
     {
@@ -22,22 +24,48 @@
             return country!;
         }
 
-        public async Task<FilterPagedResult<Country>> GetCountriesFilterAsync(int pageNumber, int pageSize)
+        // Get countries with filtering, sorting, and pagination
+        public async Task<FilterPageResultModel<Country>> GetCountriesByFilterAsync(FilterPageModel filterPageModel)
         {
             // Get countries
-            var countries = db.Countries.Where(c => !c.IsDeleted).OrderBy(c => c.Id);
-
-            // Get total count of countries
-            var totalCountCountries = await countries.CountAsync();
-
-            // Get filtered countries
-            var filterCountries = await countries
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
+            var countries = db.Countries
+                .Where(c => !c.IsDeleted)
                 .AsNoTracking()
+                .AsQueryable();
+
+            // Check if filter value is provided
+            if(!string.IsNullOrEmpty(filterPageModel.FilterValue) && !string.IsNullOrWhiteSpace(filterPageModel.FilterValue))
+                countries = countries.Where(c => c.Name.ToLower().Contains(filterPageModel.FilterValue.ToLower()) 
+                    || c.Code.ToLower().Contains(filterPageModel.FilterValue.ToLower()));
+
+            // Check if sort column and order are provided
+            switch(filterPageModel.SortColumn?.ToLower())
+            {
+                case "name":
+                    countries = filterPageModel.SortOrder?.ToLower() == "desc" 
+                        ? countries.OrderByDescending(c => c.Name) : countries.OrderBy(c => c.Name);
+                    break;
+                case "code":
+                    countries = filterPageModel.SortOrder?.ToLower() == "desc" 
+                        ? countries.OrderByDescending(c => c.Code) : countries.OrderBy(c => c.Code);
+                    break;
+                default:
+                    countries = countries.OrderBy(c => c.Id);
+                    break;
+            }
+
+            // Apply pagination
+            var applyPaginationByCountries = await countries
+                .Skip(filterPageModel.PageSize * filterPageModel.PageIndex)
+                .Take(filterPageModel.PageSize)
                 .ToListAsync();
 
-            return new FilterPagedResult<Country>(filterCountries, totalCountCountries, pageNumber, pageSize);
+            // Get total count before pagination
+            var totalCount = await countries.CountAsync();
+
+            // Return result
+            return new FilterPageResultModel<Country>(applyPaginationByCountries, totalCount);
+
         }
     }
 }

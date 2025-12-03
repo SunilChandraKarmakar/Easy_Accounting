@@ -10,14 +10,12 @@
             return Ok(getCountries);
         }
 
-        [HttpGet("{pageNumber},{pageSize}")]
-        [ProducesResponseType(typeof(FilterPagedResult<CountryGridModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<FilterPagedResult<CountryGridModel>>> GetFilterCountriesAsync(int pageNumber, 
-            int pageSize)
+        [HttpGet]
+        [ProducesResponseType(typeof(FilterPageResultModel<CountryGridModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<FilterPageResultModel<CountryGridModel>>> GetFilterCountriesAsync(
+            GetCountriesByFilterQuery getCountriesByFilterQuery)
         {
-            var getFilterCountries = 
-                await Mediator.Send(new GetFilterCountryQuery { PageNumber = pageNumber, PageSize = pageSize });
-
+            var getFilterCountries = await Mediator.Send(getCountriesByFilterQuery);
             return Ok(getFilterCountries);
         }
 

@@ -19,7 +19,7 @@ export interface ICountryService {
     delete(id: number): Observable<boolean>;
     getAll(): Observable<CountryGridModel[]>;
     getById(id: number): Observable<CountryViewModel>;
-    getFilterCountries(pageNumber: number, pageSize: number): Observable<FilterPagedResultOfCountryGridModel>;
+    getFilterCountries(getCountriesByFilterQuery: GetCountriesByFilterQuery): Observable<FilterPageResultModelOfCountryGridModel>;
     update(countryUpdateModel: CountryUpdateModel): Observable<CountryUpdateModel>;
 }
 
@@ -245,20 +245,18 @@ export class CountryService implements ICountryService {
         return _observableOf(null as any);
     }
 
-    getFilterCountries(pageNumber: number, pageSize: number): Observable<FilterPagedResultOfCountryGridModel> {
-        let url_ = this.baseUrl + "/api/Country/GetFilterCountries/{pageNumber},{pageSize}";
-        if (pageNumber === undefined || pageNumber === null)
-            throw new globalThis.Error("The parameter 'pageNumber' must be defined.");
-        url_ = url_.replace("{pageNumber}", encodeURIComponent("" + pageNumber));
-        if (pageSize === undefined || pageSize === null)
-            throw new globalThis.Error("The parameter 'pageSize' must be defined.");
-        url_ = url_.replace("{pageSize}", encodeURIComponent("" + pageSize));
+    getFilterCountries(getCountriesByFilterQuery: GetCountriesByFilterQuery): Observable<FilterPageResultModelOfCountryGridModel> {
+        let url_ = this.baseUrl + "/api/Country/GetFilterCountries";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(getCountriesByFilterQuery);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             })
         };
@@ -270,14 +268,14 @@ export class CountryService implements ICountryService {
                 try {
                     return this.processGetFilterCountries(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<FilterPagedResultOfCountryGridModel>;
+                    return _observableThrow(e) as any as Observable<FilterPageResultModelOfCountryGridModel>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<FilterPagedResultOfCountryGridModel>;
+                return _observableThrow(response_) as any as Observable<FilterPageResultModelOfCountryGridModel>;
         }));
     }
 
-    protected processGetFilterCountries(response: HttpResponseBase): Observable<FilterPagedResultOfCountryGridModel> {
+    protected processGetFilterCountries(response: HttpResponseBase): Observable<FilterPageResultModelOfCountryGridModel> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -288,7 +286,7 @@ export class CountryService implements ICountryService {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = FilterPagedResultOfCountryGridModel.fromJS(resultData200);
+            result200 = FilterPageResultModelOfCountryGridModel.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -357,6 +355,7 @@ export class CountryGridModel implements ICountryGridModel {
     name?: string;
     code?: string;
     icon?: string | undefined;
+    totalCount?: number;
 
     constructor(data?: ICountryGridModel) {
         if (data) {
@@ -373,6 +372,7 @@ export class CountryGridModel implements ICountryGridModel {
             this.name = _data["name"];
             this.code = _data["code"];
             this.icon = _data["icon"];
+            this.totalCount = _data["totalCount"];
         }
     }
 
@@ -389,6 +389,7 @@ export class CountryGridModel implements ICountryGridModel {
         data["name"] = this.name;
         data["code"] = this.code;
         data["icon"] = this.icon;
+        data["totalCount"] = this.totalCount;
         return data;
     }
 }
@@ -398,15 +399,14 @@ export interface ICountryGridModel {
     name?: string;
     code?: string;
     icon?: string | undefined;
+    totalCount?: number;
 }
 
-export class FilterPagedResultOfCountryGridModel implements IFilterPagedResultOfCountryGridModel {
+export class FilterPageResultModelOfCountryGridModel implements IFilterPageResultModelOfCountryGridModel {
     items?: CountryGridModel[];
     totalCount?: number;
-    pageNumber?: number;
-    pageSize?: number;
 
-    constructor(data?: IFilterPagedResultOfCountryGridModel) {
+    constructor(data?: IFilterPageResultModelOfCountryGridModel) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -423,14 +423,12 @@ export class FilterPagedResultOfCountryGridModel implements IFilterPagedResultOf
                     this.items!.push(CountryGridModel.fromJS(item));
             }
             this.totalCount = _data["totalCount"];
-            this.pageNumber = _data["pageNumber"];
-            this.pageSize = _data["pageSize"];
         }
     }
 
-    static fromJS(data: any): FilterPagedResultOfCountryGridModel {
+    static fromJS(data: any): FilterPageResultModelOfCountryGridModel {
         data = typeof data === 'object' ? data : {};
-        let result = new FilterPagedResultOfCountryGridModel();
+        let result = new FilterPageResultModelOfCountryGridModel();
         result.init(data);
         return result;
     }
@@ -443,17 +441,92 @@ export class FilterPagedResultOfCountryGridModel implements IFilterPagedResultOf
                 data["items"].push(item ? item.toJSON() : undefined as any);
         }
         data["totalCount"] = this.totalCount;
-        data["pageNumber"] = this.pageNumber;
-        data["pageSize"] = this.pageSize;
         return data;
     }
 }
 
-export interface IFilterPagedResultOfCountryGridModel {
+export interface IFilterPageResultModelOfCountryGridModel {
     items?: CountryGridModel[];
     totalCount?: number;
-    pageNumber?: number;
+}
+
+export class FilterPageModel implements IFilterPageModel {
+    pageIndex?: number;
     pageSize?: number;
+    sortColumn?: string | undefined;
+    sortOrder?: string | undefined;
+    filterValue?: string | undefined;
+
+    constructor(data?: IFilterPageModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageIndex = _data["pageIndex"];
+            this.pageSize = _data["pageSize"];
+            this.sortColumn = _data["sortColumn"];
+            this.sortOrder = _data["sortOrder"];
+            this.filterValue = _data["filterValue"];
+        }
+    }
+
+    static fromJS(data: any): FilterPageModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPageModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageIndex"] = this.pageIndex;
+        data["pageSize"] = this.pageSize;
+        data["sortColumn"] = this.sortColumn;
+        data["sortOrder"] = this.sortOrder;
+        data["filterValue"] = this.filterValue;
+        return data;
+    }
+}
+
+export interface IFilterPageModel {
+    pageIndex?: number;
+    pageSize?: number;
+    sortColumn?: string | undefined;
+    sortOrder?: string | undefined;
+    filterValue?: string | undefined;
+}
+
+export class GetCountriesByFilterQuery extends FilterPageModel implements IGetCountriesByFilterQuery {
+
+    constructor(data?: IGetCountriesByFilterQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetCountriesByFilterQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetCountriesByFilterQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetCountriesByFilterQuery extends IFilterPageModel {
 }
 
 export class CountryViewModel implements ICountryViewModel {
