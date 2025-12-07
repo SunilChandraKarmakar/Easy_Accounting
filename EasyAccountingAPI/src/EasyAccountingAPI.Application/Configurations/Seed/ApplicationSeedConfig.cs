@@ -1,0 +1,19 @@
+﻿namespace EasyAccountingAPI.Application.Configurations.Seed
+{
+    public class ApplicationSeedConfig
+    {
+        public static async Task SeedAsync(DatabaseContext context, IMediator mediator)
+        {
+            // Check if seeding is needed for country and city
+            if (!context.Countries.Any() && !context.Cities.Any())
+            {
+                var result = await mediator.Send(new CreateCountryCitySeedCommand());
+
+                if (!result)
+                {
+                    throw new Exception("Seeding Country/City failed.");
+                }
+            }
+        }
+    }
+}

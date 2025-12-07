@@ -11,5 +11,10 @@
         {
             return await _countryRepository.GetCountriesByFilterAsync(filterPageModel);
         }
+
+        public async Task<IEnumerable<int>> GetCountryIdsAsync()
+        {
+            return await _countryRepository.GetCountryIdsAsync();
+        }
     }
 }

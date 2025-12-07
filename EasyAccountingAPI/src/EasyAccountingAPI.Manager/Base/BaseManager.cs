@@ -20,6 +20,11 @@
             return await _baseRepository.CreateAsync(entity);
         }
 
+        public virtual Task<int> BulkCreateAsync(IEnumerable<T> entities)
+        {
+            return _baseRepository.BulkCreateAsync(entities);
+        }
+
         public virtual async Task<T> UpdateAsync(T entity)
         {
             return await _baseRepository.UpdateAsync(entity);

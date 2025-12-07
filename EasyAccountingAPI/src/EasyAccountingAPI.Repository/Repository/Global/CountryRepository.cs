@@ -1,10 +1,20 @@
-﻿using System.Drawing.Printing;
-
-namespace EasyAccountingAPI.Repository.Repository.Global
+﻿namespace EasyAccountingAPI.Repository.Repository.Global
 {
     public class CountryRepository : BaseRepository<Country>, ICountryRepository
     {
         public CountryRepository(DatabaseContext databaseContext) : base(databaseContext) { }
+
+        // Get country ids
+        public async Task<IEnumerable<int>> GetCountryIdsAsync()
+        {
+            var countryIds = await db.Countries
+                .AsNoTracking()
+                .Where(c => !c.IsDeleted)
+                .Select(c => c.Id)
+                .ToListAsync();
+
+            return countryIds;
+        }
 
         public override async Task<ICollection<Country>> GetAllAsync()
         {

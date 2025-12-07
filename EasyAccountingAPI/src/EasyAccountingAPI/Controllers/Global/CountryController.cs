@@ -10,7 +10,7 @@
             return Ok(getCountries);
         }
 
-        [HttpGet]
+        [HttpPost]
         [ProducesResponseType(typeof(FilterPageResultModel<CountryGridModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult<FilterPageResultModel<CountryGridModel>>> GetFilterCountriesAsync(
             GetCountriesByFilterQuery getCountriesByFilterQuery)

@@ -14,7 +14,7 @@
         public virtual async Task<T> GetByIdAsync(int id)
         {
             var getByIdAsync = await db.Set<T>().FindAsync(id);
-            return getByIdAsync;
+            return getByIdAsync!;
         }
 
         public virtual async Task<T> CreateAsync(T entity)
@@ -23,6 +23,37 @@
             var createAsync = await db.SaveChangesAsync() > 0;
 
             return entity;
+        }
+
+        public virtual async Task<int> BulkCreateAsync(IEnumerable<T> entities)
+        {
+            if (entities == null || !entities.Any())
+                return 0;
+
+            // Improve performance for large inserts
+            var previousTracking = db.ChangeTracker.AutoDetectChangesEnabled;
+            db.ChangeTracker.AutoDetectChangesEnabled = false;
+
+            using var transaction = await db.Database.BeginTransactionAsync();
+
+            try
+            {
+                await db.Set<T>().AddRangeAsync(entities);
+                int inserted = await db.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+                return inserted;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+            finally
+            {
+                // Restore original tracking state
+                db.ChangeTracker.AutoDetectChangesEnabled = previousTracking;
+            }
         }
 
         public virtual async Task<T> UpdateAsync(T entity)

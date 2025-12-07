@@ -126,7 +126,7 @@
       }
     },
     "/api/Country/GetFilterCountries": {
-      "get": {
+      "post": {
         "tags": [
           "Country"
         ],

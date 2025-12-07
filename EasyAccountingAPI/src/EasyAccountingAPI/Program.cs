@@ -1,3 +1,6 @@
+using EasyAccountingAPI.Application.Configurations.Seed;
+using MediatR;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -28,6 +31,15 @@ builder.Services.AddCors(options =>
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
+
+// Seed initial data
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+    var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+
+    await ApplicationSeedConfig.SeedAsync(context, mediator);
+}
 
 // Enable forwarded headers for IP Address
 app.UseForwardedHeaders(new ForwardedHeadersOptions

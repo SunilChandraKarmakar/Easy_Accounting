@@ -5,6 +5,7 @@
         Task<ICollection<T>> GetAllAsync();
         Task<T> GetByIdAsync(int id);
         Task<T> CreateAsync(T entity);
+        Task<int> BulkCreateAsync(IEnumerable<T> entities);
         Task<T> UpdateAsync(T entity);
         Task<bool> DeleteAsync(T entity);
     }
