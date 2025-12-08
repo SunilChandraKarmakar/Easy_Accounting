@@ -3,48 +3,56 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { RouterLink } from "@angular/router";
+import { NgxSpinnerModule, NgxSpinnerService } from "ngx-spinner";
+import { CountryGridModel, CountryService, FilterPageModel, FilterPageResultModelOfCountryGridModel } from '../../../../../api/base-api';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-countries',
   templateUrl: './countries.component.html',
   styleUrls: ['./countries.component.css'],
   standalone: true,
-  imports: [NzButtonModule, NzDividerModule, NzTableModule, RouterLink]
+  imports: [NzButtonModule, NzDividerModule, NzTableModule, RouterLink, NgxSpinnerModule],
+  providers: [CountryService]
 })
 
 export class CountriesComponent implements OnInit {
 
-  listOfData: Person[] = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park'
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park'
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park'
-    }
-  ];
+  // Filter page result model
+  countries: CountryGridModel[] = [];
+  filterPageModel: FilterPageModel = new FilterPageModel();
+  totalRecord: number = 0;
 
-  constructor() { }
+  constructor(private countryService: CountryService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService) { }
 
-  ngOnInit() {
+  ngOnInit() {    
+    // Initialize filter page model
+    this.initializeFilterPageModel();
+
+    this.getCountries();
   }
 
-}
+  // Get countries
+  private getCountries(): void {
+    this.spinnerService.show();
+    this.countryService.getFilterCountries(this.filterPageModel).subscribe((result: FilterPageResultModelOfCountryGridModel) => {
+      this.countries = result.items || [];
+      this.spinnerService.hide();
+      return;
+    },
+    (error: any) => {
+      this.spinnerService.hide();
+      this.toastrService.error("Country cannot load at this time! Please, try again.", "Error");
+      return;
+    })
+  }
 
-interface Person {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
+  // Initialize filter page model
+  private initializeFilterPageModel(): void {
+    this.filterPageModel.pageIndex = 0;
+    this.filterPageModel.pageSize = 10;
+    this.filterPageModel.sortColumn = "name";
+    this.filterPageModel.sortOrder = "asc";
+    this.filterPageModel.filterValue = "";
+  }
 }

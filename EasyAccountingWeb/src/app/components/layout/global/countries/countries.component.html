@@ -10,21 +10,23 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <nz-table #basicTable [nzData]="listOfData">
+      <nz-table #basicTable nzShowSizeChanger [nzData]="countries">
         <thead>
           <tr>
+            <th>Code</th>
             <th>Name</th>
-            <th>Age</th>
-            <th>Address</th>
+            <th>Icon</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
           @for (data of basicTable.data; track data) {
             <tr>
+              <td>{{ data.code }}</td>
               <td>{{ data.name }}</td>
-              <td>{{ data.age }}</td>
-              <td>{{ data.address }}</td>
+              <td>
+                <img [src]="data.icon">
+              </td>
               <td>
                 <a>Action 一 {{ data.name }}</a>
                 <nz-divider nzType="vertical"></nz-divider>
@@ -37,3 +39,6 @@
     </div>
   </div>
 </div>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
