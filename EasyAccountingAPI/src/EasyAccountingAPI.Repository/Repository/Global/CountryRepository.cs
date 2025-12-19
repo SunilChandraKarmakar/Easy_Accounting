@@ -40,7 +40,8 @@
             // Define filter expression
             Expression<Func<Country, bool>> filter = c =>
                 !c.IsDeleted 
-                && (string.IsNullOrEmpty(model.FilterValue) 
+                && (string.IsNullOrEmpty(model.FilterValue)
+                && (string.IsNullOrWhiteSpace(model.FilterValue))
                 || c.Name.Contains(model.FilterValue) 
                 || c.Code.Contains(model.FilterValue));
 

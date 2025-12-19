@@ -11,8 +11,9 @@
             return getAllAsync;
         }
 
-        public virtual async Task<FilterPageResultModel<T>> GetAllFilterAsync(FilterPageModel model, Expression<Func<T, bool>>? filterExpression = null, 
-            Expression<Func<T, object>>? defaultSortExpression = null, Dictionary<string, Expression<Func<T, object>>>? sortableColumns = null)
+        public virtual async Task<FilterPageResultModel<T>> GetAllFilterAsync(FilterPageModel model, 
+            Expression<Func<T, bool>>? filterExpression = null, Expression<Func<T, object>>? defaultSortExpression = null, 
+            Dictionary<string, Expression<Func<T, object>>>? sortableColumns = null)
         {
             // Get all records
             IQueryable<T> query = db.Set<T>().AsNoTracking();
