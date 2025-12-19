@@ -11,14 +11,20 @@ import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {MatSort, MatSortModule, Sort} from '@angular/material/sort';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatCardModule } from '@angular/material/card';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'app-countries',
   templateUrl: './countries.component.html',
   styleUrls: ['./countries.component.css'],
   standalone: true,
-  imports: [NzButtonModule, NzDividerModule, NzTableModule, RouterLink, NgxSpinnerModule, MatFormFieldModule, MatInputModule, MatTableModule, 
-    MatSortModule, MatPaginatorModule],
+  imports: [NzButtonModule, NzDividerModule, NzTableModule, RouterLink, NgxSpinnerModule, NzSpaceModule, NzInputModule, NzIconModule, MatFormFieldModule, MatInputModule, MatTableModule, 
+    MatSortModule, MatPaginatorModule, MatIconModule, MatDividerModule, MatCardModule],
   providers: [CountryService]
 })
 
@@ -67,7 +73,7 @@ export class CountriesComponent implements OnInit, AfterViewInit {
   // Initialize filter model
   private initializeFilterModel(): void {
     this.filterPageModel.pageIndex = 0;
-    this.filterPageModel.pageSize = 5;
+    this.filterPageModel.pageSize = 10;
     this.filterPageModel.sortColumn = "name";
     this.filterPageModel.sortOrder = "asc"
     this.filterPageModel.filterValue = "";
@@ -107,5 +113,17 @@ export class CountriesComponent implements OnInit, AfterViewInit {
     
     // Get countries
     this.getCountries();
+  }
+  
+  onChangePageIndex(event: number): void {
+    console.log(" Page index: ", event);
+  } 
+
+  onChangePageSize(event: number): void {
+    console.log(" Page size: ", event);
+  } 
+
+  onChnageQueryParams(event: any): void {
+    console.log(" Query params: ", event);
   }
 }

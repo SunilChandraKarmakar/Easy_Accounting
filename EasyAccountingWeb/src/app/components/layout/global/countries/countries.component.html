@@ -10,11 +10,18 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <!-- <nz-table #basicTable nzShowSizeChanger [nzData]="countries">
+      <nz-space-compact nzSize="default">
+        <nz-input-wrapper>
+          <nz-icon nzInputAddonBefore nzType="search" />
+          <input nz-input placeholder="Search by name | code" />
+        </nz-input-wrapper>
+      </nz-space-compact>
+      <nz-table #basicTable nzShowSizeChanger [nzData]="countries" [nzBordered]="true" [nzOuterBordered]="true" [nzFrontPagination]="false" [nzTotal]="totalRecord" 
+      [nzSize]="'default'" [nzPaginationType]="'default'" [nzShowSizeChanger]="true" (nzQueryParams)="onChnageQueryParams($event)">
         <thead>
           <tr>
             <th>Code</th>
-            <th>Name</th>
+            <th nzColumnKey="name" [nzSortFn]="true">Name</th>
             <th>Icon</th>
             <th>Action</th>
           </tr>
@@ -35,36 +42,27 @@
             </tr>
           }
         </tbody>
-      </nz-table> -->
-      <mat-form-field>
+      </nz-table>
+      <!-- <mat-form-field>
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
       </mat-form-field>
       <div class="mat-elevation-z8">
         <table mat-table [dataSource]="dataSource" (matSortChange)="onSortChange($event)" matSort>
-
-          <!-- Name Column -->
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
             <td mat-cell *matCellDef="let row"> {{row.name}}</td>
           </ng-container>
-
-          <!-- Code Column -->
           <ng-container matColumnDef="code">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Code </th>
             <td mat-cell *matCellDef="let row"> {{row.code}} </td>
           </ng-container>
-
-          <!-- Icon Column -->
           <ng-container matColumnDef="icon">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Icon </th>
             <td mat-cell *matCellDef="let row"> {{row.icon}} </td>
           </ng-container>
-
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-          <!-- Row shown when there is no matching data. -->
           <tr class="mat-row" *matNoDataRow>
             <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
           </tr>
@@ -72,7 +70,7 @@
         <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [length]="totalRecord" (page)="onPageChange($event)" 
           aria-label="Select page of countries">
         </mat-paginator>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
