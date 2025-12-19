@@ -11,6 +11,35 @@
             return getAllAsync;
         }
 
+        public virtual async Task<FilterPageResultModel<T>> GetAllFilterAsync(FilterPageModel model, Expression<Func<T, bool>>? filterExpression = null, 
+            Expression<Func<T, object>>? defaultSortExpression = null, Dictionary<string, Expression<Func<T, object>>>? sortableColumns = null)
+        {
+            // Get all records
+            IQueryable<T> query = db.Set<T>().AsNoTracking();
+
+            // Apply filtering
+            if (filterExpression is not null)
+                query = query.Where(filterExpression);
+
+            // Apply sorting
+            if (!string.IsNullOrWhiteSpace(model.SortColumn) && !string.IsNullOrEmpty(model.SortColumn) && sortableColumns is not null 
+                && sortableColumns.TryGetValue(model.SortColumn.ToLower(), out var sortExpression))
+                query = model.SortOrder?.ToLower() == "desc" ? query.OrderByDescending(sortExpression) : query.OrderBy(sortExpression);
+            else if (defaultSortExpression is not null)
+                query = query.OrderBy(defaultSortExpression);
+
+            // Count before pagination
+            int totalCount = await query.CountAsync();
+
+            // Pagination
+            var items = await query
+                .Skip(model.PageIndex * model.PageSize)
+                .Take(model.PageSize)
+                .ToListAsync();
+
+            return new FilterPageResultModel<T>(items, totalCount);
+        }
+
         public virtual async Task<T> GetByIdAsync(int id)
         {
             var getByIdAsync = await db.Set<T>().FindAsync(id);

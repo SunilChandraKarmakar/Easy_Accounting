@@ -10,6 +10,12 @@
             return await _baseRepository.GetAllAsync();
         }
 
+        public virtual async Task<FilterPageResultModel<T>> GetAllFilterAsync(FilterPageModel model, Expression<Func<T, bool>>? filterExpression = null, 
+            Expression<Func<T, object>>? defaultSortExpression = null, Dictionary<string, Expression<Func<T, object>>>? sortableColumns = null)
+        {
+            return await _baseRepository.GetAllFilterAsync(model, filterExpression, defaultSortExpression, sortableColumns);
+        }
+
         public virtual async Task<T> GetByIdAsync(int id)
         {
             return await _baseRepository.GetByIdAsync(id);

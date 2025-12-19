@@ -209,10 +209,6 @@
           "icon": {
             "type": "string",
             "nullable": true
-          },
-          "totalCount": {
-            "type": "integer",
-            "format": "int32"
           }
         }
       },

@@ -5,3 +5,4 @@ global using EasyAccountingAPI.Model.GlobalModels;
 global using EasyAccountingAPI.Repository.Base;
 global using EasyAccountingAPI.Repository.Contracts.Global;
 global using EasyAccountingAPI.Shared.Models;
+global using System.Linq.Expressions;

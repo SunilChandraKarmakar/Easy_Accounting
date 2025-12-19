@@ -35,47 +35,24 @@
         }
 
         // Get countries with filtering, sorting, and pagination
-        public async Task<FilterPageResultModel<Country>> GetCountriesByFilterAsync(FilterPageModel filterPageModel)
+        public Task<FilterPageResultModel<Country>> GetCountriesByFilterAsync(FilterPageModel model)
         {
-            // Get countries
-            var countries = db.Countries
-                .Where(c => !c.IsDeleted)
-                .AsNoTracking()
-                .AsQueryable();
+            // Define filter expression
+            Expression<Func<Country, bool>> filter = c =>
+                !c.IsDeleted 
+                && (string.IsNullOrEmpty(model.FilterValue) 
+                || c.Name.Contains(model.FilterValue) 
+                || c.Code.Contains(model.FilterValue));
 
-            // Check if filter value is provided
-            if(!string.IsNullOrEmpty(filterPageModel.FilterValue) && !string.IsNullOrWhiteSpace(filterPageModel.FilterValue))
-                countries = countries.Where(c => c.Name.ToLower().Contains(filterPageModel.FilterValue.ToLower()) 
-                    || c.Code.ToLower().Contains(filterPageModel.FilterValue.ToLower()));
-
-            // Check if sort column and order are provided
-            switch(filterPageModel.SortColumn?.ToLower())
+            // Define sortable columns
+            var sortableColumns = new Dictionary<string, Expression<Func<Country, object>>>
             {
-                case "name":
-                    countries = filterPageModel.SortOrder?.ToLower() == "desc" 
-                        ? countries.OrderByDescending(c => c.Name) : countries.OrderBy(c => c.Name);
-                    break;
-                case "code":
-                    countries = filterPageModel.SortOrder?.ToLower() == "desc" 
-                        ? countries.OrderByDescending(c => c.Code) : countries.OrderBy(c => c.Code);
-                    break;
-                default:
-                    countries = countries.OrderBy(c => c.Id);
-                    break;
-            }
+                ["name"] = c => c.Name,
+                ["code"] = c => c.Code,
+                ["id"] = c => c.Id
+            };
 
-            // Apply pagination
-            var applyPaginationByCountries = await countries
-                .Skip(filterPageModel.PageSize * filterPageModel.PageIndex)
-                .Take(filterPageModel.PageSize)
-                .ToListAsync();
-
-            // Get total count before pagination
-            var totalCount = await countries.CountAsync();
-
-            // Return result
-            return new FilterPageResultModel<Country>(applyPaginationByCountries, totalCount);
-
+            return GetAllFilterAsync(model, filter, c => c.Id, sortableColumns);
         }
     }
 }

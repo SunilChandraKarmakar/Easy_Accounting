@@ -355,7 +355,6 @@ export class CountryGridModel implements ICountryGridModel {
     name?: string;
     code?: string;
     icon?: string | undefined;
-    totalCount?: number;
 
     constructor(data?: ICountryGridModel) {
         if (data) {
@@ -372,7 +371,6 @@ export class CountryGridModel implements ICountryGridModel {
             this.name = _data["name"];
             this.code = _data["code"];
             this.icon = _data["icon"];
-            this.totalCount = _data["totalCount"];
         }
     }
 
@@ -389,7 +387,6 @@ export class CountryGridModel implements ICountryGridModel {
         data["name"] = this.name;
         data["code"] = this.code;
         data["icon"] = this.icon;
-        data["totalCount"] = this.totalCount;
         return data;
     }
 }
@@ -399,7 +396,6 @@ export interface ICountryGridModel {
     name?: string;
     code?: string;
     icon?: string | undefined;
-    totalCount?: number;
 }
 
 export class FilterPageResultModelOfCountryGridModel implements IFilterPageResultModelOfCountryGridModel {
