@@ -9,13 +9,16 @@ import { ToastrService } from 'ngx-toastr';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
 
 @Component({
   selector: 'app-countries',
   templateUrl: './countries.component.html',
   styleUrls: ['./countries.component.css'],
   standalone: true,
-  imports: [NzButtonModule, NzDividerModule, NzTableModule, RouterLink, NgxSpinnerModule, NzSpaceModule, NzInputModule, NzIconModule],
+  imports: [NzButtonModule, NzDividerModule, NzTableModule, RouterLink, NgxSpinnerModule, NzSpaceModule, NzInputModule, NzIconModule, 
+    NzTagModule, NzBadgeModule],
   providers: [CountryService]
 })
 
@@ -52,7 +55,7 @@ export class CountriesComponent implements OnInit {
     this.filterPageModel.pageIndex = 0;
     this.filterPageModel.pageSize = 10;
     this.filterPageModel.sortColumn = "name";
-    this.filterPageModel.sortOrder = "asc"
+    this.filterPageModel.sortOrder = "ascend"
     this.filterPageModel.filterValue = "";
   }
 
@@ -77,7 +80,14 @@ export class CountriesComponent implements OnInit {
     this.filterPageModel.pageIndex = event.pageIndex - 1;
     this.filterPageModel.pageSize = event.pageSize;
 
-    console.log("event :- ", event);
+    if(event.sort != undefined && event.sort.length > 0) {
+      event.sort.forEach(sortObj => {
+        if(sortObj.key != null && sortObj.value != null) {
+          this.filterPageModel.sortColumn = sortObj.key;
+          this.filterPageModel.sortOrder = sortObj.value;
+        }
+      });
+    }
 
     // Get countries
     this.getCountries();

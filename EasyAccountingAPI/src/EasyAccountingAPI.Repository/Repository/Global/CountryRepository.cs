@@ -37,15 +37,12 @@
         // Get countries with filtering, sorting, and pagination
         public Task<FilterPageResultModel<Country>> GetCountriesByFilterAsync(FilterPageModel model)
         {
-            // Define filter expression
             Expression<Func<Country, bool>> filter = c =>
-                !c.IsDeleted 
-                && (string.IsNullOrEmpty(model.FilterValue)
-                && (string.IsNullOrWhiteSpace(model.FilterValue))
-                || c.Name.Contains(model.FilterValue) 
-                || c.Code.Contains(model.FilterValue));
+                !c.IsDeleted &&
+                (string.IsNullOrWhiteSpace(model.FilterValue)
+                 || c.Name.Contains(model.FilterValue)
+                 || c.Code.Contains(model.FilterValue));
 
-            // Define sortable columns
             var sortableColumns = new Dictionary<string, Expression<Func<Country, object>>>
             {
                 ["name"] = c => c.Name,
@@ -53,7 +50,13 @@
                 ["id"] = c => c.Id
             };
 
-            return GetAllFilterAsync(model, filter, c => c.Id, sortableColumns);
+            return GetAllFilterAsync(
+                model,
+                filter,
+                c => c.Id,
+                sortableColumns,
+                include: q => q.Include(c => c.Cities.Where(c => !c.IsDeleted))
+            );
         }
     }
 }

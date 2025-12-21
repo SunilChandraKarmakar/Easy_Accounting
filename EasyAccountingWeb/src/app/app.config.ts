@@ -7,7 +7,8 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
 import { API_BASE_URL } from '../api/base-api';
 import { environment } from '../environments/environment.prod';
-
+import { provideNzIcons } from 'ng-zorro-antd/icon';
+import { FastBackwardOutline, PlusCircleOutline, PlusOutline } from '@ant-design/icons-angular/icons';
 export class LowerCaseUrlSerializer extends DefaultUrlSerializer {
   override parse(url: string): UrlTree {
     return super.parse(url.toLowerCase());
@@ -31,6 +32,13 @@ export const appConfig: ApplicationConfig = {
       preventDuplicates: true,
       newestOnTop: true
     }),
+
+    // NG Zorro Icons
+    provideNzIcons([
+      FastBackwardOutline,
+      PlusOutline,
+      PlusCircleOutline
+    ]),
 
     { provide: UrlSerializer, useClass: LowerCaseUrlSerializer },
     // { provide: HTTP_INTERCEPTORS, useClass: IdentityInterceptor, multi: true },

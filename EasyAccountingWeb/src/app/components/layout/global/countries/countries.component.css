@@ -3,3 +3,28 @@
   margin: 0px;
   padding: 0px;
 }
+
+.city-badge-container {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 8px;
+}
+
+/* Make tags pill-shaped */
+::ng-deep nz-tag.ant-tag {
+  border-radius: 16px;
+  padding: 4px 12px;
+  font-size: 12px;
+}
+
+@media (max-width: 992px) {
+  .city-badge-container {
+    grid-template-columns: repeat(2, auto);
+  }
+}
+
+@media (max-width: 576px) {
+  .city-badge-container {
+    grid-template-columns: repeat(1, auto);
+  }
+}

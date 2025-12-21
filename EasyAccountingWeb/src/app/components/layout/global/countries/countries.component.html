@@ -1,48 +1,59 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <h5 class="text-center">Countries</h5>
-      <hr class="hr-class">
-    </div>
-    <div class="col-md-12 text-end mt-2">
-      <button nz-button nzType="default" routerLink="/app/country/create">Primary Button</button>
-    </div>
+<div class="row">
+  <div class="col-md-12">
+    <h5 class="text-center">Countries</h5>
+    <hr class="hr-class">
   </div>
-  <div class="row">
-    <div class="col-md-12">
-      <nz-space-compact nzSize="default">
-        <nz-input-wrapper>
-          <nz-icon nzInputAddonBefore nzType="search" />
-          <input nz-input (keyup)="onChangeApplyFilter($event)" placeholder="Search by name | code" />
-        </nz-input-wrapper>
-      </nz-space-compact>
-      <nz-table #basicTable [nzData]="countries" [nzBordered]="true" [nzOuterBordered]="true" [nzFrontPagination]="false" 
-      [nzTotal]="totalRecord" [nzSize]="'default'" [nzPaginationType]="'default'" [nzShowSizeChanger]="true" 
-      (nzQueryParams)="onChangeQueryParams($event)">
-        <thead>
+  <div class="col-md-12 text-end mt-2">
+    <button nz-button nzType="primary" routerLink="/app/country/create">
+      <nz-icon nzType="plus" nzTheme="outline" />
+      Add
+    </button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <nz-space-compact nzSize="default">
+      <nz-input-wrapper>
+        <nz-icon nzInputAddonBefore nzType="search" />
+        <input nz-input (keyup)="onChangeApplyFilter($event)" placeholder="Search by name | code" />
+      </nz-input-wrapper>
+    </nz-space-compact>
+    <nz-table #basicTable [nzData]="countries" [nzBordered]="true" [nzOuterBordered]="true" [nzFrontPagination]="false" 
+    [nzTotal]="totalRecord" [nzSize]="'default'" [nzPaginationType]="'default'" [nzShowSizeChanger]="true" 
+    (nzQueryParams)="onChangeQueryParams($event)">
+      <thead>
+        <tr>
+          <th nzColumnKey="name" [nzSortFn]="true">Name</th>
+          <th>Cities</th>
+          <th>Icon</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (data of basicTable.data; track data) {
           <tr>
-            <th nzColumnKey="name" [nzSortFn]="true">Name</th>
-            <th>Icon</th>
-            <th>Action</th>
+            <td>{{ data.name }} ({{ data.code }})</td>
+           <td>
+              <div class="city-badge-container text-center">
+                @for (city of data.cities; track $index) {
+                  <nz-tag nzColor="blue">
+                    {{ city.name }}
+                  </nz-tag>
+                }
+              </div>
+            </td>
+            <td>
+              <img [src]="data.icon">
+            </td>
+            <td>
+              <a>Action 一 {{ data.name }}</a>
+              <nz-divider nzType="vertical"></nz-divider>
+              <a>Delete</a>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          @for (data of basicTable.data; track data) {
-            <tr>
-              <td>{{ data.name }} ({{ data.code }})</td>
-              <td>
-                <img [src]="data.icon">
-              </td>
-              <td>
-                <a>Action 一 {{ data.name }}</a>
-                <nz-divider nzType="vertical"></nz-divider>
-                <a>Delete</a>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </nz-table>
-    </div>
+        }
+      </tbody>
+    </nz-table>
   </div>
 </div>
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">

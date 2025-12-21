@@ -16,3 +16,4 @@ global using EasyAccountingAPI.Shared.Models;
 global using Bogus;
 global using EasyAccountingAPI.Application.ApplicationLogics.Global.CountryLogic.Command;
 global using EasyAccountingAPI.Database.DatabaseContexts;
+global using EasyAccountingAPI.Application.ApplicationLogics.Global.CityLogic.Model;

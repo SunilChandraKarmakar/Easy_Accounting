@@ -209,6 +209,28 @@
           "icon": {
             "type": "string",
             "nullable": true
+          },
+          "cities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CityGridModel"
+            }
+          }
+        }
+      },
+      "CityGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "countryName": {
+            "type": "string"
           }
         }
       },

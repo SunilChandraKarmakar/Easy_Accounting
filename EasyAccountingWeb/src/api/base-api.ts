@@ -355,6 +355,7 @@ export class CountryGridModel implements ICountryGridModel {
     name?: string;
     code?: string;
     icon?: string | undefined;
+    cities?: CityGridModel[];
 
     constructor(data?: ICountryGridModel) {
         if (data) {
@@ -371,6 +372,11 @@ export class CountryGridModel implements ICountryGridModel {
             this.name = _data["name"];
             this.code = _data["code"];
             this.icon = _data["icon"];
+            if (Array.isArray(_data["cities"])) {
+                this.cities = [] as any;
+                for (let item of _data["cities"])
+                    this.cities!.push(CityGridModel.fromJS(item));
+            }
         }
     }
 
@@ -387,6 +393,11 @@ export class CountryGridModel implements ICountryGridModel {
         data["name"] = this.name;
         data["code"] = this.code;
         data["icon"] = this.icon;
+        if (Array.isArray(this.cities)) {
+            data["cities"] = [];
+            for (let item of this.cities)
+                data["cities"].push(item ? item.toJSON() : undefined as any);
+        }
         return data;
     }
 }
@@ -396,6 +407,51 @@ export interface ICountryGridModel {
     name?: string;
     code?: string;
     icon?: string | undefined;
+    cities?: CityGridModel[];
+}
+
+export class CityGridModel implements ICityGridModel {
+    id?: number;
+    name?: string;
+    countryName?: string;
+
+    constructor(data?: ICityGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.countryName = _data["countryName"];
+        }
+    }
+
+    static fromJS(data: any): CityGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new CityGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["countryName"] = this.countryName;
+        return data;
+    }
+}
+
+export interface ICityGridModel {
+    id?: number;
+    name?: string;
+    countryName?: string;
 }
 
 export class FilterPageResultModelOfCountryGridModel implements IFilterPageResultModelOfCountryGridModel {

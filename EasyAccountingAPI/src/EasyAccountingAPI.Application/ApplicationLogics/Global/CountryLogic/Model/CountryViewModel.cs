@@ -58,9 +58,12 @@
         public string Code { get; set; }
         public string? Icon { get; set; }
 
+        public ICollection<CityGridModel> Cities { get; set; }
+
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Country, CountryGridModel>();
+            profile.CreateMap<Country, CountryGridModel>()
+                .ForMember(d => d.Cities, s => s.MapFrom(m => m.Cities));
             profile.CreateMap<CountryGridModel, Country>(); 
         }
     }
