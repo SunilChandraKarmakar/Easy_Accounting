@@ -14,10 +14,6 @@
         [StringLength(100, ErrorMessage = "City name cannot exceed 100 characters.", MinimumLength = 2)]
         public string Name { get; set; }
 
-        [ForeignKey("Country")]
-        [Required(ErrorMessage = "CountryId is required.")]
-        public int CountryId { get; set; }
-
         public void Mapping(Profile profile)
         {
             profile.CreateMap<City, CityCreateModel>();

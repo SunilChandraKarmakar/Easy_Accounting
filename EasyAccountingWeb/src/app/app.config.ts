@@ -1,4 +1,4 @@
-import { ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
 import { DefaultUrlSerializer, provideRouter, UrlSerializer, UrlTree, withComponentInputBinding } from '@angular/router';
 import { provideToastr } from "ngx-toastr";
 import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
@@ -8,7 +8,8 @@ import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/c
 import { API_BASE_URL } from '../api/base-api';
 import { environment } from '../environments/environment.prod';
 import { provideNzIcons } from 'ng-zorro-antd/icon';
-import { FastBackwardOutline, PlusCircleOutline, PlusOutline } from '@ant-design/icons-angular/icons';
+import { FastBackwardOutline, PlusCircleOutline, PlusOutline, SaveOutline, CloseOutline } from '@ant-design/icons-angular/icons';
+
 export class LowerCaseUrlSerializer extends DefaultUrlSerializer {
   override parse(url: string): UrlTree {
     return super.parse(url.toLowerCase());
@@ -37,7 +38,9 @@ export const appConfig: ApplicationConfig = {
     provideNzIcons([
       FastBackwardOutline,
       PlusOutline,
-      PlusCircleOutline
+      PlusCircleOutline,
+      SaveOutline,
+      CloseOutline
     ]),
 
     { provide: UrlSerializer, useClass: LowerCaseUrlSerializer },

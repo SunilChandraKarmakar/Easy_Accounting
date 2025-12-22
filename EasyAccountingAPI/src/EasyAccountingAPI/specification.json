@@ -323,6 +323,27 @@
           "icon": {
             "type": "string",
             "nullable": true
+          },
+          "cities": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/CityCreateModel"
+            }
+          }
+        }
+      },
+      "CityCreateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2
           }
         }
       },

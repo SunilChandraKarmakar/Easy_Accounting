@@ -21,6 +21,8 @@
 
         public string? Icon { get; set; }
 
+        public virtual ICollection<CityCreateModel>? Cities { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Country, CountryCreateModel>();

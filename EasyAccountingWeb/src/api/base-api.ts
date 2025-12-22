@@ -629,6 +629,7 @@ export class CountryCreateModel implements ICountryCreateModel {
     name!: string;
     code!: string;
     icon?: string | undefined;
+    cities?: CityCreateModel[] | undefined;
 
     constructor(data?: ICountryCreateModel) {
         if (data) {
@@ -644,6 +645,11 @@ export class CountryCreateModel implements ICountryCreateModel {
             this.name = _data["name"];
             this.code = _data["code"];
             this.icon = _data["icon"];
+            if (Array.isArray(_data["cities"])) {
+                this.cities = [] as any;
+                for (let item of _data["cities"])
+                    this.cities!.push(CityCreateModel.fromJS(item));
+            }
         }
     }
 
@@ -659,6 +665,11 @@ export class CountryCreateModel implements ICountryCreateModel {
         data["name"] = this.name;
         data["code"] = this.code;
         data["icon"] = this.icon;
+        if (Array.isArray(this.cities)) {
+            data["cities"] = [];
+            for (let item of this.cities)
+                data["cities"].push(item ? item.toJSON() : undefined as any);
+        }
         return data;
     }
 }
@@ -667,6 +678,43 @@ export interface ICountryCreateModel {
     name: string;
     code: string;
     icon?: string | undefined;
+    cities?: CityCreateModel[] | undefined;
+}
+
+export class CityCreateModel implements ICityCreateModel {
+    name!: string;
+
+    constructor(data?: ICityCreateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): CityCreateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new CityCreateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface ICityCreateModel {
+    name: string;
 }
 
 export class CountryUpdateModel implements ICountryUpdateModel {
