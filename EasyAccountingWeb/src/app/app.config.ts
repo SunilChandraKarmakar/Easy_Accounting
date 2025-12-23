@@ -8,7 +8,7 @@ import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/c
 import { API_BASE_URL } from '../api/base-api';
 import { environment } from '../environments/environment.prod';
 import { provideNzIcons } from 'ng-zorro-antd/icon';
-import { FastBackwardOutline, PlusCircleOutline, PlusOutline, SaveOutline, CloseOutline } from '@ant-design/icons-angular/icons';
+import { FastBackwardOutline, PlusCircleOutline, PlusOutline, SaveOutline, CloseOutline, BankOutline, HomeOutline, TagOutline, AimOutline } from '@ant-design/icons-angular/icons';
 
 export class LowerCaseUrlSerializer extends DefaultUrlSerializer {
   override parse(url: string): UrlTree {
@@ -40,7 +40,11 @@ export const appConfig: ApplicationConfig = {
       PlusOutline,
       PlusCircleOutline,
       SaveOutline,
-      CloseOutline
+      CloseOutline,
+      BankOutline,
+      HomeOutline,
+      TagOutline,
+      AimOutline
     ]),
 
     { provide: UrlSerializer, useClass: LowerCaseUrlSerializer },

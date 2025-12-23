@@ -1,7 +1,9 @@
-.hr-class {
-  color: #40A9FF;
-  margin: 0px;
-  padding: 0px;
+.breadcrumb-link {
+  text-decoration: none !important;
+}
+
+.icon-upload-align {
+  margin-top: 27px;
 }
 
 .btn-save {

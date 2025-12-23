@@ -1,23 +1,80 @@
-<div class="row">
+<nz-breadcrumb>
+  <nz-breadcrumb-item>Settings</nz-breadcrumb-item>
+    <nz-breadcrumb-item><a routerLink="/app/countries" class="breadcrumb-link">Country</a></nz-breadcrumb-item>
+  <nz-breadcrumb-item>Create Country</nz-breadcrumb-item>
+</nz-breadcrumb>
+<div class="row mt-3">
   <div class="col-md-12">
-    <h5 class="text-center">Create Country</h5>
-    <hr class="hr-class">
-  </div>
-</div>
-<div class="row mt-2">
-  <div class="col-md-12">
-    <div class="card shadow-sm">
+    <div class="card shadow-lg">
+      <div class="card-header">
+        <h5 class="card-title text-center">Create Country</h5>
+      </div>
       <div class="card-body">
         <form class="row g-3">
-          <div class="col-md-6">
-            <label for="inputEmail4" class="form-label">Email</label>
-            <input type="email" class="form-control" id="inputEmail4">
+          <div class="col-md-4">
+            <label for="name" class="form-label">Name <span class="text-danger fw-bold">*</span></label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="home" />
+              <input nz-input placeholder="Enter country name" nzSize="default" id="name" name="name" 
+                [(ngModel)]="countryCreateModel.name" />
+            </nz-input-wrapper>
           </div>
-          <div class="col-md-6">
-            <label for="inputPassword4" class="form-label">Password</label>
-            <input type="password" class="form-control" id="inputPassword4">
+          <div class="col-md-4">
+            <label for="code" class="form-label">Code <span class="text-danger fw-bold">*</span></label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="tag" />
+              <input nz-input placeholder="Enter country code" nzSize="default" id="code" name="code" 
+                [(ngModel)]="countryCreateModel.code" />
+            </nz-input-wrapper>
+          </div>
+          <div class="col-md-4">
+            <div class="icon-upload-align">
+              <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76" [nzHeaders]="{ authorization: 'authorization-text' }"
+              (nzChange)="handleChange($event)">
+              <button nz-button>
+                <nz-icon nzType="upload" />
+                Click to Upload Icon
+              </button>
+            </nz-upload>
+            </div>
           </div>
         </form>
+        <div class="row justify-content-center align-content-center mt-3">
+          <div class="col-md-6">
+            <nz-table [nzShowPagination]="false" #citiesTable [nzData]="countryCreateModel.cities!" [nzBordered]="true">
+              <thead>
+                <tr>
+                  <th style="width: 70%">City Name</th>
+                  <th class="text-center" style="width: 30%">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (city of citiesTable.data; track i; let i = $index) {
+                  <tr>
+                    <td>
+                      <nz-input-wrapper>
+                        <nz-icon nzInputPrefix nzType="aim" />
+                        <input nz-input nzSize="default" placeholder="Enter city name" [(ngModel)]="city.name" name="city-{{ i }}"
+                          [ngModelOptions]="{ standalone: true }" />
+                      </nz-input-wrapper>                      
+                    </td>
+                    <td class="text-center">
+                      <button nz-button nzType="default" nzDanger nzSize="small" (click)="removeCity(i)">
+                        <nz-icon nzType="delete" />
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </nz-table>
+            <div class="d-flex justify-content-end mt-2">
+              <button nz-button nzType="dashed" (click)="addCity()">
+                <nz-icon nzType="plus" />
+                Add City
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="card-footer text-end">
         <button nz-button nzType="primary" class="btn-save">
