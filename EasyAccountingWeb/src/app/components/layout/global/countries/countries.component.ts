@@ -11,6 +11,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 
 @Component({
   selector: 'app-countries',
@@ -18,7 +19,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
   styleUrls: ['./countries.component.css'],
   standalone: true,
   imports: [NzButtonModule, NzDividerModule, NzTableModule, RouterLink, NgxSpinnerModule, NzSpaceModule, NzInputModule, NzIconModule, 
-    NzTagModule, NzBadgeModule],
+    NzTagModule, NzBadgeModule, NzBreadCrumbModule],
   providers: [CountryService]
 })
 

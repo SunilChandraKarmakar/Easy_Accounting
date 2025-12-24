@@ -21,5 +21,29 @@
 
             return cities!;
         }
+
+        public async Task<bool> DeleteBulkCityByCountryIdAsync(int countryId)
+        {
+            // Get cities by country id
+            var cities = db.Cities
+                .AsNoTracking()
+                .Where(c => c.CountryId == countryId && !c.IsDeleted);
+
+            // Soft delete cities
+            if (cities.Any())
+            {
+                foreach (var city in cities)
+                {
+                    city.IsDeleted = true;
+                    city.DeletedDateTime = DateTime.UtcNow;
+                }
+
+                // Update cities in the database
+                await db.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
     }
 }

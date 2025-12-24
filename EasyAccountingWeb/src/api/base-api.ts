@@ -351,7 +351,7 @@ export class CountryService implements ICountryService {
 }
 
 export class CountryGridModel implements ICountryGridModel {
-    id?: number;
+    id?: string;
     name?: string;
     code?: string;
     icon?: string | undefined;
@@ -403,7 +403,7 @@ export class CountryGridModel implements ICountryGridModel {
 }
 
 export interface ICountryGridModel {
-    id?: number;
+    id?: string;
     name?: string;
     code?: string;
     icon?: string | undefined;

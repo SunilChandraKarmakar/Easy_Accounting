@@ -11,7 +11,7 @@
       </div>
       <div class="card-body">
         <form class="row g-3">
-          <div class="col-md-4">
+          <div class="col-md-3">
             <label for="name" class="form-label">Name <span class="text-danger fw-bold">*</span></label>
             <nz-input-wrapper>
               <nz-icon nzInputPrefix nzType="home" />
@@ -19,7 +19,7 @@
                 [(ngModel)]="countryCreateModel.name" />
             </nz-input-wrapper>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <label for="code" class="form-label">Code <span class="text-danger fw-bold">*</span></label>
             <nz-input-wrapper>
               <nz-icon nzInputPrefix nzType="tag" />
@@ -27,7 +27,7 @@
                 [(ngModel)]="countryCreateModel.code" />
             </nz-input-wrapper>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="icon-upload-align">
               <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76" [nzHeaders]="{ authorization: 'authorization-text' }"
               (nzChange)="handleChange($event)">
@@ -39,7 +39,7 @@
             </div>
           </div>
         </form>
-        <div class="row justify-content-center align-content-center mt-3">
+        <div class="row mt-3">
           <div class="col-md-6">
             <nz-table [nzShowPagination]="false" #citiesTable [nzData]="countryCreateModel.cities!" [nzBordered]="true">
               <thead>
@@ -59,7 +59,7 @@
                       </nz-input-wrapper>                      
                     </td>
                     <td class="text-center">
-                      <button nz-button nzType="default" nzDanger nzSize="small" (click)="removeCity(i)">
+                      <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Delete" nzDanger class="delete-btn" (click)="removeCity(i)">
                         <nz-icon nzType="delete" />
                       </button>
                     </td>
@@ -68,7 +68,7 @@
               </tbody>
             </nz-table>
             <div class="d-flex justify-content-end mt-2">
-              <button nz-button nzType="dashed" (click)="addCity()">
+              <button nz-button nzType="default" (click)="addCity()">
                 <nz-icon nzType="plus" />
                 Add City
               </button>

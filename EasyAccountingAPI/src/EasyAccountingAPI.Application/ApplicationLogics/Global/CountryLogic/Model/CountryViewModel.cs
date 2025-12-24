@@ -1,4 +1,6 @@
-﻿namespace EasyAccountingAPI.Application.ApplicationLogics.Global.CountryLogic.Model
+﻿using EasyAccountingAPI.Shared.Services;
+
+namespace EasyAccountingAPI.Application.ApplicationLogics.Global.CountryLogic.Model
 {
     public class CountryViewModel
     {
@@ -55,7 +57,7 @@
 
     public class CountryGridModel : IMapFrom<Country>
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public string? Icon { get; set; }
@@ -65,6 +67,7 @@
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Country, CountryGridModel>()
+                .ForMember(d => d.Id, s => s.MapFrom(m => EncryptionService.Encrypt(m.Id.ToString())))
                 .ForMember(d => d.Cities, s => s.MapFrom(m => m.Cities));
             profile.CreateMap<CountryGridModel, Country>(); 
         }

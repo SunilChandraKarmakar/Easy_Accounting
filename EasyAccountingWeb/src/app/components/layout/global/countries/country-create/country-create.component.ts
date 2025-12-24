@@ -12,6 +12,7 @@ import { NzUploadChangeParam, NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
 
 @Component({
   selector: 'app-country-create',
@@ -19,7 +20,7 @@ import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
   styleUrls: ['./country-create.component.css'],
   standalone: true,
   imports: [FormsModule, CommonModule, NzButtonModule, RouterLink, NgxSpinnerModule, NzInputModule, NzIconModule, NzUploadModule,
-    NzTableModule, NzBreadCrumbModule],
+    NzTableModule, NzBreadCrumbModule, NzDividerModule],
   providers: [CountryService]
 })
 
