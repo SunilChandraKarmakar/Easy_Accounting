@@ -16,6 +16,10 @@
             // HttpContextAccessor
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            // Unit of Work
+            services.AddScoped<IUnitOfWorkManager, UnitOfWorkManager>();
+            services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
+
             // Global services
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<ICountryManager, CountryManager>();

@@ -17,3 +17,8 @@ global using Bogus;
 global using EasyAccountingAPI.Application.ApplicationLogics.Global.CountryLogic.Command;
 global using EasyAccountingAPI.Database.DatabaseContexts;
 global using EasyAccountingAPI.Application.ApplicationLogics.Global.CityLogic.Model;
+global using EasyAccountingAPI.Shared.Services;
+global using EasyAccountingAPI.Manager.Base;
+global using EasyAccountingAPI.Manager.Contracts;
+global using EasyAccountingAPI.Repository.Base;
+global using EasyAccountingAPI.Repository.Contracts;

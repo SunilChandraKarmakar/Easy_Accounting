@@ -2,5 +2,6 @@
 {
     public interface ICityManager : IBaseManager<City>
     {
+        Task<int> DeleteBulkCityByCountryIdAsync(int countryId);
     }
 }

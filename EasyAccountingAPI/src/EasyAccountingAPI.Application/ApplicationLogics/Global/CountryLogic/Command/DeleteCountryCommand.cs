@@ -1,8 +1,4 @@
-﻿using EasyAccountingAPI.Shared.ErrorMessages;
-using EasyAccountingAPI.Shared.Exceptions;
-using EasyAccountingAPI.Shared.Services;
-
-namespace EasyAccountingAPI.Application.ApplicationLogics.Global.CountryLogic.Command
+﻿namespace EasyAccountingAPI.Application.ApplicationLogics.Global.CountryLogic.Command
 {
     public class DeleteCountryCommand : IRequest<bool>
     {
@@ -10,43 +6,51 @@ namespace EasyAccountingAPI.Application.ApplicationLogics.Global.CountryLogic.Co
 
         public class Handler : IRequestHandler<DeleteCountryCommand, bool>
         {
-            private readonly ICountryManager _countryManager;
-            public Handler(ICountryManager countryManager) => _countryManager = countryManager;
+            private readonly IUnitOfWorkManager _unitOfWorkManager;
+
+            public Handler(IUnitOfWorkManager unitOfWorkManager)
+            {
+                _unitOfWorkManager = unitOfWorkManager;
+            }
 
             public async Task<bool> Handle(DeleteCountryCommand request, CancellationToken cancellationToken)
             {
-                // Decrypt country id
-                var decryptCountryId = EncryptionService.Decrypt(request.Id);
-
-                // Check if country decrypt id is null
-                if (string.IsNullOrWhiteSpace(decryptCountryId) || string.IsNullOrEmpty(decryptCountryId))
+                // Decrypt the country ID
+                var decryptedId = EncryptionService.Decrypt(request.Id);
+                if (!int.TryParse(decryptedId, out var countryId))
                     return false;
 
-                // Convert decrypt country id
-                var convertCountryId = Convert.ToInt32(decryptCountryId);
+                // Get repositories
+                var countryManager = _unitOfWorkManager.GetRepository<ICountryManager>();
+                var cityManager = _unitOfWorkManager.GetRepository<ICityManager>();
 
-                // Get 
-                var getCompliance = await _complianceManager.GetByIdAsync(convertId);
-                if (getCompliance is null)
-                    throw new BadRequestException(ProvideErrorMessage.ComplianceNotFound);
-
-                // Get exist country
-                var getCountry = await _countryManager.GetByIdAsync(request.Id);
-
-                if (getCountry is null)
+                // Fetch the country
+                var country = await countryManager.GetByIdAsync(countryId);
+                if (country is null)
                     return false;
 
-                // Check, country is not null
-                if (getCountry is not null)
+                // Begin transaction
+                await _unitOfWorkManager.BeginTransactionAsync(cancellationToken);
+
+                try
                 {
-                    getCountry.IsDeleted = true;
-                    getCountry.DeletedDateTime = DateTime.UtcNow;
-                    await _countryManager.UpdateAsync(getCountry);
+                    // 1. Bulk soft delete cities (NO SaveChanges inside)
+                    await cityManager.DeleteBulkCityByCountryIdAsync(country.Id);
 
+                    // 2. Soft delete country (NO SaveChanges inside)
+                    country.IsDeleted = true;
+                    country.DeletedDateTime = DateTime.UtcNow;
+                    await countryManager.UpdateAsync(country);
+
+                    // 3. Single commit
+                    await _unitOfWorkManager.CommitAsync(cancellationToken);
                     return true;
                 }
-
-                return false;
+                catch
+                {
+                    await _unitOfWorkManager.RollbackAsync(cancellationToken);
+                    throw; 
+                }
             }
         }
     }

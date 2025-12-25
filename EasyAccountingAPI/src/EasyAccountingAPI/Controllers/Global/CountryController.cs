@@ -59,7 +59,7 @@
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
-        public async Task<ActionResult<bool>> DeleteAsync(int id)
+        public async Task<ActionResult<bool>> DeleteAsync(string id)
         {
             var isDeleteCountry = await Mediator.Send(new DeleteCountryCommand { Id = id });
             return Ok(isDeleteCountry);

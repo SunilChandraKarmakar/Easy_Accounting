@@ -6,3 +6,5 @@ global using EasyAccountingAPI.Repository.Base;
 global using EasyAccountingAPI.Repository.Contracts.Global;
 global using EasyAccountingAPI.Shared.Models;
 global using System.Linq.Expressions;
+global using Microsoft.EntityFrameworkCore.Storage;
+global using Microsoft.Extensions.DependencyInjection;

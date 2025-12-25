@@ -5,5 +5,10 @@
         private readonly ICityRepository _cityRepository;
 
         public CityManager(ICityRepository cityRepository) : base(cityRepository) => _cityRepository = cityRepository;
+
+        public async Task<int> DeleteBulkCityByCountryIdAsync(int countryId)
+        {
+            return await _cityRepository.DeleteBulkCityByCountryIdAsync(countryId);
+        }
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface ICityRepository : IBaseRepository<City>
     {
-        Task<bool> DeleteBulkCityByCountryIdAsync(int countryId);
+        Task<int> DeleteBulkCityByCountryIdAsync(int countryId);
     }
 }
