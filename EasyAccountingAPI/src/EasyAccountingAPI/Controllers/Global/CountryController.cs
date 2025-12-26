@@ -33,15 +33,15 @@
 
         [HttpPost]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
-        public async Task<ActionResult<bool>> CreateAsync(CountryCreateModel countryCreateModel)
+        public async Task<ActionResult<bool>> CreateAsync(CreateCountryCommand createCountryCommand)
         {
             if (ModelState.IsValid)
             {
-                var isCountryCreated = await Mediator.Send(countryCreateModel);
+                var isCountryCreated = await Mediator.Send(createCountryCommand);
                 return Ok(isCountryCreated);
             }
 
-            return BadRequest(countryCreateModel);
+            return BadRequest(createCountryCommand);
         }
 
         [HttpPut]

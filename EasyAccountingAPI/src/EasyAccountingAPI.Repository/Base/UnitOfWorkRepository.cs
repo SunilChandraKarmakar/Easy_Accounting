@@ -23,9 +23,7 @@
             if (_transaction == null)
                 throw new InvalidOperationException("Transaction not started.");
 
-            await _db.SaveChangesAsync(ct);
             await _transaction.CommitAsync(ct);
-
             await _transaction.DisposeAsync();
             _transaction = null;
         }

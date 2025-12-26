@@ -15,7 +15,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface ICountryService {
-    create(countryCreateModel: CountryCreateModel): Observable<boolean>;
+    create(createCountryCommand: CreateCountryCommand): Observable<boolean>;
     delete(id: string): Observable<boolean>;
     getAll(): Observable<CountryGridModel[]>;
     getById(id: number): Observable<CountryViewModel>;
@@ -34,11 +34,11 @@ export class CountryService implements ICountryService {
         this.baseUrl = baseUrl ?? "";
     }
 
-    create(countryCreateModel: CountryCreateModel): Observable<boolean> {
+    create(createCountryCommand: CreateCountryCommand): Observable<boolean> {
         let url_ = this.baseUrl + "/api/Country/Create";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(countryCreateModel);
+        const content_ = JSON.stringify(createCountryCommand);
 
         let options_ : any = {
             body: content_,
@@ -763,6 +763,33 @@ export interface ICountryUpdateModel {
     name: string;
     code: string;
     icon?: string | undefined;
+}
+
+export class CreateCountryCommand extends CountryCreateModel implements ICreateCountryCommand {
+
+    constructor(data?: ICreateCountryCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): CreateCountryCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateCountryCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ICreateCountryCommand extends ICountryCreateModel {
 }
 
 export class SwaggerException extends Error {

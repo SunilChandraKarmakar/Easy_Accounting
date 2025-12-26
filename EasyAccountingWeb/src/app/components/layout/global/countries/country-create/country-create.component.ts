@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -30,7 +30,7 @@ export class CountryCreateComponent implements OnInit {
   countryCreateModel: CountryCreateModel = new CountryCreateModel();
 
   constructor(private countryService: CountryService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService,
-    private messageService: NzMessageService) { }
+    private messageService: NzMessageService, private router: Router) { }
 
   ngOnInit() {
     // Initialize 0 index city for create
@@ -74,5 +74,58 @@ export class CountryCreateComponent implements OnInit {
   removeCity(index: number): void {
     this.countryCreateModel.cities =
       this.countryCreateModel.cities?.filter((_, i) => i !== index) ?? [];
+  }
+
+  // Country create form validation
+  private getCountryCreateFromValidationResult(): boolean {
+
+    // Country name validation
+    if (!this.countryCreateModel.name || this.countryCreateModel.name.trim() === '') {
+      this.toastrService.warning('Please, provide country name.', 'Warning.');
+      return false;
+    }
+
+    // Country code validation
+    if (!this.countryCreateModel.code || this.countryCreateModel.code.trim() === '') {
+      this.toastrService.warning('Please, provide country code.', 'Warning.');
+      return false;
+    }
+
+    // Cities validation (only if cities exist)
+    if (this.countryCreateModel.cities && this.countryCreateModel.cities.length > 0) {
+
+      for (let i = 0; i < this.countryCreateModel.cities.length; i++) {
+        const city = this.countryCreateModel.cities[i];
+
+        if (!city.name || city.name.trim() === '') {
+          this.toastrService.warning(`Please, provide city name for row ${i + 1}.`, 'Warning.');
+          return false;
+        }
+      }
+    }
+
+    // All validations passed
+    return true;
+  }
+
+
+  // on click save country with city
+  onClickSaveCountry(): void {
+    // Get create from validation result
+    let getCreateFormValidationResult: boolean = this.getCountryCreateFromValidationResult();
+
+    if(getCreateFormValidationResult) {
+      this.spinnerService.show();
+      this.countryService.create(this.countryCreateModel).subscribe((result: boolean) => {
+        this.spinnerService.hide();
+        this.toastrService.success("Country create successful.", "Successful");
+        return this.router.navigateByUrl("/app/countries");
+      },
+      (error: any) => {
+        this.spinnerService.hide();
+        this.toastrService.error("Country is not created! Please, try again.", "Error.");
+        return;
+      })
+    }
   }
 }

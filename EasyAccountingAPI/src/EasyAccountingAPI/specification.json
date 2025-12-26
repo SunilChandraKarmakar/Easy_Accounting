@@ -13,11 +13,11 @@
         ],
         "operationId": "Country_Create",
         "requestBody": {
-          "x-name": "countryCreateModel",
+          "x-name": "createCountryCommand",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CountryCreateModel"
+                "$ref": "#/components/schemas/CreateCountryCommand"
               }
             }
           },
@@ -372,6 +372,17 @@
             "nullable": true
           }
         }
+      },
+      "CreateCountryCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CountryCreateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
       }
     },
     "securitySchemes": {

@@ -4,12 +4,15 @@
     {
         public class Handler : IRequestHandler<CreateCountryCommand, bool>
         {
+            private readonly IUnitOfWorkRepository _unitOfWorkRepository;
             private readonly ICountryRepository _countryRepository;
             private readonly ICityRepository _cityRepository;
             private readonly IMapper _mapper;
 
-            public Handler(ICountryRepository countryRepository, ICityRepository cityRepository, IMapper mapper)
+            public Handler(IUnitOfWorkRepository unitOfWorkRepository, ICountryRepository countryRepository, ICityRepository cityRepository,
+                IMapper mapper)
             {
+                _unitOfWorkRepository = unitOfWorkRepository;
                 _countryRepository = countryRepository;
                 _cityRepository = cityRepository;
                 _mapper = mapper;
@@ -17,33 +20,41 @@
 
             public async Task<bool> Handle(CreateCountryCommand request, CancellationToken cancellationToken)
             {
-                //var createdCountry = _mapper.Map<Country>(request);
-                //createdCountry = await _countryManager.CreateAsync(createdCountry);
+                // Start Transaction
+                await _unitOfWorkRepository.BeginTransactionAsync(cancellationToken);
 
-                //// Check, cities is not null and has items
-                //if(request.Cities is not null && request.Cities.Count > 0)
-                //{
-                //    // Prepare cities
-                //    var prepiredCities = new List<City>();
+                try
+                {
+                    // Create Country
+                    var country = _mapper.Map<Country>(request);
+                    await _countryRepository.CreateAsync(country, cancellationToken);
 
-                //    foreach (var city in request.Cities)
-                //    {
-                //        var cityEntity = _mapper.Map<City>(city);
-                //        cityEntity.CountryId = createdCountry.Id;
+                    // Create Cities (if any)
+                    if (request.Cities?.Any() == true)
+                    {
+                        var cities = request.Cities
+                            .Select(cityCreateModel =>
+                            {
+                                var city = _mapper.Map<City>(cityCreateModel);
+                                city.Country = country;
+                                return city;
+                            })
+                            .ToList();
 
-                //        // Add to prepared list
-                //        prepiredCities.Add(cityEntity);
-                //    }
+                        await _cityRepository.BulkCreateAsync(cities, cancellationToken);
+                    }
 
-                //    // Bulk insert cities
-                //    if(prepiredCities is not null && prepiredCities.Count > 0)
-                //        await _cityManager.BulkCreateAsync(prepiredCities);
-                //}
+                    // Final save + commit
+                    await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);
+                    await _unitOfWorkRepository.CommitTransactionAsync(cancellationToken);
 
-                //if (createdCountry is not null && createdCountry.Id > 0)
-                //    return true;
-
-                return false;
+                    return country.Id > 0;
+                }
+                catch
+                {
+                    await _unitOfWorkRepository.RollbackTransactionAsync(cancellationToken);
+                    return false;
+                }
             }
         }
     }
