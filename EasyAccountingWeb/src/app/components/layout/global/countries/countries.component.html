@@ -56,9 +56,22 @@
                         <nz-icon nzType="edit" />
                       </button>
                       <nz-divider nzType="vertical"></nz-divider>
-                      <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Delete" nzDanger class="action-btn delete-btn">
+                      <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Delete" nzDanger class="action-btn delete-btn" nz-popconfirm [nzPopconfirmTitle]="deleteTpl" [nzIcon]="iconTpl"
+                        (nzOnConfirm)="onClickDelete(data.id)" (nzOnCancel)="cancel()">
                         <nz-icon nzType="delete" />
                       </button>
+                      <ng-template #deleteTpl>
+                        <div class="text-center">
+                          Are you sure you want to delete this Country?
+                          <br />
+                          <strong>If you delete it, all related cities will be deleted too.</strong>
+                          <br />
+                          Continue?
+                        </div>
+                      </ng-template>
+                      <ng-template #iconTpl>
+                        <nz-icon nzType="question-circle-o" style="color: red;" />
+                      </ng-template>
                     </td>
                   </tr>
                 }

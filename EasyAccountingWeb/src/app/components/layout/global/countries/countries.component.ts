@@ -12,6 +12,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 @Component({
   selector: 'app-countries',
@@ -19,7 +20,7 @@ import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
   styleUrls: ['./countries.component.css'],
   standalone: true,
   imports: [NzButtonModule, NzDividerModule, NzTableModule, RouterLink, NgxSpinnerModule, NzSpaceModule, NzInputModule, NzIconModule, 
-    NzTagModule, NzBadgeModule, NzBreadCrumbModule],
+    NzTagModule, NzBadgeModule, NzBreadCrumbModule, NzPopconfirmModule],
   providers: [CountryService]
 })
 
@@ -92,5 +93,39 @@ export class CountriesComponent implements OnInit {
 
     // Get countries
     this.getCountries();
+  }
+
+  cancel(): void {
+  }
+
+  // On click open delete modal
+  onClickDelete(countryId: string | undefined): void {
+    this.deleteCountry(countryId);
+  }
+
+  // Delete country
+  private deleteCountry(countryId: string | undefined): void {
+    if(countryId == null || countryId == undefined) {
+      this.toastrService.error("Country is not found. Please, try again.", "Error");
+      return;
+    }
+
+    this.spinnerService.show();
+    this.countryService.delete(countryId).subscribe((result: boolean) => {
+      this.spinnerService.hide();
+      if(result) {
+        this.toastrService.success("Country deleted successfully.", "Success"); 
+        this.getCountries();
+      } else {
+        this.toastrService.error("Country is not deleted. Please, try again.", "Error");
+      }
+
+      return;
+    },
+    (error: any) => {
+      this.spinnerService.hide();
+      this.toastrService.error("Country is not deleted. Please, try again.", "Error");
+      return;
+    });
   }
 }
