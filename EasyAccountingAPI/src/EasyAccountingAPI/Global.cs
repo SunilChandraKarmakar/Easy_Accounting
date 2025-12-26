@@ -18,3 +18,5 @@ global using EasyAccountingAPI.Application.ApplicationLogics.Global.CountryLogic
 global using EasyAccountingAPI.Application.ApplicationLogics.Global.CountryLogic.Queries;
 global using EasyAccountingAPI.Shared.Base;
 global using Microsoft.AspNetCore.Mvc;
+global using EasyAccountingAPI.Application.Configurations.Seed;
+global using MediatR;

@@ -4,12 +4,12 @@
     {
         public class Handler : IRequestHandler<GetCountriesByFilterQuery, FilterPageResultModel<CountryGridModel>>
         {
-            private readonly ICountryManager _countryManager;
+            private readonly ICountryRepository _countryRepository;
             private readonly IMapper _mapper;
 
-            public Handler(ICountryManager countryManager, IMapper mapper)
+            public Handler(ICountryRepository countryRepository, IMapper mapper)
             {
-                _countryManager = countryManager;
+                _countryRepository = countryRepository;
                 _mapper = mapper;
             }
 
@@ -17,7 +17,7 @@
                 CancellationToken cancellationToken)
             {
                 // Get countries and map to grid model
-                var getCountries = await _countryManager.GetCountriesByFilterAsync(request);
+                var getCountries = await _countryRepository.GetCountriesByFilterAsync(request);
                 var mapCountries = _mapper.Map<ICollection<CountryGridModel>>(getCountries.Items);
 
                 // Return paginated result

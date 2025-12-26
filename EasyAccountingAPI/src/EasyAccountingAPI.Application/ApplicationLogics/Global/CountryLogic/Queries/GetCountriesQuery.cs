@@ -4,12 +4,12 @@
     {
         public class Handler : IRequestHandler<GetCountriesQuery, ICollection<CountryGridModel>>
         {
-            private readonly ICountryManager _countryManager;
+            private readonly ICountryRepository _countryRepository;
             private readonly IMapper _mapper;
 
-            public Handler(ICountryManager countryManager, IMapper mapper)
+            public Handler(ICountryRepository countryepository, IMapper mapper)
             {
-                _countryManager = countryManager;
+                _countryRepository = countryepository;
                 _mapper = mapper;
             }
 
@@ -17,7 +17,7 @@
                 CancellationToken cancellationToken)
             {
                 // Get countries and map to grid model
-                var getCountries = await _countryManager.GetAllAsync();
+                var getCountries = await _countryRepository.GetAllAsync();
                 var mapCountries = _mapper.Map<ICollection<CountryGridModel>>(getCountries);
 
                 return mapCountries;

@@ -1,6 +1,4 @@
-﻿using EasyAccountingAPI.Shared.Services;
-
-namespace EasyAccountingAPI.Application.ApplicationLogics.Global.CountryLogic.Model
+﻿namespace EasyAccountingAPI.Application.ApplicationLogics.Global.CountryLogic.Model
 {
     public class CountryViewModel
     {

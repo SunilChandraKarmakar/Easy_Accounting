@@ -6,12 +6,12 @@
 
         public class Handler : IRequestHandler<GetCountryDetailQuery, CountryUpdateModel>
         {
-            private readonly ICountryManager _countryManager;
+            private readonly ICountryRepository _countryRepository;
             private readonly IMapper _mapper;
 
-            public Handler(ICountryManager countryManager, IMapper mapper)
+            public Handler(ICountryRepository countryRepository, IMapper mapper)
             {
-                _countryManager = countryManager;
+                _countryRepository = countryRepository;
                 _mapper = mapper;
             }
 
@@ -22,7 +22,7 @@
                     return new CountryUpdateModel();
 
                 // Get country by id
-                var getCountry = await _countryManager.GetByIdAsync(request.Id);
+                var getCountry = await _countryRepository.GetByIdAsync(request.Id);
 
                 if (getCountry is null)
                     return new CountryUpdateModel();

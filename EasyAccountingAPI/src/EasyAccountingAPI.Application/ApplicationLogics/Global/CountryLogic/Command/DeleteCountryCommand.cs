@@ -6,11 +6,15 @@
 
         public class Handler : IRequestHandler<DeleteCountryCommand, bool>
         {
-            private readonly IUnitOfWorkManager _unitOfWorkManager;
+            private readonly IUnitOfWorkRepository _unitOfWorkRepository;
+            private readonly ICountryRepository _countryRepository;
+            private readonly ICityRepository _cityRepository;
 
-            public Handler(IUnitOfWorkManager unitOfWorkManager)
+            public Handler(IUnitOfWorkRepository unitOfWorkRepository, ICountryRepository countryRepository, ICityRepository cityRepository)
             {
-                _unitOfWorkManager = unitOfWorkManager;
+                _unitOfWorkRepository = unitOfWorkRepository;
+                _countryRepository = countryRepository;
+                _cityRepository = cityRepository;
             }
 
             public async Task<bool> Handle(DeleteCountryCommand request, CancellationToken cancellationToken)
@@ -20,35 +24,31 @@
                 if (!int.TryParse(decryptedId, out var countryId))
                     return false;
 
-                // Get repositories
-                var countryManager = _unitOfWorkManager.GetRepository<ICountryManager>();
-                var cityManager = _unitOfWorkManager.GetRepository<ICityManager>();
-
                 // Fetch the country
-                var country = await countryManager.GetByIdAsync(countryId);
+                var country = await _countryRepository.GetByIdAsync(countryId);
                 if (country is null)
                     return false;
 
                 // Begin transaction
-                await _unitOfWorkManager.BeginTransactionAsync(cancellationToken);
+                await _unitOfWorkRepository.BeginTransactionAsync(cancellationToken);
 
                 try
                 {
                     // 1. Bulk soft delete cities (NO SaveChanges inside)
-                    await cityManager.DeleteBulkCityByCountryIdAsync(country.Id);
+                    await _cityRepository.DeleteBulkCityByCountryIdAsync(country.Id);
 
                     // 2. Soft delete country (NO SaveChanges inside)
                     country.IsDeleted = true;
                     country.DeletedDateTime = DateTime.UtcNow;
-                    await countryManager.UpdateAsync(country);
+                    _countryRepository.Update(country);
 
                     // 3. Single commit
-                    await _unitOfWorkManager.CommitAsync(cancellationToken);
+                    await _unitOfWorkRepository.CommitTransactionAsync(cancellationToken);
                     return true;
                 }
                 catch
                 {
-                    await _unitOfWorkManager.RollbackAsync(cancellationToken);
+                    await _unitOfWorkRepository.RollbackTransactionAsync(cancellationToken);
                     throw; 
                 }
             }

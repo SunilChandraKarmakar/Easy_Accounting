@@ -10,35 +10,37 @@
             return await _baseRepository.GetAllAsync();
         }
 
-        public virtual async Task<FilterPageResultModel<T>> GetAllFilterAsync(FilterPageModel model, Expression<Func<T, bool>>? filterExpression = null, 
-            Expression<Func<T, object>>? defaultSortExpression = null, Dictionary<string, Expression<Func<T, object>>>? sortableColumns = null)
+        public virtual async Task<FilterPageResultModel<T>> GetAllFilterAsync(FilterPageModel model,
+            Expression<Func<T, bool>>? filterExpression = null, Expression<Func<T, object>>? defaultSortExpression = null,
+            Dictionary<string, Expression<Func<T, object>>>? sortableColumns = null,
+            Func<IQueryable<T>, IQueryable<T>>? include = null)
         {
-            return await _baseRepository.GetAllFilterAsync(model, filterExpression, defaultSortExpression, sortableColumns);
+            return await _baseRepository.GetAllFilterAsync(model, filterExpression, defaultSortExpression, sortableColumns, include);
         }
 
-        public virtual async Task<T> GetByIdAsync(int id)
+        public virtual async Task<T?> GetByIdAsync(int id)
         {
             return await _baseRepository.GetByIdAsync(id);
         }
 
-        public virtual async Task<T> CreateAsync(T entity)
+        public virtual Task CreateAsync(T entity, CancellationToken ct = default)
         {
-            return await _baseRepository.CreateAsync(entity);
+            return _baseRepository.CreateAsync(entity, ct);
         }
 
-        public virtual Task<int> BulkCreateAsync(IEnumerable<T> entities)
+        public virtual Task BulkCreateAsync(IEnumerable<T> entities, CancellationToken ct = default)
         {
-            return _baseRepository.BulkCreateAsync(entities);
+            return _baseRepository.BulkCreateAsync(entities, ct);
         }
 
-        public virtual async Task<T> UpdateAsync(T entity)
+        public virtual void Update(T entity)
         {
-            return await _baseRepository.UpdateAsync(entity);
+            _baseRepository.Update(entity);
         }
 
-        public virtual async Task<bool> DeleteAsync(T entity)
+        public virtual void Delete(T entity)
         {
-            return await _baseRepository.DeleteAsync(entity);
+            _baseRepository.Delete(entity);
         }
     }
 }

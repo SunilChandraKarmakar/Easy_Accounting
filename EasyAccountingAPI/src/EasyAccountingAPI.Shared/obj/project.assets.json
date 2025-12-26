@@ -7398,11 +7398,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Easy_Accounting\\EasyAccountingAPI\\src\\EasyAccountingAPI.Shared\\EasyAccountingAPI.Shared.csproj",
+      "projectUniqueName": "E:\\Easy_Accounting\\EasyAccountingAPI\\src\\EasyAccountingAPI.Shared\\EasyAccountingAPI.Shared.csproj",
       "projectName": "EasyAccountingAPI.Shared",
-      "projectPath": "D:\\Easy_Accounting\\EasyAccountingAPI\\src\\EasyAccountingAPI.Shared\\EasyAccountingAPI.Shared.csproj",
+      "projectPath": "E:\\Easy_Accounting\\EasyAccountingAPI\\src\\EasyAccountingAPI.Shared\\EasyAccountingAPI.Shared.csproj",
       "packagesPath": "C:\\Users\\Sunil Karmakar\\.nuget\\packages\\",
-      "outputPath": "D:\\Easy_Accounting\\EasyAccountingAPI\\src\\EasyAccountingAPI.Shared\\obj\\",
+      "outputPath": "E:\\Easy_Accounting\\EasyAccountingAPI\\src\\EasyAccountingAPI.Shared\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

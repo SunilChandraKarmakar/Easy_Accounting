@@ -2,9 +2,9 @@
 {
     public interface IUnitOfWorkRepository : IDisposable
     {
-        TRepository GetRepository<TRepository>() where TRepository : class;
-        Task BeginTransactionAsync(CancellationToken cancellationToken = default);
-        Task CommitAsync(CancellationToken cancellationToken = default);
-        Task RollbackAsync(CancellationToken cancellationToken = default);
+        Task<int> SaveChangesAsync(CancellationToken ct = default);
+        Task BeginTransactionAsync(CancellationToken ct = default);
+        Task CommitTransactionAsync(CancellationToken ct = default);
+        Task RollbackTransactionAsync(CancellationToken ct = default);
     }
 }

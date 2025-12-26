@@ -16,7 +16,7 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface ICountryService {
     create(countryCreateModel: CountryCreateModel): Observable<boolean>;
-    delete(id: number): Observable<boolean>;
+    delete(id: string): Observable<boolean>;
     getAll(): Observable<CountryGridModel[]>;
     getById(id: number): Observable<CountryViewModel>;
     getFilterCountries(getCountriesByFilterQuery: GetCountriesByFilterQuery): Observable<FilterPageResultModelOfCountryGridModel>;
@@ -87,7 +87,7 @@ export class CountryService implements ICountryService {
         return _observableOf(null as any);
     }
 
-    delete(id: number): Observable<boolean> {
+    delete(id: string): Observable<boolean> {
         let url_ = this.baseUrl + "/api/Country/Delete/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");

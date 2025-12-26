@@ -43,68 +43,31 @@
             return new FilterPageResultModel<T>(items, totalCount);
         }
 
-
-        public virtual async Task<T> GetByIdAsync(int id)
+        public virtual async Task<T?> GetByIdAsync(int id)
         {
             var getByIdAsync = await db.Set<T>().FindAsync(id);
-            return getByIdAsync!;
+            return getByIdAsync;
         }
 
-        public virtual async Task<T> CreateAsync(T entity)
+        public virtual async Task CreateAsync(T entity, CancellationToken ct = default)
         {
-            await db.Set<T>().AddAsync(entity);
-            var createAsync = await db.SaveChangesAsync() > 0;
-
-            return entity;
+            await db.Set<T>().AddAsync(entity, ct);
         }
 
-        public virtual async Task<int> BulkCreateAsync(IEnumerable<T> entities)
+        public virtual async Task BulkCreateAsync(IEnumerable<T> entities, CancellationToken ct = default)
         {
-            if (entities == null || !entities.Any())
-                return 0;
-
-            // Improve performance for large inserts
-            var previousTracking = db.ChangeTracker.AutoDetectChangesEnabled;
-            db.ChangeTracker.AutoDetectChangesEnabled = false;
-
-            using var transaction = await db.Database.BeginTransactionAsync();
-
-            try
-            {
-                await db.Set<T>().AddRangeAsync(entities);
-                int inserted = await db.SaveChangesAsync();
-
-                await transaction.CommitAsync();
-                return inserted;
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
-            finally
-            {
-                // Restore original tracking state
-                db.ChangeTracker.AutoDetectChangesEnabled = previousTracking;
-            }
+            if (entities == null) return;
+            await db.Set<T>().AddRangeAsync(entities, ct);
         }
 
-        public virtual async Task<T> UpdateAsync(T entity)
+        public virtual void Update(T entity)
         {
             db.Entry(entity).State = EntityState.Modified;
-            var updateAsync = await db.SaveChangesAsync() > 0;
-            db.Entry(entity).State = EntityState.Detached;
-
-            return entity;
         }
 
-        public virtual async Task<bool> DeleteAsync(T entity)
+        public virtual void Delete(T entity)
         {
             db.Set<T>().Remove(entity);
-            var deleteAsync = await db.SaveChangesAsync() > 0;
-            db.Entry(entity).State = EntityState.Detached;
-
-            return deleteAsync;
         }
     }
 }

@@ -4,29 +4,30 @@
     {
         public class Handler : IRequestHandler<CreateCountryCitySeedCommand, bool>
         {
-            private readonly ICountryManager _countryManager;
-            private readonly ICityManager _cityManager;
+            private readonly IUnitOfWorkRepository _unitOfWorkRepository;
+            private readonly ICountryRepository _countryRepository;
+            private readonly ICityRepository _cityRepository;
 
-            public Handler(ICountryManager countryManager, ICityManager cityManager)
+            public Handler(IUnitOfWorkRepository unitOfWorkRepository, ICountryRepository countryRepository, ICityRepository cityRepository)
             {
-                _countryManager = countryManager;
-                _cityManager = cityManager;
+                _unitOfWorkRepository = unitOfWorkRepository;
+                _countryRepository = countryRepository;
+                _cityRepository = cityRepository;
             }
 
             public async Task<bool> Handle(CreateCountryCitySeedCommand request, CancellationToken cancellationToken)
             {
                 var faker = new Faker("en");
 
-                // HashSets with capacity to reduce resizing cost
                 var countryNameSet = new HashSet<string>(200, StringComparer.OrdinalIgnoreCase);
                 var countryCodeSet = new HashSet<string>(200, StringComparer.OrdinalIgnoreCase);
 
                 var countries = new List<Country>(200);
 
-               for (int i = 0; i < 200; i++)
-               {
+                for (int i = 0; i < 200; i++)
+                {
                     var name = faker.Address.Country();
-                    var code = faker.Address.CountryCode()?.Trim().ToLower() ?? "un";
+                    var code = faker.Address.CountryCode()?.Trim().ToLowerInvariant() ?? "un";
 
                     if (!countryNameSet.Add(name)) continue;
                     if (!countryCodeSet.Add(code)) continue;
@@ -40,33 +41,50 @@
                     });
                 }
 
-                // Save countries
-                var isSaveCountries = await _countryManager.BulkCreateAsync(countries) > 0;
+                // Transaction guarantees all-or-nothing
+                await _unitOfWorkRepository.BeginTransactionAsync(cancellationToken);
 
-                // Get saved country ids
-                var countryIds = await _countryManager.GetCountryIdsAsync();
-
-                // Unique city names
-                var cityNameSet = new HashSet<string>(400, StringComparer.OrdinalIgnoreCase);
-                var cities = new List<City>(400);
-
-                for (int i = 0; i < 400; i++)
+                try
                 {
-                    var cityName = faker.Address.City();
-                    if (!cityNameSet.Add(cityName)) continue;
+                    // 1) Add countries (no SaveChanges here)
+                    await _countryRepository.BulkCreateAsync(countries, cancellationToken);
 
-                    cities.Add(new City
+                    // 2) Save once so SQL Server generates Country.Id values
+                    await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);
+
+                    // Now countries list has IDs filled in by EF Core.
+                    var countryIds = countries.Select(c => c.Id).ToArray();
+
+                    var cityNameSet = new HashSet<string>(400, StringComparer.OrdinalIgnoreCase);
+                    var cities = new List<City>(400);
+
+                    for (int i = 0; i < 400; i++)
                     {
-                        Name = cityName,
-                        CountryId = faker.PickRandom(countryIds),
-                        IsDeleted = false
-                    });
+                        var cityName = faker.Address.City();
+                        if (!cityNameSet.Add(cityName)) continue;
+
+                        cities.Add(new City
+                        {
+                            Name = cityName,
+                            CountryId = faker.PickRandom(countryIds),
+                            IsDeleted = false
+                        });
+                    }
+
+                    // 3) Add cities (no SaveChanges)
+                    await _cityRepository.BulkCreateAsync(cities, cancellationToken);
+
+                    // 4) Commit: SaveChanges + transaction commit (
+                    // If your CommitTransactionAsync already calls SaveChanges, then do ONLY CommitTransactionAsync
+                    await _unitOfWorkRepository.CommitTransactionAsync(cancellationToken);
+
+                    return true;
                 }
-
-                // Save cities
-                var isSaveCities = await _cityManager.BulkCreateAsync(cities) > 0;
-
-                return isSaveCountries && isSaveCities;
+                catch
+                {
+                    await _unitOfWorkRepository.RollbackTransactionAsync(cancellationToken);
+                    return false;
+                }
             }
 
             // Get country flag URL from FlagCDN

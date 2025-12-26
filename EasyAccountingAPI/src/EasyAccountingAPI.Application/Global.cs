@@ -3,8 +3,6 @@ global using EasyAccountingAPI.Shared.Mappings;
 global using System.Reflection;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.Extensions.DependencyInjection;
-global using EasyAccountingAPI.Manager.Contracts.Global;
-global using EasyAccountingAPI.Manager.Manager.Global;
 global using EasyAccountingAPI.Repository.Contracts.Global;
 global using EasyAccountingAPI.Repository.Repository.Global;
 global using EasyAccountingAPI.Model.GlobalModels;
@@ -18,7 +16,5 @@ global using EasyAccountingAPI.Application.ApplicationLogics.Global.CountryLogic
 global using EasyAccountingAPI.Database.DatabaseContexts;
 global using EasyAccountingAPI.Application.ApplicationLogics.Global.CityLogic.Model;
 global using EasyAccountingAPI.Shared.Services;
-global using EasyAccountingAPI.Manager.Base;
-global using EasyAccountingAPI.Manager.Contracts;
 global using EasyAccountingAPI.Repository.Base;
 global using EasyAccountingAPI.Repository.Contracts;

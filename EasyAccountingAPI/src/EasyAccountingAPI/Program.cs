@@ -1,6 +1,3 @@
-using EasyAccountingAPI.Application.Configurations.Seed;
-using MediatR;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

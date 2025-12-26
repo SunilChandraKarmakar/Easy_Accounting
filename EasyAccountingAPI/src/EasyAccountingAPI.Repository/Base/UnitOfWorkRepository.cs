@@ -1,51 +1,52 @@
 ﻿namespace EasyAccountingAPI.Repository.Base
 {
-    public abstract class UnitOfWorkRepository : IUnitOfWorkRepository
+    public class UnitOfWorkRepository : IUnitOfWorkRepository
     {
         private readonly DatabaseContext _db;
-        private readonly IServiceProvider _serviceProvider;
         private IDbContextTransaction? _transaction;
 
-        public UnitOfWorkRepository(DatabaseContext db, IServiceProvider serviceProvider)
+        public UnitOfWorkRepository(DatabaseContext db) => _db = db;
+
+        public Task<int> SaveChangesAsync(CancellationToken ct = default)
+            => _db.SaveChangesAsync(ct);
+
+        public async Task BeginTransactionAsync(CancellationToken ct = default)
         {
-            _db = db;
-            _serviceProvider = serviceProvider;
+            if (_transaction != null)
+                throw new InvalidOperationException("Transaction already started.");
+
+            _transaction = await _db.Database.BeginTransactionAsync(ct);
         }
 
-        public TRepository GetRepository<TRepository>() where TRepository : class
-        {
-            var repository = _serviceProvider.GetService<TRepository>();
-
-            if (repository is null)
-                throw new InvalidOperationException($"Repository {typeof(TRepository).Name} not registered.");
-
-            return repository;
-        }
-
-        public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
-        {
-            _transaction = await _db.Database.BeginTransactionAsync(cancellationToken);
-        }
-
-        public async Task CommitAsync(CancellationToken cancellationToken = default)
+        public async Task CommitTransactionAsync(CancellationToken ct = default)
         {
             if (_transaction == null)
                 throw new InvalidOperationException("Transaction not started.");
 
-            await _db.SaveChangesAsync(cancellationToken);
-            await _transaction.CommitAsync(cancellationToken);
+            await _db.SaveChangesAsync(ct);
+            await _transaction.CommitAsync(ct);
+
+            await _transaction.DisposeAsync();
+            _transaction = null;
         }
 
-        public async Task RollbackAsync(CancellationToken cancellationToken = default)
+        public async Task RollbackTransactionAsync(CancellationToken ct = default)
         {
-            if (_transaction != null)
-                await _transaction.RollbackAsync(cancellationToken);
+            if (_transaction == null) return;
+
+            await _transaction.RollbackAsync(ct);
+            await _transaction.DisposeAsync();
+            _transaction = null;
         }
 
         public void Dispose()
         {
             _transaction?.Dispose();
-            _db.Dispose();
+
+            // IMPORTANT:
+            // If DatabaseContext is DI-scoped (recommended), DO NOT dispose it manually.
+            // Let DI container dispose it at the end of the request.
+            // _db.Dispose();
         }
     }
 }
