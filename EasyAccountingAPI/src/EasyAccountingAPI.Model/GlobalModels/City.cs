@@ -1,7 +1,6 @@
 ﻿namespace EasyAccountingAPI.Model.GlobalModels
 {
     [Table("Cities", Schema = "Global")]
-    [Index(nameof(Name), IsUnique = true)]
     public class City : IDelatableEntity
     {
         public int Id { get; set; }

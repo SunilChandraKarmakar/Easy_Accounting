@@ -6,15 +6,12 @@
         {
             private readonly IUnitOfWorkRepository _unitOfWorkRepository;
             private readonly ICountryRepository _countryRepository;
-            private readonly ICityRepository _cityRepository;
             private readonly IMapper _mapper;
 
-            public Handler(IUnitOfWorkRepository unitOfWorkRepository, ICountryRepository countryRepository, ICityRepository cityRepository,
-                IMapper mapper)
+            public Handler(IUnitOfWorkRepository unitOfWorkRepository, ICountryRepository countryRepository, IMapper mapper)
             {
                 _unitOfWorkRepository = unitOfWorkRepository;
                 _countryRepository = countryRepository;
-                _cityRepository = cityRepository;
                 _mapper = mapper;
             }
 
@@ -27,22 +24,7 @@
                 {
                     // Create Country
                     var country = _mapper.Map<Country>(request);
-                    await _countryRepository.CreateAsync(country, cancellationToken);
-
-                    // Create Cities (if any)
-                    if (request.Cities?.Any() == true)
-                    {
-                        var cities = request.Cities
-                            .Select(cityCreateModel =>
-                            {
-                                var city = _mapper.Map<City>(cityCreateModel);
-                                city.Country = country;
-                                return city;
-                            })
-                            .ToList();
-
-                        await _cityRepository.BulkCreateAsync(cities, cancellationToken);
-                    }
+                    await _countryRepository.CreateAsync(country, cancellationToken);                    
 
                     // Final save + commit
                     await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);

@@ -25,7 +25,8 @@
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Country, CountryCreateModel>();
+            profile.CreateMap<Country, CountryCreateModel>()
+                .ForMember(d => d.Cities, s => s.MapFrom(m => m.Cities));
             profile.CreateMap<CountryCreateModel, Country>();
         }
     }

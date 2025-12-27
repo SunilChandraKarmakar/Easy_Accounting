@@ -118,8 +118,14 @@ export class CountryCreateComponent implements OnInit {
       this.spinnerService.show();
       this.countryService.create(this.countryCreateModel).subscribe((result: boolean) => {
         this.spinnerService.hide();
-        this.toastrService.success("Country create successful.", "Successful");
-        return this.router.navigateByUrl("/app/countries");
+        
+        if(result) {
+          this.toastrService.success("Country create successful.", "Successful");
+          return this.router.navigateByUrl("/app/countries");
+        } else {
+          this.toastrService.error("Country cannot created! Please, try again.", "Error");
+          return;
+        }
       },
       (error: any) => {
         this.spinnerService.hide();

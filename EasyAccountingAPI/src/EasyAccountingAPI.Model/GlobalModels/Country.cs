@@ -1,7 +1,6 @@
 ﻿namespace EasyAccountingAPI.Model.GlobalModels
 {
     [Table("Countries", Schema = "Global")]
-    [Index(nameof(Name), nameof(Code), IsUnique = true)]
     public class Country : IDelatableEntity
     {
         public Country()
