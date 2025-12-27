@@ -1,3 +1,94 @@
-<p>
-  country-update works!
-</p>
+<nz-breadcrumb>
+  <nz-breadcrumb-item>Settings</nz-breadcrumb-item>
+    <nz-breadcrumb-item><a routerLink="/app/countries" class="breadcrumb-link">Country</a></nz-breadcrumb-item>
+  <nz-breadcrumb-item>Update Country</nz-breadcrumb-item>
+</nz-breadcrumb>
+<div class="row mt-3">
+  <div class="col-md-12">
+    <div class="card shadow-lg">
+      <div class="card-header">
+        <h5 class="card-title text-center">Update Country</h5>
+      </div>
+      <div class="card-body">
+        <form class="row g-3">
+          <div class="col-md-3">
+            <label for="name" class="form-label">Name <span class="text-danger fw-bold">*</span></label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="home" />
+              <input nz-input placeholder="Enter country name" nzSize="default" id="name" name="name" 
+                [(ngModel)]="countryUpdateModel.name" />
+            </nz-input-wrapper>
+          </div>
+          <div class="col-md-3">
+            <label for="code" class="form-label">Code <span class="text-danger fw-bold">*</span></label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="tag" />
+              <input nz-input placeholder="Enter country code" nzSize="default" id="code" name="code" 
+                [(ngModel)]="countryUpdateModel.code" />
+            </nz-input-wrapper>
+          </div>
+          <div class="col-md-3">
+            <div class="icon-upload-align">
+              <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76" [nzHeaders]="{ authorization: 'authorization-text' }"
+              (nzChange)="handleChange($event)">
+              <button nz-button>
+                <nz-icon nzType="upload" />
+                Click to Upload Icon
+              </button>
+            </nz-upload>
+            </div>
+          </div>
+        </form>
+        <div class="row mt-3">
+          <div class="col-md-6">
+            <nz-table [nzShowPagination]="false" #citiesTable [nzData]="countryUpdateModel.cityUpdateModels!" [nzBordered]="true">
+              <thead>
+                <tr>
+                  <th style="width: 70%">City Name</th>
+                  <th class="text-center" style="width: 30%">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (city of citiesTable.data; track i; let i = $index) {
+                  <tr>
+                    <td>
+                      <nz-input-wrapper>
+                        <nz-icon nzInputPrefix nzType="aim" />
+                        <input nz-input nzSize="default" placeholder="Enter city name" [(ngModel)]="city.name" name="city-{{ i }}"
+                          [ngModelOptions]="{ standalone: true }" />
+                      </nz-input-wrapper>                      
+                    </td>
+                    <td class="text-center">
+                      <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Delete" nzDanger class="delete-btn">
+                        <nz-icon nzType="delete" />
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </nz-table>
+            <div class="d-flex justify-content-end mt-2">
+              <button nz-button nzType="default">
+                <nz-icon nzType="plus" />
+                Add City
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-end">
+        <button nz-button nzType="primary" class="btn-save" (click)="onClickUpdateCountry()">
+          <nz-icon nzType="save" nzTheme="outline" />
+          Update
+        </button>
+        <button nz-button nzType="primary" class="btn-cancel" routerLink="/app/countries">
+          <nz-icon nzType="close" nzTheme="outline" />
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>

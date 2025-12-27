@@ -104,8 +104,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             },
             "x-position": 1
           }
@@ -163,11 +162,11 @@
         ],
         "operationId": "Country_Update",
         "requestBody": {
-          "x-name": "countryUpdateModel",
+          "x-name": "updateCountryCommand",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CountryUpdateModel"
+                "$ref": "#/components/schemas/UpdateCountryCommand"
               }
             }
           },
@@ -180,7 +179,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CountryUpdateModel"
+                  "type": "boolean"
                 }
               }
             }
@@ -370,6 +369,35 @@
           "icon": {
             "type": "string",
             "nullable": true
+          },
+          "cityUpdateModels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CityUpdateModel"
+            }
+          }
+        }
+      },
+      "CityUpdateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "countryId"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2
+          },
+          "countryId": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -377,6 +405,17 @@
         "allOf": [
           {
             "$ref": "#/components/schemas/CountryCreateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "UpdateCountryCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CountryUpdateModel"
           },
           {
             "type": "object",

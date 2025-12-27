@@ -21,7 +21,7 @@
 
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(CountryViewModel), StatusCodes.Status200OK)]
-        public async Task<ActionResult<CountryViewModel>> GetByIdAsync(int id)
+        public async Task<ActionResult<CountryViewModel>> GetByIdAsync(string id)
         {
             var countryVm = new CountryViewModel
             {
@@ -45,16 +45,16 @@
         }
 
         [HttpPut]
-        [ProducesResponseType(typeof(CountryUpdateModel), StatusCodes.Status200OK)]
-        public async Task<ActionResult<bool>> UpdateAsync(CountryUpdateModel countryUpdateModel)
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        public async Task<ActionResult<bool>> UpdateAsync(UpdateCountryCommand updateCountryCommand)
         {
             if (ModelState.IsValid)
             {
-                var isCountryUpdate = await Mediator.Send(countryUpdateModel);
+                var isCountryUpdate = await Mediator.Send(updateCountryCommand);
                 return Ok(isCountryUpdate);
             }
 
-            return BadRequest(countryUpdateModel);
+            return BadRequest(updateCountryCommand);
         }
 
         [HttpDelete("{id}")]

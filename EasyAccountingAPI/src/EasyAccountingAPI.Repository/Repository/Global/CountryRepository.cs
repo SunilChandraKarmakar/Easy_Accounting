@@ -28,6 +28,7 @@
         public override async Task<Country> GetByIdAsync(int id)
         {
             var country = await db.Countries
+                .Include(c => c.Cities.Where(c => !c.IsDeleted))
                 .Where(c => c.Id == id && !c.IsDeleted)
                 .FirstOrDefaultAsync();
 

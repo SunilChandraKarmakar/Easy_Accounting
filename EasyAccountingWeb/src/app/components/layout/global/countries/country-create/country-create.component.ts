@@ -9,7 +9,6 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NzUploadChangeParam, NzUploadModule } from 'ng-zorro-antd/upload';
-import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
@@ -30,7 +29,7 @@ export class CountryCreateComponent implements OnInit {
   countryCreateModel: CountryCreateModel = new CountryCreateModel();
 
   constructor(private countryService: CountryService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService,
-    private messageService: NzMessageService, private router: Router) { }
+    private router: Router) { }
 
   ngOnInit() {
     // Initialize 0 index city for create
@@ -50,12 +49,9 @@ export class CountryCreateComponent implements OnInit {
 
   handleChange(info: NzUploadChangeParam): void {
     if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList);
     }
     if (info.file.status === 'done') {
-      this.messageService.success(`${info.file.name} file uploaded successfully`);
     } else if (info.file.status === 'error') {
-      this.messageService.error(`${info.file.name} file upload failed.`);
     }
   }
 

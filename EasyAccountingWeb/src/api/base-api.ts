@@ -18,9 +18,9 @@ export interface ICountryService {
     create(createCountryCommand: CreateCountryCommand): Observable<boolean>;
     delete(id: string): Observable<boolean>;
     getAll(): Observable<CountryGridModel[]>;
-    getById(id: number): Observable<CountryViewModel>;
+    getById(id: string): Observable<CountryViewModel>;
     getFilterCountries(getCountriesByFilterQuery: GetCountriesByFilterQuery): Observable<FilterPageResultModelOfCountryGridModel>;
-    update(countryUpdateModel: CountryUpdateModel): Observable<CountryUpdateModel>;
+    update(updateCountryCommand: UpdateCountryCommand): Observable<boolean>;
 }
 
 @Injectable()
@@ -194,7 +194,7 @@ export class CountryService implements ICountryService {
         return _observableOf(null as any);
     }
 
-    getById(id: number): Observable<CountryViewModel> {
+    getById(id: string): Observable<CountryViewModel> {
         let url_ = this.baseUrl + "/api/Country/GetById/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -297,11 +297,11 @@ export class CountryService implements ICountryService {
         return _observableOf(null as any);
     }
 
-    update(countryUpdateModel: CountryUpdateModel): Observable<CountryUpdateModel> {
+    update(updateCountryCommand: UpdateCountryCommand): Observable<boolean> {
         let url_ = this.baseUrl + "/api/Country/Update";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(countryUpdateModel);
+        const content_ = JSON.stringify(updateCountryCommand);
 
         let options_ : any = {
             body: content_,
@@ -320,14 +320,14 @@ export class CountryService implements ICountryService {
                 try {
                     return this.processUpdate(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<CountryUpdateModel>;
+                    return _observableThrow(e) as any as Observable<boolean>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<CountryUpdateModel>;
+                return _observableThrow(response_) as any as Observable<boolean>;
         }));
     }
 
-    protected processUpdate(response: HttpResponseBase): Observable<CountryUpdateModel> {
+    protected processUpdate(response: HttpResponseBase): Observable<boolean> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -338,7 +338,8 @@ export class CountryService implements ICountryService {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = CountryUpdateModel.fromJS(resultData200);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -722,6 +723,7 @@ export class CountryUpdateModel implements ICountryUpdateModel {
     name!: string;
     code!: string;
     icon?: string | undefined;
+    cityUpdateModels?: CityUpdateModel[];
 
     constructor(data?: ICountryUpdateModel) {
         if (data) {
@@ -738,6 +740,11 @@ export class CountryUpdateModel implements ICountryUpdateModel {
             this.name = _data["name"];
             this.code = _data["code"];
             this.icon = _data["icon"];
+            if (Array.isArray(_data["cityUpdateModels"])) {
+                this.cityUpdateModels = [] as any;
+                for (let item of _data["cityUpdateModels"])
+                    this.cityUpdateModels!.push(CityUpdateModel.fromJS(item));
+            }
         }
     }
 
@@ -754,6 +761,11 @@ export class CountryUpdateModel implements ICountryUpdateModel {
         data["name"] = this.name;
         data["code"] = this.code;
         data["icon"] = this.icon;
+        if (Array.isArray(this.cityUpdateModels)) {
+            data["cityUpdateModels"] = [];
+            for (let item of this.cityUpdateModels)
+                data["cityUpdateModels"].push(item ? item.toJSON() : undefined as any);
+        }
         return data;
     }
 }
@@ -763,6 +775,51 @@ export interface ICountryUpdateModel {
     name: string;
     code: string;
     icon?: string | undefined;
+    cityUpdateModels?: CityUpdateModel[];
+}
+
+export class CityUpdateModel implements ICityUpdateModel {
+    id?: number;
+    name!: string;
+    countryId!: number;
+
+    constructor(data?: ICityUpdateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.countryId = _data["countryId"];
+        }
+    }
+
+    static fromJS(data: any): CityUpdateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new CityUpdateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["countryId"] = this.countryId;
+        return data;
+    }
+}
+
+export interface ICityUpdateModel {
+    id?: number;
+    name: string;
+    countryId: number;
 }
 
 export class CreateCountryCommand extends CountryCreateModel implements ICreateCountryCommand {
@@ -790,6 +847,33 @@ export class CreateCountryCommand extends CountryCreateModel implements ICreateC
 }
 
 export interface ICreateCountryCommand extends ICountryCreateModel {
+}
+
+export class UpdateCountryCommand extends CountryUpdateModel implements IUpdateCountryCommand {
+
+    constructor(data?: IUpdateCountryCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): UpdateCountryCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateCountryCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IUpdateCountryCommand extends ICountryUpdateModel {
 }
 
 export class SwaggerException extends Error {

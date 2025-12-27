@@ -2,7 +2,7 @@
 {
     public class GetCountryDetailQuery : IRequest<CountryUpdateModel>
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         public class Handler : IRequestHandler<GetCountryDetailQuery, CountryUpdateModel>
         {
@@ -17,12 +17,13 @@
 
             public async Task<CountryUpdateModel> Handle(GetCountryDetailQuery request, CancellationToken cancellationToken)
             {
-                // Check, id is valid
-                if (request.Id <= 0)
+                // Decrypt the country ID
+                var decryptedId = EncryptionService.Decrypt(request.Id);
+                if (!int.TryParse(decryptedId, out var countryId))
                     return new CountryUpdateModel();
 
                 // Get country by id
-                var getCountry = await _countryRepository.GetByIdAsync(request.Id);
+                var getCountry = await _countryRepository.GetByIdAsync(countryId);
 
                 if (getCountry is null)
                     return new CountryUpdateModel();

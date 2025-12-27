@@ -52,7 +52,8 @@
                       <img [src]="data.icon">
                     </td>
                     <td class="text-center action-cell">
-                      <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Edit" class="action-btn edit-btn">
+                      <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Edit" class="action-btn edit-btn"
+                        routerLink="/app/country/update/{{ data.id }}">
                         <nz-icon nzType="edit" />
                       </button>
                       <nz-divider nzType="vertical"></nz-divider>
