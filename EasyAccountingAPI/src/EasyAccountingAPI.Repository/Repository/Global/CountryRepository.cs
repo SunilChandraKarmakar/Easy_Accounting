@@ -59,5 +59,22 @@
                 include: q => q.Include(c => c.Cities.Where(c => !c.IsDeleted))
             );
         }
+
+        public async Task<IEnumerable<SelectModel>> GetCountrySelectList(CancellationToken cancellationToken)
+        {
+            // Get list of countries for drop down
+            var countries = await db.Countries
+                .AsNoTracking()
+                .Where(c => !c.IsDeleted)
+                .OrderBy(c => c.Name)
+                .Select(c => new SelectModel
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .ToListAsync(cancellationToken);
+
+            return countries;
+        }
     }
 }

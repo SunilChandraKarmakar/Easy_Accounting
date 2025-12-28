@@ -4,5 +4,6 @@
     {
         Task<FilterPageResultModel<Country>> GetCountriesByFilterAsync(FilterPageModel filterPageModel);
         Task<IEnumerable<int>> GetCountryIdsAsync();
+        Task<IEnumerable<SelectModel>> GetCountrySelectList(CancellationToken cancellationToken);
     }
 }
