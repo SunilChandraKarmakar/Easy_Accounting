@@ -9,8 +9,9 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzUploadChangeParam, NzUploadModule } from 'ng-zorro-antd/upload';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { CountryService, CountryUpdateModel, CountryViewModel } from '../../../../../../api/base-api';
+import { CityService, CityUpdateModel, CountryService, CountryUpdateModel, CountryViewModel } from '../../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 @Component({
   selector: 'app-country-update',
@@ -18,8 +19,8 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./country-update.component.css'],
   standalone: true,
   imports: [FormsModule, CommonModule, NzButtonModule, NgxSpinnerModule, NzInputModule, NzIconModule, NzUploadModule,
-    NzTableModule, NzBreadCrumbModule, RouterLink],
-  providers: [CountryService]
+    NzTableModule, NzBreadCrumbModule, RouterLink, NzPopconfirmModule],
+  providers: [CountryService, CityService]
 })
 
 export class CountryUpdateComponent implements OnInit {
@@ -30,7 +31,15 @@ export class CountryUpdateComponent implements OnInit {
   // Get country id
   private _countryId: string | undefined;
 
-  constructor(private countryService: CountryService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService,
+  // Add temporary id for new city delete operation
+  private _cityTempId = 0;
+  private nextCityTempId(): string {
+    this._cityTempId++;
+    return `tmp-${Date.now()}-${this._cityTempId}`;
+  }
+
+
+  constructor(private countryService: CountryService, private cityService: CityService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService,
      private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
@@ -89,10 +98,10 @@ export class CountryUpdateComponent implements OnInit {
     }
 
     // Cities validation (only if cities exist)
-    if (this.countryUpdateModel.cityUpdateModels && this.countryUpdateModel.cityUpdateModels.length > 0) {
+    if (this.countryUpdateModel.cities && this.countryUpdateModel.cities.length > 0) {
 
-      for (let i = 0; i < this.countryUpdateModel.cityUpdateModels.length; i++) {
-        const city = this.countryUpdateModel.cityUpdateModels[i];
+      for (let i = 0; i < this.countryUpdateModel.cities.length; i++) {
+        const city = this.countryUpdateModel.cities[i];
 
         if (!city.name || city.name.trim() === '') {
           this.toastrService.warning(`Please, provide city name for row ${i + 1}.`, 'Warning.');
@@ -130,5 +139,63 @@ export class CountryUpdateComponent implements OnInit {
         return;
       })
     }
+  }
+
+  // On click add new city in the cities
+  onClickAddNewCity(): void {
+    const city = new CityUpdateModel();
+    city.id = 0;
+    city.name = '';
+    city.countryId = this.countryUpdateModel.id;
+    city.tempId = this.nextCityTempId();
+
+    this.countryUpdateModel.cities = [
+      ...(this.countryUpdateModel.cities ?? []),
+      city
+    ];
+  }
+
+  cancel(): void {
+  }
+
+  // On click open city delete modal
+  onClickDelete(cityId: number | null | undefined, cityTempId: string | null | undefined): void {
+    this.deleteCity(cityId, cityTempId);
+  }
+
+  // Delete city (DB or local)
+  private deleteCity(cityId: number | null | undefined, cityTempId: string | null | undefined): void {
+
+    if (!cityId || cityId <= 0) {
+      if (!cityTempId) {
+        this.toastrService.error("City is not found. Please, try again.", "Error");
+        return;
+      }
+
+      const cities = (this.countryUpdateModel?.cities as any[] | undefined) ?? [];
+      const updated = cities.filter(c => c.tempId !== cityTempId);
+      this.countryUpdateModel.cities = updated as any;
+
+      this.toastrService.success("City removed from list.", "Success");
+      return;
+    }
+
+    this.spinnerService.show();
+    this.cityService.delete(cityId).subscribe((result: boolean) => {
+      this.spinnerService.hide();
+
+      if (!result) {
+        this.toastrService.error("City is not deleted. Please, try again.", "Error");
+        return;
+      }
+
+      this.toastrService.success("City deleted successfully.", "Success");
+      return this.router.navigateByUrl("/app/country/update/" + this._countryId);
+    },
+    (error: any ) => {
+      this.spinnerService.hide();
+      this.toastrService.error("City is not deleted. Please, try again.", "Error");
+      return;
+    });
   }
 }

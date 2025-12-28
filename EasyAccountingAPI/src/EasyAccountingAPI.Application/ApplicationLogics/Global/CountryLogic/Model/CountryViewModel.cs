@@ -47,14 +47,14 @@
 
         public string? Icon { get; set; }
 
-        public ICollection<CityUpdateModel> CityUpdateModels { get; set; }
+        public ICollection<CityUpdateModel> Cities { get; set; }
 
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Country, CountryUpdateModel>()
-                .ForMember(d => d.CityUpdateModels, s => s.MapFrom(m => m.Cities));
+                .ForMember(d => d.Cities, s => s.MapFrom(m => m.Cities));
             profile.CreateMap<CountryUpdateModel, Country>()
-                .ForMember(d => d.Cities, s => s.MapFrom(m => m.CityUpdateModels));            
+                .ForMember(d => d.Cities, s => s.Ignore());            
         }
     }
 

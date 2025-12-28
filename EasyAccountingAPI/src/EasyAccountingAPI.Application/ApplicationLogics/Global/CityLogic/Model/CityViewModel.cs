@@ -24,15 +24,14 @@
     public class CityUpdateModel : IMapFrom<City>
     {
         public int Id { get; set; }
+        [NotMapped] public string? TempId { get; set; }
 
         [Column(TypeName = "nvarchar(100)")]
         [Required(ErrorMessage = "City name is required.")]
         [StringLength(100, ErrorMessage = "City name cannot exceed 100 characters.", MinimumLength = 2)]
         public string Name { get; set; }
 
-        [ForeignKey("Country")]
-        [Required(ErrorMessage = "CountryId is required.")]
-        public int CountryId { get; set; }
+        public int? CountryId { get; set; }
 
         public void Mapping(Profile profile)
         {

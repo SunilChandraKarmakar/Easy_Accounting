@@ -14,6 +14,74 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
+export interface ICityService {
+    delete(id: number): Observable<boolean>;
+}
+
+@Injectable()
+export class CityService implements ICityService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    delete(id: number): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/City/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface ICountryService {
     create(createCountryCommand: CreateCountryCommand): Observable<boolean>;
     delete(id: string): Observable<boolean>;
@@ -723,7 +791,7 @@ export class CountryUpdateModel implements ICountryUpdateModel {
     name!: string;
     code!: string;
     icon?: string | undefined;
-    cityUpdateModels?: CityUpdateModel[];
+    cities?: CityUpdateModel[];
 
     constructor(data?: ICountryUpdateModel) {
         if (data) {
@@ -740,10 +808,10 @@ export class CountryUpdateModel implements ICountryUpdateModel {
             this.name = _data["name"];
             this.code = _data["code"];
             this.icon = _data["icon"];
-            if (Array.isArray(_data["cityUpdateModels"])) {
-                this.cityUpdateModels = [] as any;
-                for (let item of _data["cityUpdateModels"])
-                    this.cityUpdateModels!.push(CityUpdateModel.fromJS(item));
+            if (Array.isArray(_data["cities"])) {
+                this.cities = [] as any;
+                for (let item of _data["cities"])
+                    this.cities!.push(CityUpdateModel.fromJS(item));
             }
         }
     }
@@ -761,10 +829,10 @@ export class CountryUpdateModel implements ICountryUpdateModel {
         data["name"] = this.name;
         data["code"] = this.code;
         data["icon"] = this.icon;
-        if (Array.isArray(this.cityUpdateModels)) {
-            data["cityUpdateModels"] = [];
-            for (let item of this.cityUpdateModels)
-                data["cityUpdateModels"].push(item ? item.toJSON() : undefined as any);
+        if (Array.isArray(this.cities)) {
+            data["cities"] = [];
+            for (let item of this.cities)
+                data["cities"].push(item ? item.toJSON() : undefined as any);
         }
         return data;
     }
@@ -775,13 +843,14 @@ export interface ICountryUpdateModel {
     name: string;
     code: string;
     icon?: string | undefined;
-    cityUpdateModels?: CityUpdateModel[];
+    cities?: CityUpdateModel[];
 }
 
 export class CityUpdateModel implements ICityUpdateModel {
     id?: number;
+    tempId?: string | undefined;
     name!: string;
-    countryId!: number;
+    countryId?: number | undefined;
 
     constructor(data?: ICityUpdateModel) {
         if (data) {
@@ -795,6 +864,7 @@ export class CityUpdateModel implements ICityUpdateModel {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.tempId = _data["tempId"];
             this.name = _data["name"];
             this.countryId = _data["countryId"];
         }
@@ -810,6 +880,7 @@ export class CityUpdateModel implements ICityUpdateModel {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["tempId"] = this.tempId;
         data["name"] = this.name;
         data["countryId"] = this.countryId;
         return data;
@@ -818,8 +889,9 @@ export class CityUpdateModel implements ICityUpdateModel {
 
 export interface ICityUpdateModel {
     id?: number;
+    tempId?: string | undefined;
     name: string;
-    countryId: number;
+    countryId?: number | undefined;
 }
 
 export class CreateCountryCommand extends CountryCreateModel implements ICreateCountryCommand {

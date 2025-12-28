@@ -41,7 +41,7 @@
         </form>
         <div class="row mt-3">
           <div class="col-md-6">
-            <nz-table [nzShowPagination]="false" #citiesTable [nzData]="countryUpdateModel.cityUpdateModels!" [nzBordered]="true">
+            <nz-table [nzFrontPagination]="false" [nzShowPagination]="false" #citiesTable [nzData]="countryUpdateModel.cities!" [nzBordered]="true">
               <thead>
                 <tr>
                   <th style="width: 70%">City Name</th>
@@ -49,7 +49,7 @@
                 </tr>
               </thead>
               <tbody>
-                @for (city of citiesTable.data; track i; let i = $index) {
+                @for (city of citiesTable.data; track (city.tempId ?? city.id); let i = $index) {
                   <tr>
                     <td>
                       <nz-input-wrapper>
@@ -59,16 +59,21 @@
                       </nz-input-wrapper>                      
                     </td>
                     <td class="text-center">
-                      <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Delete" nzDanger class="delete-btn">
+                       <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Delete" nzDanger class="action-btn delete-btn" nz-popconfirm 
+                        nzPopconfirmTitle="Are you sure delete this City?" [nzIcon]="iconTpl"
+                        (nzOnConfirm)="onClickDelete(city.id!, city.tempId)" (nzOnCancel)="cancel()">
                         <nz-icon nzType="delete" />
                       </button>
+                      <ng-template #iconTpl>
+                        <nz-icon nzType="question-circle-o" style="color: red;" />
+                      </ng-template>
                     </td>
                   </tr>
                 }
               </tbody>
             </nz-table>
             <div class="d-flex justify-content-end mt-2">
-              <button nz-button nzType="default">
+              <button nz-button nzType="default" (click)="onClickAddNewCity()">
                 <nz-icon nzType="plus" />
                 Add City
               </button>

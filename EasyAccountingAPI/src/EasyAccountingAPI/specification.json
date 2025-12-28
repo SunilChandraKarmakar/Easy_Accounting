@@ -6,6 +6,38 @@
     "version": "v1"
   },
   "paths": {
+    "/api/City/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "City"
+        ],
+        "operationId": "City_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Country/Create": {
       "post": {
         "tags": [
@@ -370,7 +402,7 @@
             "type": "string",
             "nullable": true
           },
-          "cityUpdateModels": {
+          "cities": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/CityUpdateModel"
@@ -382,13 +414,16 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "name",
-          "countryId"
+          "name"
         ],
         "properties": {
           "id": {
             "type": "integer",
             "format": "int32"
+          },
+          "tempId": {
+            "type": "string",
+            "nullable": true
           },
           "name": {
             "type": "string",
@@ -397,7 +432,8 @@
           },
           "countryId": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           }
         }
       },

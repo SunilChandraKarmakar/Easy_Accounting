@@ -6,40 +6,78 @@
         {
             private readonly IUnitOfWorkRepository _unitOfWorkRepository;
             private readonly ICountryRepository _countryRepository;
+            private readonly ICityRepository _cityRepository;
             private readonly IMapper _mapper;
 
-            public Handler(IUnitOfWorkRepository unitOfWorkRepository, ICountryRepository countryRepository, IMapper mapper)
+            public Handler(IUnitOfWorkRepository unitOfWorkRepository, ICountryRepository countryRepository, ICityRepository cityRepository, IMapper mapper)
             {
                 _unitOfWorkRepository = unitOfWorkRepository;
                 _countryRepository = countryRepository;
+                _cityRepository = cityRepository;
                 _mapper = mapper;
             }
 
-            public async Task<bool> Handle(UpdateCountryCommand request, CancellationToken cancellationToken)
+            public async Task<bool> Handle(UpdateCountryCommand request, CancellationToken ct)
             {
-                // Get exist country
-                var getCountry = await _countryRepository.GetByIdAsync(request.Id);
+                // Fetch existing country
+                var getExistingCountry = await _countryRepository.GetByIdAsync(request.Id);
+                if (getExistingCountry is null) return false;
 
-                if (getCountry is null)
-                    return false;
-
-                // Begin transaction
-                await _unitOfWorkRepository.BeginTransactionAsync(cancellationToken);
+                await _unitOfWorkRepository.BeginTransactionAsync(ct);
 
                 try
                 {
-                    // Map and update country
-                    getCountry = _mapper.Map((CountryUpdateModel)request, getCountry);
-                    _countryRepository.Update(getCountry);
+                    _mapper.Map((CountryUpdateModel)request, getExistingCountry);
+                    _countryRepository.Update(getExistingCountry);
 
-                    await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);
-                    await _unitOfWorkRepository.CommitTransactionAsync(cancellationToken);
+                    if (request.Cities is not null && request.Cities.Count > 0)
+                    {
+                        getExistingCountry.Cities ??= new List<City>();
 
+                        foreach (var city in request.Cities)
+                        {
+                            if (city.Id <= 0)
+                            {
+                                if (string.IsNullOrWhiteSpace(city.Name)) continue;
+
+                                var newCity = new City
+                                {
+                                    Name = city.Name.Trim(),
+                                    CountryId = getExistingCountry.Id
+                                };
+
+                                // Add via navigation OR repository. Either is fine; nav is simplest.
+                                getExistingCountry.Cities.Add(newCity);
+                                continue;
+                            }
+
+                            var existingCity = getExistingCountry.Cities.FirstOrDefault(x => x.Id == city.Id);
+
+                            // If not loaded, fetch tracked from CityRepo
+                            if (existingCity is null)
+                            {
+                                existingCity = await _cityRepository.GetByIdAsync(city.Id);
+                                if (existingCity is null) continue;
+
+                                // Safety: ensure it belongs to this country
+                                if (existingCity.CountryId != getExistingCountry.Id)
+                                    continue; // or throw
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(city.Name))
+                                existingCity.Name = city.Name.Trim();
+
+                            existingCity.CountryId = getExistingCountry.Id;
+                        }
+                    }
+
+                    await _unitOfWorkRepository.SaveChangesAsync(ct);
+                    await _unitOfWorkRepository.CommitTransactionAsync(ct);
                     return true;
                 }
-                catch (Exception ex)
+                catch
                 {
-                    await _unitOfWorkRepository.RollbackTransactionAsync(cancellationToken);
+                    await _unitOfWorkRepository.RollbackTransactionAsync(ct);
                     return false;
                 }
             }

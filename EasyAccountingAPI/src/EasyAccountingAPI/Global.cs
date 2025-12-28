@@ -20,3 +20,4 @@ global using EasyAccountingAPI.Shared.Base;
 global using Microsoft.AspNetCore.Mvc;
 global using EasyAccountingAPI.Application.Configurations.Seed;
 global using MediatR;
+global using EasyAccountingAPI.Application.ApplicationLogics.Global.CityLogic.Command;
