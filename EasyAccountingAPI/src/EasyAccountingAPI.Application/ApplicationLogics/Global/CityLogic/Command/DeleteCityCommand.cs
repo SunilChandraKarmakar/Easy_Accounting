@@ -2,7 +2,7 @@
 {
     public class DeleteCityCommand : IRequest<bool>
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         public class Handler : IRequestHandler<DeleteCityCommand, bool>
         {
@@ -17,9 +17,13 @@
 
             public async Task<bool> Handle(DeleteCityCommand request, CancellationToken cancellationToken)
             {
+                // Decrypt the city id
+                var decrypteCityId = EncryptionService.Decrypt(request.Id);
+                if (!int.TryParse(decrypteCityId, out var cityId))
+                    return false;
 
                 // Fetch the city
-                var city = await _cityRepository.GetByIdAsync(request.Id);
+                var city = await _cityRepository.GetByIdAsync(cityId);
                 if (city is null)
                     return false;
 

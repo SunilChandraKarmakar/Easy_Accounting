@@ -181,7 +181,7 @@ export class CountryUpdateComponent implements OnInit {
     }
 
     this.spinnerService.show();
-    this.cityService.delete(cityId).subscribe((result: boolean) => {
+    this.cityService.delete(cityId.toString()).subscribe((result: boolean) => {
       this.spinnerService.hide();
 
       if (!result) {

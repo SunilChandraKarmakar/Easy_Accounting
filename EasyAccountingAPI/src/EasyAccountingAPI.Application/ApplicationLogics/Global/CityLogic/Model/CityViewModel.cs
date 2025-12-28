@@ -42,13 +42,15 @@
 
     public class CityGridModel : IMapFrom<City>
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public string CountryName { get; set; }
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<City, CityGridModel>();
+            profile.CreateMap<City, CityGridModel>()
+                .ForMember(d => d.Id, s => s.MapFrom(m => EncryptionService.Encrypt(m.Id.ToString())))
+                .ForMember(d => d.CountryName, s => s.MapFrom(m => m.Country.Name));
             profile.CreateMap<CityGridModel, City>();
         }
     }

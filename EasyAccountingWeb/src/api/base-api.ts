@@ -15,7 +15,8 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface ICityService {
-    delete(id: number): Observable<boolean>;
+    delete(id: string): Observable<boolean>;
+    getFilterCities(getCitiesByFilterQuery: GetCityByFilterQuery): Observable<FilterPageResultModelOfCityGridModel>;
 }
 
 @Injectable()
@@ -29,7 +30,7 @@ export class CityService implements ICityService {
         this.baseUrl = baseUrl ?? "";
     }
 
-    delete(id: number): Observable<boolean> {
+    delete(id: string): Observable<boolean> {
         let url_ = this.baseUrl + "/api/City/Delete/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -71,6 +72,58 @@ export class CityService implements ICityService {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : null as any;
     
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getFilterCities(getCitiesByFilterQuery: GetCityByFilterQuery): Observable<FilterPageResultModelOfCityGridModel> {
+        let url_ = this.baseUrl + "/api/City/GetFilterCities";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(getCitiesByFilterQuery);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFilterCities(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFilterCities(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FilterPageResultModelOfCityGridModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FilterPageResultModelOfCityGridModel>;
+        }));
+    }
+
+    protected processGetFilterCities(response: HttpResponseBase): Observable<FilterPageResultModelOfCityGridModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FilterPageResultModelOfCityGridModel.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -419,6 +472,177 @@ export class CountryService implements ICountryService {
     }
 }
 
+export class FilterPageResultModelOfCityGridModel implements IFilterPageResultModelOfCityGridModel {
+    items?: CityGridModel[];
+    totalCount?: number;
+
+    constructor(data?: IFilterPageResultModelOfCityGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(CityGridModel.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): FilterPageResultModelOfCityGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPageResultModelOfCityGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item ? item.toJSON() : undefined as any);
+        }
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+}
+
+export interface IFilterPageResultModelOfCityGridModel {
+    items?: CityGridModel[];
+    totalCount?: number;
+}
+
+export class CityGridModel implements ICityGridModel {
+    id?: string;
+    name?: string;
+    countryName?: string;
+
+    constructor(data?: ICityGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.countryName = _data["countryName"];
+        }
+    }
+
+    static fromJS(data: any): CityGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new CityGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["countryName"] = this.countryName;
+        return data;
+    }
+}
+
+export interface ICityGridModel {
+    id?: string;
+    name?: string;
+    countryName?: string;
+}
+
+export class FilterPageModel implements IFilterPageModel {
+    pageIndex?: number;
+    pageSize?: number;
+    sortColumn?: string | undefined;
+    sortOrder?: string | undefined;
+    filterValue?: string | undefined;
+
+    constructor(data?: IFilterPageModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageIndex = _data["pageIndex"];
+            this.pageSize = _data["pageSize"];
+            this.sortColumn = _data["sortColumn"];
+            this.sortOrder = _data["sortOrder"];
+            this.filterValue = _data["filterValue"];
+        }
+    }
+
+    static fromJS(data: any): FilterPageModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPageModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageIndex"] = this.pageIndex;
+        data["pageSize"] = this.pageSize;
+        data["sortColumn"] = this.sortColumn;
+        data["sortOrder"] = this.sortOrder;
+        data["filterValue"] = this.filterValue;
+        return data;
+    }
+}
+
+export interface IFilterPageModel {
+    pageIndex?: number;
+    pageSize?: number;
+    sortColumn?: string | undefined;
+    sortOrder?: string | undefined;
+    filterValue?: string | undefined;
+}
+
+export class GetCityByFilterQuery extends FilterPageModel implements IGetCityByFilterQuery {
+
+    constructor(data?: IGetCityByFilterQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetCityByFilterQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetCityByFilterQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetCityByFilterQuery extends IFilterPageModel {
+}
+
 export class CountryGridModel implements ICountryGridModel {
     id?: string;
     name?: string;
@@ -479,50 +703,6 @@ export interface ICountryGridModel {
     cities?: CityGridModel[];
 }
 
-export class CityGridModel implements ICityGridModel {
-    id?: number;
-    name?: string;
-    countryName?: string;
-
-    constructor(data?: ICityGridModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.countryName = _data["countryName"];
-        }
-    }
-
-    static fromJS(data: any): CityGridModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new CityGridModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["countryName"] = this.countryName;
-        return data;
-    }
-}
-
-export interface ICityGridModel {
-    id?: number;
-    name?: string;
-    countryName?: string;
-}
-
 export class FilterPageResultModelOfCountryGridModel implements IFilterPageResultModelOfCountryGridModel {
     items?: CountryGridModel[];
     totalCount?: number;
@@ -569,58 +749,6 @@ export class FilterPageResultModelOfCountryGridModel implements IFilterPageResul
 export interface IFilterPageResultModelOfCountryGridModel {
     items?: CountryGridModel[];
     totalCount?: number;
-}
-
-export class FilterPageModel implements IFilterPageModel {
-    pageIndex?: number;
-    pageSize?: number;
-    sortColumn?: string | undefined;
-    sortOrder?: string | undefined;
-    filterValue?: string | undefined;
-
-    constructor(data?: IFilterPageModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.pageIndex = _data["pageIndex"];
-            this.pageSize = _data["pageSize"];
-            this.sortColumn = _data["sortColumn"];
-            this.sortOrder = _data["sortOrder"];
-            this.filterValue = _data["filterValue"];
-        }
-    }
-
-    static fromJS(data: any): FilterPageModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new FilterPageModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["pageIndex"] = this.pageIndex;
-        data["pageSize"] = this.pageSize;
-        data["sortColumn"] = this.sortColumn;
-        data["sortOrder"] = this.sortOrder;
-        data["filterValue"] = this.filterValue;
-        return data;
-    }
-}
-
-export interface IFilterPageModel {
-    pageIndex?: number;
-    pageSize?: number;
-    sortColumn?: string | undefined;
-    sortOrder?: string | undefined;
-    filterValue?: string | undefined;
 }
 
 export class GetCountriesByFilterQuery extends FilterPageModel implements IGetCountriesByFilterQuery {

@@ -13,13 +13,38 @@
             return await cities.ToListAsync();
         }
 
-        public override async Task<City> GetByIdAsync(int id)
+        // Get cities with filtering, sorting, and pagination
+        public Task<FilterPageResultModel<City>> GetCitiesByFilterAsync(FilterPageModel model)
+        {
+            Expression<Func<City, bool>> filter = c =>
+                !c.IsDeleted &&
+                (string.IsNullOrWhiteSpace(model.FilterValue)
+                 || c.Name.Contains(model.FilterValue)
+                 || c.Country.Name.Contains(model.FilterValue));
+
+            var sortableColumns = new Dictionary<string, Expression<Func<City, object>>>
+            {
+                ["name"] = c => c.Name,
+                ["country"] = c => c.Country.Name,
+                ["id"] = c => c.Id
+            };
+
+            return GetAllFilterAsync(
+                model,
+                filter,
+                c => c.Id,
+                sortableColumns,
+                include: q => q.Include(c => c.Country)
+            );
+        }
+
+        public override async Task<City?> GetByIdAsync(int id)
         {
             var cities = await db.Cities
                 .Where(c => c.Id == id && !c.IsDeleted)
                 .FirstOrDefaultAsync();
 
-            return cities!;
+            return cities;
         }
 
         public async Task<int> DeleteBulkCityByCountryIdAsync(int countryId)

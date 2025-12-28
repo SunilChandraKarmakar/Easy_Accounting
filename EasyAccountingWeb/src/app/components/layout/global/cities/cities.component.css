@@ -1,0 +1,45 @@
+.card-header {
+  background-color: #f8f9fa;
+}
+
+.breadcrumb-link {
+  text-decoration: none !important;
+}
+
+.search-input {
+  width: 250px;
+  max-width: 250px;
+}
+
+.action-cell {
+  white-space: nowrap;
+}
+
+.action-btn {
+  padding: 4px 6px;
+  border-radius: 6px;
+  line-height: 1;
+}
+
+.edit-btn {
+  color: #1677ff;
+}
+
+.edit-btn:hover {
+  background-color: rgba(22, 119, 255, 0.1);
+}
+
+.delete-btn {
+  color: #ff4d4f;
+}
+
+.delete-btn:hover {
+  background-color: rgba(255, 77, 79, 0.1);
+}
+
+/* Make tags pill-shaped */
+::ng-deep nz-tag.ant-tag {
+  border-radius: 16px;
+  padding: 4px 12px;
+  font-size: 12px;
+}
