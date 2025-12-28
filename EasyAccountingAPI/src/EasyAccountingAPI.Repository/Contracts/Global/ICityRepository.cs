@@ -2,7 +2,7 @@
 {
     public interface ICityRepository : IBaseRepository<City>
     {
-        Task<FilterPageResultModel<City>> GetCitiesByFilterAsync(FilterPageModel filterPageModel);
-        Task<int> DeleteBulkCityByCountryIdAsync(int countryId);
+        Task<FilterPageResultModel<City>> GetCitiesByFilterAsync(FilterPageModel filterPageModel, CancellationToken cancellationToken);
+        Task<int> DeleteBulkCityByCountryIdAsync(int countryId, CancellationToken cancellationToken);
     }
 }

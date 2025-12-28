@@ -2,8 +2,8 @@
 {
     public interface ICountryRepository : IBaseRepository<Country>
     {
-        Task<FilterPageResultModel<Country>> GetCountriesByFilterAsync(FilterPageModel filterPageModel);
-        Task<IEnumerable<int>> GetCountryIdsAsync();
+        Task<FilterPageResultModel<Country>> GetCountriesByFilterAsync(FilterPageModel filterPageModel, CancellationToken cancellationToken);
+        Task<IEnumerable<int>> GetCountryIdsAsync(CancellationToken cancellationToken);
         Task<IEnumerable<SelectModel>> GetCountrySelectList(CancellationToken cancellationToken);
     }
 }

@@ -5,16 +5,16 @@
         protected readonly DatabaseContext db;
         protected BaseRepository(DatabaseContext databaseContext) => db = databaseContext;
 
-        public virtual async Task<ICollection<T>> GetAllAsync()
+        public virtual async Task<ICollection<T>> GetAllAsync(CancellationToken cancellationToken)
         {
-            var getAllAsync = await db.Set<T>().ToListAsync();
+            var getAllAsync = await db.Set<T>().ToListAsync(cancellationToken);
             return getAllAsync;
         }
 
         public virtual async Task<FilterPageResultModel<T>> GetAllFilterAsync(FilterPageModel model, 
             Expression<Func<T, bool>>? filterExpression = null, Expression<Func<T, object>>? defaultSortExpression = null,
             Dictionary<string, Expression<Func<T, object>>>? sortableColumns = null,
-            Func<IQueryable<T>, IQueryable<T>>? include = null)
+            Func<IQueryable<T>, IQueryable<T>>? include = null, CancellationToken cancellationToken = default)
         {
             IQueryable<T> query = db.Set<T>().AsNoTracking();
 
@@ -33,31 +33,31 @@
             else if (defaultSortExpression is not null)
                 query = query.OrderBy(defaultSortExpression);
 
-            int totalCount = await query.CountAsync();
+            int totalCount = await query.CountAsync(cancellationToken);
 
             var items = await query
                 .Skip(model.PageIndex * model.PageSize)
                 .Take(model.PageSize)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             return new FilterPageResultModel<T>(items, totalCount);
         }
 
-        public virtual async Task<T?> GetByIdAsync(int id)
+        public virtual async Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
-            var getByIdAsync = await db.Set<T>().FindAsync(id);
+            var getByIdAsync = await db.Set<T>().FindAsync(id, cancellationToken);
             return getByIdAsync;
         }
 
-        public virtual async Task CreateAsync(T entity, CancellationToken ct = default)
+        public virtual async Task CreateAsync(T entity, CancellationToken cancellationToken)
         {
-            await db.Set<T>().AddAsync(entity, ct);
+            await db.Set<T>().AddAsync(entity, cancellationToken);
         }
 
-        public virtual async Task BulkCreateAsync(IEnumerable<T> entities, CancellationToken ct = default)
+        public virtual async Task BulkCreateAsync(IEnumerable<T> entities, CancellationToken cancellationToken)
         {
             if (entities == null) return;
-            await db.Set<T>().AddRangeAsync(entities, ct);
+            await db.Set<T>().AddRangeAsync(entities, cancellationToken);
         }
 
         public virtual void Update(T entity)
