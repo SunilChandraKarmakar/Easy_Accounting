@@ -38,9 +38,8 @@ export class CountryUpdateComponent implements OnInit {
     return `tmp-${Date.now()}-${this._cityTempId}`;
   }
 
-
   constructor(private countryService: CountryService, private cityService: CityService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService,
-     private router: Router, private activatedRoute: ActivatedRoute) { }
+    private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     // Get country id by url

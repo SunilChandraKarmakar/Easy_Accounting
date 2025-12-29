@@ -17,7 +17,7 @@
                 CancellationToken cancellationToken)
             {
                 // Get countries and map to grid model
-                var getCountries = await _countryRepository.GetAllAsync();
+                var getCountries = await _countryRepository.GetAllAsync(cancellationToken);
                 var mapCountries = _mapper.Map<ICollection<CountryGridModel>>(getCountries);
 
                 return mapCountries;

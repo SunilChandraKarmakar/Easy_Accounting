@@ -25,7 +25,7 @@
                     return false;
 
                 // Fetch the country
-                var country = await _countryRepository.GetByIdAsync(countryId);
+                var country = await _countryRepository.GetByIdAsync(countryId, cancellationToken);
                 if (country is null)
                     return false;
 
@@ -35,7 +35,7 @@
                 try
                 {
                     // 1. Bulk soft delete cities (NO SaveChanges inside)
-                    await _cityRepository.DeleteBulkCityByCountryIdAsync(country.Id);
+                    await _cityRepository.DeleteBulkCityByCountryIdAsync(country.Id, cancellationToken);
 
                     // 2. Soft delete country (NO SaveChanges inside)
                     country.IsDeleted = true;

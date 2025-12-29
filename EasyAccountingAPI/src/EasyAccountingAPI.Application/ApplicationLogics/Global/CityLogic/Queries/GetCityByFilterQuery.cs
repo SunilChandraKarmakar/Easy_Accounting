@@ -17,7 +17,7 @@
                 CancellationToken cancellationToken)
             {
                 // Get cities and map to grid model
-                var getCities = await _cityRepository.GetCitiesByFilterAsync(request);
+                var getCities = await _cityRepository.GetCitiesByFilterAsync(request, cancellationToken);
                 var mapCities = _mapper.Map<ICollection<CityGridModel>>(getCities.Items);
 
                 // Return paginated result

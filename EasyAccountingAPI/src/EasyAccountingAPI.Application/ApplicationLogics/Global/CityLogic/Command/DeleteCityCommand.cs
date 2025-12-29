@@ -23,7 +23,7 @@
                     return false;
 
                 // Fetch the city
-                var city = await _cityRepository.GetByIdAsync(cityId);
+                var city = await _cityRepository.GetByIdAsync(cityId, cancellationToken);
                 if (city is null)
                     return false;
 

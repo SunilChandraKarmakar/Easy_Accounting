@@ -20,7 +20,7 @@
             public async Task<bool> Handle(UpdateCountryCommand request, CancellationToken ct)
             {
                 // Fetch existing country
-                var getExistingCountry = await _countryRepository.GetByIdAsync(request.Id);
+                var getExistingCountry = await _countryRepository.GetByIdAsync(request.Id, ct);
                 if (getExistingCountry is null) return false;
 
                 await _unitOfWorkRepository.BeginTransactionAsync(ct);
@@ -56,7 +56,7 @@
                             // If not loaded, fetch tracked from CityRepo
                             if (existingCity is null)
                             {
-                                existingCity = await _cityRepository.GetByIdAsync(city.Id);
+                                existingCity = await _cityRepository.GetByIdAsync(city.Id, ct);
                                 if (existingCity is null) continue;
 
                                 // Safety: ensure it belongs to this country

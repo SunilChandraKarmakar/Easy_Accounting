@@ -4,7 +4,8 @@
     {
         public CityCreateModel CreateModel { get; set; }
         public CityUpdateModel UpdateModel { get; set; }
-        public CityGridModel GridModel { get; set; }    
+        public CityGridModel GridModel { get; set; }
+        public dynamic OptionsDataSources { get; set; } = new ExpandoObject();
     }
 
     public class CityCreateModel : IMapFrom<City>
@@ -13,6 +14,10 @@
         [Required(ErrorMessage = "City name is required.")]
         [StringLength(100, ErrorMessage = "City name cannot exceed 100 characters.", MinimumLength = 2)]
         public string Name { get; set; }
+
+        [ForeignKey("Country")]
+        [Required(ErrorMessage = "CountryId is required.")]
+        public int CountryId { get; set; }
 
         public void Mapping(Profile profile)
         {

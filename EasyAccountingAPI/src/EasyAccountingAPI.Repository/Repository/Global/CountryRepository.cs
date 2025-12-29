@@ -5,38 +5,38 @@
         public CountryRepository(DatabaseContext databaseContext) : base(databaseContext) { }
 
         // Get country ids
-        public async Task<IEnumerable<int>> GetCountryIdsAsync()
+        public async Task<IEnumerable<int>> GetCountryIdsAsync(CancellationToken cancellationToken)
         {
             var countryIds = await db.Countries
                 .AsNoTracking()
                 .Where(c => !c.IsDeleted)
                 .Select(c => c.Id)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             return countryIds;
         }
 
-        public override async Task<ICollection<Country>> GetAllAsync()
+        public override async Task<ICollection<Country>> GetAllAsync(CancellationToken cancellationToken)
         {
             var countries = db.Countries
                 .Where(c => !c.IsDeleted)
                 .AsQueryable();
 
-            return await countries.ToListAsync();
+            return await countries.ToListAsync(cancellationToken);
         }
 
-        public override async Task<Country?> GetByIdAsync(int id)
+        public override async Task<Country?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             var country = await db.Countries
                 .Include(c => c.Cities.Where(c => !c.IsDeleted))
                 .Where(c => c.Id == id && !c.IsDeleted)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(cancellationToken);
 
             return country;
         }
 
         // Get countries with filtering, sorting, and pagination
-        public Task<FilterPageResultModel<Country>> GetCountriesByFilterAsync(FilterPageModel model)
+        public Task<FilterPageResultModel<Country>> GetCountriesByFilterAsync(FilterPageModel model, CancellationToken cancellationToken)
         {
             Expression<Func<Country, bool>> filter = c =>
                 !c.IsDeleted &&
@@ -56,7 +56,7 @@
                 filter,
                 c => c.Id,
                 sortableColumns,
-                include: q => q.Include(c => c.Cities.Where(c => !c.IsDeleted))
+                include: q => q.Include(c => c.Cities.Where(c => !c.IsDeleted)), cancellationToken
             );
         }
 

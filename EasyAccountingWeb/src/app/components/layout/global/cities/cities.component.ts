@@ -91,8 +91,6 @@ export class CitiesComponent implements OnInit {
       });
     }
 
-    console.log("filterPageModel :- ", this.filterPageModel);
-
     // Get cities 
     this.getCities();
   }

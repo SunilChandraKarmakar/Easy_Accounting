@@ -4,17 +4,17 @@
     {
         public CityRepository(DatabaseContext databaseContext) : base(databaseContext) { }
 
-        public override async Task<ICollection<City>> GetAllAsync()
+        public override async Task<ICollection<City>> GetAllAsync(CancellationToken cancellationToken)
         {
             var cities = db.Cities
                 .Where(c => !c.IsDeleted)
                 .AsQueryable();
 
-            return await cities.ToListAsync();
+            return await cities.ToListAsync(cancellationToken);
         }
 
         // Get cities with filtering, sorting, and pagination
-        public Task<FilterPageResultModel<City>> GetCitiesByFilterAsync(FilterPageModel model)
+        public Task<FilterPageResultModel<City>> GetCitiesByFilterAsync(FilterPageModel model, CancellationToken cancellationToken)
         {
             Expression<Func<City, bool>> filter = c =>
                 !c.IsDeleted &&
@@ -34,25 +34,26 @@
                 filter,
                 c => c.Id,
                 sortableColumns,
-                include: q => q.Include(c => c.Country)
+                include: q => q.Include(c => c.Country),
+                cancellationToken
             );
         }
 
-        public override async Task<City?> GetByIdAsync(int id)
+        public override async Task<City?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             var cities = await db.Cities
                 .Where(c => c.Id == id && !c.IsDeleted)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(cancellationToken);
 
             return cities;
         }
 
-        public async Task<int> DeleteBulkCityByCountryIdAsync(int countryId)
+        public async Task<int> DeleteBulkCityByCountryIdAsync(int countryId, CancellationToken cancellationToken)
         {
             return await db.Cities
                 .Where(c => c.CountryId == countryId && !c.IsDeleted)
                 .ExecuteUpdateAsync(s => s.SetProperty(c => c.IsDeleted, true)
-                .SetProperty(c => c.DeletedDateTime, DateTime.UtcNow));
+                .SetProperty(c => c.DeletedDateTime, DateTime.UtcNow), cancellationToken);
         }
     }
 }

@@ -18,3 +18,4 @@ global using EasyAccountingAPI.Application.ApplicationLogics.Global.CityLogic.Mo
 global using EasyAccountingAPI.Shared.Services;
 global using EasyAccountingAPI.Repository.Base;
 global using EasyAccountingAPI.Repository.Contracts;
+global using System.Dynamic;

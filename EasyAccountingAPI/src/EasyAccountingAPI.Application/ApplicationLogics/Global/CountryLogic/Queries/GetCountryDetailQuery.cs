@@ -23,7 +23,7 @@
                     return new CountryUpdateModel();
 
                 // Get country by id
-                var getCountry = await _countryRepository.GetByIdAsync(countryId);
+                var getCountry = await _countryRepository.GetByIdAsync(countryId, cancellationToken);
 
                 if (getCountry is null)
                     return new CountryUpdateModel();
