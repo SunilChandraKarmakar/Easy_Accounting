@@ -27,27 +27,16 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 
 export class CityUpdateComponent implements OnInit {
 
-  listOfOption: Array<{ value: string; label: string }> = [];
-
-  alphabet(size: number): string[] {
-  const children: string[] = [];
-  for (let i = 10; i < size; i++) {
-    children.push(i.toString(36) + i);
-  }
-  return children;
-}
-
-
-
   // City update model
   cityUpdateModel: CityUpdateModel = new CityUpdateModel();
   
   // Get city id
   private _cityId: string | undefined;
+  cityId: number | undefined;
 
   // Select list
   countries: SelectModel[] = [];
-  
+  cities: SelectModel[] = [];  
 
   constructor(private cityService: CityService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService,
     private router: Router, private activatedRoute: ActivatedRoute) { }
@@ -74,7 +63,8 @@ export class CityUpdateComponent implements OnInit {
     this.spinnerService.show();
     this.cityService.getById(this._cityId!).subscribe((result: CityViewModel) => {
       this.cityUpdateModel = result.updateModel!;
-      this.listOfOption = result.optionsDataSources.CountrySelectList;
+      this.countries = result.optionsDataSources.CountrySelectList;
+      this.cities = result.optionsDataSources.CitySelectList;
       this.spinnerService.hide();
       return;
     },

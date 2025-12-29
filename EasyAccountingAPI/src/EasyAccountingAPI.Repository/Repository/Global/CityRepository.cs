@@ -55,5 +55,21 @@
                 .ExecuteUpdateAsync(s => s.SetProperty(c => c.IsDeleted, true)
                 .SetProperty(c => c.DeletedDateTime, DateTime.UtcNow), cancellationToken);
         }
+
+        public async Task<IEnumerable<SelectModel>> GetCitySelectList(CancellationToken cancellationToken)
+        {
+            var cities = await db.Cities
+                .AsNoTracking()
+                .Where(c => !c.IsDeleted)
+                .OrderBy(c => c.Name)
+                .Select(c => new SelectModel
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .ToListAsync(cancellationToken);
+
+            return cities;
+        }
     }
 }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EasyAccountingAPI.Shared")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+143743788377afc47642a8442accd378647c4cd5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+25ac1318a37c984a3e5f6486f878c945189311fd")]
 [assembly: System.Reflection.AssemblyProductAttribute("EasyAccountingAPI.Shared")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EasyAccountingAPI.Shared")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

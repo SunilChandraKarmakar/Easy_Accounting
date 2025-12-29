@@ -19,13 +19,13 @@
             </nz-input-wrapper>
           </div>
           <div class="col-md-3">
-            <label for="countryId" class="form-label">Country <span class="text-danger fw-bold">*</span></label> ({{countries.length}})
-             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Country" [(ngModel)]="cityUpdateModel.countryId" name="countryId" style="width: 100%;">
-                @for (country of countries; track country.id) {
-                  <nz-option [nzValue]="country.id" [nzLabel]="country.name!"></nz-option>
-                }
-              </nz-select>
-               <nz-select nzMode="multiple" nzPlaceHolder="Please select" [nzOptions]="listOfOption" [(ngModel)]="cityUpdateModel.countryId"></nz-select>
+            <label for="countryId" class="form-label">Country ({{countries.length}}) <span class="text-danger fw-bold">*</span></label>
+            <nz-select nzShowSearch nzPlaceHolder="Select a Country" 
+              [(ngModel)]="cityUpdateModel.countryId" name="countryId" style="width: 100%;">
+              @for (country of countries; track country.id) {
+                <nz-option [nzValue]="country.id" [nzLabel]="country.name!"></nz-option>
+              }
+            </nz-select>
           </div>
         </form>
       </div>
