@@ -1,4 +1,4 @@
-﻿namespace EasyAccountingAPI.Model.GlobalModels
+﻿namespace EasyAccountingAPI.Model.Authentication
 {
     public class User : IdentityUser
     {
@@ -7,5 +7,6 @@
         [Required(ErrorMessage = "Please, provide full name.")]
         [StringLength(maximumLength: 100, MinimumLength = 2)]
         public string FullName { get; set; }
+        public int? EmployeeId { get; set; }
     }
 }
