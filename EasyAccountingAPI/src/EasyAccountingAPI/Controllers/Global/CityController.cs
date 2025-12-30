@@ -35,6 +35,7 @@
 
             // Select list for drop downs
             cityVM.OptionsDataSources.CountrySelectList = await Mediator.Send(new SelectListCountryQuery());
+            cityVM.OptionsDataSources.CitySelectList = await Mediator.Send(new SelectListCityQuery());
             return Ok(cityVM);
         }
 

@@ -27,6 +27,15 @@
               }
             </nz-select>
           </div>
+          <div class="col-md-3">
+            <label for="cityId" class="form-label">City ({{cities.length}}) <span class="text-danger fw-bold">*</span></label>
+            <nz-select nzShowSearch nzPlaceHolder="Select a City" 
+              [(ngModel)]="cityId" name="cityId" style="width: 100%;">
+              @for (city of cities; track city.id) {
+                <nz-option [nzValue]="city.id" [nzLabel]="city.name!"></nz-option>
+              }
+            </nz-select>
+          </div>
         </form>
       </div>
       <div class="card-footer text-end">
