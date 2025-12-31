@@ -11,9 +11,15 @@
         public DbSet<City> Cities { get; set; }
         #endregion
 
+        #region Authentication Model
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<EmployeeRole> EmployeeRoles { get; set; }
+        #endregion
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseLazyLoadingProxies();
+            // optionsBuilder.UseLazyLoadingProxies();
             base.OnConfiguring(optionsBuilder);
 
             if (!optionsBuilder.IsConfigured)

@@ -19,3 +19,4 @@ global using EasyAccountingAPI.Shared.Services;
 global using EasyAccountingAPI.Repository.Base;
 global using EasyAccountingAPI.Repository.Contracts;
 global using System.Dynamic;
+global using EasyAccountingAPI.Model.Authentication;

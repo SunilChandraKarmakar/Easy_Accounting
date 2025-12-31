@@ -8,5 +8,7 @@
         [StringLength(maximumLength: 100, MinimumLength = 2)]
         public string FullName { get; set; }
         public int? EmployeeId { get; set; }
+
+        public Employee? Employee { get; set; }
     }
 }
