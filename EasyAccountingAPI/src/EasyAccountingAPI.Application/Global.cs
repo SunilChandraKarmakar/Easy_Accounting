@@ -20,3 +20,7 @@ global using EasyAccountingAPI.Repository.Base;
 global using EasyAccountingAPI.Repository.Contracts;
 global using System.Dynamic;
 global using EasyAccountingAPI.Model.Authentication;
+global using EasyAccountingAPI.Application.ApplicationLogics.AuthenticationLogic.Model;
+global using EasyAccountingAPI.Repository.Contracts.Authentication;
+global using Microsoft.AspNetCore.Identity;
+global using EasyAccountingAPI.Repository.Repository.Authentication;

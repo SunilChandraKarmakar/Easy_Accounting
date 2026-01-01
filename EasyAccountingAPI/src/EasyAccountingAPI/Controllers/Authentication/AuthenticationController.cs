@@ -1,21 +1,20 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
-namespace EasyAccountingAPI.Controllers.Authentication
+﻿namespace EasyAccountingAPI.Controllers.Authentication
 {
-    public class AuthenticationController : ControllerBase
+    [AllowAnonymous]
+    public class AuthenticationController : BaseController
     {
-        //[HttpPost]
-        //[ProducesResponseType(typeof(IdentityViewModel), StatusCodes.Status200OK)]
-        //[ProducesDefaultResponseType]
-        //public async Task<ActionResult<IdentityViewModel>> Login(LoginCommand command)
-        //{
-        //    var ivm = new IdentityViewModel()
-        //    {
-        //        UserModel = await Mediator.Send(command)
-        //    };
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<UserModel>> Registration(RegistrationCommand command)
+        {
+            if(ModelState.IsValid)
+            {
+                var registerUser = await Mediator.Send(command);
+                return Ok(registerUser);
+            }
 
-        //    return Ok(ivm);
-        //}
+            return BadRequest(command);
+        }
     }
 }

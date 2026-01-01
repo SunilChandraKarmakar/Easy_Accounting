@@ -1,10 +1,11 @@
 ﻿global using EasyAccountingAPI.Database.DatabaseContexts;
-global using EasyAccountingAPI.Repository.Contracts;
-global using Microsoft.EntityFrameworkCore;
+global using EasyAccountingAPI.Model.Authentication;
 global using EasyAccountingAPI.Model.GlobalModels;
 global using EasyAccountingAPI.Repository.Base;
+global using EasyAccountingAPI.Repository.Contracts;
 global using EasyAccountingAPI.Repository.Contracts.Global;
 global using EasyAccountingAPI.Shared.Models;
-global using System.Linq.Expressions;
+global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Storage;
-global using Microsoft.Extensions.DependencyInjection;
+global using System.Linq.Expressions;
+global using EasyAccountingAPI.Repository.Contracts.Authentication;

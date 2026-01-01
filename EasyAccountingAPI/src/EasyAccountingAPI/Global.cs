@@ -23,3 +23,5 @@ global using Microsoft.IdentityModel.Tokens;
 global using NSwag.Generation.Processors;
 global using NSwag.Generation.Processors.Contexts;
 global using System.Text;
+global using EasyAccountingAPI.Application.ApplicationLogics.AuthenticationLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.AuthenticationLogic.Model;

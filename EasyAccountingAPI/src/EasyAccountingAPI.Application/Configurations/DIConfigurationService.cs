@@ -17,11 +17,18 @@
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Unit of Work
-            services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>(); 
+            services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
 
-            // Global services
+            #region Global Service
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<ICityRepository, CityRepository>();
+            #endregion
+
+            #region Authentication Service
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IEmployeeRoleRepository, EmployeeRoleRepository>();
+            #endregion
 
             return services;
         }

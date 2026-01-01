@@ -22,10 +22,6 @@
         [StringLength(maximumLength: 50, MinimumLength = 10)]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Please, provide password.")]
-        [StringLength(maximumLength: 50, MinimumLength = 5)]
-        public string Password { get; set; }
-
         public string? Image { get; set; }
 
         public User? User { get; set; }
