@@ -25,6 +25,9 @@
 
             public async Task<UserModel> Handle(RegistrationCommand request, CancellationToken cancellationToken)
             {
+                // Initialize identity result
+                IdentityResult identityResult = new IdentityResult();
+
                 // Email uniqueness check
                 if (await _userManager.FindByEmailAsync(request.Email) != null)
                     throw new Exception("This email address is already registered. Please use a different email address.");
@@ -44,52 +47,52 @@
                     };
 
                     await _employeeRepository.CreateAsync(newEmployee, cancellationToken);
-                    await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);
 
                     // Create new role for this user
                     var role = new Role
                     {
                         Name = "Admin",
                         Description = "Full access to manage your business operations and system settings.",
-                        CreatedByEmployeeId = newEmployee.Id
+                        CreatedByEmployee = newEmployee
                     };
 
                     await _roleRepository.CreateAsync(role, cancellationToken);
-                    await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);
 
                     // Create new employee role mapping
                     var newEmployeeRole = new EmployeeRole
                     {
-                        EmployeeId = newEmployee.Id,
-                        RoleId = role.Id,
+                        Employee = newEmployee,
+                        Role = role,
                         AssignedAt = DateTime.UtcNow,
-                        AssignedByEmployeeId = newEmployee.Id
+                        AssignedByEmployee = newEmployee
                     };
 
                     await _employeeRoleRepository.CreateAsync(newEmployeeRole, cancellationToken);
-                    await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);
 
                     // Create new user
                     var registerUser = _mapper.Map<User>(request);
                     registerUser.UserName = request.Email;
                     registerUser.Email = request.Email;
                     registerUser.FullName = request.FullName;
-                    registerUser.EmployeeId = newEmployee.Id;
+                    registerUser.Employee = newEmployee;
 
-                    var result = _userManager.CreateAsync(registerUser, request.Password);
-                    var registerCompleteUser = _mapper.Map<UserModel>(registerUser);
+                    identityResult = await _userManager.CreateAsync(registerUser, request.Password);             
 
-                    await _unitOfWorkRepository.CommitTransactionAsync(cancellationToken);
+                    if (identityResult.Succeeded)
+                    {
+                        await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);
+                        await _unitOfWorkRepository.CommitTransactionAsync(cancellationToken);
 
-                    if (result.Result.Succeeded)
+                        var registerCompleteUser = _mapper.Map<UserModel>(registerUser);
                         return registerCompleteUser;
+                    }                        
                     else
-                        throw new Exception(result.Result.Errors.Select(s => s.Description).FirstOrDefault());
+                        throw new Exception(identityResult.Errors.Select(s => s.Description).FirstOrDefault());
                 }
                 catch (Exception)
                 {
                     await _unitOfWorkRepository.RollbackTransactionAsync(cancellationToken);
-                    throw new Exception("The registration process could not be completed due to a system issue. Please try again later.");
+                    throw new Exception(identityResult.Errors.Select(s => s.Description).FirstOrDefault());
                 }
             }
         }

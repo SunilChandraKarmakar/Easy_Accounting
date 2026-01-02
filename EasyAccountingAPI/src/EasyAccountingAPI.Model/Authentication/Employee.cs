@@ -6,6 +6,7 @@
         {
             Roles = new HashSet<Role>();
             EmployeeRoles = new HashSet<EmployeeRole>();
+            AssignedByEmployeeRoles = new HashSet<EmployeeRole>();
         }
 
         public int Id { get; set; }
@@ -27,5 +28,6 @@
         public User? User { get; set; }
         public ICollection<Role> Roles { get; set; }
         public ICollection<EmployeeRole> EmployeeRoles { get; set; }
+        public ICollection<EmployeeRole> AssignedByEmployeeRoles { get; set; }
     }
 }

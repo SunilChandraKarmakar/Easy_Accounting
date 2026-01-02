@@ -37,10 +37,15 @@
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            // Global delete behavior rule
+            foreach (var fk in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+                fk.DeleteBehavior = DeleteBehavior.Restrict;
 
-            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
-                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            // Apply all configurations automatically
+            modelBuilder.ApplyConfigurationsFromAssembly(
+                typeof(DatabaseContext).Assembly);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

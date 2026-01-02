@@ -13,9 +13,11 @@
         [Required(ErrorMessage = "Please, provide assignment date.")]
         public DateTime AssignedAt { get; set; } = DateTime.UtcNow;
 
-        public int? AssignedByEmployeeId { get; set; }
+        [Required(ErrorMessage = "Please, provide assigned by employee id.")]
+        public int AssignedByEmployeeId { get; set; }
 
         public Employee Employee { get; set; }
         public Role Role { get; set; }
+        public Employee AssignedByEmployee { get; set; }
     }
 }
