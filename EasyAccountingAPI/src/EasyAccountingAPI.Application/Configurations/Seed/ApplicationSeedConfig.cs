@@ -14,6 +14,9 @@
                     throw new Exception("Seeding Country/City failed.");
                 }
             }
+
+            // Seed data for Super Admin
+            await mediator.Send(new SuperAdminSeedCommand());
         }
     }
 }

@@ -24,3 +24,4 @@ global using EasyAccountingAPI.Application.ApplicationLogics.AuthenticationLogic
 global using EasyAccountingAPI.Repository.Contracts.Authentication;
 global using Microsoft.AspNetCore.Identity;
 global using EasyAccountingAPI.Repository.Repository.Authentication;
+global using EasyAccountingAPI.Application.ApplicationLogics.AuthenticationLogic.Command;
