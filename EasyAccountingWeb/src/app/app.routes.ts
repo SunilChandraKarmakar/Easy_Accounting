@@ -6,11 +6,12 @@ import { CountryCreateComponent } from './components/layout/global/countries/cou
 import { CountryUpdateComponent } from './components/layout/global/countries/country-update/country-update.component';
 import { CityCreateComponent } from './components/layout/global/cities/city-create/city-create.component';
 import { CityUpdateComponent } from './components/layout/global/cities/city-update/city-update.component';
+import { RegistrationComponent } from './authentication/registration/registration.component';
 
 export const routes: Routes = [
 
   // Login component
-  { path: "", component: LayoutComponent, pathMatch: "full" },
+  { path: "", component: RegistrationComponent },
 
   // For layout
   {
