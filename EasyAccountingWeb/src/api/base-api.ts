@@ -1418,7 +1418,7 @@ export class UserModel implements IUserModel {
     userName?: string;
     email?: string;
     token?: string;
-    employeeId?: number;
+    employeeId?: number | undefined;
     image?: string | undefined;
 
     constructor(data?: IUserModel) {
@@ -1468,7 +1468,7 @@ export interface IUserModel {
     userName?: string;
     email?: string;
     token?: string;
-    employeeId?: number;
+    employeeId?: number | undefined;
     image?: string | undefined;
 }
 

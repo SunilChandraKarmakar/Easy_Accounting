@@ -1,146 +1,188 @@
-<div class="register-wrapper">
-  <div class="container h-100 d-flex align-items-center justify-content-center">
-    <div class="row g-0 auth-container-box">      
-      <div class="col-lg-6 d-none d-lg-flex sidebar-light flex-column justify-content-center p-5">
-        <div class="mb-5">
-          <div class="badge bg-primary-soft text-primary mb-3 px-3 py-2">Easy Accounting v 1.0.0</div>
-          <h1 class="display-6 fw-bold text-dark mb-3">Modern Accounting <br><span class="text-primary">& Inventory Solutions.</span></h1>
-          <p class="text-secondary fs-5">Simplify your bookkeeping with our automated cloud platform.</p>
-        </div>
-        <div class="text-center">
-          <img src="../../../assets/images/Finance-cuate.png" alt="Accounting" class="img-fluid hero-image">
-        </div>
-        <div class="mt-auto border-top pt-4">
-          <div class="row text-center">
-            <div class="col-4 border-end">
-              <h5 class="mb-0 fw-bold">100%</h5>
-              <small class="text-muted">Secure</small>
-            </div>
-            <div class="col-4 border-end">
-              <h5 class="mb-0 fw-bold">Real-time</h5>
-              <small class="text-muted">Sync</small>
-            </div>
-            <div class="col-4">
-              <h5 class="mb-0 fw-bold">Auto-Stock</h5>
-              <small class="text-muted">Inventory Sync</small>
-            </div>
-          </div>
-        </div>
+<div class="row root">
+  <div class="col-md-12">
+    <div class="body">
+      <div class="bg-blobs">
+        <div class="blob b1"></div>
+        <div class="blob b2"></div>
+        <div class="blob b3"></div>
       </div>
-      <div class="col-lg-6 p-5 bg-white">
-        <div class="form-wrapper">
-          <div class="mb-5 text-center">
-            <h2 class="fw-bold mb-1">Register</h2>
-            <p class="text-muted">Enter your details to create your workspace.</p>
-            <hr>
-          </div>
-           <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
-            <nz-form-item>
-              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
-              <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid E-mail!">
-                <input nz-input formControlName="email" id="email" />
-              </nz-form-control>
-            </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="password" nzRequired>Password</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your password!">
-          <input nz-input type="password" id="password" formControlName="password" />
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="checkPassword" nzRequired>Confirm Password</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorTpl">
-          <input nz-input type="password" formControlName="checkPassword" id="checkPassword" />
-          <ng-template #errorTpl let-control>
-            @if (control.errors?.['required']) {
-              Please confirm your password!
-            }
-            @if (control.errors?.['confirm']) {
-              Two passwords that you enter is inconsistent!
-            }
-          </ng-template>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label
-          [nzSm]="6"
-          [nzXs]="24"
-          nzFor="nickname"
-          nzRequired
-          nzTooltipTitle="What do you want other to call you"
-        >
-          <span>Nickname</span>
-        </nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your nickname!">
-          <input nz-input id="nickname" formControlName="nickname" />
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" nzRequired>Phone Number</nz-form-label>
-        <nz-form-control
-          [nzSm]="14"
-          [nzXs]="24"
-          [nzValidateStatus]="validateForm.controls['phoneNumber']"
-          nzErrorTip="Please input your phone number!"
-        >
-          <nz-input-wrapper>
-            <nz-select nzInputAddonBefore formControlName="phoneNumberPrefix" class="phone-select">
-              <nz-option nzLabel="+86" nzValue="+86"></nz-option>
-              <nz-option nzLabel="+87" nzValue="+87"></nz-option>
-            </nz-select>
-            <input formControlName="phoneNumber" id="'phoneNumber'" nz-input />
-          </nz-input-wrapper>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="website" nzRequired>Website</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input website!">
-          <input nz-input id="website" formControlName="website" placeholder="website" />
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label
-          [nzSm]="6"
-          [nzXs]="24"
-          nzFor="captcha"
-          nzRequired
-          nzTooltipTitle="Please click 'Get captcha'"
-          [nzTooltipIcon]="captchaTooltipIcon"
-        >
-          Captcha
-        </nz-form-label>
-        <nz-form-control
-          [nzSm]="14"
-          [nzXs]="24"
-          nzErrorTip="Please input the captcha you got!"
-          nzExtra="We must make sure that your are a human."
-        >
-          <div nz-row [nzGutter]="8">
-            <div nz-col [nzSpan]="12">
-              <input nz-input formControlName="captcha" id="captcha" />
+      <div class="auth-wrap">
+        <div class="container">
+          <div class="auth-shell">
+            <div class="row g-0">
+              <div class="col-lg-6">
+                <div class="panel panel-left h-100 d-flex flex-column">
+                  <div class="d-flex justify-content-between align-items-start gap-2">
+                    <div class="brand">
+                      <div class="logo"><i class="bi bi-journal-text"></i></div>
+                      <div>
+                        <div class="fw-bold" style="line-height:1;">Easy Accounting</div>
+                        <div class="small" style="color:var(--muted); font-weight:700;">
+                          Accounting • Inventory • LC Management
+                        </div>
+                      </div>
+                    </div>
+                    <span class="pill">
+                      <i class="bi bi-shield-check"></i> Secure signup
+                    </span>
+                  </div>
+                  <div class="mt-4">
+                    <h3 class="title">Build business workspace</h3>
+                    <p class="sub">
+                      Designed for trading, manufacturing, import-export & service-based companies.
+                    </p>
+                    <div class="d-flex gap-2 flex-wrap mt-3">
+                      <span class="chip">
+                        <i class="bi bi-journal-bookmark"></i> General Ledger
+                      </span>
+                      <span class="chip">
+                        <i class="bi bi-box-seam"></i> Inventory & Stock
+                      </span>
+                      <span class="chip">
+                        <i class="bi bi-globe2"></i> LC & Trade Finance
+                      </span>
+                      <span class="chip">
+                        <i class="bi bi-graph-up-arrow"></i> Financial Reports
+                      </span>
+                    </div>
+                  </div>
+                  <div class="illus-card">
+                    <img class="illus-img"
+                      src="https://stories.freepiklabs.com/storage/24305/finance-cuate-3391.png"
+                      alt="Accounting and business management illustration" />
+                  </div>
+                  <div class="mt-auto pt-3 small" style="color:var(--muted); font-weight:700;">
+                    Tip: Manage vouchers, stock valuation, and LC costs from a single dashboard.
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="panel panel-right h-100">
+                  <div class="mb-3">
+                    <h3 class="title">Create Account</h3>
+                    <p class="sub">
+                      Start accounting, inventory, and LC operations in minutes.
+                    </p>
+                  </div>
+                  <form class="needs-validation" novalidate autocomplete="off">
+                    <div class="row g-3">
+                      <div class="col-md-6">
+                        <label class="form-label">Owner / Admin Name <span class="text-danger">*</span></label>
+                        <input class="form-control" required placeholder="e.g., Md. Rahim" />
+                        <div class="invalid-feedback">Please enter your name.</div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <label class="form-label">Company Name</label>
+                        <input class="form-control" placeholder="e.g., Future Trading Co." />
+                      </div>
+
+                      <div class="col-12">
+                        <label class="form-label">Business Email <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                          <span class="input-group-text" style="border-radius:14px 0 0 14px;">
+                            <i class="bi bi-envelope text-muted"></i>
+                          </span>
+                          <input type="email"
+                                 class="form-control border-start-0"
+                                 style="border-radius:0 14px 14px 0;"
+                                 required
+                                 placeholder="accounts@company.com" />
+                          <div class="invalid-feedback">Please enter a valid email.</div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <label class="form-label">Phone</label>
+                        <input class="form-control" placeholder="01XXXXXXXXX" />
+                      </div>
+
+                      <div class="col-md-6">
+                        <label class="form-label">Business Type</label>
+                        <select class="form-select">
+                          <option selected>Trading</option>
+                          <option>Manufacturing</option>
+                          <option>Service</option>
+                          <option>Import / Export</option>
+                        </select>
+                      </div>
+
+                      <div class="col-md-6">
+                        <label class="form-label">Password <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                          <span class="input-group-text" style="border-radius:14px 0 0 14px;">
+                            <i class="bi bi-lock text-muted"></i>
+                          </span>
+                          <input id="password"
+                                 type="password"
+                                 class="form-control border-start-0"
+                                 style="border-radius:0;"
+                                 required
+                                 minlength="8"
+                                 placeholder="Minimum 8 characters" />
+                          <button class="btn eye-btn" type="button">
+                            <i class="bi bi-eye"></i>
+                          </button>
+                          <div class="invalid-feedback">
+                            Password must be at least 8 characters.
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <label class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                          <span class="input-group-text" style="border-radius:14px 0 0 14px;">
+                            <i class="bi bi-shield-lock text-muted"></i>
+                          </span>
+                          <input type="password"
+                                 class="form-control border-start-0"
+                                 style="border-radius:0;"
+                                 required
+                                 placeholder="Re-type password" />
+                          <button class="btn eye-btn" type="button">
+                            <i class="bi bi-eye"></i>
+                          </button>
+                          <div class="invalid-feedback">Passwords must match.</div>
+                        </div>
+                      </div>
+
+                      <div class="col-12 d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" required />
+                          <label class="form-check-label small" style="color:var(--muted); font-weight:700;">
+                            I agree to the <a class="muted-link" href="#">Terms</a> & 
+                            <a class="muted-link" href="#">Privacy</a>.
+                          </label>
+                          <div class="invalid-feedback">You must agree before submitting.</div>
+                        </div>
+                        <a class="muted-link small" href="login.html">Already have an account?</a>
+                      </div>
+
+                      <div class="col-12 d-grid">
+                        <button class="btn btn-brand" type="submit">
+                          <i class="bi bi-person-plus me-1"></i> Create Account
+                        </button>
+                      </div>
+
+                      <div class="col-12">
+                        <div class="divider my-2">or</div>
+                        <button class="btn btn-glass w-100" type="button">
+                          <i class="bi bi-google me-1"></i> Continue with Google
+                        </button>
+                      </div>
+
+                      <div class="col-12 text-center mt-2 small" style="color:var(--muted); font-weight:700;">
+                        © 2026 Easy Accounting • Accounting, Inventory & LC Solution
+                      </div>
+
+                    </div>
+                  </form>
+                </div>
+              </div>
+
             </div>
-            <div nz-col [nzSpan]="12">
-              <button nz-button (click)="getCaptcha($event)">Get captcha</button>
-            </div>
           </div>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item nz-row class="register-area">
-        <nz-form-control [nzSpan]="14" [nzOffset]="6">
-          <label nz-checkbox formControlName="agree">
-            <span>
-              I have read the
-              <a>agreement</a>
-            </span>
-          </label>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item nz-row class="register-area">
-        <nz-form-control [nzSpan]="14" [nzOffset]="6">
-          <button nz-button nzType="primary">Register</button>
-        </nz-form-control>
-      </nz-form-item>
-    </form>
         </div>
       </div>
     </div>

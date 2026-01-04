@@ -15,6 +15,7 @@
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<EmployeeRole> EmployeeRoles { get; set; }
+        public DbSet<UserLoginHistory> UserLoginHistories { get; set; }
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
