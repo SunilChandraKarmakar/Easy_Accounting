@@ -97,24 +97,26 @@
                         </div>
                       </div>
                       <div class="col-md-6">
-                        <label class="form-label">Password <span class="text-danger">*</span></label>
+                        <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
                         <div class="input-group">
                           <span class="input-group-text" style="border-radius:14px 0 0 14px;">
                             <i class="bi bi-lock text-muted"></i>
                           </span>
-                          <input id="password" type="password" class="form-control border-start-0" style="border-radius:0;" required minlength="8" placeholder="Minimum 8 characters" />
+                          <input id="password" name="password" type="password" class="form-control border-start-0" style="border-radius:0;" placeholder="Minimum 8 characters" 
+                            [(ngModel)]="registerModel.password" />
                           <button class="btn eye-btn" type="button">
                             <i class="bi bi-eye"></i>
                           </button>
                         </div>
                       </div>
                       <div class="col-md-6">
-                        <label class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                        <label for="confirmPassword" class="form-label">Confirm Password <span class="text-danger">*</span></label>
                         <div class="input-group">
                           <span class="input-group-text" style="border-radius:14px 0 0 14px;">
                             <i class="bi bi-shield-lock text-muted"></i>
                           </span>
-                          <input type="password" class="form-control border-start-0" style="border-radius:0;" required placeholder="Re-type password" />
+                          <input id="confirmPassword" name="confirmPassword" type="password" class="form-control border-start-0" style="border-radius:0;" placeholder="Re-type password"
+                            [(ngModel)]="registerModel.confirmPassword" />
                           <button class="btn eye-btn" type="button">
                             <i class="bi bi-eye"></i>
                           </button>
@@ -132,7 +134,7 @@
                         <a class="muted-link small" routerLink="/app/login">Already have an account?</a>
                       </div>
                       <div class="col-12 d-grid">
-                        <button class="btn btn-brand text-white" type="submit">
+                        <button class="btn btn-brand text-white" (click)="onClickRegistration()">
                           <i class="bi bi-person-plus me-1"></i> Create Account
                         </button>
                       </div>

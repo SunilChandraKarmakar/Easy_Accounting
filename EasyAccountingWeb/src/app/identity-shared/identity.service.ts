@@ -72,16 +72,16 @@ export class IdentityService {
     }
   }
 
-  async SignUp(model: RegisterModel) {
+  SignUp(model: RegisterModel): void {
     this.spinnerService.show();
-    this.authenticationService.registration(model).subscribe(async (result: UserModel) => {
+    this.authenticationService.registration(model).subscribe((result: UserModel) => {
       this.spinnerService.hide();
-      this.router.navigateByUrl("/app/countries");
-      return this.toasterService.success("Your account has been created successfully", "Success");
+      return this.toasterService.success("Account has been created successfully. Please sign in to continue.", "Success");
     },
-    (err) => {
+    (error: any) => {
       this.spinnerService.hide();
-      this.toasterService.error("Account cannot created! Please, try again.", "Error");
+      console.log("Error:- ", error);
+      this.toasterService.error(error.errorMessage, "Error");
     });
   }
 
