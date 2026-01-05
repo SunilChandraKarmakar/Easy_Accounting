@@ -9,12 +9,15 @@ import { CityUpdateComponent } from './components/layout/global/cities/city-upda
 import { RegistrationComponent } from './authentication/registration/registration.component';
 import { AccessDeniedComponent } from './shared/access-denied/access-denied.component';
 import { AuthGuard } from './identity-shared/auth.guard';
+import { LoginComponent } from './authentication/login/login.component';
 
 export const routes: Routes = [
 
   // Login component
   { path: "", component: RegistrationComponent },
-  { path: "access-denied", component: AccessDeniedComponent },
+  { path: "registration", component: RegistrationComponent, pathMatch: "full" },
+  { path: "login", component: LoginComponent, pathMatch: "full" },
+  { path: "access-denied", component: AccessDeniedComponent, pathMatch: "full" },
 
   // For layout
   {

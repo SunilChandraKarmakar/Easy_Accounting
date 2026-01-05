@@ -74,14 +74,18 @@ export class IdentityService {
 
   SignUp(model: RegisterModel): void {
     this.spinnerService.show();
-    this.authenticationService.registration(model).subscribe((result: UserModel) => {
-      this.spinnerService.hide();
-      return this.toasterService.success("Account has been created successfully. Please sign in to continue.", "Success");
-    },
-    (error: any) => {
-      this.spinnerService.hide();
-      console.log("Error:- ", error);
-      this.toasterService.error(error.errorMessage, "Error");
+
+    this.authenticationService.registration(model).subscribe({
+      next: (result: UserModel) => {
+        this.spinnerService.hide();
+        this.toasterService.success('Account has been created successfully. Please sign in to continue.', 'Success');
+        this.router.navigateByUrl('/login');
+      },
+      error: (error: any) => {
+        this.spinnerService.hide();
+        const errorMessage = this.getRegistrationValidationErrors(error);
+        this.toasterService.error(errorMessage, 'Validation Error', { enableHtml: true, timeOut: 10000, closeButton: true });
+      }
     });
   }
 
@@ -143,5 +147,26 @@ export class IdentityService {
     }
 
     return this._cachedJwtToken || "No Token Found!";
+  }
+
+  // Get registration validation errors
+  private getRegistrationValidationErrors(error: any): string {
+
+    if (!error?.errors) {
+      return 'Something went wrong. Please try again.';
+    }
+
+    const validationErrors = error.errors;
+    const messages: string[] = [];
+
+    for (const field in validationErrors) {
+      if (validationErrors.hasOwnProperty(field)) {
+        validationErrors[field].forEach((message: string) => {
+          messages.push(`${field}: ${message}`);
+        });
+      }
+    }
+
+    return messages.join('<br><br>');
   }
 }

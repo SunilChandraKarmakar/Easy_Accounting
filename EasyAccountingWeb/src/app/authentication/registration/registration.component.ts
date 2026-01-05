@@ -25,7 +25,6 @@ export class RegistrationComponent implements OnInit {
 
   }
 
-
   // Get registration form validation result
   private getRegistrationFormValidationResult(): boolean {
     if(this.registerModel.fullName == undefined || this.registerModel.fullName == null || this.registerModel.fullName.trim() == '') {
@@ -44,7 +43,8 @@ export class RegistrationComponent implements OnInit {
       this.toastrService.warning('Password is required.', 'Validation Warning');
       return false;
     }
-    else if(this.registerModel.confirmPassword == undefined || this.registerModel.confirmPassword == null || this.registerModel.confirmPassword.trim() == '') {
+    else if(this.registerModel.confirmPassword == undefined || this.registerModel.confirmPassword == null 
+      || this.registerModel.confirmPassword.trim() == '') {
       this.toastrService.warning('Confirm Password is required.', 'Validation Warning');
       return false;
     }
