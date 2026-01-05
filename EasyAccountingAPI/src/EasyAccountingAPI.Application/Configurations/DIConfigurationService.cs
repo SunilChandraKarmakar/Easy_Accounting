@@ -28,6 +28,7 @@
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IEmployeeRoleRepository, EmployeeRoleRepository>();
+            services.AddScoped<IUserLoginHistoryRepository, UserLoginHistoryRepository>();
             #endregion
 
             return services;

@@ -26,8 +26,10 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddResponseCaching();
 
 var app = builder.Build();
+app.UseResponseCaching();
 
 // Seed initial data
 using (var scope = app.Services.CreateScope())

@@ -1,6 +1,6 @@
 ﻿namespace EasyAccountingAPI.Application.ApplicationLogics.AuthenticationLogic.Model
 {
-    public class AuthenticationViewMoodel
+    public class AuthenticationViewModel
     {
         public UserModel UserModel { get; set; }
         public RegisterModel RegisterModel { get; set; }

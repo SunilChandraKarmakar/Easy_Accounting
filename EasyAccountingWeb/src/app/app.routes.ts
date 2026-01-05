@@ -7,11 +7,14 @@ import { CountryUpdateComponent } from './components/layout/global/countries/cou
 import { CityCreateComponent } from './components/layout/global/cities/city-create/city-create.component';
 import { CityUpdateComponent } from './components/layout/global/cities/city-update/city-update.component';
 import { RegistrationComponent } from './authentication/registration/registration.component';
+import { AccessDeniedComponent } from './shared/access-denied/access-denied.component';
+import { AuthGuard } from './identity-shared/auth.guard';
 
 export const routes: Routes = [
 
   // Login component
   { path: "", component: RegistrationComponent },
+  { path: "access-denied", component: AccessDeniedComponent },
 
   // For layout
   {
@@ -28,6 +31,7 @@ export const routes: Routes = [
       { path: "cities", component: CitiesComponent, pathMatch: "full" },
       { path: "city/create", component: CityCreateComponent, pathMatch: "full" },
       { path: "city/update/:recordId", component: CityUpdateComponent, pathMatch: "full" }
-    ] 
+    ],
+    canActivate: [AuthGuard] 
   }
 ];

@@ -6,6 +6,48 @@
     "version": "v1"
   },
   "paths": {
+    "/api/Authentication/Login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "Authentication_Login",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationViewModel"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Authentication/Registration": {
       "post": {
         "tags": [
@@ -803,6 +845,53 @@
             "minLength": 1
           }
         }
+      },
+      "AuthenticationViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userModel": {
+            "$ref": "#/components/schemas/UserModel"
+          },
+          "registerModel": {
+            "$ref": "#/components/schemas/RegisterModel"
+          },
+          "loginModel": {
+            "$ref": "#/components/schemas/LoginModel"
+          }
+        }
+      },
+      "LoginModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 50,
+            "minLength": 5
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 5
+          }
+        }
+      },
+      "LoginCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/LoginModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
       }
     },
     "securitySchemes": {

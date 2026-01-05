@@ -15,6 +15,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface IAuthenticationService {
+    login(command: LoginCommand): Observable<AuthenticationViewModel>;
     registration(command: RegistrationCommand): Observable<UserModel>;
 }
 
@@ -27,6 +28,60 @@ export class AuthenticationService implements IAuthenticationService {
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
         this.baseUrl = baseUrl ?? "";
+    }
+
+    login(command: LoginCommand): Observable<AuthenticationViewModel> {
+        let url_ = this.baseUrl + "/api/Authentication/Login";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processLogin(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processLogin(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<AuthenticationViewModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<AuthenticationViewModel>;
+        }));
+    }
+
+    protected processLogin(response: HttpResponseBase): Observable<AuthenticationViewModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AuthenticationViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let resultdefault: any = null;
+            let resultDatadefault = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            resultdefault = ProblemDetails.fromJS(resultDatadefault);
+            return throwException("A server side error occurred.", status, _responseText, _headers, resultdefault);
+            }));
+        }
     }
 
     registration(command: RegistrationCommand): Observable<UserModel> {
@@ -1613,6 +1668,117 @@ export class RegistrationCommand extends RegisterModel implements IRegistrationC
 }
 
 export interface IRegistrationCommand extends IRegisterModel {
+}
+
+export class AuthenticationViewModel implements IAuthenticationViewModel {
+    userModel?: UserModel;
+    registerModel?: RegisterModel;
+    loginModel?: LoginModel;
+
+    constructor(data?: IAuthenticationViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.userModel = _data["userModel"] ? UserModel.fromJS(_data["userModel"]) : undefined as any;
+            this.registerModel = _data["registerModel"] ? RegisterModel.fromJS(_data["registerModel"]) : undefined as any;
+            this.loginModel = _data["loginModel"] ? LoginModel.fromJS(_data["loginModel"]) : undefined as any;
+        }
+    }
+
+    static fromJS(data: any): AuthenticationViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new AuthenticationViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userModel"] = this.userModel ? this.userModel.toJSON() : undefined as any;
+        data["registerModel"] = this.registerModel ? this.registerModel.toJSON() : undefined as any;
+        data["loginModel"] = this.loginModel ? this.loginModel.toJSON() : undefined as any;
+        return data;
+    }
+}
+
+export interface IAuthenticationViewModel {
+    userModel?: UserModel;
+    registerModel?: RegisterModel;
+    loginModel?: LoginModel;
+}
+
+export class LoginModel implements ILoginModel {
+    email!: string;
+    password!: string;
+
+    constructor(data?: ILoginModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"];
+            this.password = _data["password"];
+        }
+    }
+
+    static fromJS(data: any): LoginModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new LoginModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        data["password"] = this.password;
+        return data;
+    }
+}
+
+export interface ILoginModel {
+    email: string;
+    password: string;
+}
+
+export class LoginCommand extends LoginModel implements ILoginCommand {
+
+    constructor(data?: ILoginCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): LoginCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new LoginCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ILoginCommand extends ILoginModel {
 }
 
 export class SwaggerException extends Error {

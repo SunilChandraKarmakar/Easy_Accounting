@@ -16,5 +16,18 @@
 
             return BadRequest(command);
         }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(AuthenticationViewModel), StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<AuthenticationViewModel>> Login(LoginCommand command)
+        {
+            var authenticationVM = new AuthenticationViewModel()
+            {
+                UserModel = await Mediator.Send(command)
+            };
+
+            return Ok(authenticationVM);
+        }
     }
 }
