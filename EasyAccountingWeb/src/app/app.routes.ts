@@ -14,7 +14,7 @@ import { LoginComponent } from './authentication/login/login.component';
 export const routes: Routes = [
 
   // Login component
-  { path: "", component: RegistrationComponent },
+  { path: "", component: LoginComponent },
   { path: "registration", component: RegistrationComponent, pathMatch: "full" },
   { path: "login", component: LoginComponent, pathMatch: "full" },
   { path: "access-denied", component: AccessDeniedComponent, pathMatch: "full" },
