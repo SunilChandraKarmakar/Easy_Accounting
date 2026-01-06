@@ -68,7 +68,8 @@ export class IdentityService {
       return { isSuccess: true, message: "Login Success." };
     } catch (error: any) {
       this.spinnerService.hide();
-      return { isSuccess: false, message: error.errorMessage };
+      const errorMessage: string = this.getValidationErrors(error);
+      return { isSuccess: false, message: errorMessage };
     }
   }
 
@@ -83,7 +84,7 @@ export class IdentityService {
       },
       error: (error: any) => {
         this.spinnerService.hide();
-        const errorMessage = this.getRegistrationValidationErrors(error);
+        const errorMessage: string = this.getValidationErrors(error);
         this.toasterService.error(errorMessage, 'Validation Error', { enableHtml: true, timeOut: 10000, closeButton: true });
       }
     });
@@ -149,11 +150,11 @@ export class IdentityService {
     return this._cachedJwtToken || "No Token Found!";
   }
 
-  // Get registration validation errors
-  private getRegistrationValidationErrors(error: any): string {
+  // Get validation errors
+  private getValidationErrors(error: any): string {
 
     if (!error?.errors) {
-      return 'Something went wrong. Please try again.';
+      return error.errorMessage;
     }
 
     const validationErrors = error.errors;

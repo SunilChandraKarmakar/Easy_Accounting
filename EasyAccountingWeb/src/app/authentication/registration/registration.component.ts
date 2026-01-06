@@ -17,6 +17,21 @@ import { IdentityService } from '../../identity-shared/identity.service';
 
 export class RegistrationComponent implements OnInit {
 
+  // Show hide password
+  isShowPassword: boolean = false;
+  isShowConfirmPassword: boolean = false;
+
+  // Toggle password visibility
+  togglePassword() {
+    this.isShowPassword = !this.isShowPassword;
+  }
+
+  // Toggle confirm password visibility
+  toggleConfirmPassword() {
+    this.isShowConfirmPassword = !this.isShowConfirmPassword;
+  }
+
+  // Register model
   registerModel: RegisterModel = new RegisterModel();
 
   constructor(private spinnerService: NgxSpinnerService, private toastrService: ToastrService, private identityService: IdentityService) { }

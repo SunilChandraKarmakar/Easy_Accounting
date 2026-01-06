@@ -103,10 +103,10 @@
                           <span class="input-group-text" style="border-radius:14px 0 0 14px;">
                             <i class="bi bi-lock text-muted"></i>
                           </span>
-                          <input id="password" name="password" type="password" class="form-control border-start-0" style="border-radius:0;" placeholder="Minimum 8 characters" 
-                            [(ngModel)]="registerModel.password" />
-                          <button class="btn eye-btn" type="button">
-                            <i class="bi bi-eye"></i>
+                          <input id="password" name="password" [type]="isShowPassword ? 'text' : 'password'" class="form-control border-start-0" style="border-radius:0;" 
+                            placeholder="Minimum 8 characters" [(ngModel)]="registerModel.password" />
+                          <button class="btn eye-btn" type="button" (click)="togglePassword()">
+                            <i [class]="isShowPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
                           </button>
                         </div>
                       </div>
@@ -116,10 +116,10 @@
                           <span class="input-group-text" style="border-radius:14px 0 0 14px;">
                             <i class="bi bi-shield-lock text-muted"></i>
                           </span>
-                          <input id="confirmPassword" name="confirmPassword" type="password" class="form-control border-start-0" style="border-radius:0;" placeholder="Re-type password"
-                            [(ngModel)]="registerModel.confirmPassword" />
-                          <button class="btn eye-btn" type="button">
-                            <i class="bi bi-eye"></i>
+                          <input id="confirmPassword" name="confirmPassword" [type]="isShowConfirmPassword ? 'text' : 'password'" class="form-control border-start-0" style="border-radius:0;" 
+                            placeholder="Re-type password" [(ngModel)]="registerModel.confirmPassword" />
+                          <button class="btn eye-btn" type="button" (click)="toggleConfirmPassword()">
+                            <i [class]="isShowConfirmPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
                           </button>
                         </div>
                       </div>

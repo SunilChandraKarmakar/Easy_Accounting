@@ -28,6 +28,10 @@
                 // Check email exist or not
                 var existUser = await _userManager.FindByEmailAsync(request.Email);
 
+                // Check exist user
+                if (existUser is null)
+                    throw new Exception("We couldn’t find an account with the provided email address.");
+
                 // Check disable login access for this employee
                 if (existUser is not null && existUser.LockoutEnd is not null)
                     throw new Exception("Login access is currently disabled. Please reach out to the administrator for support.");

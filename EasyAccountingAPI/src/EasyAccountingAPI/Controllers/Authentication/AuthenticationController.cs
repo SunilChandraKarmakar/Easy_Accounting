@@ -22,12 +22,17 @@
         [ProducesDefaultResponseType]
         public async Task<ActionResult<AuthenticationViewModel>> Login(LoginCommand command)
         {
-            var authenticationVM = new AuthenticationViewModel()
+            if(ModelState.IsValid)
             {
-                UserModel = await Mediator.Send(command)
-            };
+                var authenticationVM = new AuthenticationViewModel()
+                {
+                    UserModel = await Mediator.Send(command)
+                };
 
-            return Ok(authenticationVM);
+                return Ok(authenticationVM);
+            }
+
+            return BadRequest(command);
         }
     }
 }
