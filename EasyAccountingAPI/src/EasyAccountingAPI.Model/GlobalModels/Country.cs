@@ -6,6 +6,7 @@
         public Country()
         {
             Cities = new HashSet<City>();
+            Companies = new HashSet<Company>();
         }
 
         public int Id { get; set; }
@@ -24,6 +25,7 @@
         public bool IsDeleted { get; set; }
         public DateTime? DeletedDateTime { get; set; }
 
-        public virtual ICollection<City> Cities { get; set; } 
+        public ICollection<City> Cities { get; set; } 
+        public ICollection<Company> Companies { get; set; }
     }
 }

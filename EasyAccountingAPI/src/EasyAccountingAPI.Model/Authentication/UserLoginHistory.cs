@@ -1,5 +1,6 @@
 ﻿namespace EasyAccountingAPI.Model.Authentication
 {
+    [Table("UserLoginHistories", Schema = "Authentication")]
     public class UserLoginHistory
     {
         public int Id { get; set; }

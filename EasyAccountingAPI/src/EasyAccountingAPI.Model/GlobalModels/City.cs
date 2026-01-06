@@ -3,6 +3,11 @@
     [Table("Cities", Schema = "Global")]
     public class City : IDelatableEntity
     {
+        public City()
+        {
+            Companies = new HashSet<Company>();
+        }
+
         public int Id { get; set; }
 
         [Column(TypeName = "nvarchar(100)")]
@@ -17,6 +22,7 @@
         public bool IsDeleted { get; set; }
         public DateTime? DeletedDateTime { get; set; }
 
-        public virtual Country Country { get; set; }
+        public Country Country { get; set; }
+        public ICollection<Company> Companies { get; set; }
     }
 }

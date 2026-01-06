@@ -1,5 +1,6 @@
 ﻿namespace EasyAccountingAPI.Model.Authentication
 {
+    [Table("Roles", Schema = "Authentication")]
     public class Role
     {
         public Role()
@@ -9,10 +10,12 @@
 
         public int Id { get; set; }
 
+        [Column(TypeName = "nvarchar(50)")]
         [Required(ErrorMessage = "Please, provide role name.")]
         [StringLength(maximumLength: 50, MinimumLength = 2)]
         public string Name { get; set; }
 
+        [Column(TypeName = "nvarchar(100)")]
         public string? Description { get; set; }
 
         [Required(ErrorMessage = "Please, provide created by employee.")]

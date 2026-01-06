@@ -1,5 +1,6 @@
 ﻿namespace EasyAccountingAPI.Model.Authentication
 {
+    [Table("EmployeeRoles", Schema = "Authentication")]
     public class EmployeeRole
     {
         public int Id { get; set; }

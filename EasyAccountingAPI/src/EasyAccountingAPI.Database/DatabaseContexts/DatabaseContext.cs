@@ -18,6 +18,11 @@
         public DbSet<UserLoginHistory> UserLoginHistories { get; set; }
         #endregion
 
+        #region Master Settings Model
+        public DbSet<Company> Companies { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
+        #endregion
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // optionsBuilder.UseLazyLoadingProxies();

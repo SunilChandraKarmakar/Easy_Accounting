@@ -1,5 +1,6 @@
 ﻿namespace EasyAccountingAPI.Model.Authentication
 {
+    [Table("Employees", Schema = "Authentication")]
     public class Employee
     {
         public Employee()
@@ -16,6 +17,7 @@
         [StringLength(maximumLength: 100, MinimumLength = 2)]
         public string FullName { get; set; }
 
+        [Column(TypeName = "nvarchar(30)")]
         public string? Phone { get; set; }
 
         [Required(ErrorMessage = "Please, provide email address.")]
