@@ -428,10 +428,329 @@
           }
         }
       }
+    },
+    "/api/Currency/Create": {
+      "post": {
+        "tags": [
+          "Currency"
+        ],
+        "operationId": "Currency_Create",
+        "requestBody": {
+          "x-name": "createCurrencyCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCurrencyCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Currency/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "Currency"
+        ],
+        "operationId": "Currency_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Currency/GetById/{id}": {
+      "get": {
+        "tags": [
+          "Currency"
+        ],
+        "operationId": "Currency_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrencyViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Currency/GetFilterCurrencies": {
+      "post": {
+        "tags": [
+          "Currency"
+        ],
+        "operationId": "Currency_GetFilterCurrencies",
+        "requestBody": {
+          "x-name": "getCurrenciesByFilterQuery",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetCurrenciesByFilterQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilterPageResultModelOfCurrencyGridModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Currency/Update": {
+      "put": {
+        "tags": [
+          "Currency"
+        ],
+        "operationId": "Currency_Update",
+        "requestBody": {
+          "x-name": "updateCurrencyCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCurrencyCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "FilterPageResultModelOfCurrencyGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CurrencyGridModel"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "CurrencyGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "baseRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "symble": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "GetCurrenciesByFilterQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FilterPageModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "FilterPageModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "pageIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sortColumn": {
+            "type": "string",
+            "nullable": true
+          },
+          "sortOrder": {
+            "type": "string",
+            "nullable": true
+          },
+          "filterValue": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CurrencyViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "createModel": {
+            "$ref": "#/components/schemas/CurrencyCreateModel"
+          },
+          "updateModel": {
+            "$ref": "#/components/schemas/CurrencyUpdateModel"
+          },
+          "gridModel": {
+            "$ref": "#/components/schemas/CurrencyGridModel"
+          }
+        }
+      },
+      "CurrencyCreateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "baseRate"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "baseRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "symble": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CurrencyUpdateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "baseRate"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "baseRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "symble": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateCurrencyCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CurrencyCreateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "UpdateCurrencyCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CurrencyUpdateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
       "FilterPageResultModelOfCityGridModel": {
         "type": "object",
         "additionalProperties": false,
@@ -473,32 +792,6 @@
             "additionalProperties": false
           }
         ]
-      },
-      "FilterPageModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "pageIndex": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "pageSize": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "sortColumn": {
-            "type": "string",
-            "nullable": true
-          },
-          "sortOrder": {
-            "type": "string",
-            "nullable": true
-          },
-          "filterValue": {
-            "type": "string",
-            "nullable": true
-          }
-        }
       },
       "CreateCityCommand": {
         "allOf": [

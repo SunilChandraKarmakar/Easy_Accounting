@@ -9,3 +9,5 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Storage;
 global using System.Linq.Expressions;
 global using EasyAccountingAPI.Repository.Contracts.Authentication;
+global using EasyAccountingAPI.Model.MasterSettings;
+global using EasyAccountingAPI.Repository.Contracts.MasterSettings;
