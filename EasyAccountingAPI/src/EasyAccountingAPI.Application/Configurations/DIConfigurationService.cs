@@ -31,6 +31,10 @@
             services.AddScoped<IUserLoginHistoryRepository, UserLoginHistoryRepository>();
             #endregion
 
+            #region Master Settings Service
+            services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+            #endregion
+
             return services;
         }
     }

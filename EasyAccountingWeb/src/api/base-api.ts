@@ -757,6 +757,652 @@ export class CountryService implements ICountryService {
     }
 }
 
+export interface ICurrencyService {
+    create(createCurrencyCommand: CreateCurrencyCommand): Observable<boolean>;
+    delete(id: string): Observable<boolean>;
+    getById(id: string): Observable<CurrencyViewModel>;
+    getFilterCurrencies(getCurrenciesByFilterQuery: GetCurrenciesByFilterQuery): Observable<FilterPageResultModelOfCurrencyGridModel>;
+    update(updateCurrencyCommand: UpdateCurrencyCommand): Observable<boolean>;
+}
+
+@Injectable()
+export class CurrencyService implements ICurrencyService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    create(createCurrencyCommand: CreateCurrencyCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Currency/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(createCurrencyCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(id: string): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Currency/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getById(id: string): Observable<CurrencyViewModel> {
+        let url_ = this.baseUrl + "/api/Currency/GetById/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<CurrencyViewModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<CurrencyViewModel>;
+        }));
+    }
+
+    protected processGetById(response: HttpResponseBase): Observable<CurrencyViewModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CurrencyViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getFilterCurrencies(getCurrenciesByFilterQuery: GetCurrenciesByFilterQuery): Observable<FilterPageResultModelOfCurrencyGridModel> {
+        let url_ = this.baseUrl + "/api/Currency/GetFilterCurrencies";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(getCurrenciesByFilterQuery);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFilterCurrencies(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFilterCurrencies(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FilterPageResultModelOfCurrencyGridModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FilterPageResultModelOfCurrencyGridModel>;
+        }));
+    }
+
+    protected processGetFilterCurrencies(response: HttpResponseBase): Observable<FilterPageResultModelOfCurrencyGridModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FilterPageResultModelOfCurrencyGridModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(updateCurrencyCommand: UpdateCurrencyCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Currency/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(updateCurrencyCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+export class FilterPageResultModelOfCurrencyGridModel implements IFilterPageResultModelOfCurrencyGridModel {
+    items?: CurrencyGridModel[];
+    totalCount?: number;
+
+    constructor(data?: IFilterPageResultModelOfCurrencyGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(CurrencyGridModel.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): FilterPageResultModelOfCurrencyGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPageResultModelOfCurrencyGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item ? item.toJSON() : undefined as any);
+        }
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+}
+
+export interface IFilterPageResultModelOfCurrencyGridModel {
+    items?: CurrencyGridModel[];
+    totalCount?: number;
+}
+
+export class CurrencyGridModel implements ICurrencyGridModel {
+    id?: number;
+    name?: string;
+    baseRate?: number;
+    symble?: string | undefined;
+
+    constructor(data?: ICurrencyGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.baseRate = _data["baseRate"];
+            this.symble = _data["symble"];
+        }
+    }
+
+    static fromJS(data: any): CurrencyGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new CurrencyGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["baseRate"] = this.baseRate;
+        data["symble"] = this.symble;
+        return data;
+    }
+}
+
+export interface ICurrencyGridModel {
+    id?: number;
+    name?: string;
+    baseRate?: number;
+    symble?: string | undefined;
+}
+
+export class FilterPageModel implements IFilterPageModel {
+    pageIndex?: number;
+    pageSize?: number;
+    sortColumn?: string | undefined;
+    sortOrder?: string | undefined;
+    filterValue?: string | undefined;
+
+    constructor(data?: IFilterPageModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageIndex = _data["pageIndex"];
+            this.pageSize = _data["pageSize"];
+            this.sortColumn = _data["sortColumn"];
+            this.sortOrder = _data["sortOrder"];
+            this.filterValue = _data["filterValue"];
+        }
+    }
+
+    static fromJS(data: any): FilterPageModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPageModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageIndex"] = this.pageIndex;
+        data["pageSize"] = this.pageSize;
+        data["sortColumn"] = this.sortColumn;
+        data["sortOrder"] = this.sortOrder;
+        data["filterValue"] = this.filterValue;
+        return data;
+    }
+}
+
+export interface IFilterPageModel {
+    pageIndex?: number;
+    pageSize?: number;
+    sortColumn?: string | undefined;
+    sortOrder?: string | undefined;
+    filterValue?: string | undefined;
+}
+
+export class GetCurrenciesByFilterQuery extends FilterPageModel implements IGetCurrenciesByFilterQuery {
+
+    constructor(data?: IGetCurrenciesByFilterQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetCurrenciesByFilterQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetCurrenciesByFilterQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetCurrenciesByFilterQuery extends IFilterPageModel {
+}
+
+export class CurrencyViewModel implements ICurrencyViewModel {
+    createModel?: CurrencyCreateModel;
+    updateModel?: CurrencyUpdateModel;
+    gridModel?: CurrencyGridModel;
+
+    constructor(data?: ICurrencyViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.createModel = _data["createModel"] ? CurrencyCreateModel.fromJS(_data["createModel"]) : undefined as any;
+            this.updateModel = _data["updateModel"] ? CurrencyUpdateModel.fromJS(_data["updateModel"]) : undefined as any;
+            this.gridModel = _data["gridModel"] ? CurrencyGridModel.fromJS(_data["gridModel"]) : undefined as any;
+        }
+    }
+
+    static fromJS(data: any): CurrencyViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new CurrencyViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["createModel"] = this.createModel ? this.createModel.toJSON() : undefined as any;
+        data["updateModel"] = this.updateModel ? this.updateModel.toJSON() : undefined as any;
+        data["gridModel"] = this.gridModel ? this.gridModel.toJSON() : undefined as any;
+        return data;
+    }
+}
+
+export interface ICurrencyViewModel {
+    createModel?: CurrencyCreateModel;
+    updateModel?: CurrencyUpdateModel;
+    gridModel?: CurrencyGridModel;
+}
+
+export class CurrencyCreateModel implements ICurrencyCreateModel {
+    name!: string;
+    baseRate!: number;
+    symble?: string | undefined;
+
+    constructor(data?: ICurrencyCreateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.baseRate = _data["baseRate"];
+            this.symble = _data["symble"];
+        }
+    }
+
+    static fromJS(data: any): CurrencyCreateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new CurrencyCreateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["baseRate"] = this.baseRate;
+        data["symble"] = this.symble;
+        return data;
+    }
+}
+
+export interface ICurrencyCreateModel {
+    name: string;
+    baseRate: number;
+    symble?: string | undefined;
+}
+
+export class CurrencyUpdateModel implements ICurrencyUpdateModel {
+    id?: number;
+    name!: string;
+    baseRate!: number;
+    symble?: string | undefined;
+
+    constructor(data?: ICurrencyUpdateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.baseRate = _data["baseRate"];
+            this.symble = _data["symble"];
+        }
+    }
+
+    static fromJS(data: any): CurrencyUpdateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new CurrencyUpdateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["baseRate"] = this.baseRate;
+        data["symble"] = this.symble;
+        return data;
+    }
+}
+
+export interface ICurrencyUpdateModel {
+    id?: number;
+    name: string;
+    baseRate: number;
+    symble?: string | undefined;
+}
+
+export class CreateCurrencyCommand extends CurrencyCreateModel implements ICreateCurrencyCommand {
+
+    constructor(data?: ICreateCurrencyCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): CreateCurrencyCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateCurrencyCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ICreateCurrencyCommand extends ICurrencyCreateModel {
+}
+
+export class UpdateCurrencyCommand extends CurrencyUpdateModel implements IUpdateCurrencyCommand {
+
+    constructor(data?: IUpdateCurrencyCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): UpdateCurrencyCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateCurrencyCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IUpdateCurrencyCommand extends ICurrencyUpdateModel {
+}
+
 export class FilterPageResultModelOfCityGridModel implements IFilterPageResultModelOfCityGridModel {
     items?: CityGridModel[];
     totalCount?: number;
@@ -847,58 +1493,6 @@ export interface ICityGridModel {
     id?: string;
     name?: string;
     countryName?: string;
-}
-
-export class FilterPageModel implements IFilterPageModel {
-    pageIndex?: number;
-    pageSize?: number;
-    sortColumn?: string | undefined;
-    sortOrder?: string | undefined;
-    filterValue?: string | undefined;
-
-    constructor(data?: IFilterPageModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.pageIndex = _data["pageIndex"];
-            this.pageSize = _data["pageSize"];
-            this.sortColumn = _data["sortColumn"];
-            this.sortOrder = _data["sortOrder"];
-            this.filterValue = _data["filterValue"];
-        }
-    }
-
-    static fromJS(data: any): FilterPageModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new FilterPageModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["pageIndex"] = this.pageIndex;
-        data["pageSize"] = this.pageSize;
-        data["sortColumn"] = this.sortColumn;
-        data["sortOrder"] = this.sortOrder;
-        data["filterValue"] = this.filterValue;
-        return data;
-    }
-}
-
-export interface IFilterPageModel {
-    pageIndex?: number;
-    pageSize?: number;
-    sortColumn?: string | undefined;
-    sortOrder?: string | undefined;
-    filterValue?: string | undefined;
 }
 
 export class GetCityByFilterQuery extends FilterPageModel implements IGetCityByFilterQuery {

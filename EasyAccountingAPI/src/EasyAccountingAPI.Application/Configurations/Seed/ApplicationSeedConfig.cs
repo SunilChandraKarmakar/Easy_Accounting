@@ -17,6 +17,9 @@
 
             // Seed data for Super Admin
             await mediator.Send(new SuperAdminSeedCommand());
+
+            // Seed data for Currency
+            await mediator.Send(new CreateCurrencySeedCommand());
         }
     }
 }

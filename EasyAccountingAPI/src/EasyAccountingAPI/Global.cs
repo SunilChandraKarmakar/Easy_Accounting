@@ -25,3 +25,6 @@ global using NSwag.Generation.Processors.Contexts;
 global using System.Text;
 global using EasyAccountingAPI.Application.ApplicationLogics.AuthenticationLogic.Command;
 global using EasyAccountingAPI.Application.ApplicationLogics.AuthenticationLogic.Model;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CurrencyLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CurrencyLogic.Model;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CurrencyLogic.Queries;

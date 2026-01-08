@@ -33,3 +33,8 @@ global using System.Text;
 global using Microsoft.EntityFrameworkCore;
 global using AutoMapper.QueryableExtensions; 
 global using System.Linq.Expressions;
+global using EasyAccountingAPI.Model.MasterSettings;
+global using EasyAccountingAPI.Repository.Contracts.MasterSettings;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CurrencyLogic.Model;
+global using EasyAccountingAPI.Repository.Repository.MasterSettings;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CurrencyLogic.Command;
