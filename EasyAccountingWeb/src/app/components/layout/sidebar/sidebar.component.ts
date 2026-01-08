@@ -10,6 +10,7 @@ import { filter } from 'rxjs/operators';
   standalone: true,
   imports: [CommonModule, RouterModule]
 })
+
 export class SidebarComponent implements OnInit {
 
   openMenus: { [key: string]: boolean } = {};
@@ -18,7 +19,7 @@ export class SidebarComponent implements OnInit {
     users: ['users', 'user-groups', 'permissions'],
     userGroups: ['user-groups', 'permissions'],
     permissions: ['role-management'],
-    settings: ['countries', 'cities']
+    settings: ['countries', 'cities', 'currencies']
   };
 
   constructor(private router: Router) {

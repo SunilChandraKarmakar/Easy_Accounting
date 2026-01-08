@@ -10,6 +10,9 @@ import { RegistrationComponent } from './authentication/registration/registratio
 import { AccessDeniedComponent } from './shared/access-denied/access-denied.component';
 import { AuthGuard } from './identity-shared/auth.guard';
 import { LoginComponent } from './authentication/login/login.component';
+import { CurrenciesComponent } from './components/master-settings/currencies/currencies.component';
+import { CurrencyCreateComponent } from './components/master-settings/currencies/currency-create/currency-create.component';
+import { CurrencyUpdateComponent } from './components/master-settings/currencies/currency-update/currency-update.component';
 
 export const routes: Routes = [
 
@@ -33,7 +36,12 @@ export const routes: Routes = [
       // City
       { path: "cities", component: CitiesComponent, pathMatch: "full" },
       { path: "city/create", component: CityCreateComponent, pathMatch: "full" },
-      { path: "city/update/:recordId", component: CityUpdateComponent, pathMatch: "full" }
+      { path: "city/update/:recordId", component: CityUpdateComponent, pathMatch: "full" },
+
+      // Currency
+      { path: "currencies", component: CurrenciesComponent, pathMatch: "full" },
+      { path: "currency/create", component: CurrencyCreateComponent, pathMatch: "full" },
+      { path: "currency/update/:recordId", component: CurrencyUpdateComponent, pathMatch: "full" }
     ],
     canActivate: [AuthGuard] 
   }

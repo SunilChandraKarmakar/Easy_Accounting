@@ -10,6 +10,7 @@ import { provideNzIcons } from 'ng-zorro-antd/icon';
 import { FastBackwardOutline, PlusCircleOutline, PlusOutline, SaveOutline, CloseOutline, BankOutline, HomeOutline, TagOutline, AimOutline, FormOutline, DeleteOutline } from '@ant-design/icons-angular/icons';
 import { IdentityService } from './identity-shared/identity.service';
 import { IdentityInterceptor } from './identity-shared/identity-interceptor';
+import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
 
 export class LowerCaseUrlSerializer extends DefaultUrlSerializer {
   override parse(url: string): UrlTree {
@@ -52,6 +53,7 @@ export const appConfig: ApplicationConfig = {
     AuthenticationService,
     IdentityService,
 
+    { provide: NZ_I18N, useValue: en_US },
     { provide: UrlSerializer, useClass: LowerCaseUrlSerializer },
     { provide: HTTP_INTERCEPTORS, useClass: IdentityInterceptor, multi: true },
     { provide: API_BASE_URL, useValue: environment.coreBaseUrl }

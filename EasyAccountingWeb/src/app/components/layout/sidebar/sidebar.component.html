@@ -1,129 +1,85 @@
 <aside class="sidebar" id="sidebar">
     <nav class="sidebar-menu">
-
-        <!-- MAIN -->
         <div class="menu-section">
             <div class="section-title">Main</div>
-
             <div class="menu-item">
-                <a class="menu-link"
-                   routerLink="/app/dashboard"
-                   routerLinkActive="active"
-                   [routerLinkActiveOptions]="{ exact: true }">
+                <a class="menu-link" routerLink="/app/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                     <i class="fas fa-home menu-icon"></i>
                     <span class="menu-text">Dashboard</span>
                 </a>
             </div>
-
             <div class="menu-item">
-                <a class="menu-link"
-                   routerLink="/app/analytics"
-                   routerLinkActive="active">
+                <a class="menu-link" routerLink="/app/analytics" routerLinkActive="active">
                     <i class="fas fa-chart-pie menu-icon"></i>
                     <span class="menu-text">Analytics</span>
                 </a>
             </div>
         </div>
-
-        <!-- MANAGEMENT -->
         <div class="menu-section">
             <div class="section-title">Management</div>
-
             <div class="menu-item">
-
-                <!-- USERS (NO ACTIVE CLASS HERE) -->
                 <div class="menu-link" (click)="toggleMenu('users')">
                     <i class="fas fa-users menu-icon"></i>
                     <span class="menu-text">Users</span>
                     <i class="fas fa-chevron-down menu-arrow"></i>
                 </div>
-
-                <!-- USERS SUBMENU -->
                 <div class="sidebar-submenu" *ngIf="openMenus['users']">
-
-                    <a class="menu-link"
-                       routerLink="/app/users"
-                       routerLinkActive="active">
+                    <a class="menu-link" routerLink="/app/users" routerLinkActive="active">
                        All Users
                     </a>
-
-                    <!-- USER GROUPS -->
                     <div class="menu-link" (click)="toggleMenu('userGroups')">
                         <span class="menu-text">User Groups</span>
                         <i class="fas fa-chevron-down menu-arrow"></i>
                     </div>
-
                     <div class="sidebar-submenu" *ngIf="openMenus['userGroups']">
-
-                        <a class="menu-link"
-                           routerLink="/app/user-groups/members"
-                           routerLinkActive="active">
+                        <a class="menu-link" routerLink="/app/user-groups/members" routerLinkActive="active">
                            Members
                         </a>
-
-                        <!-- PERMISSIONS -->
                         <div class="menu-link" (click)="toggleMenu('permissions')">
                             <span class="menu-text">Permissions</span>
                             <i class="fas fa-chevron-down menu-arrow"></i>
                         </div>
-
                         <div class="sidebar-submenu" *ngIf="openMenus['permissions']">
-                            <a class="menu-link"
-                               routerLink="/app/user-groups/permissions/roles"
-                               routerLinkActive="active">
+                            <a class="menu-link" routerLink="/app/user-groups/permissions/roles" routerLinkActive="active">
                                Role Management
                             </a>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- SYSTEM -->
         <div class="menu-section">
             <div class="section-title">System</div>
-
             <div class="menu-item">
-
-                <!-- SETTINGS (NO ACTIVE CLASS HERE) -->
                 <div class="menu-link" (click)="toggleMenu('settings')">
                     <i class="fas fa-cog menu-icon"></i>
                     <span class="menu-text">Settings</span>
                     <i class="fas fa-chevron-down menu-arrow"></i>
                 </div>
-
                 <div class="sidebar-submenu" *ngIf="openMenus['settings']">
-                    <a class="menu-link"
-                       routerLink="/app/countries"
-                       routerLinkActive="active">
+                    <a class="menu-link" routerLink="/app/countries" routerLinkActive="active">
                        Country
                     </a>
-
-                    <a class="menu-link"
-                       routerLink="/app/cities"
-                       routerLinkActive="active">
+                    <a class="menu-link" routerLink="/app/cities" routerLinkActive="active">
                        City
                     </a>
+                    <a class="menu-link" routerLink="/app/currencies" routerLinkActive="active">
+                       Currency
+                    </a>
                 </div>
-
             </div>
-
             <div class="menu-item">
                 <a class="menu-link" href="#">
                     <i class="fas fa-life-ring menu-icon"></i>
                     <span class="menu-text">Help & Support</span>
                 </a>
             </div>
-
             <div class="menu-item">
                 <a class="menu-link" href="#">
                     <i class="fas fa-book menu-icon"></i>
                     <span class="menu-text">Documentation</span>
                 </a>
             </div>
-
         </div>
-
     </nav>
 </aside>
