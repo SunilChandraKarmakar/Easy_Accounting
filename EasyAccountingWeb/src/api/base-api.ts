@@ -1087,7 +1087,7 @@ export interface IFilterPageResultModelOfCurrencyGridModel {
 }
 
 export class CurrencyGridModel implements ICurrencyGridModel {
-    id?: number;
+    id?: string;
     name?: string;
     baseRate?: number;
     symble?: string | undefined;
@@ -1128,7 +1128,7 @@ export class CurrencyGridModel implements ICurrencyGridModel {
 }
 
 export interface ICurrencyGridModel {
-    id?: number;
+    id?: string;
     name?: string;
     baseRate?: number;
     symble?: string | undefined;

@@ -49,14 +49,15 @@
 
     public class CurrencyGridModel : IMapFrom<Currency>
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public double BaseRate { get; set; }
         public string? Symble { get; set; }
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Currency, CurrencyGridModel>();
+            profile.CreateMap<Currency, CurrencyGridModel>()
+                .ForMember(d => d.Id, s => s.MapFrom(m => EncryptionService.Encrypt(m.Id.ToString())));
             profile.CreateMap<CurrencyGridModel, Currency>();
         }
     }
