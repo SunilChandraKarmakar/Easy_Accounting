@@ -17,8 +17,13 @@
         {
             var companyVm = new CompanyViewModel
             {
-               
+               UpdateModel = await Mediator.Send(new GetCompanyDetailQuery { Id = id }),
             };
+
+            // Get select list
+            companyVm.OptionsDataSources.CountrySelectList = await Mediator.Send(new SelectListCountryQuery());
+            companyVm.OptionsDataSources.CitySelectList = await Mediator.Send(new SelectListCityQuery());
+            companyVm.OptionsDataSources.CurrencySelectList = await Mediator.Send(new SelectListCurrencyQuery());
 
             return Ok(companyVm);
         }

@@ -17,11 +17,12 @@
         }
 
         // Get countries with filtering, sorting, and pagination
-        public Task<FilterPageResultModel<Company>> GetCompaniesByFilterAsync(FilterPageModel model, string userId, bool isSuperAdmin, CancellationToken cancellationToken)
+        public Task<FilterPageResultModel<Company>> GetCompaniesByFilterAsync(FilterPageModel model, string? userId,
+            CancellationToken cancellationToken)
         {
             Expression<Func<Company, bool>> filter = c =>
                  !c.IsDeleted
-                 && (isSuperAdmin || c.CreatedById == userId)
+                  && (string.IsNullOrWhiteSpace(userId) || c.CreatedById == userId)
                  && (string.IsNullOrWhiteSpace(model.FilterValue)
                  || c.Name.Contains(model.FilterValue)
                  || c.Email.Contains(model.FilterValue)
@@ -34,7 +35,8 @@
                 ["id"] = c => c.Id
             };
 
-            return GetAllFilterAsync(model, filter, c => c.Id, sortableColumns, include: q => q.Include(c => c.Country).Include(c => c.City).Include(c => c.Currency), cancellationToken);
+            return GetAllFilterAsync(model, filter, c => c.Id, sortableColumns, 
+                include: q => q.Include(c => c.Country).Include(c => c.City).Include(c => c.Currency), cancellationToken);
         }
 
         public async Task<IEnumerable<SelectModel>> GetCompanySelectList(IHttpContextAccessor httpContextAccessor, CancellationToken cancellationToken)
