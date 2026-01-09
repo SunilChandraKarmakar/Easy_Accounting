@@ -38,3 +38,5 @@ global using EasyAccountingAPI.Repository.Contracts.MasterSettings;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CurrencyLogic.Model;
 global using EasyAccountingAPI.Repository.Repository.MasterSettings;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CurrencyLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CompanyLogic.Model;
+global using EasyAccountingAPI.Shared.ErrorMessages;

@@ -33,6 +33,7 @@
 
             #region Master Settings Service
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
             #endregion
 
             return services;

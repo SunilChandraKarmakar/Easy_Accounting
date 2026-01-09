@@ -420,6 +420,287 @@ export class CityService implements ICityService {
     }
 }
 
+export interface ICompanyService {
+    create(createCompanyCommand: CompanyCreateCommand): Observable<boolean>;
+    delete(id: string): Observable<boolean>;
+    getById(id: string): Observable<CompanyViewModel>;
+    getFilterCompanies(getCompaniesByFilterQuery: GetCompaniesByFilterQuery): Observable<FilterPageResultModelOfCompanyGridModel>;
+    update(updateCompanyCommand: CompanyUpdateCommand): Observable<boolean>;
+}
+
+@Injectable()
+export class CompanyService implements ICompanyService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    create(createCompanyCommand: CompanyCreateCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Company/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(createCompanyCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(id: string): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Company/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getById(id: string): Observable<CompanyViewModel> {
+        let url_ = this.baseUrl + "/api/Company/GetById/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<CompanyViewModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<CompanyViewModel>;
+        }));
+    }
+
+    protected processGetById(response: HttpResponseBase): Observable<CompanyViewModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CompanyViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getFilterCompanies(getCompaniesByFilterQuery: GetCompaniesByFilterQuery): Observable<FilterPageResultModelOfCompanyGridModel> {
+        let url_ = this.baseUrl + "/api/Company/GetFilterCompanies";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(getCompaniesByFilterQuery);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFilterCompanies(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFilterCompanies(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FilterPageResultModelOfCompanyGridModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FilterPageResultModelOfCompanyGridModel>;
+        }));
+    }
+
+    protected processGetFilterCompanies(response: HttpResponseBase): Observable<FilterPageResultModelOfCompanyGridModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FilterPageResultModelOfCompanyGridModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(updateCompanyCommand: CompanyUpdateCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Company/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(updateCompanyCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface ICountryService {
     create(createCountryCommand: CreateCountryCommand): Observable<boolean>;
     delete(id: string): Observable<boolean>;
@@ -1038,6 +1319,471 @@ export class CurrencyService implements ICurrencyService {
     }
 }
 
+export class FilterPageResultModelOfCompanyGridModel implements IFilterPageResultModelOfCompanyGridModel {
+    items?: CompanyGridModel[];
+    totalCount?: number;
+
+    constructor(data?: IFilterPageResultModelOfCompanyGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(CompanyGridModel.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): FilterPageResultModelOfCompanyGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPageResultModelOfCompanyGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item ? item.toJSON() : undefined as any);
+        }
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+}
+
+export interface IFilterPageResultModelOfCompanyGridModel {
+    items?: CompanyGridModel[];
+    totalCount?: number;
+}
+
+export class CompanyGridModel implements ICompanyGridModel {
+    id?: string;
+    name?: string;
+    email?: string | undefined;
+    phone?: string;
+    countryName?: string;
+    cityName?: string;
+    currencyName?: string;
+    logo?: string | undefined;
+    taxNo?: string | undefined;
+    isSellWithPos?: boolean;
+    isProductHaveBrand?: boolean;
+    address?: string | undefined;
+
+    constructor(data?: ICompanyGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.email = _data["email"];
+            this.phone = _data["phone"];
+            this.countryName = _data["countryName"];
+            this.cityName = _data["cityName"];
+            this.currencyName = _data["currencyName"];
+            this.logo = _data["logo"];
+            this.taxNo = _data["taxNo"];
+            this.isSellWithPos = _data["isSellWithPos"];
+            this.isProductHaveBrand = _data["isProductHaveBrand"];
+            this.address = _data["address"];
+        }
+    }
+
+    static fromJS(data: any): CompanyGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new CompanyGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["email"] = this.email;
+        data["phone"] = this.phone;
+        data["countryName"] = this.countryName;
+        data["cityName"] = this.cityName;
+        data["currencyName"] = this.currencyName;
+        data["logo"] = this.logo;
+        data["taxNo"] = this.taxNo;
+        data["isSellWithPos"] = this.isSellWithPos;
+        data["isProductHaveBrand"] = this.isProductHaveBrand;
+        data["address"] = this.address;
+        return data;
+    }
+}
+
+export interface ICompanyGridModel {
+    id?: string;
+    name?: string;
+    email?: string | undefined;
+    phone?: string;
+    countryName?: string;
+    cityName?: string;
+    currencyName?: string;
+    logo?: string | undefined;
+    taxNo?: string | undefined;
+    isSellWithPos?: boolean;
+    isProductHaveBrand?: boolean;
+    address?: string | undefined;
+}
+
+export class FilterPageModel implements IFilterPageModel {
+    pageIndex?: number;
+    pageSize?: number;
+    sortColumn?: string | undefined;
+    sortOrder?: string | undefined;
+    filterValue?: string | undefined;
+
+    constructor(data?: IFilterPageModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageIndex = _data["pageIndex"];
+            this.pageSize = _data["pageSize"];
+            this.sortColumn = _data["sortColumn"];
+            this.sortOrder = _data["sortOrder"];
+            this.filterValue = _data["filterValue"];
+        }
+    }
+
+    static fromJS(data: any): FilterPageModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPageModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageIndex"] = this.pageIndex;
+        data["pageSize"] = this.pageSize;
+        data["sortColumn"] = this.sortColumn;
+        data["sortOrder"] = this.sortOrder;
+        data["filterValue"] = this.filterValue;
+        return data;
+    }
+}
+
+export interface IFilterPageModel {
+    pageIndex?: number;
+    pageSize?: number;
+    sortColumn?: string | undefined;
+    sortOrder?: string | undefined;
+    filterValue?: string | undefined;
+}
+
+export class GetCompaniesByFilterQuery extends FilterPageModel implements IGetCompaniesByFilterQuery {
+
+    constructor(data?: IGetCompaniesByFilterQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetCompaniesByFilterQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetCompaniesByFilterQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetCompaniesByFilterQuery extends IFilterPageModel {
+}
+
+export class CompanyViewModel implements ICompanyViewModel {
+    createModel?: CompanyCreateModel;
+    updateModel?: CompanyUpdateModel;
+    gridModel?: CompanyGridModel;
+    optionsDataSources?: any;
+
+    constructor(data?: ICompanyViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.createModel = _data["createModel"] ? CompanyCreateModel.fromJS(_data["createModel"]) : undefined as any;
+            this.updateModel = _data["updateModel"] ? CompanyUpdateModel.fromJS(_data["updateModel"]) : undefined as any;
+            this.gridModel = _data["gridModel"] ? CompanyGridModel.fromJS(_data["gridModel"]) : undefined as any;
+            this.optionsDataSources = _data["optionsDataSources"];
+        }
+    }
+
+    static fromJS(data: any): CompanyViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new CompanyViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["createModel"] = this.createModel ? this.createModel.toJSON() : undefined as any;
+        data["updateModel"] = this.updateModel ? this.updateModel.toJSON() : undefined as any;
+        data["gridModel"] = this.gridModel ? this.gridModel.toJSON() : undefined as any;
+        data["optionsDataSources"] = this.optionsDataSources;
+        return data;
+    }
+}
+
+export interface ICompanyViewModel {
+    createModel?: CompanyCreateModel;
+    updateModel?: CompanyUpdateModel;
+    gridModel?: CompanyGridModel;
+    optionsDataSources?: any;
+}
+
+export class CompanyCreateModel implements ICompanyCreateModel {
+    name!: string;
+    email?: string | undefined;
+    phone!: string;
+    countryId!: number;
+    cityId!: number;
+    currencyId!: number;
+    logo?: string | undefined;
+    taxNo?: string | undefined;
+    isSellWithPos?: boolean;
+    isProductHaveBrand?: boolean;
+    address?: string | undefined;
+
+    constructor(data?: ICompanyCreateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.email = _data["email"];
+            this.phone = _data["phone"];
+            this.countryId = _data["countryId"];
+            this.cityId = _data["cityId"];
+            this.currencyId = _data["currencyId"];
+            this.logo = _data["logo"];
+            this.taxNo = _data["taxNo"];
+            this.isSellWithPos = _data["isSellWithPos"];
+            this.isProductHaveBrand = _data["isProductHaveBrand"];
+            this.address = _data["address"];
+        }
+    }
+
+    static fromJS(data: any): CompanyCreateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new CompanyCreateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["email"] = this.email;
+        data["phone"] = this.phone;
+        data["countryId"] = this.countryId;
+        data["cityId"] = this.cityId;
+        data["currencyId"] = this.currencyId;
+        data["logo"] = this.logo;
+        data["taxNo"] = this.taxNo;
+        data["isSellWithPos"] = this.isSellWithPos;
+        data["isProductHaveBrand"] = this.isProductHaveBrand;
+        data["address"] = this.address;
+        return data;
+    }
+}
+
+export interface ICompanyCreateModel {
+    name: string;
+    email?: string | undefined;
+    phone: string;
+    countryId: number;
+    cityId: number;
+    currencyId: number;
+    logo?: string | undefined;
+    taxNo?: string | undefined;
+    isSellWithPos?: boolean;
+    isProductHaveBrand?: boolean;
+    address?: string | undefined;
+}
+
+export class CompanyUpdateModel implements ICompanyUpdateModel {
+    id?: number;
+    name!: string;
+    email?: string | undefined;
+    phone!: string;
+    countryId!: number;
+    cityId!: number;
+    currencyId!: number;
+    logo?: string | undefined;
+    taxNo?: string | undefined;
+    isSellWithPos?: boolean;
+    isProductHaveBrand?: boolean;
+    address?: string | undefined;
+
+    constructor(data?: ICompanyUpdateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.email = _data["email"];
+            this.phone = _data["phone"];
+            this.countryId = _data["countryId"];
+            this.cityId = _data["cityId"];
+            this.currencyId = _data["currencyId"];
+            this.logo = _data["logo"];
+            this.taxNo = _data["taxNo"];
+            this.isSellWithPos = _data["isSellWithPos"];
+            this.isProductHaveBrand = _data["isProductHaveBrand"];
+            this.address = _data["address"];
+        }
+    }
+
+    static fromJS(data: any): CompanyUpdateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new CompanyUpdateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["email"] = this.email;
+        data["phone"] = this.phone;
+        data["countryId"] = this.countryId;
+        data["cityId"] = this.cityId;
+        data["currencyId"] = this.currencyId;
+        data["logo"] = this.logo;
+        data["taxNo"] = this.taxNo;
+        data["isSellWithPos"] = this.isSellWithPos;
+        data["isProductHaveBrand"] = this.isProductHaveBrand;
+        data["address"] = this.address;
+        return data;
+    }
+}
+
+export interface ICompanyUpdateModel {
+    id?: number;
+    name: string;
+    email?: string | undefined;
+    phone: string;
+    countryId: number;
+    cityId: number;
+    currencyId: number;
+    logo?: string | undefined;
+    taxNo?: string | undefined;
+    isSellWithPos?: boolean;
+    isProductHaveBrand?: boolean;
+    address?: string | undefined;
+}
+
+export class CompanyCreateCommand extends CompanyCreateModel implements ICompanyCreateCommand {
+
+    constructor(data?: ICompanyCreateCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): CompanyCreateCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CompanyCreateCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ICompanyCreateCommand extends ICompanyCreateModel {
+}
+
+export class CompanyUpdateCommand extends CompanyUpdateModel implements ICompanyUpdateCommand {
+
+    constructor(data?: ICompanyUpdateCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): CompanyUpdateCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CompanyUpdateCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ICompanyUpdateCommand extends ICompanyUpdateModel {
+}
+
 export class FilterPageResultModelOfCurrencyGridModel implements IFilterPageResultModelOfCurrencyGridModel {
     items?: CurrencyGridModel[];
     totalCount?: number;
@@ -1132,58 +1878,6 @@ export interface ICurrencyGridModel {
     name?: string;
     baseRate?: number;
     symble?: string | undefined;
-}
-
-export class FilterPageModel implements IFilterPageModel {
-    pageIndex?: number;
-    pageSize?: number;
-    sortColumn?: string | undefined;
-    sortOrder?: string | undefined;
-    filterValue?: string | undefined;
-
-    constructor(data?: IFilterPageModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.pageIndex = _data["pageIndex"];
-            this.pageSize = _data["pageSize"];
-            this.sortColumn = _data["sortColumn"];
-            this.sortOrder = _data["sortOrder"];
-            this.filterValue = _data["filterValue"];
-        }
-    }
-
-    static fromJS(data: any): FilterPageModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new FilterPageModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["pageIndex"] = this.pageIndex;
-        data["pageSize"] = this.pageSize;
-        data["sortColumn"] = this.sortColumn;
-        data["sortOrder"] = this.sortOrder;
-        data["filterValue"] = this.filterValue;
-        return data;
-    }
-}
-
-export interface IFilterPageModel {
-    pageIndex?: number;
-    pageSize?: number;
-    sortColumn?: string | undefined;
-    sortOrder?: string | undefined;
-    filterValue?: string | undefined;
 }
 
 export class GetCurrenciesByFilterQuery extends FilterPageModel implements IGetCurrenciesByFilterQuery {

@@ -11,3 +11,5 @@ global using System.Linq.Expressions;
 global using EasyAccountingAPI.Repository.Contracts.Authentication;
 global using EasyAccountingAPI.Model.MasterSettings;
 global using EasyAccountingAPI.Repository.Contracts.MasterSettings;
+global using Microsoft.AspNetCore.Http;
+global using System.Security.Claims;

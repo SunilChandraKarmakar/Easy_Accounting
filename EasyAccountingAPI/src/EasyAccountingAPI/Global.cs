@@ -28,3 +28,6 @@ global using EasyAccountingAPI.Application.ApplicationLogics.AuthenticationLogic
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CurrencyLogic.Command;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CurrencyLogic.Model;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CurrencyLogic.Queries;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CompanyLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CompanyLogic.Model;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CompanyLogic.Queries;
