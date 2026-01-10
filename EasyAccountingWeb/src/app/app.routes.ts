@@ -13,6 +13,8 @@ import { LoginComponent } from './authentication/login/login.component';
 import { CurrenciesComponent } from './components/master-settings/currencies/currencies.component';
 import { CurrencyCreateComponent } from './components/master-settings/currencies/currency-create/currency-create.component';
 import { CurrencyUpdateComponent } from './components/master-settings/currencies/currency-update/currency-update.component';
+import { CompaniesComponent } from './components/master-settings/companies/companies.component';
+import { CompanyCreateCommand, CompanyUpdateCommand } from '../api/base-api';
 
 export const routes: Routes = [
 
@@ -41,8 +43,14 @@ export const routes: Routes = [
       // Currency
       { path: "currencies", component: CurrenciesComponent, pathMatch: "full" },
       { path: "currency/create", component: CurrencyCreateComponent, pathMatch: "full" },
-      { path: "currency/update/:recordId", component: CurrencyUpdateComponent, pathMatch: "full" }
+      { path: "currency/update/:recordId", component: CurrencyUpdateComponent, pathMatch: "full" },
+
+      // Company
+      { path: "companies", component: CompaniesComponent, pathMatch: "full" },
+      { path: "company/create", component: CompanyCreateCommand, pathMatch: "full" },
+      { path: "company/update/:recordId", component: CompanyUpdateCommand, pathMatch: "full" }
     ],
+    
     canActivate: [AuthGuard] 
   }
 ];
