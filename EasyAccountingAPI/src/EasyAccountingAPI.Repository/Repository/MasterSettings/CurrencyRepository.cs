@@ -32,7 +32,7 @@ namespace EasyAccountingAPI.Repository.Repository.MasterSettings
                 .Select(c => new SelectModel
                 {
                     Id = c.Id,
-                    Name = c.Name
+                    Name = $"{c.Name} ({c.Symble})"
                 })
                 .ToListAsync(cancellationToken);
 

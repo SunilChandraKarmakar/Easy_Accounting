@@ -1,3 +1,111 @@
-<p>
-  company-create works!
-</p>
+<nz-breadcrumb>
+  <nz-breadcrumb-item>Settings</nz-breadcrumb-item>
+    <nz-breadcrumb-item><a routerLink="/app/companies" class="breadcrumb-link">Company</a></nz-breadcrumb-item>
+  <nz-breadcrumb-item>Create Company</nz-breadcrumb-item>
+</nz-breadcrumb>
+<div class="row mt-3">
+  <div class="col-md-12">
+    <div class="card shadow-lg">
+      <div class="card-header">
+        <h5 class="card-title text-center">Create Company</h5>
+      </div>
+      <div class="card-body">
+        <form class="row g-3" autocomplete="off">
+          <div class="col-md-3">
+            <label for="name" class="form-label">Name <span class="text-danger fw-bold">*</span></label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="home" />
+              <input nz-input placeholder="Enter company name" nzSize="default" id="name" name="name" 
+                [(ngModel)]="companyCreateModel.name" />
+            </nz-input-wrapper>
+          </div>
+          <div class="col-md-3">
+            <label for="email" class="form-label">Email</label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="mail" />
+              <input nz-input placeholder="Enter company email" nzSize="default" id="email" name="email" 
+                [(ngModel)]="companyCreateModel.email" />
+            </nz-input-wrapper>
+          </div>
+          <div class="col-md-3">
+            <label for="phone" class="form-label">Phone <span class="text-danger fw-bold">*</span></label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="phone" />
+              <input nz-input placeholder="Enter company phone" nzSize="default" id="phone" name="phone" 
+                [(ngModel)]="companyCreateModel.phone" />
+            </nz-input-wrapper>
+          </div>
+          <div class="col-md-3">
+            <label for="taxNo" class="form-label">Tax No</label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="borderless-table" />
+              <input nz-input placeholder="Enter company tax no" nzSize="default" id="taxNo" name="taxNo" 
+                [(ngModel)]="companyCreateModel.taxNo" />
+            </nz-input-wrapper>
+          </div>
+          <div class="col-md-3">
+            <label for="countryId" class="form-label">Country <span class="text-danger fw-bold">*</span></label>
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Country" [(ngModel)]="companyCreateModel.countryId" name="countryId" style="width: 100%;" 
+              (ngModelChange)="onChangeCountry(companyCreateModel.countryId)">
+                @for (country of countries; track country.id) {
+                  <nz-option [nzValue]="country.id" [nzLabel]="country.name!"></nz-option>
+                }
+              </nz-select>
+          </div>
+          <div class="col-md-3">
+            <label for="cityId" class="form-label">City <span class="text-danger fw-bold">*</span></label>
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a City" [(ngModel)]="companyCreateModel.cityId" name="cityId" style="width: 100%;">
+                @for (city of cities; track city.id) {
+                  <nz-option [nzValue]="city.id" [nzLabel]="city.name!"></nz-option>
+                }
+              </nz-select>
+          </div>
+          <div class="col-md-3">
+            <label for="currencyId" class="form-label">Currency <span class="text-danger fw-bold">*</span></label>
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Currency" [(ngModel)]="companyCreateModel.currencyId" name="currencyId" style="width: 100%;">
+                @for (currency of currencies; track currency.id) {
+                  <nz-option [nzValue]="currency.id" [nzLabel]="currency.name!"></nz-option>
+                }
+              </nz-select>
+          </div>
+          <div class="col-md-3">
+            <div class="icon-upload-align">
+              <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76" [nzHeaders]="{ authorization: 'authorization-text' }"
+                (nzChange)="handleChange($event)">
+                <button nz-button>
+                  <nz-icon nzType="upload" />
+                  Click to Upload logo
+                </button>
+              </nz-upload>
+            </div>
+          </div>
+          <div class="col-md-3 mt-4">            
+            <label nz-checkbox [(ngModel)]="companyCreateModel.isSellWithPos" id="isSellWithPos" name="isSellWithPos">Sell with POS?</label>
+          </div>
+          <div class="col-md-3 mt-4">            
+            <label nz-checkbox [(ngModel)]="companyCreateModel.isProductHaveBrand" id="isProductHaveBrand" name="isProductHaveBrand">Product Have Brand?</label>
+          </div>
+          <div class="col-md-9">
+            <label for="address" class="form-label">Address</label>
+            <nz-textarea-count [nzMaxCharacterCount]="500">
+              <textarea rows="4" id="address" name="address" placeholder="Enter company full address" [(ngModel)]="companyCreateModel.address" nz-input></textarea>
+            </nz-textarea-count>
+          </div>          
+        </form>
+      </div>
+      <div class="card-footer text-end">
+        <button nz-button nzType="primary" class="btn-save" (click)="onClickSaveCompany()">
+          <nz-icon nzType="save" nzTheme="outline" />
+          Save
+        </button>
+        <button nz-button nzType="primary" class="btn-cancel" routerLink="/app/companies">
+          <nz-icon nzType="close" nzTheme="outline" />
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>

@@ -143,6 +143,7 @@ export interface ICityService {
     create(createCityCommand: CreateCityCommand): Observable<boolean>;
     delete(id: string): Observable<boolean>;
     getById(id: string): Observable<CityViewModel>;
+    getCityByCountryId(countryId: number): Observable<SelectModel[]>;
     getFilterCities(getCitiesByFilterQuery: GetCityByFilterQuery): Observable<FilterPageResultModelOfCityGridModel>;
     update(updateCityCommand: UpdateCityCommand): Observable<boolean>;
 }
@@ -304,6 +305,64 @@ export class CityService implements ICityService {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = CityViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getCityByCountryId(countryId: number): Observable<SelectModel[]> {
+        let url_ = this.baseUrl + "/api/City/GetCityByCountryId/{countryId}";
+        if (countryId === undefined || countryId === null)
+            throw new globalThis.Error("The parameter 'countryId' must be defined.");
+        url_ = url_.replace("{countryId}", encodeURIComponent("" + countryId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetCityByCountryId(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetCityByCountryId(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SelectModel[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SelectModel[]>;
+        }));
+    }
+
+    protected processGetCityByCountryId(response: HttpResponseBase): Observable<SelectModel[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(SelectModel.fromJS(item));
+            }
+            else {
+                result200 = null as any;
+            }
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -2404,6 +2463,74 @@ export class UpdateCityCommand extends CityUpdateModel implements IUpdateCityCom
 }
 
 export interface IUpdateCityCommand extends ICityUpdateModel {
+}
+
+export class SelectModel implements ISelectModel {
+    id?: any;
+    name?: string;
+    group?: string;
+    isDefault?: boolean;
+    valueOne?: any;
+    valueTwo?: any;
+    valueThree?: any;
+    valueFour?: any;
+    displayOrder?: number;
+
+    constructor(data?: ISelectModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.group = _data["group"];
+            this.isDefault = _data["isDefault"];
+            this.valueOne = _data["valueOne"];
+            this.valueTwo = _data["valueTwo"];
+            this.valueThree = _data["valueThree"];
+            this.valueFour = _data["valueFour"];
+            this.displayOrder = _data["displayOrder"];
+        }
+    }
+
+    static fromJS(data: any): SelectModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new SelectModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["group"] = this.group;
+        data["isDefault"] = this.isDefault;
+        data["valueOne"] = this.valueOne;
+        data["valueTwo"] = this.valueTwo;
+        data["valueThree"] = this.valueThree;
+        data["valueFour"] = this.valueFour;
+        data["displayOrder"] = this.displayOrder;
+        return data;
+    }
+}
+
+export interface ISelectModel {
+    id?: any;
+    name?: string;
+    group?: string;
+    isDefault?: boolean;
+    valueOne?: any;
+    valueTwo?: any;
+    valueThree?: any;
+    valueFour?: any;
+    displayOrder?: number;
 }
 
 export class CountryGridModel implements ICountryGridModel {

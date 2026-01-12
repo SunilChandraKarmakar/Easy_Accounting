@@ -184,6 +184,41 @@
         }
       }
     },
+    "/api/City/GetCityByCountryId/{countryId}": {
+      "get": {
+        "tags": [
+          "City"
+        ],
+        "operationId": "City_GetCityByCountryId",
+        "parameters": [
+          {
+            "name": "countryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SelectModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/City/GetFilterCities": {
       "post": {
         "tags": [
@@ -1262,6 +1297,30 @@
             "additionalProperties": false
           }
         ]
+      },
+      "SelectModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {},
+          "name": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "isDefault": {
+            "type": "boolean"
+          },
+          "valueOne": {},
+          "valueTwo": {},
+          "valueThree": {},
+          "valueFour": {},
+          "displayOrder": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
       },
       "CountryGridModel": {
         "type": "object",

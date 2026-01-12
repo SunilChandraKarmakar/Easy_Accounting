@@ -95,8 +95,7 @@ export class CountriesComponent implements OnInit {
     this.getCountries();
   }
 
-  cancel(): void {
-  }
+  cancel(): void { }
 
   // On click open delete modal
   onClickDelete(countryId: string | undefined): void {

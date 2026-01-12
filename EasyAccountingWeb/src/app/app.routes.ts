@@ -14,7 +14,8 @@ import { CurrenciesComponent } from './components/master-settings/currencies/cur
 import { CurrencyCreateComponent } from './components/master-settings/currencies/currency-create/currency-create.component';
 import { CurrencyUpdateComponent } from './components/master-settings/currencies/currency-update/currency-update.component';
 import { CompaniesComponent } from './components/master-settings/companies/companies.component';
-import { CompanyCreateCommand, CompanyUpdateCommand } from '../api/base-api';
+import { CompanyCreateComponent } from './components/master-settings/companies/company-create/company-create.component';
+import { CompanyUpdateComponent } from './components/master-settings/companies/company-update/company-update.component';
 
 export const routes: Routes = [
 
@@ -47,8 +48,8 @@ export const routes: Routes = [
 
       // Company
       { path: "companies", component: CompaniesComponent, pathMatch: "full" },
-      { path: "company/create", component: CompanyCreateCommand, pathMatch: "full" },
-      { path: "company/update/:recordId", component: CompanyUpdateCommand, pathMatch: "full" }
+      { path: "company/create", component: CompanyCreateComponent, pathMatch: "full" },
+      { path: "company/update/:recordId", component: CompanyUpdateComponent, pathMatch: "full" }
     ],
     
     canActivate: [AuthGuard] 

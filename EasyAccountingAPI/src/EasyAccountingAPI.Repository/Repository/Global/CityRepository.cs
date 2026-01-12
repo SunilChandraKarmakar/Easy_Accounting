@@ -71,5 +71,21 @@
 
             return cities;
         }
+
+        public async Task<IEnumerable<SelectModel>> GetCityByCountryIdSelectList(int countryId, CancellationToken cancellationToken)
+        {
+            var cities = await db.Cities
+                .AsNoTracking()
+                .Where(c => !c.IsDeleted && c.CountryId == countryId)
+                .OrderBy(c => c.Name)
+                .Select(c => new SelectModel
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .ToListAsync(cancellationToken);
+
+            return cities;
+        }
     }
 }

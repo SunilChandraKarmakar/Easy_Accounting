@@ -123,4 +123,6 @@ export class CompaniesComponent implements OnInit {
       return;
     });
   }
+
+  cancel(): void { }
 }

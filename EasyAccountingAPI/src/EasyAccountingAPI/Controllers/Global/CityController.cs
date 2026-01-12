@@ -59,5 +59,13 @@
             var isDeleteCity = await Mediator.Send(new DeleteCityCommand { Id = id });
             return Ok(isDeleteCity);
         }
+
+        [HttpGet("{countryId}")]
+        [ProducesResponseType(typeof(IEnumerable<SelectModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<SelectModel>>> GetCityByCountryIdAsync(int countryId)
+        {
+            var cities = await Mediator.Send(new SelectListCityByCountryIdQuery { CountryId = countryId });
+            return Ok(cities);
+        }
     }
 }

@@ -1,6 +1,6 @@
 <nz-breadcrumb>
   <nz-breadcrumb-item>Settings</nz-breadcrumb-item>
-  <nz-breadcrumb-item><a routerLink="/app/companies" class="breadcrumb-link">COmpany</a></nz-breadcrumb-item>
+  <nz-breadcrumb-item><a routerLink="/app/companies" class="breadcrumb-link">Company</a></nz-breadcrumb-item>
 </nz-breadcrumb>
 <div class="row mt-3">
   <div class="col-md-12">
@@ -49,10 +49,10 @@
                     <td>{{ data.countryName }}</td>
                     <td>{{ data.cityName }}</td>
                     <td>{{ data.currencyName }}</td>
-                    <td><img src=""></td>
+                    <td><img [src]="data.logo"></td>
                     <td class="text-center action-cell">
                       <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Edit" class="action-btn edit-btn"
-                        routerLink="/app/currency/update/{{ data.id }}">
+                        routerLink="/app/company/update/{{ data.id }}">
                         <nz-icon nzType="edit" />
                       </button>
                       <nz-divider nzType="vertical"></nz-divider>
@@ -63,7 +63,7 @@
                       </button>
                       <ng-template #deleteTpl>
                         <div class="text-center">
-                          Are you sure you want to delete this Currency?
+                          Are you sure you want to delete this Company?
                           <br />
                           Continue?
                         </div>
