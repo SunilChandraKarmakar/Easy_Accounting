@@ -59,6 +59,9 @@ export class LoginComponent implements OnInit {
       const loginResult = await this.identityService.SignIn(this.loginModel);
       this.spinnerService.hide();
 
+
+      console.log("Login Result: ", loginResult);
+
       if (loginResult.isSuccess) {
         this.toastrService.success("Welcome back! You’re now logged in.", "Success");
         this.router.navigateByUrl("/app/countries");

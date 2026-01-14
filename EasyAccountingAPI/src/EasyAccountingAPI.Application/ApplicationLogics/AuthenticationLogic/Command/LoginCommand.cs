@@ -10,10 +10,11 @@
             private readonly IHttpContextAccessor _httpContextAccessor;
             private readonly IUserLoginHistoryRepository _userLoginHistoryRepository;
             private readonly IUnitOfWorkRepository _unitOfWorkRepository;
+            private readonly IEmployeeRoleRepository _employeeRoleRepository;
 
             public Handler(UserManager<User> userManager, IOptions<AppSettings> appSeeting, IMapper mapper, 
                 IHttpContextAccessor httpContextAccessor, IUserLoginHistoryRepository userLoginHistoryRepository,
-                IUnitOfWorkRepository unitOfWorkRepository)
+                IUnitOfWorkRepository unitOfWorkRepository, IEmployeeRoleRepository employeeRoleRepository)
             {
                 _userManager = userManager;
                 _appSeeting = appSeeting;
@@ -21,6 +22,7 @@
                 _httpContextAccessor = httpContextAccessor;
                 _userLoginHistoryRepository = userLoginHistoryRepository;
                 _unitOfWorkRepository = unitOfWorkRepository;
+                _employeeRoleRepository = employeeRoleRepository;
             }
 
             public async Task<UserModel> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -75,6 +77,9 @@
 
                     await _userLoginHistoryRepository.CreateAsync(createUserLoginHistoryModel, cancellationToken);
                     await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);
+
+                    // Get login user employee role name by employee id
+                    mapExistUser.RoleName = await _employeeRoleRepository.GetEmployeeRoleNameByEmployeeId((int)mapExistUser.EmployeeId!);
 
                     return mapExistUser;
                 }

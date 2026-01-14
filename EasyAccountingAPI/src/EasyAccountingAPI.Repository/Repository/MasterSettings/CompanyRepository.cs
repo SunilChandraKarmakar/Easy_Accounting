@@ -22,7 +22,7 @@
         {
             Expression<Func<Company, bool>> filter = c =>
                  !c.IsDeleted
-                  && (string.IsNullOrWhiteSpace(userId) || c.CreatedById == userId)
+                 && (string.IsNullOrWhiteSpace(userId) || c.CreatedById == userId)
                  && (string.IsNullOrWhiteSpace(model.FilterValue)
                  || c.Name.Contains(model.FilterValue)
                  || c.Email.Contains(model.FilterValue)

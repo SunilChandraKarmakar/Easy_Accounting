@@ -1,3 +1,33 @@
-<p>
-  access-denied works!
-</p>
+<div class="ad-page">
+  <div class="ad-bg"></div>
+  <div class="ad-card text-center" role="alert" aria-live="polite">
+    <div class="ad-badge">
+      <span class="ad-badge-dot"></span>
+      <span class="ad-badge-text">403 • Access Denied</span>
+    </div>
+    <div class="ad-icon-wrap" aria-hidden="true">
+      <svg class="ad-icon" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2L20 6V12C20 17 16.5 20.5 12 22C7.5 20.5 4 17 4 12V6L12 2Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+        <path d="M12 7.5V12.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+        <path d="M12 16.2H12.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
+      </svg>
+    </div>
+    <h1 class="ad-title">You don’t have permission to view this page</h1>
+    <p class="ad-subtitle">
+      The link may be incorrect, expired, or your account doesn’t have access.
+      Please go back or sign in with an authorized account.
+    </p>
+    <div class="ad-actions">
+      <button class="ad-btn ad-btn-primary" (click)="goHome()">
+        Go to Dashboard
+      </button>
+      <button class="ad-btn ad-btn-ghost" (click)="goLogin()">
+        Go to Login
+      </button>
+    </div>
+    <div class="ad-footer">
+      <span class="ad-tip">Tip:</span>
+      If you believe this is a mistake, contact your administrator.
+    </div>
+  </div>
+</div>

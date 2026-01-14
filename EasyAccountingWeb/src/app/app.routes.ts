@@ -23,7 +23,6 @@ export const routes: Routes = [
   { path: "", component: LoginComponent },
   { path: "registration", component: RegistrationComponent, pathMatch: "full" },
   { path: "login", component: LoginComponent, pathMatch: "full" },
-  { path: "access-denied", component: AccessDeniedComponent, pathMatch: "full" },
 
   // For layout
   {
@@ -53,5 +52,7 @@ export const routes: Routes = [
     ],
     
     canActivate: [AuthGuard] 
-  }
+  },
+  
+  { path: "**", component: AccessDeniedComponent, pathMatch: "full" }, 
 ];

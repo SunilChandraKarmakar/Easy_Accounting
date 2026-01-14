@@ -1486,7 +1486,7 @@
           "fullName": {
             "type": "string"
           },
-          "userName": {
+          "roleName": {
             "type": "string"
           },
           "email": {

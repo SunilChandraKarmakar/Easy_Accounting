@@ -2885,7 +2885,7 @@ export interface IUpdateCountryCommand extends ICountryUpdateModel {
 export class UserModel implements IUserModel {
     id?: string;
     fullName?: string;
-    userName?: string;
+    roleName?: string;
     email?: string;
     token?: string;
     employeeId?: number | undefined;
@@ -2904,7 +2904,7 @@ export class UserModel implements IUserModel {
         if (_data) {
             this.id = _data["id"];
             this.fullName = _data["fullName"];
-            this.userName = _data["userName"];
+            this.roleName = _data["roleName"];
             this.email = _data["email"];
             this.token = _data["token"];
             this.employeeId = _data["employeeId"];
@@ -2923,7 +2923,7 @@ export class UserModel implements IUserModel {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["fullName"] = this.fullName;
-        data["userName"] = this.userName;
+        data["roleName"] = this.roleName;
         data["email"] = this.email;
         data["token"] = this.token;
         data["employeeId"] = this.employeeId;
@@ -2935,7 +2935,7 @@ export class UserModel implements IUserModel {
 export interface IUserModel {
     id?: string;
     fullName?: string;
-    userName?: string;
+    roleName?: string;
     email?: string;
     token?: string;
     employeeId?: number | undefined;
