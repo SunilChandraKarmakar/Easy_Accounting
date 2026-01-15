@@ -41,8 +41,8 @@ export class HeaderComponent implements OnInit {
   // Get login user info
   private getLoginUserInfo(): void {
     this.spinnerService.show();
-    this.identityService.getLoginInfo().subscribe((result: UserModel) => {
-      this.loginUserInfoModel = result;
+    this.identityService.getLoginInfo().subscribe((result: UserModel | null) => {
+      this.loginUserInfoModel = result || new UserModel();;
       this.spinnerService.hide();
       return;
     },

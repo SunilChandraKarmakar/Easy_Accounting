@@ -119,7 +119,7 @@ export class CompanyCreateComponent implements OnInit {
       },
       (error: any) => {
         this.spinnerService.hide();
-        this.toastrService.error("COmpany is not created! Please, try again.", "Error.");
+        this.toastrService.error("Company is not created! Please, try again.", "Error.");
         return;
       })
     }

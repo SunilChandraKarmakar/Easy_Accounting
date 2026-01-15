@@ -8,17 +8,17 @@ import { UserModel } from "../../api/base-api";
 @Injectable({ providedIn: 'root' })
 
 export class AuthGuard implements CanActivate {
-  constructor(private router: Router, private identityService: IdentityService, private tasterService: ToastrService) { }
+
+  constructor(private router: Router, private identityService: IdentityService, private toastr: ToastrService) { }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    return this.identityService.getLoginInfo().pipe(map((user: UserModel) => {
-        if (user != null) {
-          return true;
-        } else {
-          this.tasterService.warning("You must be logged in to access this resource.", "Warning");
-          this.router.navigateByUrl("/login");
-          return false;
-        }
+    return this.identityService.getLoginInfo().pipe(
+      map((user: UserModel | null) => {
+        if (user) return true;
+
+        this.toastr.warning("You must be logged in to access this resource.", "Warning");
+        this.router.navigateByUrl("/login");
+        return false;
       })
     );
   }

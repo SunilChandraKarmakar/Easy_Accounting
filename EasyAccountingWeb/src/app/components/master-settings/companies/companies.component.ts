@@ -62,6 +62,11 @@ export class CompaniesComponent implements OnInit {
   // Get companies
   private getCompanies(): void {
     this.spinnerService.show();
+
+    // Clear before loading 
+    this.companies = [];
+    this.totalRecord = 0;
+
     this.companyService.getFilterCompanies(this.filterPageModel).subscribe((result: FilterPageResultModelOfCompanyGridModel) => {
       this.companies = result.items || [];
       this.totalRecord = result.totalCount || 0;
@@ -70,6 +75,11 @@ export class CompaniesComponent implements OnInit {
     },
     (error: any) => {
       this.spinnerService.hide();
+
+      // Keep cleared state on error
+      this.companies = [];
+      this.totalRecord = 0;
+
       this.toastrService.error("Company list is not show at this time! Please, try again.", "Error");
       return;
     });
