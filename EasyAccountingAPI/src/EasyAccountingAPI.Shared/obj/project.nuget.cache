@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "l2CCe1tHThQ=",
+  "dgSpecHash": "iFoo8KMhceo=",
   "success": true,
-  "projectFilePath": "E:\\Easy_Accounting\\EasyAccountingAPI\\src\\EasyAccountingAPI.Shared\\EasyAccountingAPI.Shared.csproj",
+  "projectFilePath": "D:\\Easy_Accounting\\EasyAccountingAPI\\src\\EasyAccountingAPI.Shared\\EasyAccountingAPI.Shared.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Sunil Karmakar\\.nuget\\packages\\automapper\\12.0.0\\automapper.12.0.0.nupkg.sha512",
     "C:\\Users\\Sunil Karmakar\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",

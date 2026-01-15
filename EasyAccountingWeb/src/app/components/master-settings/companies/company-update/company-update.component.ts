@@ -8,16 +8,18 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { CompanyService, CompanyUpdateModel, CompanyViewModel, SelectModel } from '../../../../../api/base-api';
+import { CityService, CompanyService, CompanyUpdateModel, CompanyViewModel, SelectModel } from '../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzUploadChangeParam, NzUploadModule } from 'ng-zorro-antd/upload';
 
 @Component({
   selector: 'app-company-update',
   templateUrl: './company-update.component.html',
   styleUrls: ['./company-update.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule, NzButtonModule, NgxSpinnerModule, NzInputModule, NzIconModule, NzBreadCrumbModule, RouterLink, NzInputNumberModule],
-  providers: [CompanyService]
+  imports: [FormsModule, CommonModule, NzButtonModule, NgxSpinnerModule, NzInputModule, NzIconModule, NzBreadCrumbModule, RouterLink, NzInputNumberModule, NzSelectModule, NzUploadModule],
+  providers: [CompanyService, CityService]
 })
 
 export class CompanyUpdateComponent implements OnInit {
@@ -34,7 +36,7 @@ export class CompanyUpdateComponent implements OnInit {
   private _companyId: string | undefined;
 
   constructor(private companyService: CompanyService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService,
-    private router: Router, private activatedRoute: ActivatedRoute) { }
+    private router: Router, private activatedRoute: ActivatedRoute, private cityService: CityService) { }
 
   ngOnInit() {
 
@@ -59,6 +61,14 @@ export class CompanyUpdateComponent implements OnInit {
     this.spinnerService.show();
     this.companyService.getById(this._companyId!).subscribe((result: CompanyViewModel) => {
       this.companyUpdateModel = result.updateModel!;
+
+      // Get select list
+      this.countries = result.optionsDataSources.CountrySelectList;
+      this.currencies = result.optionsDataSources.CurrencySelectList;
+
+      // Get cities by country
+      this.getCitiesByCountryId(this.companyUpdateModel.countryId);
+
       this.spinnerService.hide();
       return;
     },
@@ -130,6 +140,37 @@ export class CompanyUpdateComponent implements OnInit {
         this.toastrService.error("Company cannot update successful.", "Error");
         return;
       })
+    }
+  }
+
+  // On change country
+  onChangeCountry(countryId: number): void {
+    
+    // Get cities by country id
+    this.getCitiesByCountryId(countryId);
+  }
+
+  // Get cities by country id
+  private getCitiesByCountryId(countryId: number): void {
+    this.spinnerService.show();
+    this.cities = [];
+    this.cityService.getCityByCountryId(countryId).subscribe((result: SelectModel[]) => {
+      this.cities = result;
+      this.spinnerService.hide();
+      return;
+    },
+    (errro: any) => {
+      this.spinnerService.hide();
+      this.toastrService.error("Cities cannot load based on the selected country! Please, try again.", "Error.");
+      return;
+    })
+  }
+
+  handleChange(info: NzUploadChangeParam): void {
+    if (info.file.status !== 'uploading') {
+    }
+    if (info.file.status === 'done') {
+    } else if (info.file.status === 'error') {
     }
   }
 

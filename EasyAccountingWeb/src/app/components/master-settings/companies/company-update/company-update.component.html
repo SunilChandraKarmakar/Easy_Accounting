@@ -54,7 +54,7 @@
           </div>
           <div class="col-md-3">
             <label for="cityId" class="form-label">City <span class="text-danger fw-bold">*</span></label>
-             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a City" [(ngModel)]="companyCreateModel.cityId" name="cityId" style="width: 100%;">
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a City" [(ngModel)]="companyUpdateModel.cityId" name="cityId" style="width: 100%;">
                 @for (city of cities; track city.id) {
                   <nz-option [nzValue]="city.id" [nzLabel]="city.name!"></nz-option>
                 }
@@ -62,7 +62,7 @@
           </div>
           <div class="col-md-3">
             <label for="currencyId" class="form-label">Currency <span class="text-danger fw-bold">*</span></label>
-             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Currency" [(ngModel)]="companyCreateModel.currencyId" name="currencyId" style="width: 100%;">
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Currency" [(ngModel)]="companyUpdateModel.currencyId" name="currencyId" style="width: 100%;">
                 @for (currency of currencies; track currency.id) {
                   <nz-option [nzValue]="currency.id" [nzLabel]="currency.name!"></nz-option>
                 }
@@ -80,25 +80,29 @@
             </div>
           </div>
           <div class="col-md-3 mt-4">            
-            <label nz-checkbox [(ngModel)]="companyCreateModel.isSellWithPos" id="isSellWithPos" name="isSellWithPos">Sell with POS?</label>
+            <label nz-checkbox [(ngModel)]="companyUpdateModel.isSellWithPos" id="isSellWithPos" name="isSellWithPos">Sell with POS?</label>
           </div>
           <div class="col-md-3 mt-4">            
-            <label nz-checkbox [(ngModel)]="companyCreateModel.isProductHaveBrand" id="isProductHaveBrand" name="isProductHaveBrand">Product Have Brand?</label>
+            <label nz-checkbox [(ngModel)]="companyUpdateModel.isProductHaveBrand" id="isProductHaveBrand" name="isProductHaveBrand">
+              Product Have Brand?
+            </label>
           </div>
           <div class="col-md-9">
             <label for="address" class="form-label">Address</label>
             <nz-textarea-count [nzMaxCharacterCount]="500">
-              <textarea rows="4" id="address" name="address" placeholder="Enter company full address" [(ngModel)]="companyCreateModel.address" nz-input></textarea>
+              <textarea rows="4" id="address" name="address" placeholder="Enter company full address" 
+                [(ngModel)]="companyUpdateModel.address" nz-input>
+              </textarea>
             </nz-textarea-count>
           </div>          
         </form>
       </div>
       <div class="card-footer text-end">
-        <button nz-button nzType="primary" class="btn-save" (click)="onClickUpdateCurrency()">
+        <button nz-button nzType="primary" class="btn-save" (click)="onClickUpdateCompany()">
           <nz-icon nzType="save" nzTheme="outline" />
           Update
         </button>
-        <button nz-button nzType="primary" class="btn-cancel" routerLink="/app/currencies">
+        <button nz-button nzType="primary" class="btn-cancel" routerLink="/app/companies">
           <nz-icon nzType="close" nzTheme="outline" />
           Cancel
         </button>
