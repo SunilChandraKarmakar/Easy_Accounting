@@ -21,6 +21,7 @@
         #region Master Settings Model
         public DbSet<Company> Companies { get; set; }
         public DbSet<Currency> Currencies { get; set; }
+        public DbSet<InvoiceSetting> InvoiceSettings { get; set; }
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
