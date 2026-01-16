@@ -30,6 +30,7 @@
         public string? TaxNo { get; set; }
         public bool IsSellWithPos { get; set; }
         public bool IsProductHaveBrand { get; set; }
+        public bool IsDefaultCompany { get; set; }
 
         [Column(TypeName = "nvarchar(500)")]
         public string? Address { get; set; }

@@ -55,5 +55,43 @@
                 .Select(c => new SelectModel { Id = c.Id, Name = c.Name })
                 .ToListAsync(cancellationToken);
         }
+
+        // Check, company created user has default company or not
+        public async Task<bool> IsCreatedUserHaveDefaultCompany(string userId, CancellationToken cancellationToken)
+        {
+            return await db.Companies
+                .AsNoTracking()
+                .AnyAsync(c => !c.IsDeleted && c.IsDefaultCompany && c.CreatedById == userId, cancellationToken);
+        }
+
+        // Check, if create user select default company then remove old default company
+        public async Task<bool> IsRemoveOldDefaultCompanyOfCreatedUser(string userId, CancellationToken cancellationToken)
+        {
+            var oldDefaultCOmpany = await db.Companies
+                .Where(c => c.CreatedById == userId && c.IsDefaultCompany && !c.IsDeleted)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (oldDefaultCOmpany is not null)
+            {
+                oldDefaultCOmpany.IsDefaultCompany = false;
+                db.Companies.Update(oldDefaultCOmpany);
+                return true;
+            }
+
+            return false;
+        }
+
+        // Get login user's default company
+        public async Task<Company> GetLoginUserDefaultCompany(string userId, CancellationToken cancellationToken)
+        {
+            var defaultCompany = await db.Companies
+                .Include(c => c.Country)
+                .Include(c => c.City)
+                .Include(c => c.Currency)
+                .Where(c => c.CreatedById == userId && c.IsDefaultCompany && !c.IsDeleted)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            return defaultCompany!;
+        }
     }
 }

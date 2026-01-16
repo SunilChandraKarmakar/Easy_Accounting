@@ -36,6 +36,14 @@
                     company.CreatedById = userId;
                     company.CreatedDateTime = DateTime.UtcNow;
 
+                    // If user select this as default company, remove old default company
+                    if(company.IsDefaultCompany)
+                        await _companyRepository.IsRemoveOldDefaultCompanyOfCreatedUser(userId, cancellationToken);
+
+                    // Check, if created user has no company yet, set this as default
+                    if (!await _companyRepository.IsCreatedUserHaveDefaultCompany(userId, cancellationToken))
+                        company.IsDefaultCompany = true;
+
                     await _companyRepository.CreateAsync(company, cancellationToken);
 
                     // Final save + commit

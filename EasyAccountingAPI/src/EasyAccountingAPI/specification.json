@@ -839,6 +839,9 @@
           "isProductHaveBrand": {
             "type": "boolean"
           },
+          "isDefaultCompany": {
+            "type": "boolean"
+          },
           "address": {
             "type": "string",
             "nullable": true
@@ -949,6 +952,9 @@
           "isProductHaveBrand": {
             "type": "boolean"
           },
+          "isDefaultCompany": {
+            "type": "boolean"
+          },
           "address": {
             "type": "string",
             "nullable": true
@@ -1008,6 +1014,9 @@
             "type": "boolean"
           },
           "isProductHaveBrand": {
+            "type": "boolean"
+          },
+          "isDefaultCompany": {
             "type": "boolean"
           },
           "address": {

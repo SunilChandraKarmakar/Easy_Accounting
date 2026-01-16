@@ -12,13 +12,14 @@ import { CityService, CompanyService, CompanyUpdateModel, CompanyViewModel, Sele
 import { ToastrService } from 'ngx-toastr';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzUploadChangeParam, NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 
 @Component({
   selector: 'app-company-update',
   templateUrl: './company-update.component.html',
   styleUrls: ['./company-update.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule, NzButtonModule, NgxSpinnerModule, NzInputModule, NzIconModule, NzBreadCrumbModule, RouterLink, NzInputNumberModule, NzSelectModule, NzUploadModule],
+  imports: [FormsModule, CommonModule, NzButtonModule, NgxSpinnerModule, NzInputModule, NzIconModule, NzBreadCrumbModule, RouterLink, NzInputNumberModule, NzSelectModule, NzUploadModule, NzCheckboxModule],
   providers: [CompanyService, CityService]
 })
 

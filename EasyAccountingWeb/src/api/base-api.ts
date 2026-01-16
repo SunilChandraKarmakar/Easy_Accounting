@@ -1438,6 +1438,7 @@ export class CompanyGridModel implements ICompanyGridModel {
     taxNo?: string | undefined;
     isSellWithPos?: boolean;
     isProductHaveBrand?: boolean;
+    isDefaultCompany?: boolean;
     address?: string | undefined;
 
     constructor(data?: ICompanyGridModel) {
@@ -1462,6 +1463,7 @@ export class CompanyGridModel implements ICompanyGridModel {
             this.taxNo = _data["taxNo"];
             this.isSellWithPos = _data["isSellWithPos"];
             this.isProductHaveBrand = _data["isProductHaveBrand"];
+            this.isDefaultCompany = _data["isDefaultCompany"];
             this.address = _data["address"];
         }
     }
@@ -1486,6 +1488,7 @@ export class CompanyGridModel implements ICompanyGridModel {
         data["taxNo"] = this.taxNo;
         data["isSellWithPos"] = this.isSellWithPos;
         data["isProductHaveBrand"] = this.isProductHaveBrand;
+        data["isDefaultCompany"] = this.isDefaultCompany;
         data["address"] = this.address;
         return data;
     }
@@ -1503,6 +1506,7 @@ export interface ICompanyGridModel {
     taxNo?: string | undefined;
     isSellWithPos?: boolean;
     isProductHaveBrand?: boolean;
+    isDefaultCompany?: boolean;
     address?: string | undefined;
 }
 
@@ -1644,6 +1648,7 @@ export class CompanyCreateModel implements ICompanyCreateModel {
     taxNo?: string | undefined;
     isSellWithPos?: boolean;
     isProductHaveBrand?: boolean;
+    isDefaultCompany?: boolean;
     address?: string | undefined;
 
     constructor(data?: ICompanyCreateModel) {
@@ -1667,6 +1672,7 @@ export class CompanyCreateModel implements ICompanyCreateModel {
             this.taxNo = _data["taxNo"];
             this.isSellWithPos = _data["isSellWithPos"];
             this.isProductHaveBrand = _data["isProductHaveBrand"];
+            this.isDefaultCompany = _data["isDefaultCompany"];
             this.address = _data["address"];
         }
     }
@@ -1690,6 +1696,7 @@ export class CompanyCreateModel implements ICompanyCreateModel {
         data["taxNo"] = this.taxNo;
         data["isSellWithPos"] = this.isSellWithPos;
         data["isProductHaveBrand"] = this.isProductHaveBrand;
+        data["isDefaultCompany"] = this.isDefaultCompany;
         data["address"] = this.address;
         return data;
     }
@@ -1706,6 +1713,7 @@ export interface ICompanyCreateModel {
     taxNo?: string | undefined;
     isSellWithPos?: boolean;
     isProductHaveBrand?: boolean;
+    isDefaultCompany?: boolean;
     address?: string | undefined;
 }
 
@@ -1721,6 +1729,7 @@ export class CompanyUpdateModel implements ICompanyUpdateModel {
     taxNo?: string | undefined;
     isSellWithPos?: boolean;
     isProductHaveBrand?: boolean;
+    isDefaultCompany?: boolean;
     address?: string | undefined;
 
     constructor(data?: ICompanyUpdateModel) {
@@ -1745,6 +1754,7 @@ export class CompanyUpdateModel implements ICompanyUpdateModel {
             this.taxNo = _data["taxNo"];
             this.isSellWithPos = _data["isSellWithPos"];
             this.isProductHaveBrand = _data["isProductHaveBrand"];
+            this.isDefaultCompany = _data["isDefaultCompany"];
             this.address = _data["address"];
         }
     }
@@ -1769,6 +1779,7 @@ export class CompanyUpdateModel implements ICompanyUpdateModel {
         data["taxNo"] = this.taxNo;
         data["isSellWithPos"] = this.isSellWithPos;
         data["isProductHaveBrand"] = this.isProductHaveBrand;
+        data["isDefaultCompany"] = this.isDefaultCompany;
         data["address"] = this.address;
         return data;
     }
@@ -1786,6 +1797,7 @@ export interface ICompanyUpdateModel {
     taxNo?: string | undefined;
     isSellWithPos?: boolean;
     isProductHaveBrand?: boolean;
+    isDefaultCompany?: boolean;
     address?: string | undefined;
 }
 

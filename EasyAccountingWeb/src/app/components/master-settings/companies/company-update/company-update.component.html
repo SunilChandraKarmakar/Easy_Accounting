@@ -87,6 +87,11 @@
               Product Have Brand?
             </label>
           </div>
+          <div class="col-md-3 mt-4">            
+            <label nz-checkbox [(ngModel)]="companyUpdateModel.isDefaultCompany" id="isDefaultCompany" name="isDefaultCompany">
+              This is your default company?
+            </label>
+          </div>
           <div class="col-md-9">
             <label for="address" class="form-label">Address</label>
             <nz-textarea-count [nzMaxCharacterCount]="500">

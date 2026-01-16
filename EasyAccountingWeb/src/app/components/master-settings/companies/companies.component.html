@@ -43,7 +43,14 @@
               <tbody>
                 @for (data of basicTable.data; track data.id) {
                   <tr>
-                    <td>{{ data.name }}</td>
+                    <td>
+                      <span>{{ data.name }}</span> &nbsp;
+                      <span *ngIf="data.isDefaultCompany">
+                        <nz-tag nzColor="success">
+                          <nz-icon nzType="check-circle" />
+                        </nz-tag>
+                      </span>
+                    </td>
                     <td>{{ data.email }}</td>
                     <td>{{ data.phone }}</td>
                     <td>{{ data.countryName }}</td>

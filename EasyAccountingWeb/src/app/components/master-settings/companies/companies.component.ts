@@ -11,14 +11,16 @@ import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { CompanyGridModel, CompanyService, FilterPageModel, FilterPageResultModelOfCompanyGridModel } from '../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-companies',
   templateUrl: './companies.component.html',
   styleUrls: ['./companies.component.css'],
   standalone: true,
-  imports: [NzButtonModule, NzDividerModule, NzTableModule, RouterLink, NgxSpinnerModule, NzSpaceModule, NzInputModule, NzIconModule, 
-    NzBreadCrumbModule, NzPopconfirmModule],
+  imports: [CommonModule, NzButtonModule, NzDividerModule, NzTableModule, RouterLink, NgxSpinnerModule, NzSpaceModule, NzInputModule, 
+    NzIconModule, NzBreadCrumbModule, NzPopconfirmModule, NzTagModule],
   providers: [CompanyService]
 })
 
