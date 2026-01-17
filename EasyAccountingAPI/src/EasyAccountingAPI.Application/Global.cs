@@ -40,3 +40,4 @@ global using EasyAccountingAPI.Repository.Repository.MasterSettings;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CurrencyLogic.Command;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CompanyLogic.Model;
 global using EasyAccountingAPI.Shared.ErrorMessages;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.InvoiceSettingLogic.Model;

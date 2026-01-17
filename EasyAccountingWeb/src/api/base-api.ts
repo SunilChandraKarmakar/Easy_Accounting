@@ -1378,6 +1378,287 @@ export class CurrencyService implements ICurrencyService {
     }
 }
 
+export interface IInvoiceSettingService {
+    create(createInvoiveSettingCommand: CreateInvoiceSettingCommand): Observable<boolean>;
+    delete(id: string): Observable<boolean>;
+    getById(id: string): Observable<InvoiceSettingViewModel>;
+    getFilterInvoiceSettings(getinvoiceSettingsByFilterQuery: GetInvoiceSettingsByFilterQuery): Observable<FilterPageResultModelOfInvoiceSettingGridModel>;
+    update(updateInvoiceSettingCommand: UpdateInvoiceSettingCommand): Observable<boolean>;
+}
+
+@Injectable()
+export class InvoiceSettingService implements IInvoiceSettingService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    create(createInvoiveSettingCommand: CreateInvoiceSettingCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/InvoiceSetting/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(createInvoiveSettingCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(id: string): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/InvoiceSetting/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getById(id: string): Observable<InvoiceSettingViewModel> {
+        let url_ = this.baseUrl + "/api/InvoiceSetting/GetById/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<InvoiceSettingViewModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<InvoiceSettingViewModel>;
+        }));
+    }
+
+    protected processGetById(response: HttpResponseBase): Observable<InvoiceSettingViewModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = InvoiceSettingViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getFilterInvoiceSettings(getinvoiceSettingsByFilterQuery: GetInvoiceSettingsByFilterQuery): Observable<FilterPageResultModelOfInvoiceSettingGridModel> {
+        let url_ = this.baseUrl + "/api/InvoiceSetting/GetFilterInvoiceSettings";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(getinvoiceSettingsByFilterQuery);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFilterInvoiceSettings(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFilterInvoiceSettings(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FilterPageResultModelOfInvoiceSettingGridModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FilterPageResultModelOfInvoiceSettingGridModel>;
+        }));
+    }
+
+    protected processGetFilterInvoiceSettings(response: HttpResponseBase): Observable<FilterPageResultModelOfInvoiceSettingGridModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FilterPageResultModelOfInvoiceSettingGridModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(updateInvoiceSettingCommand: UpdateInvoiceSettingCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/InvoiceSetting/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(updateInvoiceSettingCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export class FilterPageResultModelOfCompanyGridModel implements IFilterPageResultModelOfCompanyGridModel {
     items?: CompanyGridModel[];
     totalCount?: number;
@@ -2166,6 +2447,415 @@ export class UpdateCurrencyCommand extends CurrencyUpdateModel implements IUpdat
 }
 
 export interface IUpdateCurrencyCommand extends ICurrencyUpdateModel {
+}
+
+export class FilterPageResultModelOfInvoiceSettingGridModel implements IFilterPageResultModelOfInvoiceSettingGridModel {
+    items?: InvoiceSettingGridModel[];
+    totalCount?: number;
+
+    constructor(data?: IFilterPageResultModelOfInvoiceSettingGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(InvoiceSettingGridModel.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): FilterPageResultModelOfInvoiceSettingGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPageResultModelOfInvoiceSettingGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item ? item.toJSON() : undefined as any);
+        }
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+}
+
+export interface IFilterPageResultModelOfInvoiceSettingGridModel {
+    items?: InvoiceSettingGridModel[];
+    totalCount?: number;
+}
+
+export class InvoiceSettingGridModel implements IInvoiceSettingGridModel {
+    id?: number;
+    invoiceDueDateCount?: number;
+    invoiceColor?: string | undefined;
+    invoiceFooter?: string | undefined;
+    invoiceTerms?: string | undefined;
+    isHideInvoiceHeader?: boolean;
+    isShowPreviousDue?: boolean;
+    isShowInvoiceCreatorName?: boolean;
+    isShowCustomerSignature?: boolean;
+    isCreateInvoiceWithoutPurchase?: boolean;
+    isServiceProviderAttributionUnderInvoice?: boolean;
+    isDefaultInvoiceSetting?: boolean;
+
+    constructor(data?: IInvoiceSettingGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.invoiceDueDateCount = _data["invoiceDueDateCount"];
+            this.invoiceColor = _data["invoiceColor"];
+            this.invoiceFooter = _data["invoiceFooter"];
+            this.invoiceTerms = _data["invoiceTerms"];
+            this.isHideInvoiceHeader = _data["isHideInvoiceHeader"];
+            this.isShowPreviousDue = _data["isShowPreviousDue"];
+            this.isShowInvoiceCreatorName = _data["isShowInvoiceCreatorName"];
+            this.isShowCustomerSignature = _data["isShowCustomerSignature"];
+            this.isCreateInvoiceWithoutPurchase = _data["isCreateInvoiceWithoutPurchase"];
+            this.isServiceProviderAttributionUnderInvoice = _data["isServiceProviderAttributionUnderInvoice"];
+            this.isDefaultInvoiceSetting = _data["isDefaultInvoiceSetting"];
+        }
+    }
+
+    static fromJS(data: any): InvoiceSettingGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new InvoiceSettingGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["invoiceDueDateCount"] = this.invoiceDueDateCount;
+        data["invoiceColor"] = this.invoiceColor;
+        data["invoiceFooter"] = this.invoiceFooter;
+        data["invoiceTerms"] = this.invoiceTerms;
+        data["isHideInvoiceHeader"] = this.isHideInvoiceHeader;
+        data["isShowPreviousDue"] = this.isShowPreviousDue;
+        data["isShowInvoiceCreatorName"] = this.isShowInvoiceCreatorName;
+        data["isShowCustomerSignature"] = this.isShowCustomerSignature;
+        data["isCreateInvoiceWithoutPurchase"] = this.isCreateInvoiceWithoutPurchase;
+        data["isServiceProviderAttributionUnderInvoice"] = this.isServiceProviderAttributionUnderInvoice;
+        data["isDefaultInvoiceSetting"] = this.isDefaultInvoiceSetting;
+        return data;
+    }
+}
+
+export interface IInvoiceSettingGridModel {
+    id?: number;
+    invoiceDueDateCount?: number;
+    invoiceColor?: string | undefined;
+    invoiceFooter?: string | undefined;
+    invoiceTerms?: string | undefined;
+    isHideInvoiceHeader?: boolean;
+    isShowPreviousDue?: boolean;
+    isShowInvoiceCreatorName?: boolean;
+    isShowCustomerSignature?: boolean;
+    isCreateInvoiceWithoutPurchase?: boolean;
+    isServiceProviderAttributionUnderInvoice?: boolean;
+    isDefaultInvoiceSetting?: boolean;
+}
+
+export class GetInvoiceSettingsByFilterQuery extends FilterPageModel implements IGetInvoiceSettingsByFilterQuery {
+
+    constructor(data?: IGetInvoiceSettingsByFilterQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetInvoiceSettingsByFilterQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetInvoiceSettingsByFilterQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetInvoiceSettingsByFilterQuery extends IFilterPageModel {
+}
+
+export class InvoiceSettingViewModel implements IInvoiceSettingViewModel {
+    createModel?: InvoiceSettingCreateModel;
+    updateModel?: InvoiceSettingUpdateModel;
+    gridModel?: InvoiceSettingGridModel;
+
+    constructor(data?: IInvoiceSettingViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.createModel = _data["createModel"] ? InvoiceSettingCreateModel.fromJS(_data["createModel"]) : undefined as any;
+            this.updateModel = _data["updateModel"] ? InvoiceSettingUpdateModel.fromJS(_data["updateModel"]) : undefined as any;
+            this.gridModel = _data["gridModel"] ? InvoiceSettingGridModel.fromJS(_data["gridModel"]) : undefined as any;
+        }
+    }
+
+    static fromJS(data: any): InvoiceSettingViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new InvoiceSettingViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["createModel"] = this.createModel ? this.createModel.toJSON() : undefined as any;
+        data["updateModel"] = this.updateModel ? this.updateModel.toJSON() : undefined as any;
+        data["gridModel"] = this.gridModel ? this.gridModel.toJSON() : undefined as any;
+        return data;
+    }
+}
+
+export interface IInvoiceSettingViewModel {
+    createModel?: InvoiceSettingCreateModel;
+    updateModel?: InvoiceSettingUpdateModel;
+    gridModel?: InvoiceSettingGridModel;
+}
+
+export class InvoiceSettingCreateModel implements IInvoiceSettingCreateModel {
+    invoiceDueDateCount!: number;
+    invoiceColor?: string | undefined;
+    invoiceFooter?: string | undefined;
+    invoiceTerms?: string | undefined;
+    isHideInvoiceHeader?: boolean;
+    isShowPreviousDue?: boolean;
+    isShowInvoiceCreatorName?: boolean;
+    isShowCustomerSignature?: boolean;
+    isCreateInvoiceWithoutPurchase?: boolean;
+    isServiceProviderAttributionUnderInvoice?: boolean;
+    isDefaultInvoiceSetting?: boolean;
+
+    constructor(data?: IInvoiceSettingCreateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.invoiceDueDateCount = _data["invoiceDueDateCount"];
+            this.invoiceColor = _data["invoiceColor"];
+            this.invoiceFooter = _data["invoiceFooter"];
+            this.invoiceTerms = _data["invoiceTerms"];
+            this.isHideInvoiceHeader = _data["isHideInvoiceHeader"];
+            this.isShowPreviousDue = _data["isShowPreviousDue"];
+            this.isShowInvoiceCreatorName = _data["isShowInvoiceCreatorName"];
+            this.isShowCustomerSignature = _data["isShowCustomerSignature"];
+            this.isCreateInvoiceWithoutPurchase = _data["isCreateInvoiceWithoutPurchase"];
+            this.isServiceProviderAttributionUnderInvoice = _data["isServiceProviderAttributionUnderInvoice"];
+            this.isDefaultInvoiceSetting = _data["isDefaultInvoiceSetting"];
+        }
+    }
+
+    static fromJS(data: any): InvoiceSettingCreateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new InvoiceSettingCreateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["invoiceDueDateCount"] = this.invoiceDueDateCount;
+        data["invoiceColor"] = this.invoiceColor;
+        data["invoiceFooter"] = this.invoiceFooter;
+        data["invoiceTerms"] = this.invoiceTerms;
+        data["isHideInvoiceHeader"] = this.isHideInvoiceHeader;
+        data["isShowPreviousDue"] = this.isShowPreviousDue;
+        data["isShowInvoiceCreatorName"] = this.isShowInvoiceCreatorName;
+        data["isShowCustomerSignature"] = this.isShowCustomerSignature;
+        data["isCreateInvoiceWithoutPurchase"] = this.isCreateInvoiceWithoutPurchase;
+        data["isServiceProviderAttributionUnderInvoice"] = this.isServiceProviderAttributionUnderInvoice;
+        data["isDefaultInvoiceSetting"] = this.isDefaultInvoiceSetting;
+        return data;
+    }
+}
+
+export interface IInvoiceSettingCreateModel {
+    invoiceDueDateCount: number;
+    invoiceColor?: string | undefined;
+    invoiceFooter?: string | undefined;
+    invoiceTerms?: string | undefined;
+    isHideInvoiceHeader?: boolean;
+    isShowPreviousDue?: boolean;
+    isShowInvoiceCreatorName?: boolean;
+    isShowCustomerSignature?: boolean;
+    isCreateInvoiceWithoutPurchase?: boolean;
+    isServiceProviderAttributionUnderInvoice?: boolean;
+    isDefaultInvoiceSetting?: boolean;
+}
+
+export class InvoiceSettingUpdateModel implements IInvoiceSettingUpdateModel {
+    id?: number;
+    invoiceDueDateCount!: number;
+    invoiceColor?: string | undefined;
+    invoiceFooter?: string | undefined;
+    invoiceTerms?: string | undefined;
+    isHideInvoiceHeader?: boolean;
+    isShowPreviousDue?: boolean;
+    isShowInvoiceCreatorName?: boolean;
+    isShowCustomerSignature?: boolean;
+    isCreateInvoiceWithoutPurchase?: boolean;
+    isServiceProviderAttributionUnderInvoice?: boolean;
+    isDefaultInvoiceSetting?: boolean;
+
+    constructor(data?: IInvoiceSettingUpdateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.invoiceDueDateCount = _data["invoiceDueDateCount"];
+            this.invoiceColor = _data["invoiceColor"];
+            this.invoiceFooter = _data["invoiceFooter"];
+            this.invoiceTerms = _data["invoiceTerms"];
+            this.isHideInvoiceHeader = _data["isHideInvoiceHeader"];
+            this.isShowPreviousDue = _data["isShowPreviousDue"];
+            this.isShowInvoiceCreatorName = _data["isShowInvoiceCreatorName"];
+            this.isShowCustomerSignature = _data["isShowCustomerSignature"];
+            this.isCreateInvoiceWithoutPurchase = _data["isCreateInvoiceWithoutPurchase"];
+            this.isServiceProviderAttributionUnderInvoice = _data["isServiceProviderAttributionUnderInvoice"];
+            this.isDefaultInvoiceSetting = _data["isDefaultInvoiceSetting"];
+        }
+    }
+
+    static fromJS(data: any): InvoiceSettingUpdateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new InvoiceSettingUpdateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["invoiceDueDateCount"] = this.invoiceDueDateCount;
+        data["invoiceColor"] = this.invoiceColor;
+        data["invoiceFooter"] = this.invoiceFooter;
+        data["invoiceTerms"] = this.invoiceTerms;
+        data["isHideInvoiceHeader"] = this.isHideInvoiceHeader;
+        data["isShowPreviousDue"] = this.isShowPreviousDue;
+        data["isShowInvoiceCreatorName"] = this.isShowInvoiceCreatorName;
+        data["isShowCustomerSignature"] = this.isShowCustomerSignature;
+        data["isCreateInvoiceWithoutPurchase"] = this.isCreateInvoiceWithoutPurchase;
+        data["isServiceProviderAttributionUnderInvoice"] = this.isServiceProviderAttributionUnderInvoice;
+        data["isDefaultInvoiceSetting"] = this.isDefaultInvoiceSetting;
+        return data;
+    }
+}
+
+export interface IInvoiceSettingUpdateModel {
+    id?: number;
+    invoiceDueDateCount: number;
+    invoiceColor?: string | undefined;
+    invoiceFooter?: string | undefined;
+    invoiceTerms?: string | undefined;
+    isHideInvoiceHeader?: boolean;
+    isShowPreviousDue?: boolean;
+    isShowInvoiceCreatorName?: boolean;
+    isShowCustomerSignature?: boolean;
+    isCreateInvoiceWithoutPurchase?: boolean;
+    isServiceProviderAttributionUnderInvoice?: boolean;
+    isDefaultInvoiceSetting?: boolean;
+}
+
+export class CreateInvoiceSettingCommand extends InvoiceSettingCreateModel implements ICreateInvoiceSettingCommand {
+
+    constructor(data?: ICreateInvoiceSettingCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): CreateInvoiceSettingCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateInvoiceSettingCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ICreateInvoiceSettingCommand extends IInvoiceSettingCreateModel {
+}
+
+export class UpdateInvoiceSettingCommand extends InvoiceSettingUpdateModel implements IUpdateInvoiceSettingCommand {
+
+    constructor(data?: IUpdateInvoiceSettingCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): UpdateInvoiceSettingCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateInvoiceSettingCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IUpdateInvoiceSettingCommand extends IInvoiceSettingUpdateModel {
 }
 
 export class FilterPageResultModelOfCityGridModel implements IFilterPageResultModelOfCityGridModel {

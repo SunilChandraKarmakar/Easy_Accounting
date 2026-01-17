@@ -34,6 +34,7 @@
             #region Master Settings Service
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<IInvoiceSettingRepository, InvoiceSettingRepository>();
             #endregion
 
             return services;

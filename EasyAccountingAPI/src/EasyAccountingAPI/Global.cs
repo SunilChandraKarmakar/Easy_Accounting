@@ -31,3 +31,6 @@ global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.Curr
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CompanyLogic.Command;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CompanyLogic.Model;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CompanyLogic.Queries;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.InvoiceSettingLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.InvoiceSettingLogic.Model;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.InvoiceSettingLogic.Queries;

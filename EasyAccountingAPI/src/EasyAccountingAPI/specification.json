@@ -779,6 +779,164 @@
           }
         }
       }
+    },
+    "/api/InvoiceSetting/Create": {
+      "post": {
+        "tags": [
+          "InvoiceSetting"
+        ],
+        "operationId": "InvoiceSetting_Create",
+        "requestBody": {
+          "x-name": "createInvoiveSettingCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateInvoiceSettingCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/InvoiceSetting/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "InvoiceSetting"
+        ],
+        "operationId": "InvoiceSetting_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/InvoiceSetting/GetById/{id}": {
+      "get": {
+        "tags": [
+          "InvoiceSetting"
+        ],
+        "operationId": "InvoiceSetting_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceSettingViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/InvoiceSetting/GetFilterInvoiceSettings": {
+      "post": {
+        "tags": [
+          "InvoiceSetting"
+        ],
+        "operationId": "InvoiceSetting_GetFilterInvoiceSettings",
+        "requestBody": {
+          "x-name": "getinvoiceSettingsByFilterQuery",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetInvoiceSettingsByFilterQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilterPageResultModelOfInvoiceSettingGridModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/InvoiceSetting/Update": {
+      "put": {
+        "tags": [
+          "InvoiceSetting"
+        ],
+        "operationId": "InvoiceSetting_Update",
+        "requestBody": {
+          "x-name": "updateInvoiceSettingCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateInvoiceSettingCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1174,6 +1332,213 @@
         "allOf": [
           {
             "$ref": "#/components/schemas/CurrencyUpdateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "FilterPageResultModelOfInvoiceSettingGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InvoiceSettingGridModel"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "InvoiceSettingGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "invoiceDueDateCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "invoiceColor": {
+            "type": "string",
+            "nullable": true
+          },
+          "invoiceFooter": {
+            "type": "string",
+            "nullable": true
+          },
+          "invoiceTerms": {
+            "type": "string",
+            "nullable": true
+          },
+          "isHideInvoiceHeader": {
+            "type": "boolean"
+          },
+          "isShowPreviousDue": {
+            "type": "boolean"
+          },
+          "isShowInvoiceCreatorName": {
+            "type": "boolean"
+          },
+          "isShowCustomerSignature": {
+            "type": "boolean"
+          },
+          "isCreateInvoiceWithoutPurchase": {
+            "type": "boolean"
+          },
+          "isServiceProviderAttributionUnderInvoice": {
+            "type": "boolean"
+          },
+          "isDefaultInvoiceSetting": {
+            "type": "boolean"
+          }
+        }
+      },
+      "GetInvoiceSettingsByFilterQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FilterPageModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "InvoiceSettingViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "createModel": {
+            "$ref": "#/components/schemas/InvoiceSettingCreateModel"
+          },
+          "updateModel": {
+            "$ref": "#/components/schemas/InvoiceSettingUpdateModel"
+          },
+          "gridModel": {
+            "$ref": "#/components/schemas/InvoiceSettingGridModel"
+          }
+        }
+      },
+      "InvoiceSettingCreateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "invoiceDueDateCount"
+        ],
+        "properties": {
+          "invoiceDueDateCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "invoiceColor": {
+            "type": "string",
+            "nullable": true
+          },
+          "invoiceFooter": {
+            "type": "string",
+            "nullable": true
+          },
+          "invoiceTerms": {
+            "type": "string",
+            "nullable": true
+          },
+          "isHideInvoiceHeader": {
+            "type": "boolean"
+          },
+          "isShowPreviousDue": {
+            "type": "boolean"
+          },
+          "isShowInvoiceCreatorName": {
+            "type": "boolean"
+          },
+          "isShowCustomerSignature": {
+            "type": "boolean"
+          },
+          "isCreateInvoiceWithoutPurchase": {
+            "type": "boolean"
+          },
+          "isServiceProviderAttributionUnderInvoice": {
+            "type": "boolean"
+          },
+          "isDefaultInvoiceSetting": {
+            "type": "boolean"
+          }
+        }
+      },
+      "InvoiceSettingUpdateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "invoiceDueDateCount"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "invoiceDueDateCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "invoiceColor": {
+            "type": "string",
+            "nullable": true
+          },
+          "invoiceFooter": {
+            "type": "string",
+            "nullable": true
+          },
+          "invoiceTerms": {
+            "type": "string",
+            "nullable": true
+          },
+          "isHideInvoiceHeader": {
+            "type": "boolean"
+          },
+          "isShowPreviousDue": {
+            "type": "boolean"
+          },
+          "isShowInvoiceCreatorName": {
+            "type": "boolean"
+          },
+          "isShowCustomerSignature": {
+            "type": "boolean"
+          },
+          "isCreateInvoiceWithoutPurchase": {
+            "type": "boolean"
+          },
+          "isServiceProviderAttributionUnderInvoice": {
+            "type": "boolean"
+          },
+          "isDefaultInvoiceSetting": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CreateInvoiceSettingCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/InvoiceSettingCreateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "UpdateInvoiceSettingCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/InvoiceSettingUpdateModel"
           },
           {
             "type": "object",

@@ -17,7 +17,7 @@
         public bool IsShowCustomerSignature { get; set; }
         public bool IsCreateInvoiceWithoutPurchase { get; set; }
         public bool IsServiceProviderAttributionUnderInvoice { get; set; }
-        public bool IsDefaultCompany { get; set; }
+        public bool IsDefaultInvoiceSetting { get; set; }
         public string CreatedById { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public string? UpdatedById { get; set; }
