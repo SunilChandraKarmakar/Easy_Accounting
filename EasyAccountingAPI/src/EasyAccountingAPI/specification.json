@@ -1363,6 +1363,9 @@
             "type": "integer",
             "format": "int32"
           },
+          "companyName": {
+            "type": "string"
+          },
           "invoiceDueDateCount": {
             "type": "integer",
             "format": "int32"
@@ -1425,16 +1428,22 @@
           },
           "gridModel": {
             "$ref": "#/components/schemas/InvoiceSettingGridModel"
-          }
+          },
+          "optionsDataSources": {}
         }
       },
       "InvoiceSettingCreateModel": {
         "type": "object",
         "additionalProperties": false,
         "required": [
+          "companyId",
           "invoiceDueDateCount"
         ],
         "properties": {
+          "companyId": {
+            "type": "integer",
+            "format": "int32"
+          },
           "invoiceDueDateCount": {
             "type": "integer",
             "format": "int32"
@@ -1478,10 +1487,15 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
+          "companyId",
           "invoiceDueDateCount"
         ],
         "properties": {
           "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "companyId": {
             "type": "integer",
             "format": "int32"
           },

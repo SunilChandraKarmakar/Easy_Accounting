@@ -20,6 +20,9 @@
                 UpdateModel = await Mediator.Send(new GetInvoiceSettingDetailQuery { Id = id }),
             };
 
+            // Set select list
+            invoiceSettingVm.OptionsDataSources.CompanySelectList = await Mediator.Send(new SelectListCompanyQuery());
+
             return Ok(invoiceSettingVm);
         }
 

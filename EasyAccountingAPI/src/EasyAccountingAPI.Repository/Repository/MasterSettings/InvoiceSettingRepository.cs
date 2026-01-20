@@ -7,7 +7,8 @@
         public override async Task<InvoiceSetting?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             var invoiceSetting = await db.InvoiceSettings
-                .Where(c => c.Id == id && !c.IsDeleted)
+                .Include(x => x.Company)
+                .Where(x => x.Id == id && !x.IsDeleted)
                 .FirstOrDefaultAsync(cancellationToken);
 
             return invoiceSetting;
@@ -21,17 +22,19 @@
                  !ic.IsDeleted
                  && (string.IsNullOrWhiteSpace(userId) || ic.CreatedById == userId)
                  && (string.IsNullOrWhiteSpace(model.FilterValue)
+                 || ic.Company.Name.Contains(model.FilterValue)
                  || ic.InvoiceFooter.Contains(model.FilterValue)
                  || ic.InvoiceTerms.Contains(model.FilterValue));
 
             var sortableColumns = new Dictionary<string, Expression<Func<InvoiceSetting, object>>>
             {
+                ["companyName"] = ic => ic.Company.Name,
                 ["invoiceFooter"] = ic => ic.InvoiceFooter,
                 ["invoiceTerms"] = ic => ic.InvoiceTerms,
                 ["id"] = ic => ic.Id
             };
 
-            return GetAllFilterAsync(model, filter, ic => ic.Id, sortableColumns, include: null, cancellationToken);
+            return GetAllFilterAsync(model, filter, ic => ic.Id, sortableColumns, include: q => q.Include(c => c.Company), cancellationToken);
         }
 
         public async Task<IEnumerable<SelectModel>> GetInvoiceSettingSelectList(IHttpContextAccessor httpContextAccessor, 

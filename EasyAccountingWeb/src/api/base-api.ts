@@ -2499,6 +2499,7 @@ export interface IFilterPageResultModelOfInvoiceSettingGridModel {
 
 export class InvoiceSettingGridModel implements IInvoiceSettingGridModel {
     id?: number;
+    companyName?: string;
     invoiceDueDateCount?: number;
     invoiceColor?: string | undefined;
     invoiceFooter?: string | undefined;
@@ -2523,6 +2524,7 @@ export class InvoiceSettingGridModel implements IInvoiceSettingGridModel {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.companyName = _data["companyName"];
             this.invoiceDueDateCount = _data["invoiceDueDateCount"];
             this.invoiceColor = _data["invoiceColor"];
             this.invoiceFooter = _data["invoiceFooter"];
@@ -2547,6 +2549,7 @@ export class InvoiceSettingGridModel implements IInvoiceSettingGridModel {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["companyName"] = this.companyName;
         data["invoiceDueDateCount"] = this.invoiceDueDateCount;
         data["invoiceColor"] = this.invoiceColor;
         data["invoiceFooter"] = this.invoiceFooter;
@@ -2564,6 +2567,7 @@ export class InvoiceSettingGridModel implements IInvoiceSettingGridModel {
 
 export interface IInvoiceSettingGridModel {
     id?: number;
+    companyName?: string;
     invoiceDueDateCount?: number;
     invoiceColor?: string | undefined;
     invoiceFooter?: string | undefined;
@@ -2608,6 +2612,7 @@ export class InvoiceSettingViewModel implements IInvoiceSettingViewModel {
     createModel?: InvoiceSettingCreateModel;
     updateModel?: InvoiceSettingUpdateModel;
     gridModel?: InvoiceSettingGridModel;
+    optionsDataSources?: any;
 
     constructor(data?: IInvoiceSettingViewModel) {
         if (data) {
@@ -2623,6 +2628,7 @@ export class InvoiceSettingViewModel implements IInvoiceSettingViewModel {
             this.createModel = _data["createModel"] ? InvoiceSettingCreateModel.fromJS(_data["createModel"]) : undefined as any;
             this.updateModel = _data["updateModel"] ? InvoiceSettingUpdateModel.fromJS(_data["updateModel"]) : undefined as any;
             this.gridModel = _data["gridModel"] ? InvoiceSettingGridModel.fromJS(_data["gridModel"]) : undefined as any;
+            this.optionsDataSources = _data["optionsDataSources"];
         }
     }
 
@@ -2638,6 +2644,7 @@ export class InvoiceSettingViewModel implements IInvoiceSettingViewModel {
         data["createModel"] = this.createModel ? this.createModel.toJSON() : undefined as any;
         data["updateModel"] = this.updateModel ? this.updateModel.toJSON() : undefined as any;
         data["gridModel"] = this.gridModel ? this.gridModel.toJSON() : undefined as any;
+        data["optionsDataSources"] = this.optionsDataSources;
         return data;
     }
 }
@@ -2646,9 +2653,11 @@ export interface IInvoiceSettingViewModel {
     createModel?: InvoiceSettingCreateModel;
     updateModel?: InvoiceSettingUpdateModel;
     gridModel?: InvoiceSettingGridModel;
+    optionsDataSources?: any;
 }
 
 export class InvoiceSettingCreateModel implements IInvoiceSettingCreateModel {
+    companyId!: number;
     invoiceDueDateCount!: number;
     invoiceColor?: string | undefined;
     invoiceFooter?: string | undefined;
@@ -2672,6 +2681,7 @@ export class InvoiceSettingCreateModel implements IInvoiceSettingCreateModel {
 
     init(_data?: any) {
         if (_data) {
+            this.companyId = _data["companyId"];
             this.invoiceDueDateCount = _data["invoiceDueDateCount"];
             this.invoiceColor = _data["invoiceColor"];
             this.invoiceFooter = _data["invoiceFooter"];
@@ -2695,6 +2705,7 @@ export class InvoiceSettingCreateModel implements IInvoiceSettingCreateModel {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["companyId"] = this.companyId;
         data["invoiceDueDateCount"] = this.invoiceDueDateCount;
         data["invoiceColor"] = this.invoiceColor;
         data["invoiceFooter"] = this.invoiceFooter;
@@ -2711,6 +2722,7 @@ export class InvoiceSettingCreateModel implements IInvoiceSettingCreateModel {
 }
 
 export interface IInvoiceSettingCreateModel {
+    companyId: number;
     invoiceDueDateCount: number;
     invoiceColor?: string | undefined;
     invoiceFooter?: string | undefined;
@@ -2726,6 +2738,7 @@ export interface IInvoiceSettingCreateModel {
 
 export class InvoiceSettingUpdateModel implements IInvoiceSettingUpdateModel {
     id?: number;
+    companyId!: number;
     invoiceDueDateCount!: number;
     invoiceColor?: string | undefined;
     invoiceFooter?: string | undefined;
@@ -2750,6 +2763,7 @@ export class InvoiceSettingUpdateModel implements IInvoiceSettingUpdateModel {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.companyId = _data["companyId"];
             this.invoiceDueDateCount = _data["invoiceDueDateCount"];
             this.invoiceColor = _data["invoiceColor"];
             this.invoiceFooter = _data["invoiceFooter"];
@@ -2774,6 +2788,7 @@ export class InvoiceSettingUpdateModel implements IInvoiceSettingUpdateModel {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["companyId"] = this.companyId;
         data["invoiceDueDateCount"] = this.invoiceDueDateCount;
         data["invoiceColor"] = this.invoiceColor;
         data["invoiceFooter"] = this.invoiceFooter;
@@ -2791,6 +2806,7 @@ export class InvoiceSettingUpdateModel implements IInvoiceSettingUpdateModel {
 
 export interface IInvoiceSettingUpdateModel {
     id?: number;
+    companyId: number;
     invoiceDueDateCount: number;
     invoiceColor?: string | undefined;
     invoiceFooter?: string | undefined;

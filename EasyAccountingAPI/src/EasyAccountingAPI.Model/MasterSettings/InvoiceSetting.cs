@@ -5,6 +5,9 @@
     {
         public int Id { get; set; }
 
+        [Required(ErrorMessage = "Please, provide company.")]
+        public int CompanyId { get; set; }
+
         [Required(ErrorMessage = "Please, provide invoice due date count.")]
         public int InvoiceDueDateCount { get; set; }
 
@@ -24,5 +27,7 @@
         public DateTime? UpdatedDateTime { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime? DeletedDateTime { get; set; }
+
+        public Company Company { get; set; }
     }
 }

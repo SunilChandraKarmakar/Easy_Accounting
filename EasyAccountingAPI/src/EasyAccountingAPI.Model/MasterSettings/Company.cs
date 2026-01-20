@@ -3,6 +3,11 @@
     [Table("Companies", Schema = "MasterSettings")]
     public class Company : IAuditableEntity, IDelatableEntity
     {
+        public Company()
+        {
+            InvoiceSettings = new HashSet<InvoiceSetting>();
+        }
+
         public int Id { get; set; }
 
         [Column(TypeName = "nvarchar(100)")]
@@ -45,5 +50,6 @@
         public Country Country { get; set; }
         public City City { get; set; }
         public Currency Currency { get; set; }
+        public ICollection<InvoiceSetting> InvoiceSettings { get; set; }
     }
 }

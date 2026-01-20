@@ -16,6 +16,9 @@ import { CurrencyUpdateComponent } from './components/master-settings/currencies
 import { CompaniesComponent } from './components/master-settings/companies/companies.component';
 import { CompanyCreateComponent } from './components/master-settings/companies/company-create/company-create.component';
 import { CompanyUpdateComponent } from './components/master-settings/companies/company-update/company-update.component';
+import { InvoiceSettingsComponent } from './components/master-settings/Invoice-settings/Invoice-settings.component';
+import { InvoiceSettingCreateComponent } from './components/master-settings/Invoice-settings/Invoice-setting-create/Invoice-setting-create.component';
+import { InvoiceSettingUpdateComponent } from './components/master-settings/Invoice-settings/Invoice-setting-update/Invoice-setting-update.component';
 
 export const routes: Routes = [
 
@@ -48,7 +51,12 @@ export const routes: Routes = [
       // Company
       { path: "companies", component: CompaniesComponent, pathMatch: "full" },
       { path: "company/create", component: CompanyCreateComponent, pathMatch: "full" },
-      { path: "company/update/:recordId", component: CompanyUpdateComponent, pathMatch: "full" }
+      { path: "company/update/:recordId", component: CompanyUpdateComponent, pathMatch: "full" },
+
+      // Invoice setting
+      { path: "invoice-settings", component: InvoiceSettingsComponent, pathMatch: "full" },
+      { path: "invoice-setting/create", component: InvoiceSettingCreateComponent, pathMatch: "full" },
+      { path: "invoice-setting/update/:recordId", component: InvoiceSettingUpdateComponent, pathMatch: "full" }
     ],
     
     canActivate: [AuthGuard] 
