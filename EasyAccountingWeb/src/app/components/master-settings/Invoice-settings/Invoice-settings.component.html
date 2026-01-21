@@ -53,8 +53,16 @@
                     <td>{{ data.invoiceTerms }}</td>
                     <td>{{ data.invoiceFooter }}</td>
                     <td>{{ data.invoiceDueDateCount }}</td>
-                    <td>{{ data.invoiceColor }}</td>
-                    <td></td>
+                    <td>
+                      <nz-color-picker nzDisabled nzShowText [nzValue]="data.invoiceColor!"></nz-color-picker>
+                    </td>
+                    <td>
+                      <p>
+                        Hide Invoice Header <nz-tag nzColor="#2db7f5">Yes</nz-tag>
+                      </p>
+                      <nz-tag nzColor="#f50">No</nz-tag>
+                      
+                    </td>
                     <td class="text-center action-cell">
                       <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Edit" class="action-btn edit-btn"
                         routerLink="/app/invoice-setting/update/{{ data.id }}">

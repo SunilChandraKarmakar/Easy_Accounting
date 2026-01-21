@@ -13,6 +13,8 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { FilterPageModel, FilterPageResultModelOfInvoiceSettingGridModel, InvoiceSettingGridModel, InvoiceSettingService } from '../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { NzColorPickerModule } from 'ng-zorro-antd/color-picker';
+import { presetColors } from 'ng-zorro-antd/core/color';
 
 @Component({
   selector: 'app-Invoice-settings',
@@ -20,7 +22,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./Invoice-settings.component.css'],
   standalone: true,
   imports: [CommonModule, NzButtonModule, NzDividerModule, NzTableModule, RouterLink, NgxSpinnerModule, NzSpaceModule, NzInputModule, 
-    NzIconModule, NzBreadCrumbModule, NzPopconfirmModule, NzTagModule],
+    NzIconModule, NzBreadCrumbModule, NzPopconfirmModule, NzTagModule, NzColorPickerModule],
   providers: [InvoiceSettingService]
 })
 

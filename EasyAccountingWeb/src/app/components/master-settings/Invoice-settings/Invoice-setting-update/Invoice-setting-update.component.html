@@ -1,3 +1,105 @@
-<p>
-  Invoice-setting-update works!
-</p>
+<nz-breadcrumb>
+  <nz-breadcrumb-item>Settings</nz-breadcrumb-item>
+    <nz-breadcrumb-item><a routerLink="/app/invoice-settings" class="breadcrumb-link">Invoice Setting</a></nz-breadcrumb-item>
+  <nz-breadcrumb-item>Update Invoice Setting</nz-breadcrumb-item>
+</nz-breadcrumb>
+<div class="row mt-3">
+  <div class="col-md-12">
+    <div class="card shadow-lg">
+      <div class="card-header">
+        <h5 class="card-title text-center">Update Invoice Setting</h5>
+      </div>
+      <div class="card-body">
+        <form class="row g-3" autocomplete="off">
+          <div class="col-md-3">
+            <label for="companyId" class="form-label">Company <span class="text-danger fw-bold">*</span></label>
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Company" 
+              [(ngModel)]="invoiceSettingUpdateModel.companyId" name="companyId" style="width: 100%;">
+                @for (company of companies; track company.id) {
+                  <nz-option [nzValue]="company.id" [nzLabel]="company.name!"></nz-option>
+                }
+              </nz-select>
+          </div>
+          <div class="col-md-3">
+            <label for="invoiceDueDateCount" class="form-label">Invoice Due Date Count <span class="text-danger fw-bold">*</span></label> <br>
+            <nz-input-number [(ngModel)]="invoiceSettingUpdateModel.invoiceDueDateCount" name="invoiceDueDateCount" nzMin="1" 
+              nzSize="default" [style.width.%]="100" />
+          </div>
+          <div class="col-md-3">
+            <label for="invoiceColor" class="form-label">Invoice Color</label> <br>
+            <nz-color-picker nzShowText  [nzValue]="invoiceSettingUpdateModel.invoiceColor!" 
+              (nzOnChange)="onInvoiceColorChange($event)"></nz-color-picker>
+          </div>
+          <div class="col-md-3 mt-4">            
+            <label nz-checkbox [(ngModel)]="invoiceSettingUpdateModel.isHideInvoiceHeader" id="isHideInvoiceHeader" name="isHideInvoiceHeader">
+              Do you want to hide Invoice Header?
+            </label>
+          </div>
+          <div class="col-md-3 mt-4">            
+            <label nz-checkbox [(ngModel)]="invoiceSettingUpdateModel.isShowPreviousDue" id="isShowPreviousDue" name="isShowPreviousDue">
+              Do you want to show Previous Due?
+            </label>
+          </div>
+          <div class="col-md-3 mt-4">            
+            <label nz-checkbox [(ngModel)]="invoiceSettingUpdateModel.isShowInvoiceCreatorName" id="isShowInvoiceCreatorName" 
+              name="isShowInvoiceCreatorName">
+              Do you want to show Invoice Creator Name?
+            </label>
+          </div>    
+          <div class="col-md-3 mt-4">            
+            <label nz-checkbox [(ngModel)]="invoiceSettingUpdateModel.isShowCustomerSignature" id="isShowCustomerSignature" 
+              name="isShowCustomerSignature">
+              Do you want to show Customer Signature?
+            </label>
+          </div>   
+          <div class="col-md-3 mt-4">            
+            <label nz-checkbox [(ngModel)]="invoiceSettingUpdateModel.isCreateInvoiceWithoutPurchase" id="isCreateInvoiceWithoutPurchase" 
+              name="isCreateInvoiceWithoutPurchase">
+              Do you want to show Invoice without Purchase?
+            </label>
+          </div> 
+          <div class="col-md-3 mt-4">            
+            <label nz-checkbox [(ngModel)]="invoiceSettingUpdateModel.isServiceProviderAttributionUnderInvoice"
+              id="isServiceProviderAttributionUnderInvoice" name="isServiceProviderAttributionUnderInvoice">
+              Do you want to show service provider attribution under Invoice?
+            </label>
+          </div>
+          <div class="col-md-3 mt-4">            
+            <label nz-checkbox [(ngModel)]="invoiceSettingUpdateModel.isDefaultInvoiceSetting"
+              id="isDefaultInvoiceSetting" name="isDefaultInvoiceSetting">
+              Do you want to set Default Invoice Setting?
+            </label>
+          </div>           
+          <div class="col-md-6"></div>         
+          <div class="col-md-6">
+            <label for="invoiceTerms" class="form-label">Invoice Terms</label>
+            <nz-textarea-count [nzMaxCharacterCount]="5000">
+              <textarea rows="4" id="invoiceTerms" name="invoiceTerms" placeholder="Enter your invoice terms" 
+                [(ngModel)]="invoiceSettingUpdateModel.invoiceTerms" nz-input></textarea>
+            </nz-textarea-count>
+          </div>
+          <div class="col-md-6">
+            <label for="invoiceFooter" class="form-label">Invoice Footer</label>
+            <nz-textarea-count [nzMaxCharacterCount]="5000">
+              <textarea rows="4" id="invoiceFooter" name="invoiceFooter" placeholder="Enter your invoice footer" 
+                [(ngModel)]="invoiceSettingUpdateModel.invoiceFooter" nz-input></textarea>
+            </nz-textarea-count>
+          </div>          
+        </form>
+      </div>
+      <div class="card-footer text-end">
+        <button nz-button nzType="primary" class="btn-save" (click)="onClickUpdateInvoiceSetting()">
+          <nz-icon nzType="save" nzTheme="outline" />
+          Update
+        </button>
+        <button nz-button nzType="primary" class="btn-cancel" routerLink="/app/invoice-settings">
+          <nz-icon nzType="close" nzTheme="outline" />
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
