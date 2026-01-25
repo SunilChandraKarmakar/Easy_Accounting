@@ -41,3 +41,5 @@ global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.Curr
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CompanyLogic.Model;
 global using EasyAccountingAPI.Shared.ErrorMessages;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.InvoiceSettingLogic.Model;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.ModuleLogic.Model;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.ModuleLogic.Command;

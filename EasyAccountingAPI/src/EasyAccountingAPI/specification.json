@@ -937,6 +937,164 @@
           }
         }
       }
+    },
+    "/api/Module/Create": {
+      "post": {
+        "tags": [
+          "Module"
+        ],
+        "operationId": "Module_Create",
+        "requestBody": {
+          "x-name": "createModuleCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateModuleCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Module/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "Module"
+        ],
+        "operationId": "Module_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Module/GetById/{id}": {
+      "get": {
+        "tags": [
+          "Module"
+        ],
+        "operationId": "Module_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModuleViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Module/GetFilterModules": {
+      "post": {
+        "tags": [
+          "Module"
+        ],
+        "operationId": "Module_GetFilterModules",
+        "requestBody": {
+          "x-name": "getModulesByFilterQuery",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetModulesByFilterQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilterPageResultModelOfModuleGridModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Module/Update": {
+      "put": {
+        "tags": [
+          "Module"
+        ],
+        "operationId": "Module_Update",
+        "requestBody": {
+          "x-name": "updateModuleCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateModuleCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1553,6 +1711,114 @@
         "allOf": [
           {
             "$ref": "#/components/schemas/InvoiceSettingUpdateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "FilterPageResultModelOfModuleGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModuleGridModel"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ModuleGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "GetModulesByFilterQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FilterPageModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "ModuleViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "createModel": {
+            "$ref": "#/components/schemas/ModuleCreateModel"
+          },
+          "updateModel": {
+            "$ref": "#/components/schemas/ModuleUpdateModel"
+          },
+          "gridModel": {
+            "$ref": "#/components/schemas/ModuleGridModel"
+          }
+        }
+      },
+      "ModuleCreateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2
+          }
+        }
+      },
+      "ModuleUpdateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2
+          }
+        }
+      },
+      "CreateModuleCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ModuleCreateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "UpdateModuleCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ModuleUpdateModel"
           },
           {
             "type": "object",

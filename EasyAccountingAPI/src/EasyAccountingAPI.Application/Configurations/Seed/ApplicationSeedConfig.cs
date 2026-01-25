@@ -20,6 +20,9 @@
 
             // Seed data for Currency
             await mediator.Send(new CreateCurrencySeedCommand());
+
+            // Seed data for Module
+            await mediator.Send(new CreateModuleSeedCommand());
         }
     }
 }

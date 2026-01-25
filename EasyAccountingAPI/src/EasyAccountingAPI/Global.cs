@@ -34,3 +34,6 @@ global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.Comp
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.InvoiceSettingLogic.Command;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.InvoiceSettingLogic.Model;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.InvoiceSettingLogic.Queries;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.ModuleLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.ModuleLogic.Model;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.ModuleLogic.Queries;
