@@ -28,6 +28,7 @@
                     _mapper.Map((ModuleUpdateModel)request, getExistingModule);
                     _moduleRepository.Update(getExistingModule);
                     await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);
+                    await _unitOfWorkRepository.CommitTransactionAsync(cancellationToken);
 
                     return true;
                 }

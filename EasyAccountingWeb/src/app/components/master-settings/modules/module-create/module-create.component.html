@@ -1,0 +1,39 @@
+<nz-breadcrumb>
+  <nz-breadcrumb-item>Settings</nz-breadcrumb-item>
+    <nz-breadcrumb-item><a routerLink="/app/modules" class="breadcrumb-link">Module</a></nz-breadcrumb-item>
+  <nz-breadcrumb-item>Create Module</nz-breadcrumb-item>
+</nz-breadcrumb>
+<div class="row mt-3">
+  <div class="col-md-12">
+    <div class="card shadow-lg">
+      <div class="card-header">
+        <h5 class="card-title text-center">Create Module</h5>
+      </div>
+      <div class="card-body">
+        <form class="row g-3" autocomplete="off">
+          <div class="col-md-12">
+            <label for="name" class="form-label">Name <span class="text-danger fw-bold">*</span></label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="home" />
+              <input nz-input placeholder="Enter module name" nzSize="default" id="name" name="name" 
+                [(ngModel)]="moduleCreateModel.name" />
+            </nz-input-wrapper>
+          </div>    
+        </form>
+      </div>
+      <div class="card-footer text-end">
+        <button nz-button nzType="primary" class="btn-save" (click)="onClickSaveModule()">
+          <nz-icon nzType="save" nzTheme="outline" />
+          Save
+        </button>
+        <button nz-button nzType="primary" class="btn-cancel" routerLink="/app/modules">
+          <nz-icon nzType="close" nzTheme="outline" />
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>

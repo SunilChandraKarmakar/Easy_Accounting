@@ -19,7 +19,8 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
   templateUrl: './company-update.component.html',
   styleUrls: ['./company-update.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule, NzButtonModule, NgxSpinnerModule, NzInputModule, NzIconModule, NzBreadCrumbModule, RouterLink, NzInputNumberModule, NzSelectModule, NzUploadModule, NzCheckboxModule],
+  imports: [FormsModule, CommonModule, NzButtonModule, NgxSpinnerModule, NzInputModule, NzIconModule, NzBreadCrumbModule, RouterLink,
+    NzInputNumberModule, NzSelectModule, NzUploadModule, NzCheckboxModule],
   providers: [CompanyService, CityService]
 })
 

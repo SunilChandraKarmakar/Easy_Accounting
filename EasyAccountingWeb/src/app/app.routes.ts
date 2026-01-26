@@ -19,6 +19,9 @@ import { CompanyUpdateComponent } from './components/master-settings/companies/c
 import { InvoiceSettingsComponent } from './components/master-settings/Invoice-settings/Invoice-settings.component';
 import { InvoiceSettingCreateComponent } from './components/master-settings/Invoice-settings/Invoice-setting-create/Invoice-setting-create.component';
 import { InvoiceSettingUpdateComponent } from './components/master-settings/Invoice-settings/Invoice-setting-update/Invoice-setting-update.component';
+import { ModulesComponent } from './components/master-settings/modules/modules.component';
+import { ModuleCreateComponent } from './components/master-settings/modules/module-create/module-create.component';
+import { ModuleUpdateComponent } from './components/master-settings/modules/module-update/module-update.component';
 
 export const routes: Routes = [
 
@@ -56,7 +59,12 @@ export const routes: Routes = [
       // Invoice setting
       { path: "invoice-settings", component: InvoiceSettingsComponent, pathMatch: "full" },
       { path: "invoice-setting/create", component: InvoiceSettingCreateComponent, pathMatch: "full" },
-      { path: "invoice-setting/update/:recordId", component: InvoiceSettingUpdateComponent, pathMatch: "full" }
+      { path: "invoice-setting/update/:recordId", component: InvoiceSettingUpdateComponent, pathMatch: "full" },
+
+      // Module
+      { path: "modules", component: ModulesComponent, pathMatch: "full" },
+      { path: "module/create", component: ModuleCreateComponent, pathMatch: "full" },
+      { path: "module/update/:recordId", component: ModuleUpdateComponent, pathMatch: "full" }
     ],
     
     canActivate: [AuthGuard] 
