@@ -23,7 +23,8 @@ export class LoginComponent implements OnInit {
   // Login model
   loginModel: LoginModel = new LoginModel();
 
-  constructor(private spinnerService: NgxSpinnerService, private toastrService: ToastrService, private identityService: IdentityService, private router: Router) { }
+  constructor(private spinnerService: NgxSpinnerService, private toastrService: ToastrService, 
+    private identityService: IdentityService, private router: Router) { }
 
   ngOnInit() { }
 
@@ -49,8 +50,7 @@ export class LoginComponent implements OnInit {
 
   // Handle login button click
   async onClickLogin(): Promise<void> {
-
-   const isLoginFormValid: boolean = this.getLoginFormValidationResult();
+    const isLoginFormValid: boolean = this.getLoginFormValidationResult();
 
     if (isLoginFormValid) {
       this.spinnerService.show();
@@ -59,15 +59,12 @@ export class LoginComponent implements OnInit {
       const loginResult = await this.identityService.SignIn(this.loginModel);
       this.spinnerService.hide();
 
-
-      console.log("Login Result: ", loginResult);
-
       if (loginResult.isSuccess) {
         this.toastrService.success("Welcome back! You’re now logged in.", "Success");
         this.router.navigateByUrl("/app/countries");
       } else {
-        console.log(loginResult.message);
-        this.toastrService.error(loginResult.message ?? "Login failed. Please try again.", "Error",  { enableHtml: true, timeOut: 10000, closeButton: true });
+        this.toastrService.error(loginResult.message ?? "Login failed. Please try again.", "Error", 
+          { enableHtml: true, timeOut: 10000, closeButton: true });
         return;
       }
     }
