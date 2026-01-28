@@ -36,6 +36,7 @@
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IInvoiceSettingRepository, InvoiceSettingRepository>();
             services.AddScoped<IModuleRepository, ModuleRepository>();
+            services.AddScoped<IActionRepository, ActionRepository>();
             #endregion
 
             return services;

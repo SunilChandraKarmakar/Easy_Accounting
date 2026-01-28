@@ -1,24 +1,24 @@
-﻿namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CurrencyLogic.Command
+﻿namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.Command
 {
-    public class CreateCurrencyCommand : CurrencyCreateModel, IRequest<bool>
+    public class CreateActionCommand : ActionCreateModel, IRequest<bool>
     {
-        public class Handler : IRequestHandler<CreateCurrencyCommand, bool>
+        public class Handler : IRequestHandler<CreateActionCommand, bool>
         {
             private readonly IUnitOfWorkRepository _unitOfWorkRepository;
-            private readonly ICurrencyRepository _currencyRepository;
+            private readonly IActionRepository _actionRepository;
             private readonly IHttpContextAccessor _httpContextAccessor;
             private readonly IMapper _mapper;
 
-            public Handler(IUnitOfWorkRepository unitOfWorkRepository, ICurrencyRepository currencyRepository,
+            public Handler(IUnitOfWorkRepository unitOfWorkRepository, IActionRepository actionRepository,
                 IHttpContextAccessor httpContextAccessor, IMapper mapper)
             {
                 _unitOfWorkRepository = unitOfWorkRepository;
-                _currencyRepository = currencyRepository;
+                _actionRepository = actionRepository;
                 _httpContextAccessor = httpContextAccessor;
                 _mapper = mapper;
             }
 
-            public async Task<bool> Handle(CreateCurrencyCommand request, CancellationToken cancellationToken)
+            public async Task<bool> Handle(CreateActionCommand request, CancellationToken cancellationToken)
             {
                 // Retrieve the user's Id from the current HTTP context
                 var userId = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
@@ -32,15 +32,12 @@
 
                 try
                 {
-                    // Create currency
-                    var currency = _mapper.Map<Currency>(request);
-                    await _currencyRepository.CreateAsync(currency, cancellationToken);
-
-                    // Final save + commit
+                    // Create action
+                    var action = _mapper.Map<EasyAccountingAPI.Model.MasterSettings.AccessControl.Action>(request);
+                    await _actionRepository.CreateAsync(action, cancellationToken);
                     await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);
-                    await _unitOfWorkRepository.CommitTransactionAsync(cancellationToken);
 
-                    return currency.Id > 0;
+                    return action.Id > 0;
                 }
                 catch
                 {

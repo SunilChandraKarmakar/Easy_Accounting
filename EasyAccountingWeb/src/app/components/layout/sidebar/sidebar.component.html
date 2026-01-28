@@ -78,6 +78,24 @@
                 </div>
             </div>
             <div class="menu-item">
+                <div class="menu-link" (click)="toggleMenu('accessControl')">
+                    <i class="fas fa-cog menu-icon"></i>
+                    <span class="menu-text">Access Control</span>
+                    <i class="fas fa-chevron-down menu-arrow"></i>
+                </div>
+                <div class="sidebar-submenu" *ngIf="openMenus['accessControl']">
+                    <a class="menu-link" routerLink="/app/actions" routerLinkActive="active">
+                       Action
+                    </a>
+                    <a class="menu-link" routerLink="/app/features" routerLinkActive="active">
+                       Feature
+                    </a>
+                    <a class="menu-link" routerLink="/app/user-permission" routerLinkActive="active">
+                       User Permission
+                    </a>
+                </div>
+            </div>
+            <div class="menu-item">
                 <a class="menu-link" href="#">
                     <i class="fas fa-life-ring menu-icon"></i>
                     <span class="menu-text">Help & Support</span>

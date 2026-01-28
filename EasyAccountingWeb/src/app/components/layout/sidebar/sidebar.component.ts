@@ -13,13 +13,15 @@ import { filter } from 'rxjs/operators';
 
 export class SidebarComponent implements OnInit {
 
+  private initialized = false;
   openMenus: { [key: string]: boolean } = {};
 
   menuMapping: { [key: string]: string[] } = {
     users: ['users', 'user-groups', 'permissions'],
     userGroups: ['user-groups', 'permissions'],
     permissions: ['role-management'],
-    settings: ['countries', 'cities', 'currencies', 'companies', 'invoice-settings', 'modules']
+    settings: ['countries', 'cities', 'currencies', 'companies', 'invoice-settings', 'modules'], 
+    accessControl: ['actions', 'features', 'user-permission']
   };
 
   constructor(private router: Router) {
@@ -29,6 +31,10 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
+    Object.keys(this.menuMapping).forEach(key => {
+      this.openMenus[key] = false;
+    });
+
     this.checkCurrentUrl();
   }
 
@@ -37,10 +43,20 @@ export class SidebarComponent implements OnInit {
   }
 
   checkCurrentUrl() {
-    const url = this.router.url;
+    if (this.initialized) return;
+
+    const url = this.router.url.toLowerCase();
+
+    Object.keys(this.openMenus).forEach(key => {
+      this.openMenus[key] = false;
+    });
 
     for (const [menuKey, keywords] of Object.entries(this.menuMapping)) {
-      this.openMenus[menuKey] = keywords.some(k => url.includes(k));
+      if (keywords.some(k => url.includes(k))) {
+        this.openMenus[menuKey] = true;
+      }
     }
+
+    this.initialized = true;
   }
 }

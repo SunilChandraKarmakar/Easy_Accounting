@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EasyAccountingAPI.Model.MasterSettings.AccessControl
+﻿namespace EasyAccountingAPI.Model.MasterSettings.AccessControl
 {
-    internal class Action
+    [Table("Actions", Schema = "MasterSettings")]
+    public class Action : IDelatableEntity
     {
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "Name is required.")]
+        [StringLength(50, MinimumLength = 2)]
+        public string Name { get; set; }
+
+        public bool IsDeleted { get; set; }
+        public DateTime? DeletedDateTime { get; set; }
     }
 }

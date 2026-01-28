@@ -23,6 +23,9 @@
 
             // Seed data for Module
             await mediator.Send(new CreateModuleSeedCommand());
+
+            // Seed data for Action
+            await mediator.Send(new CreateActionSeedCommand());
         }
     }
 }

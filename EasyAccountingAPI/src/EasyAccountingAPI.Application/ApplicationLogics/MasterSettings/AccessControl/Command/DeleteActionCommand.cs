@@ -1,24 +1,24 @@
-﻿namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.CurrencyLogic.Command
+﻿namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.Command
 {
-    public class DeleteCurrencyCommand : IRequest<bool>
+    public class DeleteActionCommand : IRequest<bool>
     {
         public string Id { get; set; }
 
-        public class Handler : IRequestHandler<DeleteCurrencyCommand, bool>
+        public class Handler : IRequestHandler<DeleteActionCommand, bool>
         {
-            private readonly IUnitOfWorkRepository _unitOfWorkRepository;            
-            private readonly ICurrencyRepository _currencyRepository;
+            private readonly IUnitOfWorkRepository _unitOfWorkRepository;
+            private readonly IActionRepository _actionRepository;
             private readonly IHttpContextAccessor _httpContextAccessor;
 
-            public Handler(IUnitOfWorkRepository unitOfWorkRepository, ICurrencyRepository currencyRepository, 
+            public Handler(IUnitOfWorkRepository unitOfWorkRepository, IActionRepository actionRepository, 
                 IHttpContextAccessor httpContextAccessor)
             {
                 _unitOfWorkRepository = unitOfWorkRepository;
-                _currencyRepository = currencyRepository;
+                _actionRepository = actionRepository;
                 _httpContextAccessor = httpContextAccessor;
             }
 
-            public async Task<bool> Handle(DeleteCurrencyCommand request, CancellationToken cancellationToken)
+            public async Task<bool> Handle(DeleteActionCommand request, CancellationToken cancellationToken)
             {
                 // Retrieve the user's Id from the current HTTP context
                 var userId = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
@@ -27,14 +27,14 @@
                 if (string.IsNullOrEmpty(userId) || string.IsNullOrWhiteSpace(userId))
                     throw new UnauthorizedAccessException(ProvideErrorMessage.UserNotAuthenticated);
 
-                // Decrypt the currency id
+                // Decrypt the action id
                 var decryptedId = EncryptionService.Decrypt(request.Id);
-                if (!int.TryParse(decryptedId, out var currencyId))
+                if (!int.TryParse(decryptedId, out var actionId))
                     return false;
 
-                // Fetch the currency
-                var currency = await _currencyRepository.GetByIdAsync(currencyId, cancellationToken);
-                if (currency is null)
+                // Fetch the action
+                var action = await _actionRepository.GetByIdAsync(actionId, cancellationToken);
+                if (action is null)
                     return false;
 
                 // Begin transaction
@@ -42,9 +42,9 @@
 
                 try
                 {
-                    currency.IsDeleted = true;
-                    currency.DeletedDateTime = DateTime.UtcNow;
-                    _currencyRepository.Update(currency);
+                    action.IsDeleted = true;
+                    action.DeletedDateTime = DateTime.UtcNow;
+                    _actionRepository.Update(action);
 
                     await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);
                     await _unitOfWorkRepository.CommitTransactionAsync(cancellationToken);

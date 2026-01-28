@@ -6,6 +6,164 @@
     "version": "v1"
   },
   "paths": {
+    "/api/Action/Create": {
+      "post": {
+        "tags": [
+          "Action"
+        ],
+        "operationId": "Action_Create",
+        "requestBody": {
+          "x-name": "createActionCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateActionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Action/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "Action"
+        ],
+        "operationId": "Action_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Action/GetById/{id}": {
+      "get": {
+        "tags": [
+          "Action"
+        ],
+        "operationId": "Action_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActionViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Action/GetFilterActions": {
+      "post": {
+        "tags": [
+          "Action"
+        ],
+        "operationId": "Action_GetFilterActions",
+        "requestBody": {
+          "x-name": "getActionsByFilterQuery",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetActionsByFilterQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilterPageResultModelOfActionGridModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Action/Update": {
+      "put": {
+        "tags": [
+          "Action"
+        ],
+        "operationId": "Action_Update",
+        "requestBody": {
+          "x-name": "updateActionCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateActionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Authentication/Login": {
       "post": {
         "tags": [
@@ -1819,6 +1977,114 @@
         "allOf": [
           {
             "$ref": "#/components/schemas/ModuleUpdateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "FilterPageResultModelOfActionGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ActionGridModel"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ActionGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "GetActionsByFilterQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FilterPageModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "ActionViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "createModel": {
+            "$ref": "#/components/schemas/ActionCreateModel"
+          },
+          "updateModel": {
+            "$ref": "#/components/schemas/ActionUpdateModel"
+          },
+          "gridModel": {
+            "$ref": "#/components/schemas/ActionGridModel"
+          }
+        }
+      },
+      "ActionCreateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 2
+          }
+        }
+      },
+      "ActionUpdateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 2
+          }
+        }
+      },
+      "CreateActionCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ActionCreateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "UpdateActionCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ActionUpdateModel"
           },
           {
             "type": "object",

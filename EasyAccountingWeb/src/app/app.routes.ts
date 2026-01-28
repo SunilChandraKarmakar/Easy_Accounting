@@ -22,6 +22,9 @@ import { InvoiceSettingUpdateComponent } from './components/master-settings/Invo
 import { ModulesComponent } from './components/master-settings/modules/modules.component';
 import { ModuleCreateComponent } from './components/master-settings/modules/module-create/module-create.component';
 import { ModuleUpdateComponent } from './components/master-settings/modules/module-update/module-update.component';
+import { ActionsComponent } from './components/master-settings/AccessControl/actions/actions.component';
+import { ActionCreateComponent } from './components/master-settings/AccessControl/actions/action-create/action-create.component';
+import { ActionUpdateComponent } from './components/master-settings/AccessControl/actions/action-update/action-update.component';
 
 export const routes: Routes = [
 
@@ -64,7 +67,12 @@ export const routes: Routes = [
       // Module
       { path: "modules", component: ModulesComponent, pathMatch: "full" },
       { path: "module/create", component: ModuleCreateComponent, pathMatch: "full" },
-      { path: "module/update/:recordId", component: ModuleUpdateComponent, pathMatch: "full" }
+      { path: "module/update/:recordId", component: ModuleUpdateComponent, pathMatch: "full" },
+
+      // Action
+      { path: "actions", component: ActionsComponent, pathMatch: "full" },
+      { path: "action/create", component: ActionCreateComponent, pathMatch: "full" },
+      { path: "action/update/:recordId", component: ActionUpdateComponent, pathMatch: "full" }
     ],
     
     canActivate: [AuthGuard] 

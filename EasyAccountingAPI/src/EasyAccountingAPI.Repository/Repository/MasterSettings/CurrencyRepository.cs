@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace EasyAccountingAPI.Repository.Repository.MasterSettings
+﻿namespace EasyAccountingAPI.Repository.Repository.MasterSettings
 {
     public class CurrencyRepository : BaseRepository<Currency>, ICurrencyRepository
     {

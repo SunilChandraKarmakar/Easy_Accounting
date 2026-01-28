@@ -14,6 +14,287 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
+export interface IActionService {
+    create(createActionCommand: CreateActionCommand): Observable<boolean>;
+    delete(id: string): Observable<boolean>;
+    getById(id: string): Observable<ActionViewModel>;
+    getFilterActions(getActionsByFilterQuery: GetActionsByFilterQuery): Observable<FilterPageResultModelOfActionGridModel>;
+    update(updateActionCommand: UpdateActionCommand): Observable<boolean>;
+}
+
+@Injectable()
+export class ActionService implements IActionService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    create(createActionCommand: CreateActionCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Action/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(createActionCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(id: string): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Action/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getById(id: string): Observable<ActionViewModel> {
+        let url_ = this.baseUrl + "/api/Action/GetById/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ActionViewModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ActionViewModel>;
+        }));
+    }
+
+    protected processGetById(response: HttpResponseBase): Observable<ActionViewModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ActionViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getFilterActions(getActionsByFilterQuery: GetActionsByFilterQuery): Observable<FilterPageResultModelOfActionGridModel> {
+        let url_ = this.baseUrl + "/api/Action/GetFilterActions";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(getActionsByFilterQuery);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFilterActions(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFilterActions(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FilterPageResultModelOfActionGridModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FilterPageResultModelOfActionGridModel>;
+        }));
+    }
+
+    protected processGetFilterActions(response: HttpResponseBase): Observable<FilterPageResultModelOfActionGridModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FilterPageResultModelOfActionGridModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(updateActionCommand: UpdateActionCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Action/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(updateActionCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface IAuthenticationService {
     login(command: LoginCommand): Observable<AuthenticationViewModel>;
     registration(command: RegistrationCommand): Observable<UserModel>;
@@ -3442,6 +3723,295 @@ export class UpdateModuleCommand extends ModuleUpdateModel implements IUpdateMod
 }
 
 export interface IUpdateModuleCommand extends IModuleUpdateModel {
+}
+
+export class FilterPageResultModelOfActionGridModel implements IFilterPageResultModelOfActionGridModel {
+    items?: ActionGridModel[];
+    totalCount?: number;
+
+    constructor(data?: IFilterPageResultModelOfActionGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(ActionGridModel.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): FilterPageResultModelOfActionGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPageResultModelOfActionGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item ? item.toJSON() : undefined as any);
+        }
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+}
+
+export interface IFilterPageResultModelOfActionGridModel {
+    items?: ActionGridModel[];
+    totalCount?: number;
+}
+
+export class ActionGridModel implements IActionGridModel {
+    id?: string;
+    name?: string;
+
+    constructor(data?: IActionGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): ActionGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ActionGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IActionGridModel {
+    id?: string;
+    name?: string;
+}
+
+export class GetActionsByFilterQuery extends FilterPageModel implements IGetActionsByFilterQuery {
+
+    constructor(data?: IGetActionsByFilterQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetActionsByFilterQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetActionsByFilterQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetActionsByFilterQuery extends IFilterPageModel {
+}
+
+export class ActionViewModel implements IActionViewModel {
+    createModel?: ActionCreateModel;
+    updateModel?: ActionUpdateModel;
+    gridModel?: ActionGridModel;
+
+    constructor(data?: IActionViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.createModel = _data["createModel"] ? ActionCreateModel.fromJS(_data["createModel"]) : undefined as any;
+            this.updateModel = _data["updateModel"] ? ActionUpdateModel.fromJS(_data["updateModel"]) : undefined as any;
+            this.gridModel = _data["gridModel"] ? ActionGridModel.fromJS(_data["gridModel"]) : undefined as any;
+        }
+    }
+
+    static fromJS(data: any): ActionViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ActionViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["createModel"] = this.createModel ? this.createModel.toJSON() : undefined as any;
+        data["updateModel"] = this.updateModel ? this.updateModel.toJSON() : undefined as any;
+        data["gridModel"] = this.gridModel ? this.gridModel.toJSON() : undefined as any;
+        return data;
+    }
+}
+
+export interface IActionViewModel {
+    createModel?: ActionCreateModel;
+    updateModel?: ActionUpdateModel;
+    gridModel?: ActionGridModel;
+}
+
+export class ActionCreateModel implements IActionCreateModel {
+    name!: string;
+
+    constructor(data?: IActionCreateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): ActionCreateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ActionCreateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IActionCreateModel {
+    name: string;
+}
+
+export class ActionUpdateModel implements IActionUpdateModel {
+    id?: number;
+    name!: string;
+
+    constructor(data?: IActionUpdateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): ActionUpdateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ActionUpdateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IActionUpdateModel {
+    id?: number;
+    name: string;
+}
+
+export class CreateActionCommand extends ActionCreateModel implements ICreateActionCommand {
+
+    constructor(data?: ICreateActionCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): CreateActionCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateActionCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ICreateActionCommand extends IActionCreateModel {
+}
+
+export class UpdateActionCommand extends ActionUpdateModel implements IUpdateActionCommand {
+
+    constructor(data?: IUpdateActionCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): UpdateActionCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateActionCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IUpdateActionCommand extends IActionUpdateModel {
 }
 
 export class FilterPageResultModelOfCityGridModel implements IFilterPageResultModelOfCityGridModel {

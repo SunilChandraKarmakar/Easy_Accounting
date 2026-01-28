@@ -43,3 +43,7 @@ global using EasyAccountingAPI.Shared.ErrorMessages;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.InvoiceSettingLogic.Model;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.ModuleLogic.Model;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.ModuleLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.Model;
+global using EasyAccountingAPI.Repository.Contracts.MasterSettings.AccessControl;
+global using EasyAccountingAPI.Repository.Repository.MasterSettings.AccessControl;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.Command;
