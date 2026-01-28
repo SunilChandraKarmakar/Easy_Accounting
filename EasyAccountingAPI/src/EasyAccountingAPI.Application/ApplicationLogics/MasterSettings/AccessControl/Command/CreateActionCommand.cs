@@ -36,6 +36,7 @@
                     var action = _mapper.Map<EasyAccountingAPI.Model.MasterSettings.AccessControl.Action>(request);
                     await _actionRepository.CreateAsync(action, cancellationToken);
                     await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);
+                    await _unitOfWorkRepository.CommitTransactionAsync(cancellationToken);
 
                     return action.Id > 0;
                 }
