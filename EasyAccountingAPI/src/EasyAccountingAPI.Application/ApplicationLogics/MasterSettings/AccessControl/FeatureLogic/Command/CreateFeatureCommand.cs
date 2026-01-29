@@ -1,24 +1,24 @@
-﻿namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.Command
+﻿namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.FeatureLogic.Command
 {
-    public class CreateActionCommand : ActionCreateModel, IRequest<bool>
+    public class CreateFeatureCommand : FeatureCreateModel, IRequest<bool>
     {
-        public class Handler : IRequestHandler<CreateActionCommand, bool>
+        public class Handler : IRequestHandler<CreateFeatureCommand, bool>
         {
-            private readonly IUnitOfWorkRepository _unitOfWorkRepository;
-            private readonly IActionRepository _actionRepository;
             private readonly IHttpContextAccessor _httpContextAccessor;
+            private readonly IUnitOfWorkRepository _unitOfWorkRepository;
+            private readonly IFeatureRepository _featureRepository;
             private readonly IMapper _mapper;
 
-            public Handler(IUnitOfWorkRepository unitOfWorkRepository, IActionRepository actionRepository,
-                IHttpContextAccessor httpContextAccessor, IMapper mapper)
+            public Handler(IHttpContextAccessor httpContextAccessor, IUnitOfWorkRepository unitOfWorkRepository, 
+                IFeatureRepository featureRepository, IMapper mapper)
             {
-                _unitOfWorkRepository = unitOfWorkRepository;
-                _actionRepository = actionRepository;
                 _httpContextAccessor = httpContextAccessor;
+                _unitOfWorkRepository = unitOfWorkRepository;
+                _featureRepository = featureRepository;
                 _mapper = mapper;
             }
 
-            public async Task<bool> Handle(CreateActionCommand request, CancellationToken cancellationToken)
+            public async Task<bool> Handle(CreateFeatureCommand request, CancellationToken cancellationToken)
             {
                 // Retrieve the user's Id from the current HTTP context
                 var userId = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
@@ -32,13 +32,13 @@
 
                 try
                 {
-                    // Create action
-                    var action = _mapper.Map<EasyAccountingAPI.Model.MasterSettings.AccessControl.Action>(request);
-                    await _actionRepository.CreateAsync(action, cancellationToken);
+                    // Create feature
+                    var feature = _mapper.Map<Feature>(request);                    
+                    await _featureRepository.CreateAsync(feature, cancellationToken);
                     await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);
                     await _unitOfWorkRepository.CommitTransactionAsync(cancellationToken);
 
-                    return action.Id > 0;
+                    return feature.Id > 0;
                 }
                 catch
                 {

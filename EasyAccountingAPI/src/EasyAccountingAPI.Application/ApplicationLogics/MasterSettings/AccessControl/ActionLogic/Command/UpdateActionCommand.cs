@@ -1,4 +1,6 @@
-﻿namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.Command
+﻿using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.ActionLogic.Model;
+
+namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.ActionLogic.Command
 {
     public class UpdateActionCommand : ActionUpdateModel, IRequest<bool>
     {

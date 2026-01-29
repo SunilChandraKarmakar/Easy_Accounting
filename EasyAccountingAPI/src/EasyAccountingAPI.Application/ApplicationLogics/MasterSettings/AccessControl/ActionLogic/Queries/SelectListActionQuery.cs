@@ -1,4 +1,4 @@
-﻿namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.Queries
+﻿namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.ActionLogic.Queries
 {
     public class SelectListActionQuery : IRequest<IEnumerable<SelectModel>>
     {

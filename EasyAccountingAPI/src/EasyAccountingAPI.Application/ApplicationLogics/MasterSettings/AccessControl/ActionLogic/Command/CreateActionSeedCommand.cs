@@ -1,4 +1,4 @@
-﻿namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.Command
+﻿namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.ActionLogic.Command
 {
     public class CreateActionSeedCommand : IRequest<bool>
     {

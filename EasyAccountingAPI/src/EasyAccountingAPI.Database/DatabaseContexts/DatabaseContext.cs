@@ -24,6 +24,7 @@
         public DbSet<InvoiceSetting> InvoiceSettings { get; set; }
         public DbSet<Module> Modules { get; set; }
         public DbSet<Model.MasterSettings.AccessControl.Action> Actions { get; set; }
+        public DbSet<Model.MasterSettings.AccessControl.Feature> Features { get; set; }
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -40,6 +40,15 @@
                 .ToListAsync(cancellationToken);
         }
 
+        public async Task<Module?> GetModuleByNameAsync(string name, CancellationToken cancellationToken)
+        {
+            var module = await db.Modules
+                .Where(m => m.Name.ToLower() == name.ToLower() && !m.IsDeleted)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            return module;
+        }
+
         public async Task<bool> AnyAsync(CancellationToken cancellationToken)
         {
             return await db.Modules

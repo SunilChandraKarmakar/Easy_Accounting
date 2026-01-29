@@ -14,3 +14,4 @@ global using EasyAccountingAPI.Repository.Contracts.MasterSettings;
 global using Microsoft.AspNetCore.Http;
 global using System.Security.Claims;
 global using EasyAccountingAPI.Repository.Contracts.MasterSettings.AccessControl;
+global using EasyAccountingAPI.Model.MasterSettings.AccessControl;

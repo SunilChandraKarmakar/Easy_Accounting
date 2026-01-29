@@ -4,6 +4,7 @@
     {
         Task<FilterPageResultModel<Module>> GetModulesByFilterAsync(FilterPageModel filterPageModel, CancellationToken cancellationToken);
         Task<IEnumerable<SelectModel>> GetModuleSelectList(CancellationToken cancellationToken);
+        Task<Module?> GetModuleByNameAsync(string name, CancellationToken cancellationToken);
         Task<bool> AnyAsync(CancellationToken cancellationToken);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.Model
+﻿namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.ActionLogic.Model
 {
     public class ActionViewModel
     {
