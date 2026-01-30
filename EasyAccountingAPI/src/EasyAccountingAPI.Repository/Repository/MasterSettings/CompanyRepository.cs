@@ -16,7 +16,7 @@
             return company;
         }
 
-        // Get countries with filtering, sorting, and pagination
+        // Get companies with filtering, sorting, and pagination
         public Task<FilterPageResultModel<Company>> GetCompaniesByFilterAsync(FilterPageModel model, string? userId,
             CancellationToken cancellationToken)
         {

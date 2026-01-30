@@ -4,6 +4,16 @@
     {
         public ModuleRepository(DatabaseContext databaseContext) : base(databaseContext) { }
 
+        public override async Task<ICollection<Module>> GetAllAsync(CancellationToken cancellationToken)
+        {
+            var getModules = await db.Modules
+                .AsNoTracking()
+                .Where(c => !c.IsDeleted)
+                .ToListAsync(cancellationToken);
+
+            return getModules;
+        }
+
         public override async Task<Module?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             var module = await db.Modules

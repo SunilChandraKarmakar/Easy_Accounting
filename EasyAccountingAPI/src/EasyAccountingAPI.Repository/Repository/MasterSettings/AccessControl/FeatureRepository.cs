@@ -4,6 +4,16 @@
     {
         public FeatureRepository(DatabaseContext databaseContext) : base(databaseContext) { }
 
+        public override async Task<ICollection<Feature>> GetAllAsync(CancellationToken cancellationToken)
+        {
+            var getFeatures = await db.Features
+                .AsNoTracking()
+                .Where(c => !c.IsDeleted)
+                .ToListAsync(cancellationToken);
+
+            return getFeatures;
+        }
+
         public override async Task<Feature?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             var feature = await db.Features
@@ -36,6 +46,16 @@
             };
 
             return GetAllFilterAsync(model, filter, f => f.Id, sortableColumns, include: q => q.Include(c => c.Module), cancellationToken);
+        }
+
+        public async Task<IEnumerable<SelectModel>> GetFeatureSelectList(CancellationToken cancellationToken)
+        {
+            var getFeatures = db.Features.AsNoTracking().Where(f => !f.IsDeleted);
+
+            return await getFeatures
+                .OrderBy(c => c.Name)
+                .Select(c => new SelectModel { Id = c.Id, Name = c.Name })
+                .ToListAsync(cancellationToken);
         }
 
         public async Task<IEnumerable<SelectModel>> GetFeatureSelectListByModule(int moduleId, CancellationToken cancellationToken)

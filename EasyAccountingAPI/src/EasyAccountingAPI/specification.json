@@ -938,6 +938,164 @@
         }
       }
     },
+    "/api/Feature/Create": {
+      "post": {
+        "tags": [
+          "Feature"
+        ],
+        "operationId": "Feature_Create",
+        "requestBody": {
+          "x-name": "createFeatureCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFeatureCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Feature/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "Feature"
+        ],
+        "operationId": "Feature_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Feature/GetById/{id}": {
+      "get": {
+        "tags": [
+          "Feature"
+        ],
+        "operationId": "Feature_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeatureViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Feature/GetFilterFeatures": {
+      "post": {
+        "tags": [
+          "Feature"
+        ],
+        "operationId": "Feature_GetFilterFeatures",
+        "requestBody": {
+          "x-name": "getFeaturesByFilterQuery",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetFeaturesByFilterQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilterPageResultModelOfFeatureGridModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Feature/Update": {
+      "put": {
+        "tags": [
+          "Feature"
+        ],
+        "operationId": "Feature_Update",
+        "requestBody": {
+          "x-name": "updateFeatureCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFeatureCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/InvoiceSetting/Create": {
       "post": {
         "tags": [
@@ -2085,6 +2243,168 @@
         "allOf": [
           {
             "$ref": "#/components/schemas/ActionUpdateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "FilterPageResultModelOfFeatureGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FeatureGridModel"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "FeatureGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "moduleName": {
+            "type": "string"
+          },
+          "controllerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "tableName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "GetFeaturesByFilterQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FilterPageModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "FeatureViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "createModel": {
+            "$ref": "#/components/schemas/FeatureCreateModel"
+          },
+          "updateModel": {
+            "$ref": "#/components/schemas/FeatureUpdateModel"
+          },
+          "gridModel": {
+            "$ref": "#/components/schemas/FeatureGridModel"
+          },
+          "optionsDataSources": {}
+        }
+      },
+      "FeatureCreateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "code",
+          "moduleId"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "code": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 2
+          },
+          "moduleId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "controllerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "tableName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "FeatureUpdateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "code",
+          "moduleId"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "code": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 2
+          },
+          "moduleId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "controllerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "tableName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateFeatureCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FeatureCreateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "UpdateFeatureCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FeatureUpdateModel"
           },
           {
             "type": "object",

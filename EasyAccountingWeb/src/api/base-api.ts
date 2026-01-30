@@ -1659,6 +1659,287 @@ export class CurrencyService implements ICurrencyService {
     }
 }
 
+export interface IFeatureService {
+    create(createFeatureCommand: CreateFeatureCommand): Observable<boolean>;
+    delete(id: string): Observable<boolean>;
+    getById(id: string): Observable<FeatureViewModel>;
+    getFilterFeatures(getFeaturesByFilterQuery: GetFeaturesByFilterQuery): Observable<FilterPageResultModelOfFeatureGridModel>;
+    update(updateFeatureCommand: UpdateFeatureCommand): Observable<boolean>;
+}
+
+@Injectable()
+export class FeatureService implements IFeatureService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    create(createFeatureCommand: CreateFeatureCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Feature/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(createFeatureCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(id: string): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Feature/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getById(id: string): Observable<FeatureViewModel> {
+        let url_ = this.baseUrl + "/api/Feature/GetById/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FeatureViewModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FeatureViewModel>;
+        }));
+    }
+
+    protected processGetById(response: HttpResponseBase): Observable<FeatureViewModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FeatureViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getFilterFeatures(getFeaturesByFilterQuery: GetFeaturesByFilterQuery): Observable<FilterPageResultModelOfFeatureGridModel> {
+        let url_ = this.baseUrl + "/api/Feature/GetFilterFeatures";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(getFeaturesByFilterQuery);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFilterFeatures(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFilterFeatures(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FilterPageResultModelOfFeatureGridModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FilterPageResultModelOfFeatureGridModel>;
+        }));
+    }
+
+    protected processGetFilterFeatures(response: HttpResponseBase): Observable<FilterPageResultModelOfFeatureGridModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FilterPageResultModelOfFeatureGridModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(updateFeatureCommand: UpdateFeatureCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Feature/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(updateFeatureCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface IInvoiceSettingService {
     create(createInvoiveSettingCommand: CreateInvoiceSettingCommand): Observable<boolean>;
     delete(id: string): Observable<boolean>;
@@ -4012,6 +4293,347 @@ export class UpdateActionCommand extends ActionUpdateModel implements IUpdateAct
 }
 
 export interface IUpdateActionCommand extends IActionUpdateModel {
+}
+
+export class FilterPageResultModelOfFeatureGridModel implements IFilterPageResultModelOfFeatureGridModel {
+    items?: FeatureGridModel[];
+    totalCount?: number;
+
+    constructor(data?: IFilterPageResultModelOfFeatureGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(FeatureGridModel.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): FilterPageResultModelOfFeatureGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPageResultModelOfFeatureGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item ? item.toJSON() : undefined as any);
+        }
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+}
+
+export interface IFilterPageResultModelOfFeatureGridModel {
+    items?: FeatureGridModel[];
+    totalCount?: number;
+}
+
+export class FeatureGridModel implements IFeatureGridModel {
+    id?: number;
+    name?: string;
+    code?: string;
+    moduleName?: string;
+    controllerName?: string | undefined;
+    tableName?: string | undefined;
+
+    constructor(data?: IFeatureGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.code = _data["code"];
+            this.moduleName = _data["moduleName"];
+            this.controllerName = _data["controllerName"];
+            this.tableName = _data["tableName"];
+        }
+    }
+
+    static fromJS(data: any): FeatureGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FeatureGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["code"] = this.code;
+        data["moduleName"] = this.moduleName;
+        data["controllerName"] = this.controllerName;
+        data["tableName"] = this.tableName;
+        return data;
+    }
+}
+
+export interface IFeatureGridModel {
+    id?: number;
+    name?: string;
+    code?: string;
+    moduleName?: string;
+    controllerName?: string | undefined;
+    tableName?: string | undefined;
+}
+
+export class GetFeaturesByFilterQuery extends FilterPageModel implements IGetFeaturesByFilterQuery {
+
+    constructor(data?: IGetFeaturesByFilterQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetFeaturesByFilterQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetFeaturesByFilterQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetFeaturesByFilterQuery extends IFilterPageModel {
+}
+
+export class FeatureViewModel implements IFeatureViewModel {
+    createModel?: FeatureCreateModel;
+    updateModel?: FeatureUpdateModel;
+    gridModel?: FeatureGridModel;
+    optionsDataSources?: any;
+
+    constructor(data?: IFeatureViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.createModel = _data["createModel"] ? FeatureCreateModel.fromJS(_data["createModel"]) : undefined as any;
+            this.updateModel = _data["updateModel"] ? FeatureUpdateModel.fromJS(_data["updateModel"]) : undefined as any;
+            this.gridModel = _data["gridModel"] ? FeatureGridModel.fromJS(_data["gridModel"]) : undefined as any;
+            this.optionsDataSources = _data["optionsDataSources"];
+        }
+    }
+
+    static fromJS(data: any): FeatureViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FeatureViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["createModel"] = this.createModel ? this.createModel.toJSON() : undefined as any;
+        data["updateModel"] = this.updateModel ? this.updateModel.toJSON() : undefined as any;
+        data["gridModel"] = this.gridModel ? this.gridModel.toJSON() : undefined as any;
+        data["optionsDataSources"] = this.optionsDataSources;
+        return data;
+    }
+}
+
+export interface IFeatureViewModel {
+    createModel?: FeatureCreateModel;
+    updateModel?: FeatureUpdateModel;
+    gridModel?: FeatureGridModel;
+    optionsDataSources?: any;
+}
+
+export class FeatureCreateModel implements IFeatureCreateModel {
+    name!: string;
+    code!: string;
+    moduleId!: number;
+    controllerName?: string | undefined;
+    tableName?: string | undefined;
+
+    constructor(data?: IFeatureCreateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.code = _data["code"];
+            this.moduleId = _data["moduleId"];
+            this.controllerName = _data["controllerName"];
+            this.tableName = _data["tableName"];
+        }
+    }
+
+    static fromJS(data: any): FeatureCreateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FeatureCreateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["code"] = this.code;
+        data["moduleId"] = this.moduleId;
+        data["controllerName"] = this.controllerName;
+        data["tableName"] = this.tableName;
+        return data;
+    }
+}
+
+export interface IFeatureCreateModel {
+    name: string;
+    code: string;
+    moduleId: number;
+    controllerName?: string | undefined;
+    tableName?: string | undefined;
+}
+
+export class FeatureUpdateModel implements IFeatureUpdateModel {
+    id?: number;
+    name!: string;
+    code!: string;
+    moduleId!: number;
+    controllerName?: string | undefined;
+    tableName?: string | undefined;
+
+    constructor(data?: IFeatureUpdateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.code = _data["code"];
+            this.moduleId = _data["moduleId"];
+            this.controllerName = _data["controllerName"];
+            this.tableName = _data["tableName"];
+        }
+    }
+
+    static fromJS(data: any): FeatureUpdateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FeatureUpdateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["code"] = this.code;
+        data["moduleId"] = this.moduleId;
+        data["controllerName"] = this.controllerName;
+        data["tableName"] = this.tableName;
+        return data;
+    }
+}
+
+export interface IFeatureUpdateModel {
+    id?: number;
+    name: string;
+    code: string;
+    moduleId: number;
+    controllerName?: string | undefined;
+    tableName?: string | undefined;
+}
+
+export class CreateFeatureCommand extends FeatureCreateModel implements ICreateFeatureCommand {
+
+    constructor(data?: ICreateFeatureCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): CreateFeatureCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateFeatureCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ICreateFeatureCommand extends IFeatureCreateModel {
+}
+
+export class UpdateFeatureCommand extends FeatureUpdateModel implements IUpdateFeatureCommand {
+
+    constructor(data?: IUpdateFeatureCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): UpdateFeatureCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateFeatureCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IUpdateFeatureCommand extends IFeatureUpdateModel {
 }
 
 export class FilterPageResultModelOfCityGridModel implements IFilterPageResultModelOfCityGridModel {
