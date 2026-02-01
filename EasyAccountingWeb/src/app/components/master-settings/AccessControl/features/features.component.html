@@ -1,0 +1,81 @@
+<nz-breadcrumb>
+  <nz-breadcrumb-item>Access Control</nz-breadcrumb-item>
+  <nz-breadcrumb-item><a routerLink="/app/features" class="breadcrumb-link">Feature</a></nz-breadcrumb-item>
+</nz-breadcrumb>
+<div class="row mt-3">
+  <div class="col-md-12">
+    <div class="card shadow-lg">
+      <div class="card-header">
+        <h5 class="text-center card-title">Features</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6 text-start">
+            <nz-space-compact nzSize="default">
+              <nz-input-wrapper class="search-input">
+                <nz-icon nzInputAddonBefore nzType="search" />
+                <input nz-input (keyup)="onChangeApplyFilter($event)" placeholder="Search feature" />
+              </nz-input-wrapper>              
+            </nz-space-compact>
+          </div>
+          <div class="col-md-6 text-end">
+            <button nz-button nzType="primary" routerLink="/app/feature/create">
+              <nz-icon nzType="plus" nzTheme="outline" />
+              Create
+            </button>
+          </div>
+          <div class="col-md-12">
+            <nz-table #basicTable [nzData]="features" [nzBordered]="true" [nzOuterBordered]="true" [nzFrontPagination]="false" 
+              [nzTotal]="totalRecord" [nzSize]="'default'" [nzPaginationType]="'default'" [nzShowSizeChanger]="true" 
+              (nzQueryParams)="onChangeQueryParams($event)">
+              <thead>
+                <tr>
+                  <th nzColumnKey="name" [nzSortFn]="true">Name</th>
+                  <th nzColumnKey="moduleName" [nzSortFn]="true">Module</th>
+                  <th nzColumnKey="controllerName" [nzSortFn]="true">Controller</th>
+                  <th nzColumnKey="tableName" [nzSortFn]="true">Table</th>
+                  <th class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (data of basicTable.data; track data.id) {
+                  <tr>
+                    <td>{{ data.name }} ({{ data.code }})</td>
+                    <td>{{ data.moduleName }}</td>
+                    <td>{{ data.controllerName }}</td>
+                    <td>{{ data.tableName }}</td>
+                    <td class="text-center action-cell">
+                      <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Edit" class="action-btn edit-btn"
+                        routerLink="/app/feature/update/{{ data.id }}">
+                        <nz-icon nzType="edit" />
+                      </button>
+                      <nz-divider nzType="vertical"></nz-divider>
+                      <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Delete" nzDanger class="action-btn delete-btn" 
+                        nz-popconfirm [nzPopconfirmTitle]="deleteTpl" [nzIcon]="iconTpl" (nzOnConfirm)="onClickDelete(data.id)" 
+                        (nzOnCancel)="cancel()">
+                        <nz-icon nzType="delete" />
+                      </button>
+                      <ng-template #deleteTpl>
+                        <div class="text-center">
+                          Are you sure you want to delete this Feature?
+                          <br />
+                          Continue?
+                        </div>
+                      </ng-template>
+                      <ng-template #iconTpl>
+                        <nz-icon nzType="question-circle-o" style="color: red;" />
+                      </ng-template>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </nz-table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>

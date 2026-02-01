@@ -4344,7 +4344,7 @@ export interface IFilterPageResultModelOfFeatureGridModel {
 }
 
 export class FeatureGridModel implements IFeatureGridModel {
-    id?: number;
+    id?: string;
     name?: string;
     code?: string;
     moduleName?: string;
@@ -4391,7 +4391,7 @@ export class FeatureGridModel implements IFeatureGridModel {
 }
 
 export interface IFeatureGridModel {
-    id?: number;
+    id?: string;
     name?: string;
     code?: string;
     moduleName?: string;

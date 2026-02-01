@@ -25,6 +25,9 @@ import { ModuleUpdateComponent } from './components/master-settings/modules/modu
 import { ActionsComponent } from './components/master-settings/AccessControl/actions/actions.component';
 import { ActionCreateComponent } from './components/master-settings/AccessControl/actions/action-create/action-create.component';
 import { ActionUpdateComponent } from './components/master-settings/AccessControl/actions/action-update/action-update.component';
+import { FeaturesComponent } from './components/master-settings/AccessControl/features/features.component';
+import { FeatureCreateComponent } from './components/master-settings/AccessControl/features/feature-create/feature-create.component';
+import { FeatureUpdateComponent } from './components/master-settings/AccessControl/features/feature-update/feature-update.component';
 
 export const routes: Routes = [
 
@@ -72,7 +75,12 @@ export const routes: Routes = [
       // Action
       { path: "actions", component: ActionsComponent, pathMatch: "full" },
       { path: "action/create", component: ActionCreateComponent, pathMatch: "full" },
-      { path: "action/update/:recordId", component: ActionUpdateComponent, pathMatch: "full" }
+      { path: "action/update/:recordId", component: ActionUpdateComponent, pathMatch: "full" },
+
+      // Feature
+      { path: "features", component: FeaturesComponent, pathMatch: "full" },
+      { path: "feature/create", component: FeatureCreateComponent, pathMatch: "full" },
+      { path: "feature/update/:recordId", component: FeatureUpdateComponent, pathMatch: "full" }
     ],
     
     canActivate: [AuthGuard] 
