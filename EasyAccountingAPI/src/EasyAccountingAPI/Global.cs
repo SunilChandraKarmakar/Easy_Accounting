@@ -40,3 +40,7 @@ global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.Modu
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.FeatureLogic.Command;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.FeatureLogic.Model;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.FeatureLogic.Queries;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.ActionLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.ActionLogic.Model;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.ActionLogic.Queries;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.FeatureActionLogic.Command;

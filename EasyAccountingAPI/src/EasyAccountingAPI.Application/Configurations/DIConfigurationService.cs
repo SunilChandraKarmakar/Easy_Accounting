@@ -38,6 +38,7 @@
             services.AddScoped<IModuleRepository, ModuleRepository>();
             services.AddScoped<IActionRepository, ActionRepository>();
             services.AddScoped<IFeatureRepository, FeatureRepository>();
+            services.AddScoped<IFeatureActionRepository, FeatureActionRepository>();
             #endregion
 
             return services;

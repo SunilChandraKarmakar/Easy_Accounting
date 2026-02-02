@@ -1096,6 +1096,38 @@
         }
       }
     },
+    "/api/FeatureAction/Create": {
+      "post": {
+        "tags": [
+          "FeatureAction"
+        ],
+        "operationId": "FeatureAction_Create",
+        "requestBody": {
+          "x-name": "createFeatureActionCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFeatureActionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/InvoiceSetting/Create": {
       "post": {
         "tags": [
@@ -2249,6 +2281,38 @@
             "additionalProperties": false
           }
         ]
+      },
+      "CreateFeatureActionCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FeatureActionCreateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "FeatureActionCreateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "featureId",
+          "actionIds"
+        ],
+        "properties": {
+          "featureId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "actionIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
       },
       "FilterPageResultModelOfFeatureGridModel": {
         "type": "object",

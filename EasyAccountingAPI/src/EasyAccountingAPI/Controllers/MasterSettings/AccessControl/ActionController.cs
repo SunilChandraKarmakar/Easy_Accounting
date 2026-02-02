@@ -1,8 +1,4 @@
-﻿using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.ActionLogic.Command;
-using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.ActionLogic.Model;
-using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.ActionLogic.Queries;
-
-namespace EasyAccountingAPI.Controllers.MasterSettings.AccessControl
+﻿namespace EasyAccountingAPI.Controllers.MasterSettings.AccessControl
 {
     public class ActionController : BaseController
     {

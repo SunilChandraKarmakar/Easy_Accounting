@@ -3,6 +3,11 @@
     [Table("Actions", Schema = "MasterSettings")]
     public class Action : IDelatableEntity
     {
+        public Action()
+        {
+            FeatureActions = new HashSet<FeatureAction>();
+        }
+
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Name is required.")]
@@ -11,5 +16,7 @@
 
         public bool IsDeleted { get; set; }
         public DateTime? DeletedDateTime { get; set; }
+
+        public ICollection<FeatureAction> FeatureActions { get; set; }
     }
 }
