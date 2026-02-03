@@ -1663,6 +1663,7 @@ export interface IFeatureService {
     create(createFeatureCommand: CreateFeatureCommand): Observable<boolean>;
     delete(id: string): Observable<boolean>;
     getById(id: string): Observable<FeatureViewModel>;
+    getFeatureByModuleId(moduleId: number | undefined): Observable<SelectModel[]>;
     getFilterFeatures(getFeaturesByFilterQuery: GetFeaturesByFilterQuery): Observable<FilterPageResultModelOfFeatureGridModel>;
     update(updateFeatureCommand: UpdateFeatureCommand): Observable<boolean>;
 }
@@ -1834,6 +1835,65 @@ export class FeatureService implements IFeatureService {
         return _observableOf(null as any);
     }
 
+    getFeatureByModuleId(moduleId: number | undefined): Observable<SelectModel[]> {
+        let url_ = this.baseUrl + "/api/Feature/GetFeatureByModuleId/moduleId?";
+        if (moduleId === null)
+            throw new globalThis.Error("The parameter 'moduleId' cannot be null.");
+        else if (moduleId !== undefined)
+            url_ += "moduleId=" + encodeURIComponent("" + moduleId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFeatureByModuleId(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFeatureByModuleId(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SelectModel[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SelectModel[]>;
+        }));
+    }
+
+    protected processGetFeatureByModuleId(response: HttpResponseBase): Observable<SelectModel[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(SelectModel.fromJS(item));
+            }
+            else {
+                result200 = null as any;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
     getFilterFeatures(getFeaturesByFilterQuery: GetFeaturesByFilterQuery): Observable<FilterPageResultModelOfFeatureGridModel> {
         let url_ = this.baseUrl + "/api/Feature/GetFilterFeatures";
         url_ = url_.replace(/[?&]$/, "");
@@ -1942,6 +2002,7 @@ export class FeatureService implements IFeatureService {
 
 export interface IFeatureActionService {
     create(createFeatureActionCommand: CreateFeatureActionCommand): Observable<boolean>;
+    getById(featureId: string): Observable<FeatureActionViewModel>;
 }
 
 @Injectable()
@@ -1998,6 +2059,57 @@ export class FeatureActionService implements IFeatureActionService {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : null as any;
     
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getById(featureId: string): Observable<FeatureActionViewModel> {
+        let url_ = this.baseUrl + "/api/FeatureAction/GetById/{featureId}";
+        if (featureId === undefined || featureId === null)
+            throw new globalThis.Error("The parameter 'featureId' must be defined.");
+        url_ = url_.replace("{featureId}", encodeURIComponent("" + featureId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FeatureActionViewModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FeatureActionViewModel>;
+        }));
+    }
+
+    protected processGetById(response: HttpResponseBase): Observable<FeatureActionViewModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FeatureActionViewModel.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -4365,6 +4477,7 @@ export interface IUpdateActionCommand extends IActionUpdateModel {
 }
 
 export class FeatureActionCreateModel implements IFeatureActionCreateModel {
+    moduleId?: number;
     featureId!: number;
     actionIds!: number[];
 
@@ -4382,6 +4495,7 @@ export class FeatureActionCreateModel implements IFeatureActionCreateModel {
 
     init(_data?: any) {
         if (_data) {
+            this.moduleId = _data["moduleId"];
             this.featureId = _data["featureId"];
             if (Array.isArray(_data["actionIds"])) {
                 this.actionIds = [] as any;
@@ -4400,6 +4514,7 @@ export class FeatureActionCreateModel implements IFeatureActionCreateModel {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["moduleId"] = this.moduleId;
         data["featureId"] = this.featureId;
         if (Array.isArray(this.actionIds)) {
             data["actionIds"] = [];
@@ -4411,6 +4526,7 @@ export class FeatureActionCreateModel implements IFeatureActionCreateModel {
 }
 
 export interface IFeatureActionCreateModel {
+    moduleId?: number;
     featureId: number;
     actionIds: number[];
 }
@@ -4440,6 +4556,177 @@ export class CreateFeatureActionCommand extends FeatureActionCreateModel impleme
 }
 
 export interface ICreateFeatureActionCommand extends IFeatureActionCreateModel {
+}
+
+export class FeatureActionViewModel implements IFeatureActionViewModel {
+    createModel?: FeatureActionCreateModel;
+    updateModel?: FeatureActionUpdateModel;
+    gridModel?: FeatureActionGridModel;
+    optionsDataSources?: any;
+
+    constructor(data?: IFeatureActionViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.createModel = _data["createModel"] ? FeatureActionCreateModel.fromJS(_data["createModel"]) : undefined as any;
+            this.updateModel = _data["updateModel"] ? FeatureActionUpdateModel.fromJS(_data["updateModel"]) : undefined as any;
+            this.gridModel = _data["gridModel"] ? FeatureActionGridModel.fromJS(_data["gridModel"]) : undefined as any;
+            this.optionsDataSources = _data["optionsDataSources"];
+        }
+    }
+
+    static fromJS(data: any): FeatureActionViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FeatureActionViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["createModel"] = this.createModel ? this.createModel.toJSON() : undefined as any;
+        data["updateModel"] = this.updateModel ? this.updateModel.toJSON() : undefined as any;
+        data["gridModel"] = this.gridModel ? this.gridModel.toJSON() : undefined as any;
+        data["optionsDataSources"] = this.optionsDataSources;
+        return data;
+    }
+}
+
+export interface IFeatureActionViewModel {
+    createModel?: FeatureActionCreateModel;
+    updateModel?: FeatureActionUpdateModel;
+    gridModel?: FeatureActionGridModel;
+    optionsDataSources?: any;
+}
+
+export class FeatureActionUpdateModel implements IFeatureActionUpdateModel {
+    id?: number;
+    featureId!: number;
+    actionIds!: number[];
+
+    constructor(data?: IFeatureActionUpdateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+        if (!data) {
+            this.actionIds = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.featureId = _data["featureId"];
+            if (Array.isArray(_data["actionIds"])) {
+                this.actionIds = [] as any;
+                for (let item of _data["actionIds"])
+                    this.actionIds!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): FeatureActionUpdateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FeatureActionUpdateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["featureId"] = this.featureId;
+        if (Array.isArray(this.actionIds)) {
+            data["actionIds"] = [];
+            for (let item of this.actionIds)
+                data["actionIds"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IFeatureActionUpdateModel {
+    id?: number;
+    featureId: number;
+    actionIds: number[];
+}
+
+export class FeatureActionGridModel implements IFeatureActionGridModel {
+    id?: number;
+    featureId?: number;
+    featureName?: string;
+    actionIds?: number[];
+    actionNames?: string[];
+
+    constructor(data?: IFeatureActionGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.featureId = _data["featureId"];
+            this.featureName = _data["featureName"];
+            if (Array.isArray(_data["actionIds"])) {
+                this.actionIds = [] as any;
+                for (let item of _data["actionIds"])
+                    this.actionIds!.push(item);
+            }
+            if (Array.isArray(_data["actionNames"])) {
+                this.actionNames = [] as any;
+                for (let item of _data["actionNames"])
+                    this.actionNames!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): FeatureActionGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FeatureActionGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["featureId"] = this.featureId;
+        data["featureName"] = this.featureName;
+        if (Array.isArray(this.actionIds)) {
+            data["actionIds"] = [];
+            for (let item of this.actionIds)
+                data["actionIds"].push(item);
+        }
+        if (Array.isArray(this.actionNames)) {
+            data["actionNames"] = [];
+            for (let item of this.actionNames)
+                data["actionNames"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IFeatureActionGridModel {
+    id?: number;
+    featureId?: number;
+    featureName?: string;
+    actionIds?: number[];
+    actionNames?: string[];
 }
 
 export class FilterPageResultModelOfFeatureGridModel implements IFilterPageResultModelOfFeatureGridModel {
@@ -4783,6 +5070,74 @@ export class UpdateFeatureCommand extends FeatureUpdateModel implements IUpdateF
 export interface IUpdateFeatureCommand extends IFeatureUpdateModel {
 }
 
+export class SelectModel implements ISelectModel {
+    id?: any;
+    name?: string;
+    group?: string;
+    isDefault?: boolean;
+    valueOne?: any;
+    valueTwo?: any;
+    valueThree?: any;
+    valueFour?: any;
+    displayOrder?: number;
+
+    constructor(data?: ISelectModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.group = _data["group"];
+            this.isDefault = _data["isDefault"];
+            this.valueOne = _data["valueOne"];
+            this.valueTwo = _data["valueTwo"];
+            this.valueThree = _data["valueThree"];
+            this.valueFour = _data["valueFour"];
+            this.displayOrder = _data["displayOrder"];
+        }
+    }
+
+    static fromJS(data: any): SelectModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new SelectModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["group"] = this.group;
+        data["isDefault"] = this.isDefault;
+        data["valueOne"] = this.valueOne;
+        data["valueTwo"] = this.valueTwo;
+        data["valueThree"] = this.valueThree;
+        data["valueFour"] = this.valueFour;
+        data["displayOrder"] = this.displayOrder;
+        return data;
+    }
+}
+
+export interface ISelectModel {
+    id?: any;
+    name?: string;
+    group?: string;
+    isDefault?: boolean;
+    valueOne?: any;
+    valueTwo?: any;
+    valueThree?: any;
+    valueFour?: any;
+    displayOrder?: number;
+}
+
 export class FilterPageResultModelOfCityGridModel implements IFilterPageResultModelOfCityGridModel {
     items?: CityGridModel[];
     totalCount?: number;
@@ -5090,74 +5445,6 @@ export class UpdateCityCommand extends CityUpdateModel implements IUpdateCityCom
 }
 
 export interface IUpdateCityCommand extends ICityUpdateModel {
-}
-
-export class SelectModel implements ISelectModel {
-    id?: any;
-    name?: string;
-    group?: string;
-    isDefault?: boolean;
-    valueOne?: any;
-    valueTwo?: any;
-    valueThree?: any;
-    valueFour?: any;
-    displayOrder?: number;
-
-    constructor(data?: ISelectModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.group = _data["group"];
-            this.isDefault = _data["isDefault"];
-            this.valueOne = _data["valueOne"];
-            this.valueTwo = _data["valueTwo"];
-            this.valueThree = _data["valueThree"];
-            this.valueFour = _data["valueFour"];
-            this.displayOrder = _data["displayOrder"];
-        }
-    }
-
-    static fromJS(data: any): SelectModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new SelectModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["group"] = this.group;
-        data["isDefault"] = this.isDefault;
-        data["valueOne"] = this.valueOne;
-        data["valueTwo"] = this.valueTwo;
-        data["valueThree"] = this.valueThree;
-        data["valueFour"] = this.valueFour;
-        data["displayOrder"] = this.displayOrder;
-        return data;
-    }
-}
-
-export interface ISelectModel {
-    id?: any;
-    name?: string;
-    group?: string;
-    isDefault?: boolean;
-    valueOne?: any;
-    valueTwo?: any;
-    valueThree?: any;
-    valueFour?: any;
-    displayOrder?: number;
 }
 
 export class CountryGridModel implements ICountryGridModel {

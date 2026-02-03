@@ -63,6 +63,7 @@
             var getFeatures = db.Features.AsNoTracking().Where(f => f.ModuleId == moduleId && !f.IsDeleted);
 
             return await getFeatures
+                .AsNoTracking()
                 .OrderBy(c => c.Name)
                 .Select(c => new SelectModel { Id = c.Id, Name = c.Name })
                 .ToListAsync(cancellationToken);

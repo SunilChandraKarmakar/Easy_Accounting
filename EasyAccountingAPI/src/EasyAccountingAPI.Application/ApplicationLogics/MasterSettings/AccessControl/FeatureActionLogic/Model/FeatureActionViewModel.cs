@@ -10,6 +10,7 @@
 
     public class FeatureActionCreateModel : IMapFrom<FeatureAction>
     {
+        [NotMapped] public int ModuleId { get; set; }
 
         [Required(ErrorMessage = "Feature is required.")]
         public int FeatureId { get; set; }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EasyAccountingAPI.Repository.Repository.MasterSettings.AccessControl
+﻿namespace EasyAccountingAPI.Repository.Repository.MasterSettings.AccessControl
 {
     public class FeatureActionRepository : BaseRepository<FeatureAction>, IFeatureActionRepository
     {
@@ -31,7 +25,8 @@ namespace EasyAccountingAPI.Repository.Repository.MasterSettings.AccessControl
         }
 
         // Get features with filtering, sorting, and pagination
-        public Task<FilterPageResultModel<FeatureAction>> GetFeaturesByFilterAsync(FilterPageModel model, CancellationToken cancellationToken)
+        public Task<FilterPageResultModel<FeatureAction>> GetFeatureActionsByFilterAsync(FilterPageModel model, 
+            CancellationToken cancellationToken)
         {
             Expression<Func<FeatureAction, bool>> filter = f =>
                  string.IsNullOrWhiteSpace(model.FilterValue)
@@ -46,6 +41,16 @@ namespace EasyAccountingAPI.Repository.Repository.MasterSettings.AccessControl
 
             return GetAllFilterAsync(model, filter, f => f.Id, sortableColumns, 
                 include: q => q.Include(c => c.Feature).Include(c => c.Action), cancellationToken);
+        }
+
+        public async Task<ICollection<FeatureAction>> GetFeatureActionsByFeatureIdAsync(int featureId, CancellationToken cancellationToken)
+        {
+            var featureActions = await db.FeatureActions
+                .AsNoTracking()
+                .Where(fa => fa.FeatureId == featureId)
+                .ToListAsync(cancellationToken);
+
+            return featureActions;
         }
     }
 }

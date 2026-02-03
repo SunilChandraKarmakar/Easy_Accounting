@@ -58,5 +58,13 @@
             var isDeleteFeature = await Mediator.Send(new DeleteFeatureCommand { Id = id });
             return Ok(isDeleteFeature);
         }
+
+        [HttpGet("moduleId")]
+        [ProducesResponseType(typeof(IEnumerable<SelectModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<SelectModel>>> GetFeatureByModuleIdAsync(int moduleId)
+        {
+            var getFeatures = await Mediator.Send(new SelectListFeatureByModuleIdQuery { ModuleId = moduleId });
+            return Ok(getFeatures);
+        }
     }
 }
