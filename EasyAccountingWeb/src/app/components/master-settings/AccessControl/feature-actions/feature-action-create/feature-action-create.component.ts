@@ -30,6 +30,7 @@ export class FeatureActionCreateComponent implements OnInit {
   // Select list
   modules: SelectModel[] = [];
   actions: SelectModel[] = [];
+  features: SelectModel[] = [];
 
   // Feature create model
   featureActionCreateModel: FeatureActionCreateModel = new FeatureActionCreateModel();
@@ -62,6 +63,54 @@ export class FeatureActionCreateComponent implements OnInit {
 
   // On change module
   onChangeModule(moduleId: number): void {
-    
+    this.spinnerService.show()
+    this.featureService.getFeatureByModuleId(moduleId).subscribe((result: SelectModel[]) => {
+      this.features = result;
+      this.spinnerService.hide();
+      return;
+    },
+    (error: any) => {
+      this.spinnerService.hide();
+      this.toastrService.error("Feature list is not load based on selected module! Please, try again.", "Error");
+      return;
+    })
+  }
+
+  // Create from validation
+  private createFromValidation(): boolean {
+    if(this.featureActionCreateModel.moduleId == undefined || this.featureActionCreateModel.moduleId == null 
+      || this.featureActionCreateModel.moduleId == -1) {
+      this.toastrService.warning("Please, select module.", "Warning");
+      return false;
+    } else if(this.featureActionCreateModel.featureId == undefined || this.featureActionCreateModel.featureId == null 
+      || this.featureActionCreateModel.featureId == -1) {
+      this.toastrService.warning("Please, select feature.", "Warning.");
+      return false;
+    } else if(this.featureActionCreateModel.actionIds == undefined || this.featureActionCreateModel.actionIds == null 
+      || this.featureActionCreateModel.actionIds.length == 0) {
+      this.toastrService.warning("Please, select at last one action for this feature.", "Warning.");
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  // Save feature action
+  onClickSaveFeatureAction(): void {
+    let getCreateFromValidationResult: boolean = this.createFromValidation();
+
+    if(getCreateFromValidationResult) {
+      this.spinnerService.show();
+      this.featureActionService.create(this.featureActionCreateModel).subscribe((reatlt: boolean) => {
+        this.spinnerService.hide();
+        this.toastrService.success("Feature action mapping has been set.", "Successful");
+        return this.router.navigateByUrl("/app/feature-actions");
+      },
+      (error: any) => {
+        this.spinnerService.hide();
+        this.toastrService.error("Feature action mapping cannot set! Please, try again");
+        return;
+      })
+    }
   }
 }

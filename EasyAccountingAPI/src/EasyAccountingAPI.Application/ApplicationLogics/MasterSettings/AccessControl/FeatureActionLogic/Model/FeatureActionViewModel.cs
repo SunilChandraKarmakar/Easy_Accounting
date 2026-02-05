@@ -41,17 +41,17 @@
         }
     }
 
-    public class FeatureActionGridModel : IMapFrom<FeatureAction>
+    public class FeatureActionGridModel
     {
-        public int Id { get; set; }
         public int FeatureId { get; set; }
         public string FeatureName { get; set; }
-        public List<int> ActionIds { get; set; }
-        public List<string> ActionNames { get; set; }
+        public List<FeatureActionStatusModel> Actions { get; set; }
+    }
 
-        public void Mapping(Profile profile)
-        {
-            profile.CreateMap<FeatureAction, FeatureActionGridModel>();
-        }
+    public class FeatureActionStatusModel
+    {
+        public int ActionId { get; set; }
+        public string ActionName { get; set; }
+        public bool IsEnabled { get; set; }
     }
 }

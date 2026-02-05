@@ -42,6 +42,34 @@
             return GetAllFilterAsync(model, filter, f => f.Id, sortableColumns, 
                 include: q => q.Include(c => c.Feature).Include(c => c.Action), cancellationToken);
         }
+        
+        public async Task<List<int>> GetPagedFeatureIdsAsync(FilterPageModel model, CancellationToken cancellationToken)
+        {
+            return await db.Set<FeatureAction>()
+                .AsNoTracking()
+                .Where(x => string.IsNullOrWhiteSpace(model.FilterValue)
+                    || x.Feature.Name.Contains(model.FilterValue)
+                    || x.Action.Name.Contains(model.FilterValue))
+                .Select(x => x.FeatureId)
+                .Distinct()
+                .OrderBy(x => x)
+                .Skip(model.PageIndex * model.PageSize)
+                .Take(model.PageSize)
+                .ToListAsync(cancellationToken);
+        }
+
+        public async Task<int> GetTotalFeatureCountAsync(FilterPageModel model, CancellationToken cancellationToken)
+        {
+            return await db.Set<FeatureAction>()
+                .AsNoTracking()
+                .Where(x =>
+                    string.IsNullOrWhiteSpace(model.FilterValue)
+                    || x.Feature.Name.Contains(model.FilterValue)
+                    || x.Action.Name.Contains(model.FilterValue))
+                .Select(x => x.FeatureId)
+                .Distinct()
+                .CountAsync(cancellationToken);
+        }
 
         public async Task<ICollection<FeatureAction>> GetFeatureActionsByFeatureIdAsync(int featureId, CancellationToken cancellationToken)
         {

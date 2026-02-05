@@ -27,7 +27,8 @@
                 if(request.ModuleId <= 0)
                     return Enumerable.Empty<SelectModel>();
 
-                var getFeatures = await _featureRepository.GetFeatureSelectListByModule(request.ModuleId, cancellationToken);
+                // Get features by module id where feature id is not use in the feature action table
+                var getFeatures = await _featureRepository.GetFeatureSelectListByModuleIdAsync(request.ModuleId, cancellationToken);
                 return getFeatures;
             }
         }

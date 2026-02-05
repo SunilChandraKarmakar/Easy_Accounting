@@ -58,15 +58,18 @@
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<SelectModel>> GetFeatureSelectListByModule(int moduleId, CancellationToken cancellationToken)
+        // Get features by module id where feature id is not use in the feature action table
+        public async Task<IEnumerable<SelectModel>> GetFeatureSelectListByModuleIdAsync(int moduleId, CancellationToken cancellationToken)
         {
-            var getFeatures = db.Features.AsNoTracking().Where(f => f.ModuleId == moduleId && !f.IsDeleted);
-
-            return await getFeatures
+            return await db.Features
                 .AsNoTracking()
-                .OrderBy(c => c.Name)
-                .Select(c => new SelectModel { Id = c.Id, Name = c.Name })
-                .ToListAsync(cancellationToken);
+                .Where(f => f.ModuleId == moduleId && !f.IsDeleted && !db.FeatureActions.Any(fa => fa.FeatureId == f.Id))
+                .OrderBy(f => f.Name)
+                .Select(f => new SelectModel
+                {
+                    Id = f.Id,
+                    Name = f.Name
+                }).ToListAsync(cancellationToken);
         }
 
         public async Task<Feature?> GetFeatureByTableNameAsync(string tableName, CancellationToken cancellationToken)

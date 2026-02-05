@@ -59,6 +59,7 @@
             return Ok(isDeleteFeature);
         }
 
+        // Get features by module id where feature id is not use in the feature action table
         [HttpGet("moduleId")]
         [ProducesResponseType(typeof(IEnumerable<SelectModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<SelectModel>>> GetFeatureByModuleIdAsync(int moduleId)

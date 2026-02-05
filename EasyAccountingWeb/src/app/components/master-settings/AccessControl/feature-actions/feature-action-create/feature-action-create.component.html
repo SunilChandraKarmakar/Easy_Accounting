@@ -14,49 +14,34 @@
           <div class="col-md-3">
             <label for="moduleId" class="form-label">Module <span class="text-danger fw-bold">*</span></label>
              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Module" [(ngModel)]="featureActionCreateModel.moduleId" 
-              name="moduleId" style="width: 100%;" (ngModelChange)="onChangeModule(featureActionCreateModel.moduleId)">
+              name="moduleId" style="width: 100%;" (ngModelChange)="onChangeModule(featureActionCreateModel.moduleId!)">
                 @for (module of modules; track module.id) {
                   <nz-option [nzValue]="module.id" [nzLabel]="module.name!"></nz-option>
                 }
               </nz-select>
           </div>
-          <!-- <div class="col-md-3">
-            <label for="name" class="form-label">Name <span class="text-danger fw-bold">*</span></label>
-            <nz-input-wrapper>
-              <nz-icon nzInputPrefix nzType="branches" />
-              <input nz-input placeholder="Enter feature name" nzSize="default" id="name" name="name" 
-                [(ngModel)]="featureCreateModel.name" />
-            </nz-input-wrapper>
+          <div class="col-md-3">
+            <label for="featureId" class="form-label">Feature <span class="text-danger fw-bold">*</span></label>
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Feature" [(ngModel)]="featureActionCreateModel.featureId" 
+              name="featureId" style="width: 100%;">
+                @for (feature of features; track feature.id) {
+                  <nz-option [nzValue]="feature.id" [nzLabel]="feature.name!"></nz-option>
+                }
+              </nz-select>
           </div>
           <div class="col-md-3">
-            <label for="email" class="form-label">Code</label>
-            <nz-input-wrapper>
-              <nz-icon nzInputPrefix nzType="number" />
-              <input nz-input placeholder="Enter feature code" nzSize="default" id="code" name="code" 
-                [(ngModel)]="featureCreateModel.code" />
-            </nz-input-wrapper>
+            <label for="actionIds" class="form-label">Actions <span class="text-danger fw-bold">*</span></label>
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Actions" nzMode="multiple" [(ngModel)]="featureActionCreateModel.actionIds" 
+              name="actionIds" style="width: 100%;">
+                @for (action of actions; track action.id) {
+                  <nz-option [nzValue]="action.id" [nzLabel]="action.name!"></nz-option>
+                }
+              </nz-select>
           </div>
-          
-          <div class="col-md-3">
-            <label for="controllerName" class="form-label">Controller Name <span class="text-danger fw-bold">*</span></label>
-            <nz-input-wrapper>
-              <nz-icon nzInputPrefix nzType="profile" />
-              <input nz-input placeholder="Enter controller name" nzSize="default" id="controllerName" name="controllerName" 
-                [(ngModel)]="featureCreateModel.controllerName" />
-            </nz-input-wrapper>
-          </div>
-          <div class="col-md-3">
-            <label for="tableName" class="form-label">Table Name <span class="text-danger fw-bold">*</span></label>
-            <nz-input-wrapper>
-              <nz-icon nzInputPrefix nzType="table" />
-              <input nz-input placeholder="Enter table name" nzSize="default" id="tableName" name="tableName" 
-                [(ngModel)]="featureCreateModel.tableName" />
-            </nz-input-wrapper>
-          </div>          -->
         </form>
       </div>
       <div class="card-footer text-end">
-        <button nz-button nzType="primary" class="btn-save">
+        <button nz-button nzType="primary" class="btn-save" (click)="onClickSaveFeatureAction()">
           <nz-icon nzType="save" nzTheme="outline" />
           Save
         </button>
