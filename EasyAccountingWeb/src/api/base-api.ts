@@ -2002,7 +2002,10 @@ export class FeatureService implements IFeatureService {
 
 export interface IFeatureActionService {
     create(createFeatureActionCommand: CreateFeatureActionCommand): Observable<boolean>;
+    delete(featureId: number): Observable<boolean>;
     getById(featureId: string): Observable<FeatureActionViewModel>;
+    getFilterFeatureActions(getFeatureActionsByFilterQuery: GetFeatureActionsByFilterQuery): Observable<FilterPageResultModelOfFeatureActionGridModel>;
+    update(updateFeatureActionCommand: UpdateFeatureActionCommand): Observable<boolean>;
 }
 
 @Injectable()
@@ -2069,6 +2072,58 @@ export class FeatureActionService implements IFeatureActionService {
         return _observableOf(null as any);
     }
 
+    delete(featureId: number): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/FeatureAction/Delete/{featureId}";
+        if (featureId === undefined || featureId === null)
+            throw new globalThis.Error("The parameter 'featureId' must be defined.");
+        url_ = url_.replace("{featureId}", encodeURIComponent("" + featureId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
     getById(featureId: string): Observable<FeatureActionViewModel> {
         let url_ = this.baseUrl + "/api/FeatureAction/GetById/{featureId}";
         if (featureId === undefined || featureId === null)
@@ -2110,6 +2165,111 @@ export class FeatureActionService implements IFeatureActionService {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = FeatureActionViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getFilterFeatureActions(getFeatureActionsByFilterQuery: GetFeatureActionsByFilterQuery): Observable<FilterPageResultModelOfFeatureActionGridModel> {
+        let url_ = this.baseUrl + "/api/FeatureAction/GetFilterFeatureActions";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(getFeatureActionsByFilterQuery);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFilterFeatureActions(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFilterFeatureActions(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FilterPageResultModelOfFeatureActionGridModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FilterPageResultModelOfFeatureActionGridModel>;
+        }));
+    }
+
+    protected processGetFilterFeatureActions(response: HttpResponseBase): Observable<FilterPageResultModelOfFeatureActionGridModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FilterPageResultModelOfFeatureActionGridModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(updateFeatureActionCommand: UpdateFeatureActionCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/FeatureAction/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(updateFeatureActionCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -4476,6 +4636,181 @@ export class UpdateActionCommand extends ActionUpdateModel implements IUpdateAct
 export interface IUpdateActionCommand extends IActionUpdateModel {
 }
 
+export class FilterPageResultModelOfFeatureActionGridModel implements IFilterPageResultModelOfFeatureActionGridModel {
+    items?: FeatureActionGridModel[];
+    totalCount?: number;
+
+    constructor(data?: IFilterPageResultModelOfFeatureActionGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(FeatureActionGridModel.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): FilterPageResultModelOfFeatureActionGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPageResultModelOfFeatureActionGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item ? item.toJSON() : undefined as any);
+        }
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+}
+
+export interface IFilterPageResultModelOfFeatureActionGridModel {
+    items?: FeatureActionGridModel[];
+    totalCount?: number;
+}
+
+export class FeatureActionGridModel implements IFeatureActionGridModel {
+    featureId?: number;
+    encriptedFeatureId?: string | undefined;
+    featureName?: string;
+    actions?: FeatureActionStatusModel[];
+
+    constructor(data?: IFeatureActionGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.featureId = _data["featureId"];
+            this.encriptedFeatureId = _data["encriptedFeatureId"];
+            this.featureName = _data["featureName"];
+            if (Array.isArray(_data["actions"])) {
+                this.actions = [] as any;
+                for (let item of _data["actions"])
+                    this.actions!.push(FeatureActionStatusModel.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): FeatureActionGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FeatureActionGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["featureId"] = this.featureId;
+        data["encriptedFeatureId"] = this.encriptedFeatureId;
+        data["featureName"] = this.featureName;
+        if (Array.isArray(this.actions)) {
+            data["actions"] = [];
+            for (let item of this.actions)
+                data["actions"].push(item ? item.toJSON() : undefined as any);
+        }
+        return data;
+    }
+}
+
+export interface IFeatureActionGridModel {
+    featureId?: number;
+    encriptedFeatureId?: string | undefined;
+    featureName?: string;
+    actions?: FeatureActionStatusModel[];
+}
+
+export class FeatureActionStatusModel implements IFeatureActionStatusModel {
+    actionId?: number;
+    actionName?: string;
+    isEnabled?: boolean;
+
+    constructor(data?: IFeatureActionStatusModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.actionId = _data["actionId"];
+            this.actionName = _data["actionName"];
+            this.isEnabled = _data["isEnabled"];
+        }
+    }
+
+    static fromJS(data: any): FeatureActionStatusModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FeatureActionStatusModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["actionId"] = this.actionId;
+        data["actionName"] = this.actionName;
+        data["isEnabled"] = this.isEnabled;
+        return data;
+    }
+}
+
+export interface IFeatureActionStatusModel {
+    actionId?: number;
+    actionName?: string;
+    isEnabled?: boolean;
+}
+
+export class GetFeatureActionsByFilterQuery extends FilterPageModel implements IGetFeatureActionsByFilterQuery {
+
+    constructor(data?: IGetFeatureActionsByFilterQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetFeatureActionsByFilterQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetFeatureActionsByFilterQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetFeatureActionsByFilterQuery extends IFilterPageModel {
+}
+
 export class FeatureActionCreateModel implements IFeatureActionCreateModel {
     moduleId?: number;
     featureId!: number;
@@ -4609,6 +4944,7 @@ export interface IFeatureActionViewModel {
 export class FeatureActionUpdateModel implements IFeatureActionUpdateModel {
     id?: number;
     featureId!: number;
+    featureName?: string;
     actionIds!: number[];
 
     constructor(data?: IFeatureActionUpdateModel) {
@@ -4627,6 +4963,7 @@ export class FeatureActionUpdateModel implements IFeatureActionUpdateModel {
         if (_data) {
             this.id = _data["id"];
             this.featureId = _data["featureId"];
+            this.featureName = _data["featureName"];
             if (Array.isArray(_data["actionIds"])) {
                 this.actionIds = [] as any;
                 for (let item of _data["actionIds"])
@@ -4646,6 +4983,7 @@ export class FeatureActionUpdateModel implements IFeatureActionUpdateModel {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["featureId"] = this.featureId;
+        data["featureName"] = this.featureName;
         if (Array.isArray(this.actionIds)) {
             data["actionIds"] = [];
             for (let item of this.actionIds)
@@ -4658,75 +4996,35 @@ export class FeatureActionUpdateModel implements IFeatureActionUpdateModel {
 export interface IFeatureActionUpdateModel {
     id?: number;
     featureId: number;
+    featureName?: string;
     actionIds: number[];
 }
 
-export class FeatureActionGridModel implements IFeatureActionGridModel {
-    id?: number;
-    featureId?: number;
-    featureName?: string;
-    actionIds?: number[];
-    actionNames?: string[];
+export class UpdateFeatureActionCommand extends FeatureActionUpdateModel implements IUpdateFeatureActionCommand {
 
-    constructor(data?: IFeatureActionGridModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
+    constructor(data?: IUpdateFeatureActionCommand) {
+        super(data);
     }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.featureId = _data["featureId"];
-            this.featureName = _data["featureName"];
-            if (Array.isArray(_data["actionIds"])) {
-                this.actionIds = [] as any;
-                for (let item of _data["actionIds"])
-                    this.actionIds!.push(item);
-            }
-            if (Array.isArray(_data["actionNames"])) {
-                this.actionNames = [] as any;
-                for (let item of _data["actionNames"])
-                    this.actionNames!.push(item);
-            }
-        }
+    override init(_data?: any) {
+        super.init(_data);
     }
 
-    static fromJS(data: any): FeatureActionGridModel {
+    static override fromJS(data: any): UpdateFeatureActionCommand {
         data = typeof data === 'object' ? data : {};
-        let result = new FeatureActionGridModel();
+        let result = new UpdateFeatureActionCommand();
         result.init(data);
         return result;
     }
 
-    toJSON(data?: any) {
+    override toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["featureId"] = this.featureId;
-        data["featureName"] = this.featureName;
-        if (Array.isArray(this.actionIds)) {
-            data["actionIds"] = [];
-            for (let item of this.actionIds)
-                data["actionIds"].push(item);
-        }
-        if (Array.isArray(this.actionNames)) {
-            data["actionNames"] = [];
-            for (let item of this.actionNames)
-                data["actionNames"].push(item);
-        }
+        super.toJSON(data);
         return data;
     }
 }
 
-export interface IFeatureActionGridModel {
-    id?: number;
-    featureId?: number;
-    featureName?: string;
-    actionIds?: number[];
-    actionNames?: string[];
+export interface IUpdateFeatureActionCommand extends IFeatureActionUpdateModel {
 }
 
 export class FilterPageResultModelOfFeatureGridModel implements IFilterPageResultModelOfFeatureGridModel {

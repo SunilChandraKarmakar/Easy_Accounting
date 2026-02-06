@@ -4,6 +4,14 @@
     {
         public ActionRepository(DatabaseContext databaseContext) : base(databaseContext) { }
 
+        public override async Task<ICollection<Model.MasterSettings.AccessControl.Action>> GetAllAsync(CancellationToken cancellationToken)
+        {
+            return await db.Actions
+                .AsNoTracking()
+                .Where(a => !a.IsDeleted)
+                .ToListAsync(cancellationToken);
+        }
+
         public override async Task<Model.MasterSettings.AccessControl.Action?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             var action = await db.Actions

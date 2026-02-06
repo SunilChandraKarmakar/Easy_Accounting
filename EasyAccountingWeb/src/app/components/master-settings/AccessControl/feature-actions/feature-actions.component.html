@@ -24,34 +24,41 @@
               Create
             </button>
           </div>
-          <!-- <div class="col-md-12">
-            <nz-table #basicTable [nzData]="features" [nzBordered]="true" [nzOuterBordered]="true" [nzFrontPagination]="false" 
+          <div class="col-md-12">
+            <nz-table #basicTable [nzData]="featureActions" [nzBordered]="true" [nzOuterBordered]="true" [nzFrontPagination]="false" 
               [nzTotal]="totalRecord" [nzSize]="'default'" [nzPaginationType]="'default'" [nzShowSizeChanger]="true" 
               (nzQueryParams)="onChangeQueryParams($event)">
               <thead>
                 <tr>
-                  <th nzColumnKey="name" [nzSortFn]="true">Name</th>
-                  <th nzColumnKey="moduleName" [nzSortFn]="true">Module</th>
-                  <th nzColumnKey="controllerName" [nzSortFn]="true">Controller</th>
-                  <th nzColumnKey="tableName" [nzSortFn]="true">Table</th>
+                  <th>Feature Name</th>
+                  <th class="text-center">Status</th>
                   <th class="text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
-                @for (data of basicTable.data; track data.id) {
+                @for (data of basicTable.data; track data.featureId) {
                   <tr>
-                    <td>{{ data.name }} ({{ data.code }})</td>
-                    <td>{{ data.moduleName }}</td>
-                    <td>{{ data.controllerName }}</td>
-                    <td>{{ data.tableName }}</td>
+                    <td>{{ data.featureName }}</td>
+                    <td>
+                      @for(action of data.actions; track action.actionId) {
+                        <nz-tag nzColor="success" *ngIf="action.isEnabled">
+                          <nz-icon nzType="check-circle" />
+                          <span>{{ action.actionName }}</span>
+                        </nz-tag>
+                        <nz-tag nzColor="error" *ngIf="!action.isEnabled">
+                          <nz-icon nzType="close-circle" />
+                          <span>{{ action.actionName }}</span>
+                        </nz-tag>
+                      }
+                    </td>
                     <td class="text-center action-cell">
                       <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Edit" class="action-btn edit-btn"
-                        routerLink="/app/feature/update/{{ data.id }}">
+                        routerLink="/app/feature-action/update/{{ data.encriptedFeatureId }}">
                         <nz-icon nzType="edit" />
                       </button>
                       <nz-divider nzType="vertical"></nz-divider>
                       <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Delete" nzDanger class="action-btn delete-btn" 
-                        nz-popconfirm [nzPopconfirmTitle]="deleteTpl" [nzIcon]="iconTpl" (nzOnConfirm)="onClickDelete(data.id)" 
+                        nz-popconfirm [nzPopconfirmTitle]="deleteTpl" [nzIcon]="iconTpl" (nzOnConfirm)="onClickDelete(data.featureId!)" 
                         (nzOnCancel)="cancel()">
                         <nz-icon nzType="delete" />
                       </button>
@@ -70,7 +77,7 @@
                 }
               </tbody>
             </nz-table>
-          </div> -->
+          </div>
         </div>
       </div>
     </div>

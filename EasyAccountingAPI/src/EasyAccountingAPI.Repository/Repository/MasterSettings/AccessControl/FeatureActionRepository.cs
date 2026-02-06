@@ -42,25 +42,41 @@
             return GetAllFilterAsync(model, filter, f => f.Id, sortableColumns, 
                 include: q => q.Include(c => c.Feature).Include(c => c.Action), cancellationToken);
         }
-        
+
+        public async Task<List<FeatureAction>> GetFeatureActionsByFeatureIdsAsync(List<int> featureIds, CancellationToken cancellationToken)
+        {
+            return await db.FeatureActions
+                .AsNoTracking()
+                .Include(x => x.Feature)
+                .Include(x => x.Action)
+                .Where(x => featureIds.Contains(x.FeatureId))
+                .ToListAsync(cancellationToken);
+        }
+
         public async Task<List<int>> GetPagedFeatureIdsAsync(FilterPageModel model, CancellationToken cancellationToken)
         {
-            return await db.Set<FeatureAction>()
+            return await db.FeatureActions
                 .AsNoTracking()
                 .Where(x => string.IsNullOrWhiteSpace(model.FilterValue)
                     || x.Feature.Name.Contains(model.FilterValue)
                     || x.Action.Name.Contains(model.FilterValue))
-                .Select(x => x.FeatureId)
+                .Select(x => new
+                {
+                    x.FeatureId,
+                    FeatureName = x.Feature.Name
+                })
                 .Distinct()
-                .OrderBy(x => x)
+                .OrderBy(x => x.FeatureName) 
                 .Skip(model.PageIndex * model.PageSize)
                 .Take(model.PageSize)
+                .Select(x => x.FeatureId)
                 .ToListAsync(cancellationToken);
         }
 
+
         public async Task<int> GetTotalFeatureCountAsync(FilterPageModel model, CancellationToken cancellationToken)
         {
-            return await db.Set<FeatureAction>()
+            return await db.FeatureActions
                 .AsNoTracking()
                 .Where(x =>
                     string.IsNullOrWhiteSpace(model.FilterValue)
@@ -74,8 +90,8 @@
         public async Task<ICollection<FeatureAction>> GetFeatureActionsByFeatureIdAsync(int featureId, CancellationToken cancellationToken)
         {
             var featureActions = await db.FeatureActions
-                .AsNoTracking()
                 .Where(fa => fa.FeatureId == featureId)
+                .Include(fa => fa.Feature)
                 .ToListAsync(cancellationToken);
 
             return featureActions;

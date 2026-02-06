@@ -11,5 +11,6 @@
         Task BulkCreateAsync(IEnumerable<T> entities, CancellationToken cancellationToken);
         void Update(T entity);
         void Delete(T entity);
+        Task BulkDeleteAsync(IEnumerable<T> entities, CancellationToken cancellationToken);
     }
 }

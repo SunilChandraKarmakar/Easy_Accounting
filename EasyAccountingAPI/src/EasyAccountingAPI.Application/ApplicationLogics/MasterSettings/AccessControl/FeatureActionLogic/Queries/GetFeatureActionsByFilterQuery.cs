@@ -5,64 +5,62 @@
         public class Handler : IRequestHandler<GetFeatureActionsByFilterQuery, FilterPageResultModel<FeatureActionGridModel>>
         {
             private readonly IFeatureActionRepository _featureActionRepository;
+            private readonly IActionRepository _actionRepository;
             private readonly IHttpContextAccessor _httpContextAccessor;
-            private readonly IMapper _mapper;
 
-            public Handler(IFeatureActionRepository featureActionRepository, IHttpContextAccessor httpContextAccessor, IMapper mapper)
+            public Handler(IFeatureActionRepository featureActionRepository, IActionRepository actionRepository, 
+                IHttpContextAccessor httpContextAccessor)
             {
                 _featureActionRepository = featureActionRepository;
+                _actionRepository = actionRepository;
                 _httpContextAccessor = httpContextAccessor;
-                _mapper = mapper;
             }
 
             public async Task<FilterPageResultModel<FeatureActionGridModel>> Handle(GetFeatureActionsByFilterQuery request,
                 CancellationToken cancellationToken)
             {
-                // Retrieve the user's Id from the current HTTP context
                 var userId = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
 
-                // Check if the user Id is null or not
-                if (string.IsNullOrEmpty(userId) || string.IsNullOrWhiteSpace(userId))
+                if (string.IsNullOrWhiteSpace(userId))
                     throw new UnauthorizedAccessException(ProvideErrorMessage.UserNotAuthenticated);
 
-                // Get the feature IDs that match the filter criteria for the user
+                // Get paged feature ids based on filter and pagination
                 var featureIds = await _featureActionRepository.GetPagedFeatureIdsAsync(request, cancellationToken);
 
                 if (!featureIds.Any())
                     return new FilterPageResultModel<FeatureActionGridModel>(new List<FeatureActionGridModel>(), 0);
 
-                // Get actions for those features
-                var rawData = await _featureActionRepository.GetFeatureActionsByFilterAsync(new FilterPageModel
-                {
-                    PageIndex = 0,
-                    PageSize = int.MaxValue,
-                    FilterValue = request.FilterValue
-                },
-                cancellationToken);
+                // Get actions
+                var allActions = await _actionRepository.GetAllAsync(cancellationToken);
 
-                // Group data
-                var grouped = rawData.Items
-                    .Where(x => featureIds.Contains(x.FeatureId))
-                    .GroupBy(x => new { x.FeatureId, x.Feature.Name })
-                    .Select(g => new FeatureActionGridModel
+                // Get feature actions based on featureIds
+                var featureActions = await _featureActionRepository.GetFeatureActionsByFeatureIdsAsync(featureIds, cancellationToken);
+
+                // Build a lookup of enabled (FeatureId, ActionId) pairs for O(1) checks
+                var enabledLookup = new HashSet<(int FeatureId, int ActionId)>(featureActions.Select(fa => (fa.FeatureId, fa.ActionId)));
+
+                // Map grid
+                var result = featureActions
+                    .GroupBy(fa => new { fa.FeatureId, fa.Feature.Name })
+                    .Select(fg => new FeatureActionGridModel
                     {
-                        FeatureId = g.Key.FeatureId,
-                        FeatureName = g.Key.Name,
-                        Actions = g
-                            .GroupBy(a => new { a.ActionId, a.Action.Name })
-                            .Select(a => new FeatureActionStatusModel
-                            {
-                                ActionId = a.Key.ActionId,
-                                ActionName = a.Key.Name,
-                                // IsEnabled = a.Any(x => x.IsEnabled)
-                            })
-                            .ToList()
+                        FeatureId = fg.Key.FeatureId,
+                        EncriptedFeatureId = EncryptionService.Encrypt(fg.Key.FeatureId.ToString()),
+                        FeatureName = fg.Key.Name,
+                        Actions = allActions.Select(a => new FeatureActionStatusModel
+                        {
+                            ActionId = a.Id,
+                            ActionName = a.Name,
+                            IsEnabled = enabledLookup.Contains((fg.Key.FeatureId, a.Id))
+                        }).ToList()
                     })
+                    .OrderBy(x => x.FeatureName)
                     .ToList();
 
-                // Get total feature count 
-                var totalFeatures = await _featureActionRepository.GetTotalFeatureCountAsync(request, cancellationToken);
-                return new FilterPageResultModel<FeatureActionGridModel>(grouped, totalFeatures);
+                // Total feature count
+                var totalCount = await _featureActionRepository.GetTotalFeatureCountAsync(request, cancellationToken);
+
+                return new FilterPageResultModel<FeatureActionGridModel>(result, totalCount);
             }
         }
     }

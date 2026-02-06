@@ -10,8 +10,9 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { FeatureActionGridModel, FeatureActionService, FilterPageModel } from '../../../../../api/base-api';
+import { FeatureActionGridModel, FeatureActionService, FilterPageModel, FilterPageResultModelOfFeatureActionGridModel } from '../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 
 @Component({
   selector: 'app-feature-actions',
@@ -19,7 +20,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./feature-actions.component.css'],
   standalone: true,
   imports: [CommonModule, NzButtonModule, NzDividerModule, NzTableModule, RouterLink, NgxSpinnerModule, NzSpaceModule, NzInputModule, 
-    NzIconModule, NzBreadCrumbModule, NzPopconfirmModule],
+    NzIconModule, NzBreadCrumbModule, NzPopconfirmModule, NzTagModule],
   providers: [FeatureActionService]
 })
 
@@ -40,7 +41,7 @@ export class FeatureActionsComponent implements OnInit {
     this.initializeFilterModel();
 
     // Get feature actions
-    // this.getFeatures();
+    this.getFeatureActions();
   }
 
   onChangeApplyFilter(event: Event) {
@@ -49,7 +50,7 @@ export class FeatureActionsComponent implements OnInit {
     this.filterPageModel.pageIndex = 0;
 
     // Get feature actions
-    // this.getFeatures();
+    this.getFeatureActions();
   }
 
   // Initialize filter model
@@ -76,38 +77,63 @@ export class FeatureActionsComponent implements OnInit {
     }
 
     // Get feature actions
-    // this.getFeatures();
+    this.getFeatureActions();
+  }
+
+  // Get feature actions
+  private getFeatureActions(): void {
+    this.spinnerService.show();
+
+    // Clear before loading 
+    this.featureActions = [];
+    this.totalRecord = 0;
+
+    this.featureActionService.getFilterFeatureActions(this.filterPageModel)
+    .subscribe((result: FilterPageResultModelOfFeatureActionGridModel) => {
+      this.featureActions = result.items || [];
+      this.totalRecord = result.totalCount || 0;
+      this.spinnerService.hide();
+      return;
+    },
+    (error: any) => {
+      this.spinnerService.hide();
+      this.featureActions = [];
+      this.totalRecord = 0;
+
+      this.toastrService.error("Feature Action list is not show at this time! Please, try again.", "Error");
+      return;
+    });
   }
 
   // On click open delete modal
-  onClickDelete(featuresId: string | undefined): void {
-    // this.deleteFeature(featuresId);
+  onClickDelete(featuresId: number): void {
+    this.deleteFeatureAction(featuresId);
   }
 
-  // Delete feature
-  private deleteFeature(featureId: string | undefined): void {
-    // if(featureId == null || featureId == undefined) {
-    //   this.toastrService.error("Feature is not found. Please, try again.", "Error");
-    //   return;
-    // }
+  // Delete feature action
+  private deleteFeatureAction(featureId: number): void {
+    if(featureId == null || featureId == undefined || featureId == -1) {
+      this.toastrService.error("Feature is not found. Please, try again.", "Error");
+      return;
+    }
 
-    // this.spinnerService.show();
-    // this.featureService.delete(featureId).subscribe((result: boolean) => {
-    //   this.spinnerService.hide();
-    //   if(result) {
-    //     this.toastrService.success("Feature deleted successfully.", "Success"); 
-    //     this.getFeatures();
-    //   } else {
-    //     this.toastrService.error("Feature is not deleted. Please, try again.", "Error");
-    //   }
+    this.spinnerService.show();
+    this.featureActionService.delete(featureId).subscribe((result: boolean) => {
+      this.spinnerService.hide();
+      if(result) {
+        this.toastrService.success("Feature Action deleted successfully.", "Success"); 
+        this.getFeatureActions();
+      } else {
+        this.toastrService.error("Feature Action is not deleted. Please, try again.", "Error");
+      }
 
-    //   return;
-    // },
-    // (error: any) => {
-    //   this.spinnerService.hide();
-    //   this.toastrService.error("Feature is not deleted. Please, try again.", "Error");
-    //   return;
-    // });
+      return;
+    },
+    (error: any) => {
+      this.spinnerService.hide();
+      this.toastrService.error("Feature Action is not deleted. Please, try again.", "Error");
+      return;
+    });
   }
 
   cancel(): void { }

@@ -31,19 +31,23 @@
         [Required(ErrorMessage = "Feature is required.")]
         public int FeatureId { get; set; }
 
+        [NotMapped] public string FeatureName { get; set; }
+
         [Required(ErrorMessage = "At least one Action is required.")]
         public List<int> ActionIds { get; set; }
 
         public void Mapping(Profile profile)
         {
             profile.CreateMap<FeatureActionUpdateModel, FeatureAction>();
-            profile.CreateMap<FeatureAction, FeatureActionUpdateModel>();
+            profile.CreateMap<FeatureAction, FeatureActionUpdateModel>()
+                .ForMember(d => d.FeatureName, s => s.MapFrom(m => m.Feature.Name));
         }
     }
 
     public class FeatureActionGridModel
     {
         public int FeatureId { get; set; }
+        public string? EncriptedFeatureId { get; set; }
         public string FeatureName { get; set; }
         public List<FeatureActionStatusModel> Actions { get; set; }
     }

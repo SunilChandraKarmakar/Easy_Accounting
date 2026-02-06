@@ -69,5 +69,12 @@
         {
             db.Set<T>().Remove(entity);
         }
+
+        public virtual async Task BulkDeleteAsync(IEnumerable<T> entities, CancellationToken cancellationToken)
+        {
+            if (entities == null) return;
+            db.Set<T>().RemoveRange(entities);
+            await Task.CompletedTask;
+        }
     }
 }

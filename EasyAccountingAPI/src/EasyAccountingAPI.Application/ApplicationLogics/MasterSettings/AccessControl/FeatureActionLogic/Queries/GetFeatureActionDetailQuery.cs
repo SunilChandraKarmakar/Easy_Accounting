@@ -46,6 +46,7 @@
                 var mapFeatureAction = new FeatureActionUpdateModel
                 {
                     FeatureId = (int)getFeatureId!,
+                    FeatureName = getFeatureActions?.FirstOrDefault()?.Feature?.Name ?? string.Empty,
                     ActionIds = getActionIds!
                 };
 

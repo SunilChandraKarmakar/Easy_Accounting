@@ -1162,6 +1162,38 @@
         }
       }
     },
+    "/api/FeatureAction/Delete/{featureId}": {
+      "delete": {
+        "tags": [
+          "FeatureAction"
+        ],
+        "operationId": "FeatureAction_Delete",
+        "parameters": [
+          {
+            "name": "featureId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/FeatureAction/GetById/{featureId}": {
       "get": {
         "tags": [
@@ -1186,6 +1218,70 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/FeatureActionViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/FeatureAction/GetFilterFeatureActions": {
+      "post": {
+        "tags": [
+          "FeatureAction"
+        ],
+        "operationId": "FeatureAction_GetFilterFeatureActions",
+        "requestBody": {
+          "x-name": "getFeatureActionsByFilterQuery",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetFeatureActionsByFilterQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilterPageResultModelOfFeatureActionGridModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/FeatureAction/Update": {
+      "put": {
+        "tags": [
+          "FeatureAction"
+        ],
+        "operationId": "FeatureAction_Update",
+        "requestBody": {
+          "x-name": "updateFeatureActionCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFeatureActionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
                 }
               }
             }
@@ -2347,6 +2443,72 @@
           }
         ]
       },
+      "FilterPageResultModelOfFeatureActionGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FeatureActionGridModel"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "FeatureActionGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "featureId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "encriptedFeatureId": {
+            "type": "string",
+            "nullable": true
+          },
+          "featureName": {
+            "type": "string"
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FeatureActionStatusModel"
+            }
+          }
+        }
+      },
+      "FeatureActionStatusModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "actionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "actionName": {
+            "type": "string"
+          },
+          "isEnabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "GetFeatureActionsByFilterQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FilterPageModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
       "CreateFeatureActionCommand": {
         "allOf": [
           {
@@ -2415,27 +2577,6 @@
             "type": "integer",
             "format": "int32"
           },
-          "actionIds": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        }
-      },
-      "FeatureActionGridModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "featureId": {
-            "type": "integer",
-            "format": "int32"
-          },
           "featureName": {
             "type": "string"
           },
@@ -2445,14 +2586,19 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          "actionNames": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
           }
         }
+      },
+      "UpdateFeatureActionCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FeatureActionUpdateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
       },
       "FilterPageResultModelOfFeatureGridModel": {
         "type": "object",
