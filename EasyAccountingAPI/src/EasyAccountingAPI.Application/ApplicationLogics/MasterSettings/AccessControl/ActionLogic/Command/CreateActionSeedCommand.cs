@@ -15,22 +15,36 @@
 
             public async Task<bool> Handle(CreateActionSeedCommand request, CancellationToken cancellationToken)
             {
-                // Prevent duplicate seeding
-                if (await _actionRepository.AnyAsync(cancellationToken))
-                    return true;
+                // Get the list of seed actions
+                var seedActions = Actions();
 
-                // Seed default actions
-                var actions = GetDefaultActions();
+                // Get all existing actions
+                var existingActionNames = await _actionRepository.GetAllAsync(cancellationToken);
 
-                // Transactional operation
+                // Create a HashSet of existing action names for efficient lookup
+                var existingNamesSet = existingActionNames
+                    .Select(a => a.Name.ToLower())
+                    .ToHashSet();
+
+                // Filter out actions that already exist and create new action entities for those that don't
+                var newActions = seedActions
+                    .Where(name => !existingNamesSet.Contains(name.ToLower()))
+                    .Select(name => new EasyAccountingAPI.Model.MasterSettings.AccessControl.Action
+                    {
+                        Name = name
+                    })
+                    .ToList();
+
+                if (newActions.Count == 0)
+                    return false;
+
                 await _unitOfWork.BeginTransactionAsync(cancellationToken);
 
                 try
                 {
-                    await _actionRepository.BulkCreateAsync(actions, cancellationToken);
+                    await _actionRepository.BulkCreateAsync(newActions, cancellationToken);
                     await _unitOfWork.SaveChangesAsync(cancellationToken);
                     await _unitOfWork.CommitTransactionAsync(cancellationToken);
-
                     return true;
                 }
                 catch
@@ -40,23 +54,18 @@
                 }
             }
 
-            // Action list
-            private static List<EasyAccountingAPI.Model.MasterSettings.AccessControl.Action> GetDefaultActions()
+            // Actions
+            private static List<string> Actions()
             {
-                return new List<EasyAccountingAPI.Model.MasterSettings.AccessControl.Action>
+                var actions = new List<string>
                 {
-                    new() { Name = "Create" },
-                    new() { Name = "Update" },
-                    new() { Name = "Delete" },
-                    new() { Name = "List" },
-                }
-                .Select(c => new EasyAccountingAPI.Model.MasterSettings.AccessControl.Action
-                {
-                    Name = c.Name.Trim(),
-                    IsDeleted = false,
-                    DeletedDateTime = null
-                })
-                .ToList();
+                    "Create",
+                    "Update",
+                    "Delete",
+                    "List"
+                };
+
+                return actions;
             }
         }
     }

@@ -55,5 +55,15 @@
                 .AsNoTracking()
                 .AnyAsync(c => !c.IsDeleted, cancellationToken);
         }
+
+        public async Task<bool> IsExistActionByNameAsync(string actionName, CancellationToken cancellationToken)
+        {
+            var hasAction = await db.Actions
+                .AsNoTracking()
+                .Where(c => !c.IsDeleted && c.Name.ToLower() == actionName.ToLower())
+                .FirstOrDefaultAsync(cancellationToken);
+
+            return hasAction is not null ? true : false;
+        }
     }
 }
