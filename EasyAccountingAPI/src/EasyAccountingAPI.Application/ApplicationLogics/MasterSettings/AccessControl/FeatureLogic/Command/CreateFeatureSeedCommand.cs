@@ -8,7 +8,10 @@
             private readonly IModuleRepository _moduleRepository;
             private readonly IFeatureRepository _featureRepository;
 
-            public Handler(IUnitOfWorkRepository unitOfWork, IModuleRepository moduleRepository, IFeatureRepository featureRepository)
+            public Handler(
+                IUnitOfWorkRepository unitOfWork,
+                IModuleRepository moduleRepository,
+                IFeatureRepository featureRepository)
             {
                 _unitOfWork = unitOfWork;
                 _moduleRepository = moduleRepository;
@@ -21,61 +24,72 @@
 
                 try
                 {
-                    // Get modules and features
+                    // Get existing data
                     var existingModules = await _moduleRepository.GetAllAsync(cancellationToken);
                     var existingFeatures = await _featureRepository.GetAllAsync(cancellationToken);
 
-                    var modulesToInsert = new List<EasyAccountingAPI.Model.MasterSettings.Module>();
-                    var featuresToInsert = new List<Feature>();
+                    // Create lookup for existing modules and features
+                    var existingModuleDict = existingModules.ToDictionary(m => m.Name, m => m);
 
-                    var modules = GetModules();
-                    var masterFeatures = GetMasterSettingFeatures();
+                    // Use HashSet for O(1) lookups on existing feature table names
+                    var existingFeatureTableSet = existingFeatures
+                        .Select(f => f.TableName)
+                        .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-                    // Working on the module
-                    foreach (var module in modules)
-                    {
-                        if (!existingModules.Any(m => m.Name == module.Name))
-                            modulesToInsert.Add(module);
-                    }
+                    // Prepare modules
+                    var seedModules = GetModules();
+
+                    // Only insert modules that don't exist
+                    var modulesToInsert = seedModules
+                        .Where(m => !existingModuleDict.ContainsKey(m.Name))
+                        .ToList();
 
                     if (modulesToInsert.Any())
                         await _moduleRepository.BulkCreateAsync(modulesToInsert, cancellationToken);
 
-                    // Save once so ids are generated
+                    // Save once to generate IDs
                     await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-                    // Refresh modules dictionary
-                    var moduleDict = existingModules
-                        .Concat(modulesToInsert)
-                        .ToDictionary(m => m.Name, m => m.Id);
+                    // Refresh module dictionary (after insert)
+                    var allModules = existingModules.Concat(modulesToInsert).ToDictionary(m => m.Name, m => m.Id);
 
-                    // Working on the features
-                    foreach (var feature in masterFeatures)
+                    // Prepare features dynamically
+                    var moduleFeatureMap = GetModuleFeatureMap();
+                    var featuresToInsert = new List<Feature>();
+
+                    foreach (var moduleEntry in moduleFeatureMap)
                     {
-                        if (!existingFeatures.Any(f => f.TableName == feature.TableName))
+                        if (!allModules.TryGetValue(moduleEntry.Key, out var moduleId))
+                            continue;
+
+                        foreach (var feature in moduleEntry.Value)
                         {
-                            feature.ModuleId = moduleDict["Master Setting"];
-                            featuresToInsert.Add(feature);
+                            if (!existingFeatureTableSet.Contains(feature.TableName))
+                            {
+                                feature.ModuleId = moduleId;
+                                feature.IsDeleted = false;
+                                feature.DeletedDateTime = null;
+
+                                featuresToInsert.Add(feature);
+                            }
                         }
                     }
 
                     if (featuresToInsert.Any())
                         await _featureRepository.BulkCreateAsync(featuresToInsert, cancellationToken);
 
-                    // One save, one commit
                     await _unitOfWork.SaveChangesAsync(cancellationToken);
                     await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
-                    return true;
+                    return modulesToInsert.Any() || featuresToInsert.Any();
                 }
                 catch
                 {
                     await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                    throw; 
+                    throw;
                 }
             }
 
-            // Get modules
             private static List<EasyAccountingAPI.Model.MasterSettings.Module> GetModules()
             {
                 return new List<EasyAccountingAPI.Model.MasterSettings.Module>
@@ -84,30 +98,32 @@
                     new() { Name = "Sales & Payment" },
                     new() { Name = "Purchase" },
                     new() { Name = "Product & Service" },
-                    new() { Name = " Accounting" },
+                    new() { Name = "Accounting" },
                     new() { Name = "Reports" }
                 }
-                .Select(c => new EasyAccountingAPI.Model.MasterSettings.Module
+                .Select(m => new EasyAccountingAPI.Model.MasterSettings.Module
                 {
-                    Name = c.Name.Trim(),
+                    Name = m.Name.Trim(),
                     IsDeleted = false,
                     DeletedDateTime = null
                 })
                 .ToList();
             }
 
-            private ICollection<Feature> GetMasterSettingFeatures()
+            private static Dictionary<string, List<Feature>> GetModuleFeatureMap()
             {
-                return new List<Feature>()
-                {                
-                    new Feature { Code = "Country", Name = "Country", TableName = "Countries", ControllerName = "Country" },
-                    new Feature { Code = "City", Name = "City", TableName = "Cities", ControllerName = "City" },
-                    new Feature { Code = "Currency", Name = "Currency", TableName = "Currencies", ControllerName = "Currency" },
-                    new Feature { Code = "Module", Name = "Module", TableName = "Modules", ControllerName = "Module" },
-                    new Feature { Code = "Company", Name = "Company", TableName = "Companies", ControllerName = "Company" },
-                    new Feature { Code = "InvoiceSetting", Name = "Invoice Setting", TableName = "InvoiceSettings", 
-                        ControllerName = "InvoieSetting" },
-                    new Feature { Code = "Action", Name = "Action", TableName = "Actions", ControllerName = "Action" }
+                return new Dictionary<string, List<Feature>>
+                {
+                    ["Master Setting"] = new()
+                    {
+                        new() { Code = "Country", Name = "Country", TableName = "Countries", ControllerName = "Country" },
+                        new() { Code = "City", Name = "City", TableName = "Cities", ControllerName = "City" },
+                        new() { Code = "Currency", Name = "Currency", TableName = "Currencies", ControllerName = "Currency" },
+                        new() { Code = "Module", Name = "Module", TableName = "Modules", ControllerName = "Module" },
+                        new() { Code = "Company", Name = "Company", TableName = "Companies", ControllerName = "Company" },
+                        new() { Code = "InvoiceSetting", Name = "Invoice Setting", TableName = "InvoiceSettings", ControllerName = "InvoiceSetting" },
+                        new() { Code = "Action", Name = "Action", TableName = "Actions", ControllerName = "Action" }
+                    }
                 };
             }
         }
