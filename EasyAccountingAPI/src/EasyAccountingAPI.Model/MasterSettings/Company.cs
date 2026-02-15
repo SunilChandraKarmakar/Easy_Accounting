@@ -6,6 +6,7 @@
         public Company()
         {
             InvoiceSettings = new HashSet<InvoiceSetting>();
+            Employees = new HashSet<Employee>();
         }
 
         public int Id { get; set; }
@@ -51,5 +52,6 @@
         public City City { get; set; }
         public Currency Currency { get; set; }
         public ICollection<InvoiceSetting> InvoiceSettings { get; set; }
+        public ICollection<Employee> Employees { get; set; }
     }
 }

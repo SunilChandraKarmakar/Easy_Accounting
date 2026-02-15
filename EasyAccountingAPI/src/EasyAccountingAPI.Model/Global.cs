@@ -4,3 +4,5 @@ global using System.ComponentModel.DataAnnotations;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using EasyAccountingAPI.Model.MasterSettings;
 global using EasyAccountingAPI.Model.GlobalModels;
+global using EasyAccountingAPI.Model.Authentication;
+global using EasyAccountingAPI.Model.MasterSettings.AccessControl;

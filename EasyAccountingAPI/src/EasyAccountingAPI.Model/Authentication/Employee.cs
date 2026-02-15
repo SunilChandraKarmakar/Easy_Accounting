@@ -8,6 +8,7 @@
             Roles = new HashSet<Role>();
             EmployeeRoles = new HashSet<EmployeeRole>();
             AssignedByEmployeeRoles = new HashSet<EmployeeRole>();
+            EmployeeFeatureActions = new HashSet<EmployeeFeatureAction>();
         }
 
         public int Id { get; set; }
@@ -27,9 +28,13 @@
 
         public string? Image { get; set; }
 
+        public int? CompanyId { get; set; }
+
+        public Company? Company { get; set; }
         public User? User { get; set; }
         public ICollection<Role> Roles { get; set; }
         public ICollection<EmployeeRole> EmployeeRoles { get; set; }
         public ICollection<EmployeeRole> AssignedByEmployeeRoles { get; set; }
+        public ICollection<EmployeeFeatureAction> EmployeeFeatureActions { get; set; }
     }
 }

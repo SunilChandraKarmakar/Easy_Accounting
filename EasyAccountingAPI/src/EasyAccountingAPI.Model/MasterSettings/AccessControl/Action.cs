@@ -6,6 +6,7 @@
         public Action()
         {
             FeatureActions = new HashSet<FeatureAction>();
+            EmployeeFeatureActions = new HashSet<EmployeeFeatureAction>();
         }
 
         public int Id { get; set; }
@@ -18,5 +19,6 @@
         public DateTime? DeletedDateTime { get; set; }
 
         public ICollection<FeatureAction> FeatureActions { get; set; }
+        public ICollection<EmployeeFeatureAction> EmployeeFeatureActions { get; set; }
     }
 }

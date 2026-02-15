@@ -26,6 +26,7 @@
         public DbSet<Model.MasterSettings.AccessControl.Action> Actions { get; set; }
         public DbSet<Feature> Features { get; set; }
         public DbSet<FeatureAction> FeatureActions { get; set; }
+        public DbSet<EmployeeFeatureAction> EmployeeFeatureActions { get; set; }
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
