@@ -26,6 +26,9 @@
 
             // Seed module and features
             await mediator.Send(new CreateFeatureSeedCommand());
+
+            // Seed feature-action combinations
+            await mediator.Send(new CreateFeatureActionSeedCommand());
         }
     }
 }
