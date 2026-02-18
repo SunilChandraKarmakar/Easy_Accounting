@@ -6222,6 +6222,7 @@ export class RegisterModel implements IRegisterModel {
     fullName!: string;
     phone!: string;
     email!: string;
+    companyName!: string;
     password!: string;
     confirmPassword!: string;
 
@@ -6239,6 +6240,7 @@ export class RegisterModel implements IRegisterModel {
             this.fullName = _data["fullName"];
             this.phone = _data["phone"];
             this.email = _data["email"];
+            this.companyName = _data["companyName"];
             this.password = _data["password"];
             this.confirmPassword = _data["confirmPassword"];
         }
@@ -6256,6 +6258,7 @@ export class RegisterModel implements IRegisterModel {
         data["fullName"] = this.fullName;
         data["phone"] = this.phone;
         data["email"] = this.email;
+        data["companyName"] = this.companyName;
         data["password"] = this.password;
         data["confirmPassword"] = this.confirmPassword;
         return data;
@@ -6266,6 +6269,7 @@ export interface IRegisterModel {
     fullName: string;
     phone: string;
     email: string;
+    companyName: string;
     password: string;
     confirmPassword: string;
 }

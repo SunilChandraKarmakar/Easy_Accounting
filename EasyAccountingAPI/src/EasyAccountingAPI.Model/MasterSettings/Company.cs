@@ -19,19 +19,12 @@
         public string? Email { get; set; }
 
         [Column(TypeName = "nvarchar(30)")]
-        [Required(ErrorMessage = "Phone number is required.")]
         [StringLength(30, MinimumLength = 11)]
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
 
-        [Required(ErrorMessage = "Please, provide country.")]
-        public int CountryId { get; set; }
-
-        [Required(ErrorMessage = "Please, provide city.")]
-        public int CityId { get; set; }
-
-        [Required(ErrorMessage = "Please, provide currency.")]
-        public int CurrencyId { get; set; }
-
+        public int? CountryId { get; set; }
+        public int? CityId { get; set; }
+        public int? CurrencyId { get; set; }
         public string? Logo { get; set; }
         public string? TaxNo { get; set; }
         public bool IsSellWithPos { get; set; }

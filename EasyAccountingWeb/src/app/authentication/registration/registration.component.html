@@ -28,9 +28,6 @@
                   </div>
                   <div class="mt-4">
                     <h3 class="title">Build business workspace</h3>
-                    <!-- <p class="sub">
-                      Designed for trading, manufacturing, import-export & service-based companies.
-                    </p> -->
                     <div class="d-flex gap-2 flex-wrap mt-3">
                       <span class="chip">
                         <i class="bi bi-journal-bookmark"></i> General Ledger
@@ -51,9 +48,6 @@
                       src="https://stories.freepiklabs.com/storage/24305/finance-cuate-3391.png"
                       alt="Accounting and business management illustration" />
                   </div>
-                  <!-- <div class="mt-auto pt-3 small" style="color:var(--muted); font-weight:700;">
-                    Tip: Manage vouchers, stock valuation, and LC costs from a single dashboard.
-                  </div> -->
                 </div>
               </div>
               <div class="col-lg-6">
@@ -61,20 +55,28 @@
                   <div class="mb-3">
                     <h3 class="title">Create Account</h3>
                     <hr>
-                    <!-- <p class="sub">
-                      Start accounting, inventory, and LC operations in minutes.
-                    </p> -->
                   </div>
                   <form class="needs-validation" novalidate autocomplete="off">
                     <div class="row g-3">
-                      <div class="col-md-12">
+                      <div class="col-md-6">
                         <label for="fullName" class="form-label">Owner / Admin Name <span class="text-danger">*</span></label>
                         <div class="input-group">
                           <span class="input-group-text" style="border-radius:14px 0 0 14px;">
                             <i class="bi bi-person text-muted"></i>
                           </span>
-                          <input type="text" class="form-control border-start-0" style="border-radius:0 14px 14px 0;" required placeholder="e.g., Md. Rahim" 
-                            id="fullName" name="fullName" [(ngModel)]="registerModel.fullName" />
+                          <input type="text" class="form-control border-start-0" style="border-radius:0 14px 14px 0;"
+                            required placeholder="e.g., Md. Rahim" id="fullName" name="fullName" [(ngModel)]="registerModel.fullName" />
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="companyName" class="form-label">Company Name <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                          <span class="input-group-text" style="border-radius:14px 0 0 14px;">
+                            <i class="bi bi-person text-muted"></i>
+                          </span>
+                          <input type="text" class="form-control border-start-0" style="border-radius:0 14px 14px 0;" 
+                            required placeholder="e.g., XYZ Company" id="companyName" name="companyName" 
+                            [(ngModel)]="registerModel.companyName" />
                         </div>
                       </div>
                       <div class="col-md-6">

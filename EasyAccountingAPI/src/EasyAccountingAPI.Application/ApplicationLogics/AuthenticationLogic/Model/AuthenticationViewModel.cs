@@ -22,6 +22,9 @@
         [StringLength(maximumLength: 50, MinimumLength = 5)]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "Please, provide company name.")]
+        public string CompanyName { get; set; }
+
         [Required(ErrorMessage = "Please, provide password.")]
         [DataType(DataType.Password, ErrorMessage = "Please, provide valid password.")]
         [StringLength(maximumLength: 50, MinimumLength = 5)]

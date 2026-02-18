@@ -45,8 +45,11 @@ export class RegistrationComponent implements OnInit {
     if(this.registerModel.fullName == undefined || this.registerModel.fullName == null || this.registerModel.fullName.trim() == '') {
       this.toastrService.warning('Full Name is required.', 'Validation Warning');
       return false;
-    }
-    else if(this.registerModel.email == undefined || this.registerModel.email == null || this.registerModel.email.trim() == '') {
+    } else if(this.registerModel.companyName == undefined || this.registerModel.companyName == null 
+      || this.registerModel.companyName.trim() == '') {
+      this.toastrService.warning('Company name is required.', 'Validation Warning');
+      return false;
+    } else if(this.registerModel.email == undefined || this.registerModel.email == null || this.registerModel.email.trim() == '') {
       this.toastrService.warning('Email is required.', 'Validation Warning');
       return false;
     }

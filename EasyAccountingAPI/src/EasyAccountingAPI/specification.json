@@ -3142,6 +3142,7 @@
           "fullName",
           "phone",
           "email",
+          "companyName",
           "password",
           "confirmPassword"
         ],
@@ -3161,6 +3162,10 @@
             "maxLength": 50,
             "minLength": 5,
             "pattern": "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+          },
+          "companyName": {
+            "type": "string",
+            "minLength": 1
           },
           "password": {
             "type": "string",
