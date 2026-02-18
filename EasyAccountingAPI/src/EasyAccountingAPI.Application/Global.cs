@@ -50,3 +50,4 @@ global using System.Reflection;
 global using System.Security.Claims;
 global using System.Text;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.FeatureActionLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.EmployeeFeatureActionLogic.Model;

@@ -39,6 +39,7 @@
             services.AddScoped<IActionRepository, ActionRepository>();
             services.AddScoped<IFeatureRepository, FeatureRepository>();
             services.AddScoped<IFeatureActionRepository, FeatureActionRepository>();
+            services.AddScoped<IEmployeeFeatureActionRepository, EmployeeFeatureActionRepository>();
             #endregion
 
             return services;

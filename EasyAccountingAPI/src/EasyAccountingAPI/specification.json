@@ -938,6 +938,38 @@
         }
       }
     },
+    "/api/EmployeeFeatureAction/Create": {
+      "post": {
+        "tags": [
+          "EmployeeFeatureAction"
+        ],
+        "operationId": "EmployeeFeatureAction_Create",
+        "requestBody": {
+          "x-name": "createEmployeeFeatureActionCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEmployeeFeatureActionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Feature/Create": {
       "post": {
         "tags": [
@@ -2442,6 +2474,33 @@
             "additionalProperties": false
           }
         ]
+      },
+      "CreateEmployeeFeatureActionCommand": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/EmployeeFeatureActionCreateModel"
+        }
+      },
+      "EmployeeFeatureActionCreateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "employeeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "featureId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "actionIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
       },
       "FilterPageResultModelOfFeatureActionGridModel": {
         "type": "object",

@@ -1659,6 +1659,75 @@ export class CurrencyService implements ICurrencyService {
     }
 }
 
+export interface IEmployeeFeatureActionService {
+    create(createEmployeeFeatureActionCommand: EmployeeFeatureActionCreateModel[]): Observable<boolean>;
+}
+
+@Injectable()
+export class EmployeeFeatureActionService implements IEmployeeFeatureActionService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    create(createEmployeeFeatureActionCommand: EmployeeFeatureActionCreateModel[]): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/EmployeeFeatureAction/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(createEmployeeFeatureActionCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface IFeatureService {
     create(createFeatureCommand: CreateFeatureCommand): Observable<boolean>;
     delete(id: string): Observable<boolean>;
@@ -4634,6 +4703,58 @@ export class UpdateActionCommand extends ActionUpdateModel implements IUpdateAct
 }
 
 export interface IUpdateActionCommand extends IActionUpdateModel {
+}
+
+export class EmployeeFeatureActionCreateModel implements IEmployeeFeatureActionCreateModel {
+    employeeId?: number;
+    featureId?: number;
+    actionIds?: number[];
+
+    constructor(data?: IEmployeeFeatureActionCreateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.employeeId = _data["employeeId"];
+            this.featureId = _data["featureId"];
+            if (Array.isArray(_data["actionIds"])) {
+                this.actionIds = [] as any;
+                for (let item of _data["actionIds"])
+                    this.actionIds!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): EmployeeFeatureActionCreateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new EmployeeFeatureActionCreateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["employeeId"] = this.employeeId;
+        data["featureId"] = this.featureId;
+        if (Array.isArray(this.actionIds)) {
+            data["actionIds"] = [];
+            for (let item of this.actionIds)
+                data["actionIds"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IEmployeeFeatureActionCreateModel {
+    employeeId?: number;
+    featureId?: number;
+    actionIds?: number[];
 }
 
 export class FilterPageResultModelOfFeatureActionGridModel implements IFilterPageResultModelOfFeatureActionGridModel {
