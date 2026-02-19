@@ -96,9 +96,6 @@ namespace EasyAccountingAPI.Database.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CreatedByEmployeeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(100)");
 
@@ -108,8 +105,6 @@ namespace EasyAccountingAPI.Database.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedByEmployeeId");
 
                     b.ToTable("Roles", "Authentication");
                 });
@@ -780,17 +775,6 @@ namespace EasyAccountingAPI.Database.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("EasyAccountingAPI.Model.Authentication.Role", b =>
-                {
-                    b.HasOne("EasyAccountingAPI.Model.Authentication.Employee", "CreatedByEmployee")
-                        .WithMany("Roles")
-                        .HasForeignKey("CreatedByEmployeeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("CreatedByEmployee");
-                });
-
             modelBuilder.Entity("EasyAccountingAPI.Model.GlobalModels.City", b =>
                 {
                     b.HasOne("EasyAccountingAPI.Model.GlobalModels.Country", "Country")
@@ -962,8 +946,6 @@ namespace EasyAccountingAPI.Database.Migrations
                     b.Navigation("EmployeeFeatureActions");
 
                     b.Navigation("EmployeeRoles");
-
-                    b.Navigation("Roles");
 
                     b.Navigation("User");
                 });

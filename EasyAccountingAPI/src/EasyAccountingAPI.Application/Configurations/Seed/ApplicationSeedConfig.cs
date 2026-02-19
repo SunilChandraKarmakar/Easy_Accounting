@@ -15,6 +15,9 @@
                 }
             }
 
+            // Seed data for Role
+            await mediator.Send(new CreateRoleSeedCommand());
+
             // Seed data for Super Admin
             await mediator.Send(new SuperAdminSeedCommand());
 

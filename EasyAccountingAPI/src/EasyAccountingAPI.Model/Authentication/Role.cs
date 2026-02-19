@@ -18,10 +18,6 @@
         [Column(TypeName = "nvarchar(100)")]
         public string? Description { get; set; }
 
-        [Required(ErrorMessage = "Please, provide created by employee.")]
-        public int CreatedByEmployeeId { get; set; }
-
-        public Employee CreatedByEmployee { get; set; }
         public ICollection<EmployeeRole> EmployeeRoles { get; set; }
     }
 }

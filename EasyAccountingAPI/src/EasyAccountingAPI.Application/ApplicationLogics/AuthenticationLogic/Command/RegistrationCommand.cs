@@ -53,28 +53,19 @@
                         Image = string.Empty,
                         Company = null
                     };
-
                     await _employeeRepository.CreateAsync(newEmployee, cancellationToken);
 
-                    // Create new role for this user
-                    var role = new Role
-                    {
-                        Name = "Admin",
-                        Description = "Full access to manage your business operations and system settings.",
-                        CreatedByEmployee = newEmployee
-                    };
-
-                    await _roleRepository.CreateAsync(role, cancellationToken);
+                    // Get role for the admin
+                    var existingRole = await _roleRepository.GetRoleByNameAsync("Admin", cancellationToken);
 
                     // Create new employee role mapping
                     var newEmployeeRole = new EmployeeRole
                     {
                         Employee = newEmployee,
-                        Role = role,
+                        Role = existingRole,
                         AssignedAt = DateTime.UtcNow,
                         AssignedByEmployee = newEmployee
                     };
-
                     await _employeeRoleRepository.CreateAsync(newEmployeeRole, cancellationToken);
 
                     // Create new user
@@ -104,7 +95,6 @@
                         CreatedById = registerUser.Id,
                         CreatedDateTime = DateTime.UtcNow
                     };
-
                     await _companyRepository.CreateAsync(company, cancellationToken);
 
                     if (identityResult.Succeeded)

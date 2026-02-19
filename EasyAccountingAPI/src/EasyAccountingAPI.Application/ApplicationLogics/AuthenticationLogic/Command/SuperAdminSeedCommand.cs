@@ -11,8 +11,12 @@
             private readonly IEmployeeRoleRepository _employeeRoleRepository;
             private readonly IMapper _mapper;
 
-            public Handler(IUnitOfWorkRepository unitOfWorkRepository, UserManager<User> userManager,
-                IEmployeeRepository employeeRepository, IRoleRepository roleRepository, IEmployeeRoleRepository employeeRoleRepository,
+            public Handler(
+                IUnitOfWorkRepository unitOfWorkRepository, 
+                UserManager<User> userManager,
+                IEmployeeRepository employeeRepository, 
+                IRoleRepository roleRepository, 
+                IEmployeeRoleRepository employeeRoleRepository,
                 IMapper mapper)
             {
                 _unitOfWorkRepository = unitOfWorkRepository;
@@ -27,7 +31,7 @@
             {
                 // Super admin seeding email & password
                 // email: super_admin@gmail.com
-                // password: Super_Admin@123#
+                // password: q%>:BVr£^&vC/=q0i29DPk0n4%N!UeMR^<5
 
                 // Initialize identity result
                 IdentityResult identityResult = new IdentityResult();
@@ -49,28 +53,19 @@
                         Email = "super_admin@gmail.com",
                         Image = string.Empty
                     };
-
                     await _employeeRepository.CreateAsync(newEmployee, cancellationToken);
 
-                    // Create new role for this user
-                    var role = new Role
-                    {
-                        Name = "Super Admin",
-                        Description = "Full access to Easy Accounting for manage operations and system settings.",
-                        CreatedByEmployee = newEmployee
-                    };
-
-                    await _roleRepository.CreateAsync(role, cancellationToken);
+                    // Get role for the super admin
+                    var existingRole = await _roleRepository.GetRoleByNameAsync("Super Admin", cancellationToken);
 
                     // Create new employee role mapping
                     var newEmployeeRole = new EmployeeRole
                     {
                         Employee = newEmployee,
-                        Role = role,
+                        Role = existingRole,
                         AssignedAt = DateTime.UtcNow,
                         AssignedByEmployee = newEmployee
                     };
-
                     await _employeeRoleRepository.CreateAsync(newEmployeeRole, cancellationToken);
 
                     // Create new user
@@ -80,7 +75,7 @@
                     registerUser.FullName = "Super Admin";
                     registerUser.Employee = newEmployee;
 
-                    identityResult = await _userManager.CreateAsync(registerUser, "Super_Admin@123#");
+                    identityResult = await _userManager.CreateAsync(registerUser, "q%>:BVr£^&vC/=q0i29DPk0n4%N!UeMR^<5");
 
                     if (identityResult.Succeeded)
                     {

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EasyAccountingAPI.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20260102154902_UpdateEmployeeRoleTable002")]
-    partial class UpdateEmployeeRoleTable002
+    [Migration("20260219133923_InitializeDatabase")]
+    partial class InitializeDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,9 @@ namespace EasyAccountingAPI.Database.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -47,11 +50,13 @@ namespace EasyAccountingAPI.Database.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employees");
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Employees", "Authentication");
                 });
 
             modelBuilder.Entity("EasyAccountingAPI.Model.Authentication.EmployeeRole", b =>
@@ -83,7 +88,7 @@ namespace EasyAccountingAPI.Database.Migrations
                     b.HasIndex("EmployeeId", "RoleId")
                         .IsUnique();
 
-                    b.ToTable("EmployeeRoles");
+                    b.ToTable("EmployeeRoles", "Authentication");
                 });
 
             modelBuilder.Entity("EasyAccountingAPI.Model.Authentication.Role", b =>
@@ -94,11 +99,8 @@ namespace EasyAccountingAPI.Database.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CreatedByEmployeeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -107,9 +109,34 @@ namespace EasyAccountingAPI.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedByEmployeeId");
+                    b.ToTable("Roles", "Authentication");
+                });
 
-                    b.ToTable("Roles");
+            modelBuilder.Entity("EasyAccountingAPI.Model.Authentication.UserLoginHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("LoginDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LoginIp")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LogoutDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserLoginHistories", "Authentication");
                 });
 
             modelBuilder.Entity("EasyAccountingAPI.Model.GlobalModels.City", b =>
@@ -171,6 +198,321 @@ namespace EasyAccountingAPI.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Countries", "Global");
+                });
+
+            modelBuilder.Entity("EasyAccountingAPI.Model.MasterSettings.AccessControl.Action", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("DeletedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Actions", "MasterSettings");
+                });
+
+            modelBuilder.Entity("EasyAccountingAPI.Model.MasterSettings.AccessControl.EmployeeFeatureAction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ActionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FeatureId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActionId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("FeatureId");
+
+                    b.ToTable("EmployeeFeatureActions", "MasterSettings");
+                });
+
+            modelBuilder.Entity("EasyAccountingAPI.Model.MasterSettings.AccessControl.Feature", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("ControllerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("TableName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModuleId");
+
+                    b.ToTable("Features", "MasterSettings");
+                });
+
+            modelBuilder.Entity("EasyAccountingAPI.Model.MasterSettings.AccessControl.FeatureAction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ActionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FeatureId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActionId");
+
+                    b.HasIndex("FeatureId");
+
+                    b.ToTable("FeatureActions", "MasterSettings");
+                });
+
+            modelBuilder.Entity("EasyAccountingAPI.Model.MasterSettings.Company", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int?>("CityId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CurrencyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDefaultCompany")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsProductHaveBrand")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSellWithPos")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Logo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("TaxNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedById")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("CurrencyId");
+
+                    b.ToTable("Companies", "MasterSettings");
+                });
+
+            modelBuilder.Entity("EasyAccountingAPI.Model.MasterSettings.Currency", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double>("BaseRate")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime?>("DeletedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Symble")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Currencies", "MasterSettings");
+                });
+
+            modelBuilder.Entity("EasyAccountingAPI.Model.MasterSettings.InvoiceSetting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("InvoiceColor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("InvoiceDueDateCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("InvoiceFooter")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InvoiceTerms")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsCreateInvoiceWithoutPurchase")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDefaultInvoiceSetting")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsHideInvoiceHeader")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsServiceProviderAttributionUnderInvoice")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsShowCustomerSignature")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsShowInvoiceCreatorName")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsShowPreviousDue")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UpdatedById")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("InvoiceSettings", "MasterSettings");
+                });
+
+            modelBuilder.Entity("EasyAccountingAPI.Model.MasterSettings.Module", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("DeletedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Modules", "MasterSettings");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -399,6 +741,16 @@ namespace EasyAccountingAPI.Database.Migrations
                     b.HasDiscriminator().HasValue("User");
                 });
 
+            modelBuilder.Entity("EasyAccountingAPI.Model.Authentication.Employee", b =>
+                {
+                    b.HasOne("EasyAccountingAPI.Model.MasterSettings.Company", "Company")
+                        .WithMany("Employees")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Company");
+                });
+
             modelBuilder.Entity("EasyAccountingAPI.Model.Authentication.EmployeeRole", b =>
                 {
                     b.HasOne("EasyAccountingAPI.Model.Authentication.Employee", "AssignedByEmployee")
@@ -426,17 +778,6 @@ namespace EasyAccountingAPI.Database.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("EasyAccountingAPI.Model.Authentication.Role", b =>
-                {
-                    b.HasOne("EasyAccountingAPI.Model.Authentication.Employee", "CreatedByEmployee")
-                        .WithMany("Roles")
-                        .HasForeignKey("CreatedByEmployeeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("CreatedByEmployee");
-                });
-
             modelBuilder.Entity("EasyAccountingAPI.Model.GlobalModels.City", b =>
                 {
                     b.HasOne("EasyAccountingAPI.Model.GlobalModels.Country", "Country")
@@ -446,6 +787,98 @@ namespace EasyAccountingAPI.Database.Migrations
                         .IsRequired();
 
                     b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("EasyAccountingAPI.Model.MasterSettings.AccessControl.EmployeeFeatureAction", b =>
+                {
+                    b.HasOne("EasyAccountingAPI.Model.MasterSettings.AccessControl.Action", "Action")
+                        .WithMany("EmployeeFeatureActions")
+                        .HasForeignKey("ActionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EasyAccountingAPI.Model.Authentication.Employee", "Employee")
+                        .WithMany("EmployeeFeatureActions")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EasyAccountingAPI.Model.MasterSettings.AccessControl.Feature", "Feature")
+                        .WithMany("EmployeeFeatureActions")
+                        .HasForeignKey("FeatureId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Action");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Feature");
+                });
+
+            modelBuilder.Entity("EasyAccountingAPI.Model.MasterSettings.AccessControl.Feature", b =>
+                {
+                    b.HasOne("EasyAccountingAPI.Model.MasterSettings.Module", "Module")
+                        .WithMany("Features")
+                        .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Module");
+                });
+
+            modelBuilder.Entity("EasyAccountingAPI.Model.MasterSettings.AccessControl.FeatureAction", b =>
+                {
+                    b.HasOne("EasyAccountingAPI.Model.MasterSettings.AccessControl.Action", "Action")
+                        .WithMany("FeatureActions")
+                        .HasForeignKey("ActionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EasyAccountingAPI.Model.MasterSettings.AccessControl.Feature", "Feature")
+                        .WithMany("FeatureActions")
+                        .HasForeignKey("FeatureId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Action");
+
+                    b.Navigation("Feature");
+                });
+
+            modelBuilder.Entity("EasyAccountingAPI.Model.MasterSettings.Company", b =>
+                {
+                    b.HasOne("EasyAccountingAPI.Model.GlobalModels.City", "City")
+                        .WithMany("Companies")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("EasyAccountingAPI.Model.GlobalModels.Country", "Country")
+                        .WithMany("Companies")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("EasyAccountingAPI.Model.MasterSettings.Currency", "Currency")
+                        .WithMany("Companies")
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("City");
+
+                    b.Navigation("Country");
+
+                    b.Navigation("Currency");
+                });
+
+            modelBuilder.Entity("EasyAccountingAPI.Model.MasterSettings.InvoiceSetting", b =>
+                {
+                    b.HasOne("EasyAccountingAPI.Model.MasterSettings.Company", "Company")
+                        .WithMany("InvoiceSettings")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -513,9 +946,9 @@ namespace EasyAccountingAPI.Database.Migrations
                 {
                     b.Navigation("AssignedByEmployeeRoles");
 
-                    b.Navigation("EmployeeRoles");
+                    b.Navigation("EmployeeFeatureActions");
 
-                    b.Navigation("Roles");
+                    b.Navigation("EmployeeRoles");
 
                     b.Navigation("User");
                 });
@@ -525,9 +958,47 @@ namespace EasyAccountingAPI.Database.Migrations
                     b.Navigation("EmployeeRoles");
                 });
 
+            modelBuilder.Entity("EasyAccountingAPI.Model.GlobalModels.City", b =>
+                {
+                    b.Navigation("Companies");
+                });
+
             modelBuilder.Entity("EasyAccountingAPI.Model.GlobalModels.Country", b =>
                 {
                     b.Navigation("Cities");
+
+                    b.Navigation("Companies");
+                });
+
+            modelBuilder.Entity("EasyAccountingAPI.Model.MasterSettings.AccessControl.Action", b =>
+                {
+                    b.Navigation("EmployeeFeatureActions");
+
+                    b.Navigation("FeatureActions");
+                });
+
+            modelBuilder.Entity("EasyAccountingAPI.Model.MasterSettings.AccessControl.Feature", b =>
+                {
+                    b.Navigation("EmployeeFeatureActions");
+
+                    b.Navigation("FeatureActions");
+                });
+
+            modelBuilder.Entity("EasyAccountingAPI.Model.MasterSettings.Company", b =>
+                {
+                    b.Navigation("Employees");
+
+                    b.Navigation("InvoiceSettings");
+                });
+
+            modelBuilder.Entity("EasyAccountingAPI.Model.MasterSettings.Currency", b =>
+                {
+                    b.Navigation("Companies");
+                });
+
+            modelBuilder.Entity("EasyAccountingAPI.Model.MasterSettings.Module", b =>
+                {
+                    b.Navigation("Features");
                 });
 #pragma warning restore 612, 618
         }
