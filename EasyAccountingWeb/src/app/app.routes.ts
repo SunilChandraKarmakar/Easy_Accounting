@@ -31,6 +31,7 @@ import { FeatureUpdateComponent } from './components/master-settings/AccessContr
 import { FeatureActionsComponent } from './components/master-settings/AccessControl/feature-actions/feature-actions.component';
 import { FeatureActionCreateComponent } from './components/master-settings/AccessControl/feature-actions/feature-action-create/feature-action-create.component';
 import { FeatureActionUpdateComponent } from './components/master-settings/AccessControl/feature-actions/feature-action-update/feature-action-update.component';
+import { EmployeeFeatureActionsComponent } from './components/master-settings/AccessControl/employee-feature-actions/employee-feature-actions.component';
 
 export const routes: Routes = [
 
@@ -88,7 +89,10 @@ export const routes: Routes = [
       // Feature Actions
       { path: "feature-actions", component: FeatureActionsComponent, pathMatch: "full" },
       { path: "feature-action/create", component: FeatureActionCreateComponent, pathMatch: "full" },
-      { path: "feature-action/update/:recordId", component: FeatureActionUpdateComponent, pathMatch: "full" }
+      { path: "feature-action/update/:recordId", component: FeatureActionUpdateComponent, pathMatch: "full" },
+
+      // Employee Feature Actions
+      { path: "employee-feature-actions", component: EmployeeFeatureActionsComponent, pathMatch: "full" }
     ],
     
     canActivate: [AuthGuard] 

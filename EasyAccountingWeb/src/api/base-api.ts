@@ -1661,6 +1661,8 @@ export class CurrencyService implements ICurrencyService {
 
 export interface IEmployeeFeatureActionService {
     create(createEmployeeFeatureActionCommand: EmployeeFeatureActionCreateModel[]): Observable<boolean>;
+    delete(employeeId: number): Observable<boolean>;
+    getFilterEmployeeFeatureActions(emloyeeFeatureActionsQuery: GetEmloyeeFeatureActionsByFilterQuery): Observable<FilterPageResultModelOfEmployeeFeatureActionGridModel>;
 }
 
 @Injectable()
@@ -1717,6 +1719,110 @@ export class EmployeeFeatureActionService implements IEmployeeFeatureActionServi
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : null as any;
     
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(employeeId: number): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/EmployeeFeatureAction/Delete/{employeeId}";
+        if (employeeId === undefined || employeeId === null)
+            throw new globalThis.Error("The parameter 'employeeId' must be defined.");
+        url_ = url_.replace("{employeeId}", encodeURIComponent("" + employeeId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getFilterEmployeeFeatureActions(emloyeeFeatureActionsQuery: GetEmloyeeFeatureActionsByFilterQuery): Observable<FilterPageResultModelOfEmployeeFeatureActionGridModel> {
+        let url_ = this.baseUrl + "/api/EmployeeFeatureAction/GetFilterEmployeeFeatureActions";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(emloyeeFeatureActionsQuery);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFilterEmployeeFeatureActions(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFilterEmployeeFeatureActions(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FilterPageResultModelOfEmployeeFeatureActionGridModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FilterPageResultModelOfEmployeeFeatureActionGridModel>;
+        }));
+    }
+
+    protected processGetFilterEmployeeFeatureActions(response: HttpResponseBase): Observable<FilterPageResultModelOfEmployeeFeatureActionGridModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FilterPageResultModelOfEmployeeFeatureActionGridModel.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -4703,6 +4809,225 @@ export class UpdateActionCommand extends ActionUpdateModel implements IUpdateAct
 }
 
 export interface IUpdateActionCommand extends IActionUpdateModel {
+}
+
+export class FilterPageResultModelOfEmployeeFeatureActionGridModel implements IFilterPageResultModelOfEmployeeFeatureActionGridModel {
+    items?: EmployeeFeatureActionGridModel[];
+    totalCount?: number;
+
+    constructor(data?: IFilterPageResultModelOfEmployeeFeatureActionGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(EmployeeFeatureActionGridModel.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): FilterPageResultModelOfEmployeeFeatureActionGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPageResultModelOfEmployeeFeatureActionGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item ? item.toJSON() : undefined as any);
+        }
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+}
+
+export interface IFilterPageResultModelOfEmployeeFeatureActionGridModel {
+    items?: EmployeeFeatureActionGridModel[];
+    totalCount?: number;
+}
+
+export class EmployeeFeatureActionGridModel implements IEmployeeFeatureActionGridModel {
+    employeeId?: number;
+    employeeName?: string;
+    features?: FeatureWithActionsModel[];
+
+    constructor(data?: IEmployeeFeatureActionGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.employeeId = _data["employeeId"];
+            this.employeeName = _data["employeeName"];
+            if (Array.isArray(_data["features"])) {
+                this.features = [] as any;
+                for (let item of _data["features"])
+                    this.features!.push(FeatureWithActionsModel.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): EmployeeFeatureActionGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new EmployeeFeatureActionGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["employeeId"] = this.employeeId;
+        data["employeeName"] = this.employeeName;
+        if (Array.isArray(this.features)) {
+            data["features"] = [];
+            for (let item of this.features)
+                data["features"].push(item ? item.toJSON() : undefined as any);
+        }
+        return data;
+    }
+}
+
+export interface IEmployeeFeatureActionGridModel {
+    employeeId?: number;
+    employeeName?: string;
+    features?: FeatureWithActionsModel[];
+}
+
+export class FeatureWithActionsModel implements IFeatureWithActionsModel {
+    featureId?: number;
+    featureName?: string;
+    actions?: ActionDetails[];
+
+    constructor(data?: IFeatureWithActionsModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.featureId = _data["featureId"];
+            this.featureName = _data["featureName"];
+            if (Array.isArray(_data["actions"])) {
+                this.actions = [] as any;
+                for (let item of _data["actions"])
+                    this.actions!.push(ActionDetails.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): FeatureWithActionsModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FeatureWithActionsModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["featureId"] = this.featureId;
+        data["featureName"] = this.featureName;
+        if (Array.isArray(this.actions)) {
+            data["actions"] = [];
+            for (let item of this.actions)
+                data["actions"].push(item ? item.toJSON() : undefined as any);
+        }
+        return data;
+    }
+}
+
+export interface IFeatureWithActionsModel {
+    featureId?: number;
+    featureName?: string;
+    actions?: ActionDetails[];
+}
+
+export class ActionDetails implements IActionDetails {
+    id?: number;
+    name?: string;
+
+    constructor(data?: IActionDetails) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): ActionDetails {
+        data = typeof data === 'object' ? data : {};
+        let result = new ActionDetails();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IActionDetails {
+    id?: number;
+    name?: string;
+}
+
+export class GetEmloyeeFeatureActionsByFilterQuery extends FilterPageModel implements IGetEmloyeeFeatureActionsByFilterQuery {
+
+    constructor(data?: IGetEmloyeeFeatureActionsByFilterQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetEmloyeeFeatureActionsByFilterQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetEmloyeeFeatureActionsByFilterQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetEmloyeeFeatureActionsByFilterQuery extends IFilterPageModel {
 }
 
 export class EmployeeFeatureActionCreateModel implements IEmployeeFeatureActionCreateModel {

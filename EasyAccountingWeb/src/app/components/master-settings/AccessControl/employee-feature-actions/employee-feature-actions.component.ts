@@ -9,15 +9,15 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
-import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { FeatureActionGridModel, FeatureActionService, FilterPageModel, FilterPageResultModelOfFeatureActionGridModel } from '../../../../../api/base-api';
-import { ToastrService } from 'ngx-toastr';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { EmployeeFeatureActionGridModel, EmployeeFeatureActionService, FilterPageModel, FilterPageResultModelOfEmployeeFeatureActionGridModel } from '../../../../../api/base-api';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-feature-actions',
-  templateUrl: './feature-actions.component.html',
-  styleUrls: ['./feature-actions.component.css'],
+  selector: 'app-employee-feature-actions',
+  templateUrl: './employee-feature-actions.component.html',
+  styleUrls: ['./employee-feature-actions.component.css'],
   standalone: true,
   imports: [
     CommonModule, 
@@ -32,20 +32,20 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
     NzBreadCrumbModule, 
     NzPopconfirmModule, 
     NzTagModule],
-  providers: [FeatureActionService]
+  providers: [EmployeeFeatureActionService]
 })
 
-export class FeatureActionsComponent implements OnInit {
+export class EmployeeFeatureActionsComponent implements OnInit {
 
   // Table property
-  featureActions: FeatureActionGridModel[] = [];
+  employeeFeatureActions: EmployeeFeatureActionGridModel[] = [];
   totalRecord: number = 0;
   
   // Filter page model
   filterPageModel: FilterPageModel = new FilterPageModel();
 
   constructor(
-    private featureActionService: FeatureActionService, 
+    private employeeFeatureActionService: EmployeeFeatureActionService, 
     private spinnerService: NgxSpinnerService, 
     private toastrService: ToastrService) { }
 
@@ -53,8 +53,8 @@ export class FeatureActionsComponent implements OnInit {
     // Initialize page filter model
     this.initializeFilterModel();
 
-    // Get feature actions
-    this.getFeatureActions();
+    // Get employee feature actions
+    this.getEmployeeFeatureActions();
   }
 
   onChangeApplyFilter(event: Event) {
@@ -62,15 +62,15 @@ export class FeatureActionsComponent implements OnInit {
     this.filterPageModel.filterValue = filterValue;
     this.filterPageModel.pageIndex = 0;
 
-    // Get feature actions
-    this.getFeatureActions();
+    // Get employee feature actions
+    this.getEmployeeFeatureActions();
   }
 
   // Initialize filter model
   private initializeFilterModel(): void {
     this.filterPageModel.pageIndex = 0;
     this.filterPageModel.pageSize = 10;
-    this.filterPageModel.sortColumn = "name";
+    this.filterPageModel.sortColumn = "employeename";
     this.filterPageModel.sortOrder = "ascend"
     this.filterPageModel.filterValue = "";
   }
@@ -89,31 +89,31 @@ export class FeatureActionsComponent implements OnInit {
       });
     }
 
-    // Get feature actions
-    this.getFeatureActions();
+    // Get employee feature actions
+    this.getEmployeeFeatureActions();
   }
 
-  // Get feature actions
-  private getFeatureActions(): void {
+  // Get employee feature actions
+  private getEmployeeFeatureActions(): void {
     this.spinnerService.show();
 
     // Clear before loading 
-    this.featureActions = [];
+    this.employeeFeatureActions = [];
     this.totalRecord = 0;
 
-    this.featureActionService.getFilterFeatureActions(this.filterPageModel)
-    .subscribe((result: FilterPageResultModelOfFeatureActionGridModel) => {
-      this.featureActions = result.items || [];
+    this.employeeFeatureActionService.getFilterEmployeeFeatureActions(this.filterPageModel)
+    .subscribe((result: FilterPageResultModelOfEmployeeFeatureActionGridModel) => {
+      this.employeeFeatureActions = result.items || [];
       this.totalRecord = result.totalCount || 0;
       this.spinnerService.hide();
       return;
     },
     (error: any) => {
       this.spinnerService.hide();
-      this.featureActions = [];
+      this.employeeFeatureActions = [];
       this.totalRecord = 0;
 
-      this.toastrService.error("Feature Action list is not show at this time! Please, try again.", "Error");
+      this.toastrService.error("Employee Feature Action list is not show at this time! Please, try again.", "Error");
       return;
     });
   }
@@ -123,28 +123,28 @@ export class FeatureActionsComponent implements OnInit {
     this.deleteFeatureAction(featuresId);
   }
 
-  // Delete feature action
-  private deleteFeatureAction(featureId: number): void {
-    if(featureId == null || featureId == undefined || featureId == -1) {
-      this.toastrService.error("Feature is not found. Please, try again.", "Error");
+  // Delete employee feature action
+  private deleteFeatureAction(employeeId: number): void {
+    if(employeeId == null || employeeId == undefined || employeeId == -1) {
+      this.toastrService.error("Employee Feature Action is not found. Please, try again.", "Error");
       return;
     }
 
     this.spinnerService.show();
-    this.featureActionService.delete(featureId).subscribe((result: boolean) => {
+    this.employeeFeatureActionService.delete(employeeId).subscribe((result: boolean) => {
       this.spinnerService.hide();
       if(result) {
-        this.toastrService.success("Feature Action deleted successfully.", "Success"); 
-        this.getFeatureActions();
+        this.toastrService.success("Employee Feature Action deleted successfully.", "Success"); 
+        this.getEmployeeFeatureActions();
       } else {
-        this.toastrService.error("Feature Action is not deleted. Please, try again.", "Error");
+        this.toastrService.error("Employee Feature Action is not deleted. Please, try again.", "Error");
       }
 
       return;
     },
     (error: any) => {
       this.spinnerService.hide();
-      this.toastrService.error("Feature Action is not deleted. Please, try again.", "Error");
+      this.toastrService.error("Employee Feature Action is not deleted. Please, try again.", "Error");
       return;
     });
   }
