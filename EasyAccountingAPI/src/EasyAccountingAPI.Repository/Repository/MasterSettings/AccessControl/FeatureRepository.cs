@@ -54,7 +54,12 @@
 
             return await getFeatures
                 .OrderBy(c => c.Name)
-                .Select(c => new SelectModel { Id = c.Id, Name = c.Name })
+                .Select(c => new SelectModel 
+                { 
+                    Id = c.Id, 
+                    Name = c.Name,
+                    ValueOne = c.ModuleId
+                })
                 .ToListAsync(cancellationToken);
         }
 

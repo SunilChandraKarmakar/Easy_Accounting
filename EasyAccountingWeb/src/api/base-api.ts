@@ -1659,9 +1659,84 @@ export class CurrencyService implements ICurrencyService {
     }
 }
 
+export interface IEmployeeService {
+    getEmployeeByCompanyId(companyId: number): Observable<SelectModel[]>;
+}
+
+@Injectable()
+export class EmployeeService implements IEmployeeService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    getEmployeeByCompanyId(companyId: number): Observable<SelectModel[]> {
+        let url_ = this.baseUrl + "/api/Employee/GetEmployeeByCompanyId/{companyId}";
+        if (companyId === undefined || companyId === null)
+            throw new globalThis.Error("The parameter 'companyId' must be defined.");
+        url_ = url_.replace("{companyId}", encodeURIComponent("" + companyId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetEmployeeByCompanyId(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetEmployeeByCompanyId(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SelectModel[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SelectModel[]>;
+        }));
+    }
+
+    protected processGetEmployeeByCompanyId(response: HttpResponseBase): Observable<SelectModel[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(SelectModel.fromJS(item));
+            }
+            else {
+                result200 = null as any;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface IEmployeeFeatureActionService {
     create(createEmployeeFeatureActionCommand: EmployeeFeatureActionCreateModel[]): Observable<boolean>;
     delete(employeeId: number): Observable<boolean>;
+    getById(employeeId: string): Observable<EmployeeFeatureActionViewModel>;
     getFilterEmployeeFeatureActions(emloyeeFeatureActionsQuery: GetEmloyeeFeatureActionsByFilterQuery): Observable<FilterPageResultModelOfEmployeeFeatureActionGridModel>;
 }
 
@@ -1771,6 +1846,57 @@ export class EmployeeFeatureActionService implements IEmployeeFeatureActionServi
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : null as any;
     
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getById(employeeId: string): Observable<EmployeeFeatureActionViewModel> {
+        let url_ = this.baseUrl + "/api/EmployeeFeatureAction/GetById/{employeeId}";
+        if (employeeId === undefined || employeeId === null)
+            throw new globalThis.Error("The parameter 'employeeId' must be defined.");
+        url_ = url_.replace("{employeeId}", encodeURIComponent("" + employeeId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<EmployeeFeatureActionViewModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<EmployeeFeatureActionViewModel>;
+        }));
+    }
+
+    protected processGetById(response: HttpResponseBase): Observable<EmployeeFeatureActionViewModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = EmployeeFeatureActionViewModel.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -3808,6 +3934,74 @@ export class UpdateCurrencyCommand extends CurrencyUpdateModel implements IUpdat
 export interface IUpdateCurrencyCommand extends ICurrencyUpdateModel {
 }
 
+export class SelectModel implements ISelectModel {
+    id?: any;
+    name?: string;
+    group?: string;
+    isDefault?: boolean;
+    valueOne?: any;
+    valueTwo?: any;
+    valueThree?: any;
+    valueFour?: any;
+    displayOrder?: number;
+
+    constructor(data?: ISelectModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.group = _data["group"];
+            this.isDefault = _data["isDefault"];
+            this.valueOne = _data["valueOne"];
+            this.valueTwo = _data["valueTwo"];
+            this.valueThree = _data["valueThree"];
+            this.valueFour = _data["valueFour"];
+            this.displayOrder = _data["displayOrder"];
+        }
+    }
+
+    static fromJS(data: any): SelectModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new SelectModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["group"] = this.group;
+        data["isDefault"] = this.isDefault;
+        data["valueOne"] = this.valueOne;
+        data["valueTwo"] = this.valueTwo;
+        data["valueThree"] = this.valueThree;
+        data["valueFour"] = this.valueFour;
+        data["displayOrder"] = this.displayOrder;
+        return data;
+    }
+}
+
+export interface ISelectModel {
+    id?: any;
+    name?: string;
+    group?: string;
+    isDefault?: boolean;
+    valueOne?: any;
+    valueTwo?: any;
+    valueThree?: any;
+    valueFour?: any;
+    displayOrder?: number;
+}
+
 export class FilterPageResultModelOfInvoiceSettingGridModel implements IFilterPageResultModelOfInvoiceSettingGridModel {
     items?: InvoiceSettingGridModel[];
     totalCount?: number;
@@ -5031,6 +5225,8 @@ export interface IGetEmloyeeFeatureActionsByFilterQuery extends IFilterPageModel
 }
 
 export class EmployeeFeatureActionCreateModel implements IEmployeeFeatureActionCreateModel {
+    companyId?: number;
+    moduleId?: number;
     employeeId?: number;
     featureId?: number;
     actionIds?: number[];
@@ -5046,6 +5242,8 @@ export class EmployeeFeatureActionCreateModel implements IEmployeeFeatureActionC
 
     init(_data?: any) {
         if (_data) {
+            this.companyId = _data["companyId"];
+            this.moduleId = _data["moduleId"];
             this.employeeId = _data["employeeId"];
             this.featureId = _data["featureId"];
             if (Array.isArray(_data["actionIds"])) {
@@ -5065,6 +5263,8 @@ export class EmployeeFeatureActionCreateModel implements IEmployeeFeatureActionC
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["companyId"] = this.companyId;
+        data["moduleId"] = this.moduleId;
         data["employeeId"] = this.employeeId;
         data["featureId"] = this.featureId;
         if (Array.isArray(this.actionIds)) {
@@ -5077,6 +5277,112 @@ export class EmployeeFeatureActionCreateModel implements IEmployeeFeatureActionC
 }
 
 export interface IEmployeeFeatureActionCreateModel {
+    companyId?: number;
+    moduleId?: number;
+    employeeId?: number;
+    featureId?: number;
+    actionIds?: number[];
+}
+
+export class EmployeeFeatureActionViewModel implements IEmployeeFeatureActionViewModel {
+    createModel?: EmployeeFeatureActionCreateModel;
+    updateModel?: EmployeeFeatureActionUpdateModel;
+    gridModel?: EmployeeFeatureActionGridModel;
+    optionsDataSources?: any;
+
+    constructor(data?: IEmployeeFeatureActionViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.createModel = _data["createModel"] ? EmployeeFeatureActionCreateModel.fromJS(_data["createModel"]) : undefined as any;
+            this.updateModel = _data["updateModel"] ? EmployeeFeatureActionUpdateModel.fromJS(_data["updateModel"]) : undefined as any;
+            this.gridModel = _data["gridModel"] ? EmployeeFeatureActionGridModel.fromJS(_data["gridModel"]) : undefined as any;
+            this.optionsDataSources = _data["optionsDataSources"];
+        }
+    }
+
+    static fromJS(data: any): EmployeeFeatureActionViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new EmployeeFeatureActionViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["createModel"] = this.createModel ? this.createModel.toJSON() : undefined as any;
+        data["updateModel"] = this.updateModel ? this.updateModel.toJSON() : undefined as any;
+        data["gridModel"] = this.gridModel ? this.gridModel.toJSON() : undefined as any;
+        data["optionsDataSources"] = this.optionsDataSources;
+        return data;
+    }
+}
+
+export interface IEmployeeFeatureActionViewModel {
+    createModel?: EmployeeFeatureActionCreateModel;
+    updateModel?: EmployeeFeatureActionUpdateModel;
+    gridModel?: EmployeeFeatureActionGridModel;
+    optionsDataSources?: any;
+}
+
+export class EmployeeFeatureActionUpdateModel implements IEmployeeFeatureActionUpdateModel {
+    id?: number;
+    employeeId?: number;
+    featureId?: number;
+    actionIds?: number[];
+
+    constructor(data?: IEmployeeFeatureActionUpdateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.employeeId = _data["employeeId"];
+            this.featureId = _data["featureId"];
+            if (Array.isArray(_data["actionIds"])) {
+                this.actionIds = [] as any;
+                for (let item of _data["actionIds"])
+                    this.actionIds!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): EmployeeFeatureActionUpdateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new EmployeeFeatureActionUpdateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["employeeId"] = this.employeeId;
+        data["featureId"] = this.featureId;
+        if (Array.isArray(this.actionIds)) {
+            data["actionIds"] = [];
+            for (let item of this.actionIds)
+                data["actionIds"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IEmployeeFeatureActionUpdateModel {
+    id?: number;
     employeeId?: number;
     featureId?: number;
     actionIds?: number[];
@@ -5812,74 +6118,6 @@ export class UpdateFeatureCommand extends FeatureUpdateModel implements IUpdateF
 }
 
 export interface IUpdateFeatureCommand extends IFeatureUpdateModel {
-}
-
-export class SelectModel implements ISelectModel {
-    id?: any;
-    name?: string;
-    group?: string;
-    isDefault?: boolean;
-    valueOne?: any;
-    valueTwo?: any;
-    valueThree?: any;
-    valueFour?: any;
-    displayOrder?: number;
-
-    constructor(data?: ISelectModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.group = _data["group"];
-            this.isDefault = _data["isDefault"];
-            this.valueOne = _data["valueOne"];
-            this.valueTwo = _data["valueTwo"];
-            this.valueThree = _data["valueThree"];
-            this.valueFour = _data["valueFour"];
-            this.displayOrder = _data["displayOrder"];
-        }
-    }
-
-    static fromJS(data: any): SelectModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new SelectModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["group"] = this.group;
-        data["isDefault"] = this.isDefault;
-        data["valueOne"] = this.valueOne;
-        data["valueTwo"] = this.valueTwo;
-        data["valueThree"] = this.valueThree;
-        data["valueFour"] = this.valueFour;
-        data["displayOrder"] = this.displayOrder;
-        return data;
-    }
-}
-
-export interface ISelectModel {
-    id?: any;
-    name?: string;
-    group?: string;
-    isDefault?: boolean;
-    valueOne?: any;
-    valueTwo?: any;
-    valueThree?: any;
-    valueFour?: any;
-    displayOrder?: number;
 }
 
 export class FilterPageResultModelOfCityGridModel implements IFilterPageResultModelOfCityGridModel {

@@ -3,11 +3,23 @@
     public class EmployeeFeatureActionViewModel
     {
         public EmployeeFeatureActionCreateModel CreateModel { get; set; }
+        public EmployeeFeatureActionUpdateModel UpdateModel { get; set; }
         public EmployeeFeatureActionGridModel GridModel { get; set; }
+        public dynamic OptionsDataSources { get; set; } = new ExpandoObject();
     }
 
     public class EmployeeFeatureActionCreateModel
     {
+        [NotMapped] public int CompanyId { get; set; }
+        [NotMapped] public int ModuleId { get; set; }
+        public int EmployeeId { get; set; }
+        public int FeatureId { get; set; }
+        public int[] ActionIds { get; set; }
+    }
+
+    public class EmployeeFeatureActionUpdateModel
+    {
+        public int Id { get; set; }
         public int EmployeeId { get; set; }
         public int FeatureId { get; set; }
         public int[] ActionIds { get; set; }

@@ -16,57 +16,44 @@
             <nz-space-compact nzSize="default">
               <nz-input-wrapper class="search-input">
                 <nz-icon nzInputAddonBefore nzType="search" />
-                <input nz-input (keyup)="onChangeApplyFilter($event)" placeholder="Search feature actions" />
+                <input nz-input (keyup)="onChangeApplyFilter($event)" placeholder="Search employee feature actions" />
               </nz-input-wrapper>              
             </nz-space-compact>
           </div>
           <div class="col-md-6 text-end">
-            <button nz-button nzType="primary" routerLink="/app/feature-action/create">
+            <button nz-button nzType="primary" routerLink="/app/employee-feature-action/create">
               <nz-icon nzType="plus" nzTheme="outline" />
               Create
             </button>
           </div>
           <div class="col-md-12">
-            <nz-table #basicTable [nzData]="featureActions" [nzBordered]="true" [nzOuterBordered]="true" [nzFrontPagination]="false" 
-              [nzTotal]="totalRecord" [nzSize]="'default'" [nzPaginationType]="'default'" [nzShowSizeChanger]="true" 
-              (nzQueryParams)="onChangeQueryParams($event)">
+            <nz-table #basicTable [nzData]="employeeFeatureActions" [nzBordered]="true" [nzOuterBordered]="true" 
+              [nzFrontPagination]="false" [nzTotal]="totalRecord" [nzSize]="'default'" [nzPaginationType]="'default'" [nzShowSizeChanger]="true" (nzQueryParams)="onChangeQueryParams($event)">
               <thead>
                 <tr>
-                  <th>Feature Name</th>
-                  <th class="text-center">Status</th>
+                  <th nzColumnKey="employeename" [nzSortFn]="true">Employee</th>
+                  <th >Feature & Action</th>
                   <th class="text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
-                @for (data of basicTable.data; track data.featureId) {
+                @for (data of basicTable.data; track data.employeeId) {
                   <tr>
-                    <td>{{ data.featureName }}</td>
-                    <td>
-                      @for(action of data.actions; track action.actionId) {
-                        <nz-tag nzColor="success" *ngIf="action.isEnabled">
-                          <nz-icon nzType="check-circle" />
-                          <span>{{ action.actionName }}</span>
-                        </nz-tag>
-                        <nz-tag nzColor="error" *ngIf="!action.isEnabled">
-                          <nz-icon nzType="close-circle" />
-                          <span>{{ action.actionName }}</span>
-                        </nz-tag>
-                      }
-                    </td>
+                    <td>{{ data.employeeName }}</td>
                     <td class="text-center action-cell">
                       <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Edit" class="action-btn edit-btn"
-                        routerLink="/app/feature-action/update/{{ data.encriptedFeatureId }}">
+                        routerLink="/app/employee-feature-action/update/{{ data.employeeId }}">
                         <nz-icon nzType="edit" />
                       </button>
                       <nz-divider nzType="vertical"></nz-divider>
                       <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Delete" nzDanger class="action-btn delete-btn" 
-                        nz-popconfirm [nzPopconfirmTitle]="deleteTpl" [nzIcon]="iconTpl" (nzOnConfirm)="onClickDelete(data.featureId!)" 
-                        (nzOnCancel)="cancel()">
+                        nz-popconfirm [nzPopconfirmTitle]="deleteTpl" [nzIcon]="iconTpl" 
+                        (nzOnConfirm)="onClickDelete(data.employeeId!)" (nzOnCancel)="cancel()">
                         <nz-icon nzType="delete" />
                       </button>
                       <ng-template #deleteTpl>
                         <div class="text-center">
-                          Are you sure you want to delete this Feature?
+                          Are you sure you want to delete this Employee Feature Action?
                           <br />
                           Continue?
                         </div>

@@ -46,7 +46,12 @@
 
             return await getModules
                 .OrderBy(c => c.Name)
-                .Select(c => new SelectModel { Id = c.Id, Name = c.Name })
+                .Select(c => new SelectModel 
+                { 
+                    Id = c.Id, 
+                    Name = c.Name,
+                    Group = c.Features.Count() > 0 ? "With Features" : "No Features",
+                })
                 .ToListAsync(cancellationToken);
         }
 

@@ -21,7 +21,7 @@ export class SidebarComponent implements OnInit {
     userGroups: ['user-groups', 'permissions'],
     permissions: ['role-management'],
     settings: ['countries', 'cities', 'currencies', 'companies', 'invoice-settings', 'modules'], 
-    accessControl: ['actions', 'features', 'feature-actions', 'user-permission']
+    accessControl: ['actions', 'features', 'feature-actions', 'employee-feature-actions']
   };
 
   constructor(private router: Router) {

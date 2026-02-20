@@ -16,7 +16,15 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './action-create.component.html',
   styleUrls: ['./action-create.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule, NzButtonModule, RouterLink, NgxSpinnerModule, NzInputModule, NzIconModule, NzBreadCrumbModule, 
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    NzButtonModule, 
+    RouterLink, 
+    NgxSpinnerModule, 
+    NzInputModule, 
+    NzIconModule, 
+    NzBreadCrumbModule, 
     NzDividerModule],
   providers: [ActionService]
 })
