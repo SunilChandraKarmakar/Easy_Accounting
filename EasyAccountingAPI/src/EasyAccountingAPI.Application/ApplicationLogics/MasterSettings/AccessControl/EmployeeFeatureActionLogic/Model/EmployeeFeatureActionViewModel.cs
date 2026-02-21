@@ -14,7 +14,7 @@
         [NotMapped] public int ModuleId { get; set; }
         public int EmployeeId { get; set; }
         public int FeatureId { get; set; }
-        public int[] ActionIds { get; set; }
+        public int ActionId { get; set; }
     }
 
     public class EmployeeFeatureActionUpdateModel

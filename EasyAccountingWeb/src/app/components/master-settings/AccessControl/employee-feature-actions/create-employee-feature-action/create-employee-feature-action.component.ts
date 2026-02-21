@@ -11,6 +11,7 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { EmployeeFeatureActionCreateModel, EmployeeFeatureActionService, EmployeeFeatureActionViewModel, EmployeeService, SelectModel } from '../../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 
 @Component({
   selector: 'app-create-employee-feature-action',
@@ -27,7 +28,8 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
     NzIconModule, 
     NzBreadCrumbModule, 
     NzDividerModule,
-    NzSelectModule
+    NzSelectModule,
+    NzCheckboxModule
   ],
   providers: [EmployeeFeatureActionService, EmployeeService]
 })
@@ -39,6 +41,7 @@ export class CreateEmployeeFeatureActionComponent implements OnInit {
 
   // Create model
   employeeFeatureActionCreateModel: EmployeeFeatureActionCreateModel = new EmployeeFeatureActionCreateModel(); 
+  employeeFeatureActionCreateModels: EmployeeFeatureActionCreateModel[] = []; 
 
   // Select list
   companies: SelectModel[] = [];
@@ -46,6 +49,9 @@ export class CreateEmployeeFeatureActionComponent implements OnInit {
   modules: SelectModel[] = [];
   features: SelectModel[] = [];
   actions: SelectModel[] = [];
+
+  // Store selected permissions
+  selectedPermissions: { moduleId: number; featureId: number; actionId: number }[] = [];
 
   constructor(
     private employeeFeatureActionService: EmployeeFeatureActionService, 
@@ -107,11 +113,26 @@ export class CreateEmployeeFeatureActionComponent implements OnInit {
   }
 
   // Group by feature based on module
-  groupedFeatures: Record<number, SelectModel[]> = { };
+  groupedFeatures: Partial<Record<number, SelectModel[]>> = {};
   private groupFeatures(): void {
     this.groupedFeatures = this.features.reduce((acc, feature) => {
       (acc[feature.valueOne] ??= []).push(feature);
       return acc;
-    }, {} as Record<number, SelectModel[]>);
+    }, {} as Partial<Record<number, SelectModel[]>>);
+  }
+
+  onActionChange(moduleId: number, featureId: number, actionId: number, checked: boolean): void {
+    if (checked) {
+      this.selectedPermissions.push({
+        moduleId,
+        featureId,
+        actionId
+      });
+    } else {
+      this.selectedPermissions = this.selectedPermissions
+        .filter(x => !(x.moduleId === moduleId && x.featureId === featureId && x.actionId === actionId));
+    }
+
+    console.log(this.selectedPermissions);
   }
 }

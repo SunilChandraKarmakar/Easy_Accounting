@@ -33,34 +33,44 @@
             </nz-select>
           </div>   
         </form>
-        <div class="row">
-          <div class="col-md-12">
+        <div class="row mt-4">
+          <div class="col-12">
             @for(module of modules; track module.id) {
-              @if(module.group == "With Features" && module.group != undefined && module.group != null) {
-                <div class="card mt-3 mb-3 card-info">
-                  <div class="card-header text-center">
-                    {{ module.name }}
+              @if(module.group == "With Features") {
+                <div class="module-card">
+                  <div class="module-header">
+                    <span class="module-title">
+                      <nz-icon nzInputPrefix nzType="appstore" />
+                      {{ module.name }}
+                    </span>
+                    <hr>
                   </div>
-                  <div class="card-body">
-                    <div class="row">
-                      @for (feature of groupedFeatures[module.id] ?? []; track feature.id) {
-                        <div class="col-md-4">
-                          <div class="card mt-2 mb-2 border-primary">
-                            <div class="card-header text-center">
+                  <div class="row g-4 mt-2">
+                    @for (feature of groupedFeatures[module.id] ?? []; track feature.id) {
+                      <div class="col-lg-4 col-md-6">
+                        <div class="feature-card">
+                          <div class="feature-header">
+                            <span class="feature-title">
+                              <nz-icon nzType="profile" nzTheme="outline"></nz-icon>
                               {{ feature.name }}
-                            </div>
-                            <div class="card-body">
-                              @for (action of actions; track action.id) {
-                                <h6>{{ action.name }}</h6>
-                              }
-                            </div>
+                            </span>
+                          </div>
+                          <div class="action-container">
+                            @for (action of actions; track action.id) {
+                              <div class="action-item">
+                                <label nz-checkbox [ngModel]="false" 
+                                  (ngModelChange)="onActionChange(module.id, feature.id, action.id, $event)">
+                                  {{ action.name }}
+                                </label>
+                              </div>
+                            }
                           </div>
                         </div>
-                      }
-                    </div>
+                      </div>
+                    }
                   </div>
                 </div>
-              } 
+              }
             }
           </div>
         </div>

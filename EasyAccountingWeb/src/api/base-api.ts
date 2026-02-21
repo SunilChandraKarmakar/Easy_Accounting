@@ -5229,7 +5229,7 @@ export class EmployeeFeatureActionCreateModel implements IEmployeeFeatureActionC
     moduleId?: number;
     employeeId?: number;
     featureId?: number;
-    actionIds?: number[];
+    actionId?: number;
 
     constructor(data?: IEmployeeFeatureActionCreateModel) {
         if (data) {
@@ -5246,11 +5246,7 @@ export class EmployeeFeatureActionCreateModel implements IEmployeeFeatureActionC
             this.moduleId = _data["moduleId"];
             this.employeeId = _data["employeeId"];
             this.featureId = _data["featureId"];
-            if (Array.isArray(_data["actionIds"])) {
-                this.actionIds = [] as any;
-                for (let item of _data["actionIds"])
-                    this.actionIds!.push(item);
-            }
+            this.actionId = _data["actionId"];
         }
     }
 
@@ -5267,11 +5263,7 @@ export class EmployeeFeatureActionCreateModel implements IEmployeeFeatureActionC
         data["moduleId"] = this.moduleId;
         data["employeeId"] = this.employeeId;
         data["featureId"] = this.featureId;
-        if (Array.isArray(this.actionIds)) {
-            data["actionIds"] = [];
-            for (let item of this.actionIds)
-                data["actionIds"].push(item);
-        }
+        data["actionId"] = this.actionId;
         return data;
     }
 }
@@ -5281,7 +5273,7 @@ export interface IEmployeeFeatureActionCreateModel {
     moduleId?: number;
     employeeId?: number;
     featureId?: number;
-    actionIds?: number[];
+    actionId?: number;
 }
 
 export class EmployeeFeatureActionViewModel implements IEmployeeFeatureActionViewModel {

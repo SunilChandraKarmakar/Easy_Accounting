@@ -2733,12 +2733,9 @@
             "type": "integer",
             "format": "int32"
           },
-          "actionIds": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
+          "actionId": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
