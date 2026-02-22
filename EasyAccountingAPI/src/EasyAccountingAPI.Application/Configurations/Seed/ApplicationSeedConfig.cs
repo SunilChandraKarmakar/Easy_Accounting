@@ -32,6 +32,9 @@
 
             // Seed feature-action combinations
             await mediator.Send(new CreateFeatureActionSeedCommand());
+
+            // Seed super admin permissions
+            await mediator.Send(new CreateSuperAdminFeatureAcionSeedCommand());
         }
     }
 }

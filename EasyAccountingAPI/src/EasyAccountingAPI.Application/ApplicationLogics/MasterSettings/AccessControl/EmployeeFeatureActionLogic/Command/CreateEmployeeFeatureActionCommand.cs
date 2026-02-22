@@ -30,11 +30,17 @@
                 if (string.IsNullOrEmpty(userId) || string.IsNullOrWhiteSpace(userId))
                     throw new UnauthorizedAccessException(ProvideErrorMessage.UserNotAuthenticated);
 
+                // Check, if the request is null or empty, then return false
+                if (request is null || !request.Any() || request.Any(x => x.EmployeeId <= 0))
+                    return false;
+
                 // Start Transaction
                 await _unitOfWorkRepository.BeginTransactionAsync(cancellationToken);
 
                 try
                 {
+                    var employeeFeatureActions = _mapper.Map<List<EmployeeFeatureAction>>(request);
+                    await _employeeFeatureActionRepository.BulkCreateAsync(employeeFeatureActions, cancellationToken);
 
                     // Final save + commit
                     await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);

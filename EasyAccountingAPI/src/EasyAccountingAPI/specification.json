@@ -2717,14 +2717,6 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "companyId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "moduleId": {
-            "type": "integer",
-            "format": "int32"
-          },
           "employeeId": {
             "type": "integer",
             "format": "int32"
@@ -2772,11 +2764,8 @@
             "format": "int32"
           },
           "actionIds": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

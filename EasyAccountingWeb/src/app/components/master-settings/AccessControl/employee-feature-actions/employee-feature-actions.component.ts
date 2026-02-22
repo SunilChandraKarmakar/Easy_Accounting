@@ -31,7 +31,8 @@ import { ToastrService } from 'ngx-toastr';
     NzIconModule, 
     NzBreadCrumbModule, 
     NzPopconfirmModule, 
-    NzTagModule],
+    NzTagModule
+  ],
   providers: [EmployeeFeatureActionService]
 })
 

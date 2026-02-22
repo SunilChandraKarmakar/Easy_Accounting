@@ -26,6 +26,16 @@
                 cancellationToken);
         }
 
+        public async Task<EmployeeFeatureAction?> GetEmployeeFeatureActionByEmployeeAndFeatureAndActionAsync(int employeeId,
+            int featureId, int actionId, CancellationToken cancellationToken)
+        {
+            var employeeFeatureAction = await db.EmployeeFeatureActions
+                .FirstOrDefaultAsync(efa => efa.EmployeeId == employeeId && efa.FeatureId == featureId
+                    && efa.ActionId == actionId, cancellationToken);
+
+            return employeeFeatureAction;
+        }
+
         public async Task<bool> DeleteEmployeeFeatureActionByEmployeeAsync(int employeeId, CancellationToken cancellationToken)
         {
             var affectedRows = await db.EmployeeFeatureActions
@@ -33,6 +43,17 @@
                 .ExecuteDeleteAsync(cancellationToken);
 
             return affectedRows > 0;
+        }
+
+        public async Task<IEnumerable<EmployeeFeatureAction>> GetEmployeeFeatureActionsByEmployeeIdAsync(int employeeId, 
+            CancellationToken cancellationToken)
+        {
+            var employeeFeatureActions = await db.EmployeeFeatureActions
+                .AsNoTracking()
+                .Where(efa => efa.EmployeeId == employeeId)
+                .ToListAsync(cancellationToken);
+
+            return employeeFeatureActions;
         }
     }
 }

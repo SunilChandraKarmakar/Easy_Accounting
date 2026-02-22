@@ -19,5 +19,14 @@
 
             return employees;
         }
+
+        public async Task<Employee?> GetEmployeeByEmailAsync(string email, CancellationToken cancellationToken)
+        {
+            var employee = await db.Employees
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Email == email, cancellationToken);
+
+            return employee;
+        }
     }
 }

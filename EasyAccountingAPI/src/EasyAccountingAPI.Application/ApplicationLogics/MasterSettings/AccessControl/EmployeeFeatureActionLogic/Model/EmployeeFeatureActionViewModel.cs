@@ -8,21 +8,31 @@
         public dynamic OptionsDataSources { get; set; } = new ExpandoObject();
     }
 
-    public class EmployeeFeatureActionCreateModel
+    public class EmployeeFeatureActionCreateModel : IMapFrom<EmployeeFeatureAction>
     {
-        [NotMapped] public int CompanyId { get; set; }
-        [NotMapped] public int ModuleId { get; set; }
         public int EmployeeId { get; set; }
         public int FeatureId { get; set; }
         public int ActionId { get; set; }
+
+        public void Mapping(Profile profile)
+        {
+            profile.CreateMap<EmployeeFeatureActionCreateModel, EmployeeFeatureAction>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
+        }
     }
 
-    public class EmployeeFeatureActionUpdateModel
+    public class EmployeeFeatureActionUpdateModel : IMapFrom<EmployeeFeatureAction>
     {
         public int Id { get; set; }
         public int EmployeeId { get; set; }
         public int FeatureId { get; set; }
-        public int[] ActionIds { get; set; }
+        public int ActionIds { get; set; }
+
+        public void Mapping(Profile profile)
+        {
+            profile.CreateMap<EmployeeFeatureActionUpdateModel, EmployeeFeatureAction>();
+            profile.CreateMap<EmployeeFeatureAction, EmployeeFeatureActionUpdateModel>();
+        }
     }
 
     public class EmployeeFeatureActionGridModel

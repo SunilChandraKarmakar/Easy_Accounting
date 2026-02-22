@@ -16,8 +16,8 @@
           <div class="col-md-3">
             <label for="companyId" class="form-label">Company <span class="text-danger fw-bold">*</span></label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Company" 
-              [(ngModel)]="employeeFeatureActionCreateModel.companyId" name="companyId" style="width: 100%;"
-              (nzOpenChange)="onChangeCompany(employeeFeatureActionCreateModel.companyId!)">
+              [(ngModel)]="companyId" name="companyId" style="width: 100%;"
+              (nzOpenChange)="onChangeCompany(companyId!)">
               @for (company of companies; track company.id) {
                 <nz-option [nzValue]="company.id" [nzLabel]="company.name!"></nz-option>
               }
@@ -26,7 +26,7 @@
           <div class="col-md-3">
             <label for="employeeId" class="form-label">Employee <span class="text-danger fw-bold">*</span></label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Employee" 
-              [(ngModel)]="employeeFeatureActionCreateModel.employeeId" name="employeeId" style="width: 100%;">
+              [(ngModel)]="employeeId" name="employeeId" style="width: 100%;">
               @for (employee of employees; track employee.id) {
                 <nz-option [nzValue]="employee.id" [nzLabel]="employee.name!"></nz-option>
               }
@@ -76,7 +76,7 @@
         </div>
       </div>
       <div class="card-footer text-end">
-        <button nz-button nzType="primary" class="btn-save">
+        <button nz-button nzType="primary" class="btn-save" (click)="onClickSaveEmployeeFeatureAction()">
           <nz-icon nzType="save" nzTheme="outline" />
           Save
         </button>

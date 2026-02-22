@@ -39,8 +39,11 @@ export class CreateEmployeeFeatureActionComponent implements OnInit {
   // Default employee id
   private _employeeId: string = "-1";
 
+  // Employee & company id
+  employeeId: number | undefined;
+  companyId: number | undefined
+
   // Create model
-  employeeFeatureActionCreateModel: EmployeeFeatureActionCreateModel = new EmployeeFeatureActionCreateModel(); 
   employeeFeatureActionCreateModels: EmployeeFeatureActionCreateModel[] = []; 
 
   // Select list
@@ -132,7 +135,50 @@ export class CreateEmployeeFeatureActionComponent implements OnInit {
       this.selectedPermissions = this.selectedPermissions
         .filter(x => !(x.moduleId === moduleId && x.featureId === featureId && x.actionId === actionId));
     }
+  }
 
-    console.log(this.selectedPermissions);
+  // Create from validation
+  private getCreateFromValidationResult(): boolean {
+    if(this.companyId == undefined || this.companyId == null || this.companyId <= 0) {
+      this.toastrService.warning("Please, provide company.", "Warning");
+      return false;
+    } else if(this.employeeId == undefined || this.employeeId == null || this.employeeId <= 0) {
+      this.toastrService.warning("Please, provide employee.", "Warning");
+      return false;
+    } else if(this.selectedPermissions.length == 0 || this.selectedPermissions == undefined || this.selectedPermissions == null) {
+        this.toastrService.warning("Please, provide at last one employee permission.", "Warning");
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  // On click save employee feature action
+  onClickSaveEmployeeFeatureAction(): void {
+
+    let getValidationResult: boolean = this.getCreateFromValidationResult();
+
+    if(getValidationResult) {
+      this.spinnerService.show();
+
+      this.employeeFeatureActionCreateModels = this.selectedPermissions.map(x => {
+        const model = new EmployeeFeatureActionCreateModel();
+        model.employeeId = this.employeeId!;
+        model.featureId = x.featureId;
+        model.actionId = x.actionId;
+        return model;
+      });
+
+      this.employeeFeatureActionService.create(this.employeeFeatureActionCreateModels).subscribe((result: boolean) => {
+        this.spinnerService.hide();
+        this.toastrService.success("Feature & action permission is assigned on the selected employee.", "Success.");
+        return this.router.navigateByUrl("/app/employee-feature-actions");
+      },
+      (error: any) => {
+        this.spinnerService.hide();
+        this.toastrService.error("Feature & action permission is not assigned on the selected employee.", "Error");
+        return;
+      })
+    }
   }
 }

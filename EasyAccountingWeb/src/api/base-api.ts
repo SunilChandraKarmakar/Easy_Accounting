@@ -5225,8 +5225,6 @@ export interface IGetEmloyeeFeatureActionsByFilterQuery extends IFilterPageModel
 }
 
 export class EmployeeFeatureActionCreateModel implements IEmployeeFeatureActionCreateModel {
-    companyId?: number;
-    moduleId?: number;
     employeeId?: number;
     featureId?: number;
     actionId?: number;
@@ -5242,8 +5240,6 @@ export class EmployeeFeatureActionCreateModel implements IEmployeeFeatureActionC
 
     init(_data?: any) {
         if (_data) {
-            this.companyId = _data["companyId"];
-            this.moduleId = _data["moduleId"];
             this.employeeId = _data["employeeId"];
             this.featureId = _data["featureId"];
             this.actionId = _data["actionId"];
@@ -5259,8 +5255,6 @@ export class EmployeeFeatureActionCreateModel implements IEmployeeFeatureActionC
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["companyId"] = this.companyId;
-        data["moduleId"] = this.moduleId;
         data["employeeId"] = this.employeeId;
         data["featureId"] = this.featureId;
         data["actionId"] = this.actionId;
@@ -5269,8 +5263,6 @@ export class EmployeeFeatureActionCreateModel implements IEmployeeFeatureActionC
 }
 
 export interface IEmployeeFeatureActionCreateModel {
-    companyId?: number;
-    moduleId?: number;
     employeeId?: number;
     featureId?: number;
     actionId?: number;
@@ -5328,7 +5320,7 @@ export class EmployeeFeatureActionUpdateModel implements IEmployeeFeatureActionU
     id?: number;
     employeeId?: number;
     featureId?: number;
-    actionIds?: number[];
+    actionIds?: number;
 
     constructor(data?: IEmployeeFeatureActionUpdateModel) {
         if (data) {
@@ -5344,11 +5336,7 @@ export class EmployeeFeatureActionUpdateModel implements IEmployeeFeatureActionU
             this.id = _data["id"];
             this.employeeId = _data["employeeId"];
             this.featureId = _data["featureId"];
-            if (Array.isArray(_data["actionIds"])) {
-                this.actionIds = [] as any;
-                for (let item of _data["actionIds"])
-                    this.actionIds!.push(item);
-            }
+            this.actionIds = _data["actionIds"];
         }
     }
 
@@ -5364,11 +5352,7 @@ export class EmployeeFeatureActionUpdateModel implements IEmployeeFeatureActionU
         data["id"] = this.id;
         data["employeeId"] = this.employeeId;
         data["featureId"] = this.featureId;
-        if (Array.isArray(this.actionIds)) {
-            data["actionIds"] = [];
-            for (let item of this.actionIds)
-                data["actionIds"].push(item);
-        }
+        data["actionIds"] = this.actionIds;
         return data;
     }
 }
@@ -5377,7 +5361,7 @@ export interface IEmployeeFeatureActionUpdateModel {
     id?: number;
     employeeId?: number;
     featureId?: number;
-    actionIds?: number[];
+    actionIds?: number;
 }
 
 export class FilterPageResultModelOfFeatureActionGridModel implements IFilterPageResultModelOfFeatureActionGridModel {
