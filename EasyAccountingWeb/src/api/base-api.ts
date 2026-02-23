@@ -5054,6 +5054,7 @@ export interface IFilterPageResultModelOfEmployeeFeatureActionGridModel {
 }
 
 export class EmployeeFeatureActionGridModel implements IEmployeeFeatureActionGridModel {
+    employeeEncryptedId?: string;
     employeeId?: number;
     employeeName?: string;
     features?: FeatureWithActionsModel[];
@@ -5069,6 +5070,7 @@ export class EmployeeFeatureActionGridModel implements IEmployeeFeatureActionGri
 
     init(_data?: any) {
         if (_data) {
+            this.employeeEncryptedId = _data["employeeEncryptedId"];
             this.employeeId = _data["employeeId"];
             this.employeeName = _data["employeeName"];
             if (Array.isArray(_data["features"])) {
@@ -5088,6 +5090,7 @@ export class EmployeeFeatureActionGridModel implements IEmployeeFeatureActionGri
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["employeeEncryptedId"] = this.employeeEncryptedId;
         data["employeeId"] = this.employeeId;
         data["employeeName"] = this.employeeName;
         if (Array.isArray(this.features)) {
@@ -5100,6 +5103,7 @@ export class EmployeeFeatureActionGridModel implements IEmployeeFeatureActionGri
 }
 
 export interface IEmployeeFeatureActionGridModel {
+    employeeEncryptedId?: string;
     employeeId?: number;
     employeeName?: string;
     features?: FeatureWithActionsModel[];
@@ -5270,7 +5274,7 @@ export interface IEmployeeFeatureActionCreateModel {
 
 export class EmployeeFeatureActionViewModel implements IEmployeeFeatureActionViewModel {
     createModel?: EmployeeFeatureActionCreateModel;
-    updateModel?: EmployeeFeatureActionUpdateModel;
+    updateModel?: EmployeeFeatureActionUpdateModel[];
     gridModel?: EmployeeFeatureActionGridModel;
     optionsDataSources?: any;
 
@@ -5286,7 +5290,11 @@ export class EmployeeFeatureActionViewModel implements IEmployeeFeatureActionVie
     init(_data?: any) {
         if (_data) {
             this.createModel = _data["createModel"] ? EmployeeFeatureActionCreateModel.fromJS(_data["createModel"]) : undefined as any;
-            this.updateModel = _data["updateModel"] ? EmployeeFeatureActionUpdateModel.fromJS(_data["updateModel"]) : undefined as any;
+            if (Array.isArray(_data["updateModel"])) {
+                this.updateModel = [] as any;
+                for (let item of _data["updateModel"])
+                    this.updateModel!.push(EmployeeFeatureActionUpdateModel.fromJS(item));
+            }
             this.gridModel = _data["gridModel"] ? EmployeeFeatureActionGridModel.fromJS(_data["gridModel"]) : undefined as any;
             this.optionsDataSources = _data["optionsDataSources"];
         }
@@ -5302,7 +5310,11 @@ export class EmployeeFeatureActionViewModel implements IEmployeeFeatureActionVie
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["createModel"] = this.createModel ? this.createModel.toJSON() : undefined as any;
-        data["updateModel"] = this.updateModel ? this.updateModel.toJSON() : undefined as any;
+        if (Array.isArray(this.updateModel)) {
+            data["updateModel"] = [];
+            for (let item of this.updateModel)
+                data["updateModel"].push(item ? item.toJSON() : undefined as any);
+        }
         data["gridModel"] = this.gridModel ? this.gridModel.toJSON() : undefined as any;
         data["optionsDataSources"] = this.optionsDataSources;
         return data;
@@ -5311,7 +5323,7 @@ export class EmployeeFeatureActionViewModel implements IEmployeeFeatureActionVie
 
 export interface IEmployeeFeatureActionViewModel {
     createModel?: EmployeeFeatureActionCreateModel;
-    updateModel?: EmployeeFeatureActionUpdateModel;
+    updateModel?: EmployeeFeatureActionUpdateModel[];
     gridModel?: EmployeeFeatureActionGridModel;
     optionsDataSources?: any;
 }
@@ -5320,7 +5332,7 @@ export class EmployeeFeatureActionUpdateModel implements IEmployeeFeatureActionU
     id?: number;
     employeeId?: number;
     featureId?: number;
-    actionIds?: number;
+    actionId?: number;
 
     constructor(data?: IEmployeeFeatureActionUpdateModel) {
         if (data) {
@@ -5336,7 +5348,7 @@ export class EmployeeFeatureActionUpdateModel implements IEmployeeFeatureActionU
             this.id = _data["id"];
             this.employeeId = _data["employeeId"];
             this.featureId = _data["featureId"];
-            this.actionIds = _data["actionIds"];
+            this.actionId = _data["actionId"];
         }
     }
 
@@ -5352,7 +5364,7 @@ export class EmployeeFeatureActionUpdateModel implements IEmployeeFeatureActionU
         data["id"] = this.id;
         data["employeeId"] = this.employeeId;
         data["featureId"] = this.featureId;
-        data["actionIds"] = this.actionIds;
+        data["actionId"] = this.actionId;
         return data;
     }
 }
@@ -5361,7 +5373,7 @@ export interface IEmployeeFeatureActionUpdateModel {
     id?: number;
     employeeId?: number;
     featureId?: number;
-    actionIds?: number;
+    actionId?: number;
 }
 
 export class FilterPageResultModelOfFeatureActionGridModel implements IFilterPageResultModelOfFeatureActionGridModel {

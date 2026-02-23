@@ -104,7 +104,7 @@ export class CreateEmployeeFeatureActionComponent implements OnInit {
   private getEmployeeByCompanyId(companyId: number): void {
     this.spinnerService.hide();
     this.employeeService.getEmployeeByCompanyId(companyId).subscribe((result: SelectModel[]) => {
-      this.employees = result;
+      this.employees = result.filter(x => x.group == "No Permission");
       this.spinnerService.hide();
       return;
     },

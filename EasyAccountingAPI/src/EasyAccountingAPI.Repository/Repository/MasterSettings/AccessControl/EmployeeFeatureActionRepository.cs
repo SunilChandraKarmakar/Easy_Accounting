@@ -4,26 +4,71 @@
     {
         public EmployeeFeatureActionRepository(DatabaseContext databaseContext) : base(databaseContext) { }
 
-        public Task<FilterPageResultModel<EmployeeFeatureAction>> GetEmployeeFeatureActionsByFilterAsync(
+        public async Task<FilterPageResultModel<EmployeeFeatureAction>> GetEmployeeFeatureActionsByFilterAsync(
             FilterPageModel filterPageModel, CancellationToken cancellationToken)
         {
-            Expression<Func<EmployeeFeatureAction, bool>> filter = x =>
-                 (string.IsNullOrWhiteSpace(filterPageModel.FilterValue)
-                 || x.Employee.FullName.Contains(filterPageModel.FilterValue)
-                 || x.Feature.Name.Contains(filterPageModel.FilterValue)
-                 || x.Action.Name.Contains(filterPageModel.FilterValue));
+            // Base query with includes
+            IQueryable<EmployeeFeatureAction> query = db.Set<EmployeeFeatureAction>()
+                .AsNoTracking()
+                .Include(x => x.Employee)
+                .Include(x => x.Feature)
+                .Include(x => x.Action);
 
-            var sortableColumns = new Dictionary<string, Expression<Func<EmployeeFeatureAction, object>>>
+            // Filtering
+            if (!string.IsNullOrWhiteSpace(filterPageModel.FilterValue))
             {
-                ["employeename"] = x => x.Employee.FullName,
-                ["featurename"] = x => x.Feature.Name,
-                ["actionname"] = x => x.Action.Name,
-                ["id"] = c => c.Id
+                string filterValue = filterPageModel.FilterValue;
+                query = query.Where(x =>
+                    x.Employee.FullName.Contains(filterValue) ||
+                    x.Feature.Name.Contains(filterValue) ||
+                    x.Action.Name.Contains(filterValue));
+            }
+
+            // Get distinct employee IDs after filtering
+            var employeeQuery = query
+                .Select(x => new EmployeeProjection
+                {
+                    EmployeeId = x.EmployeeId,
+                    FullName = x.Employee.FullName
+                })
+                .Distinct();
+
+            // Define sortable columns for employee pagination
+            var employeeSortableColumns = new Dictionary<string, Expression<Func<EmployeeProjection, object>>>
+            {
+                ["employeename"] = x => x.FullName,
+                ["id"] = x => x.EmployeeId
             };
 
-            return GetAllFilterAsync(filterPageModel, filter, c => c.Id, sortableColumns, 
-                include: x => x.Include(x => x.Employee).Include(x => x.Feature).Include(x => x.Action), 
-                cancellationToken);
+            // Apply sorting based on requested column
+            if (!string.IsNullOrWhiteSpace(filterPageModel.SortColumn)
+                && employeeSortableColumns.TryGetValue(filterPageModel.SortColumn.ToLower(), out var sortExpression))
+            {
+                employeeQuery = filterPageModel.SortOrder?.ToLower() == "descend"
+                    ? employeeQuery.OrderByDescending(sortExpression)
+                    : employeeQuery.OrderBy(sortExpression);
+            }
+            else
+            {
+                employeeQuery = employeeQuery.OrderBy(x => x.EmployeeId);
+            }
+
+            // Count total employees
+            int totalCount = await employeeQuery.CountAsync(cancellationToken);
+
+            // Apply pagination on employees
+            var pagedEmployeeIds = await employeeQuery
+                .Skip(filterPageModel.PageIndex * filterPageModel.PageSize)
+                .Take(filterPageModel.PageSize)
+                .Select(x => x.EmployeeId)
+                .ToListAsync(cancellationToken);
+
+            // Get all feature actions for paged employees
+            var items = await query
+                .Where(x => pagedEmployeeIds.Contains(x.EmployeeId))
+                .ToListAsync(cancellationToken);
+
+            return new FilterPageResultModel<EmployeeFeatureAction>(items, totalCount);
         }
 
         public async Task<EmployeeFeatureAction?> GetEmployeeFeatureActionByEmployeeAndFeatureAndActionAsync(int employeeId,
@@ -55,5 +100,11 @@
 
             return employeeFeatureActions;
         }
+    }
+
+    public class EmployeeProjection
+    {
+        public int EmployeeId { get; set; }
+        public string FullName { get; set; } = string.Empty;
     }
 }

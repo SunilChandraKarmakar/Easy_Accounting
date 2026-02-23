@@ -120,8 +120,8 @@ export class EmployeeFeatureActionsComponent implements OnInit {
   }
 
   // On click open delete modal
-  onClickDelete(featuresId: number): void {
-    this.deleteFeatureAction(featuresId);
+  onClickDelete(employeeId: number): void {
+    this.deleteFeatureAction(employeeId);
   }
 
   // Delete employee feature action

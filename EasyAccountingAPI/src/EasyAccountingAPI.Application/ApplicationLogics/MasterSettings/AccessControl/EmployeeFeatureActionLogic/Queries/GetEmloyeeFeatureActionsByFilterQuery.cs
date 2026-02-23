@@ -8,16 +8,13 @@
         {
             private readonly IEmployeeFeatureActionRepository _employeeFeatureActionRepository;
             private readonly IHttpContextAccessor _httpContextAccessor;
-            private readonly IMapper _mapper;
 
             public Handler(
                 IEmployeeFeatureActionRepository employeeFeatureActionRepository, 
-                IHttpContextAccessor httpContextAccessor, 
-                IMapper mapper)
+                IHttpContextAccessor httpContextAccessor)
             {
                 _employeeFeatureActionRepository = employeeFeatureActionRepository;
                 _httpContextAccessor = httpContextAccessor;
-                _mapper = mapper;
             }
 
             public async Task<FilterPageResultModel<EmployeeFeatureActionGridModel>> Handle(
@@ -36,6 +33,7 @@
                     .GroupBy(x => new { x.EmployeeId, x.Employee.FullName })
                     .Select(employeeGroup => new EmployeeFeatureActionGridModel
                     {
+                        EmployeeEncryptedId = EncryptionService.Encrypt(employeeGroup.Key.EmployeeId.ToString()),
                         EmployeeId = employeeGroup.Key.EmployeeId,
                         EmployeeName = employeeGroup.Key.FullName,
 

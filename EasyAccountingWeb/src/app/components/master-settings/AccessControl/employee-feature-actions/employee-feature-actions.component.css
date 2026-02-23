@@ -54,10 +54,6 @@
   transition: 0.3s;
 }
 
-.feature-box:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
 .feature-title {
   margin-bottom: 8px;
 }

@@ -14,6 +14,7 @@
                 {
                     Id = e.Id,
                     Name = e.FullName,
+                    Group = e.EmployeeFeatureActions.Any() ? "Has Permission" : "No Permission",
                 })
                 .ToListAsync(cancellationToken);
 

@@ -41,31 +41,28 @@
                   <tr>
                     <td>{{ data.employeeName }}</td>
                     <td>
-  <div class="feature-container">
-    @for (feature of data.features; track feature.featureId) {
-      <div class="feature-box">
-        <!-- Feature Name -->
-        <div class="feature-title">
-          <nz-tag nzColor="blue">
-            <strong>{{ feature.featureName }}</strong>
-          </nz-tag>
-        </div>
-
-        <!-- Action List -->
-        <div class="action-list">
-          @for (action of feature.actions; track action.id) {
-            <nz-tag nzColor="green" class="action-tag">
-              {{ action.name }}
-            </nz-tag>
-          }
-        </div>
-      </div>
-    }
-  </div>
-</td>
+                      <div class="feature-container">
+                        @for (feature of data.features; track feature.featureId) {
+                          <div class="feature-box">
+                            <div class="feature-title">
+                              <nz-tag nzColor="blue">
+                                <strong>{{ feature.featureName }}</strong>
+                              </nz-tag>
+                            </div>
+                            <div class="action-list">
+                              @for (action of feature.actions; track action.id) {
+                                <nz-tag nzColor="green" class="action-tag">
+                                  {{ action.name }}
+                                </nz-tag>
+                              }
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    </td>
                     <td class="text-center action-cell">
                       <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Edit" class="action-btn edit-btn"
-                        routerLink="/app/employee-feature-action/update/{{ data.employeeId }}">
+                        routerLink="/app/employee-feature-action/update/{{ data.employeeEncryptedId }}">
                         <nz-icon nzType="edit" />
                       </button>
                       <nz-divider nzType="vertical"></nz-divider>

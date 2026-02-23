@@ -2649,6 +2649,9 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "employeeEncryptedId": {
+            "type": "string"
+          },
           "employeeId": {
             "type": "integer",
             "format": "int32"
@@ -2739,7 +2742,10 @@
             "$ref": "#/components/schemas/EmployeeFeatureActionCreateModel"
           },
           "updateModel": {
-            "$ref": "#/components/schemas/EmployeeFeatureActionUpdateModel"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmployeeFeatureActionUpdateModel"
+            }
           },
           "gridModel": {
             "$ref": "#/components/schemas/EmployeeFeatureActionGridModel"
@@ -2763,7 +2769,7 @@
             "type": "integer",
             "format": "int32"
           },
-          "actionIds": {
+          "actionId": {
             "type": "integer",
             "format": "int32"
           }

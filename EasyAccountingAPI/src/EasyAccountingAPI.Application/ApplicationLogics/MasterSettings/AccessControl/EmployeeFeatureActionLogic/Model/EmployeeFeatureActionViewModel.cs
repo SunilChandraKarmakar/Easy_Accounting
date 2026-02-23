@@ -3,7 +3,7 @@
     public class EmployeeFeatureActionViewModel
     {
         public EmployeeFeatureActionCreateModel CreateModel { get; set; }
-        public EmployeeFeatureActionUpdateModel UpdateModel { get; set; }
+        public ICollection<EmployeeFeatureActionUpdateModel> UpdateModel { get; set; }
         public EmployeeFeatureActionGridModel GridModel { get; set; }
         public dynamic OptionsDataSources { get; set; } = new ExpandoObject();
     }
@@ -26,7 +26,7 @@
         public int Id { get; set; }
         public int EmployeeId { get; set; }
         public int FeatureId { get; set; }
-        public int ActionIds { get; set; }
+        public int ActionId { get; set; }
 
         public void Mapping(Profile profile)
         {
@@ -37,6 +37,7 @@
 
     public class EmployeeFeatureActionGridModel
     {
+        [NotMapped] public string EmployeeEncryptedId { get; set; }
         public int EmployeeId { get; set; }
         public string EmployeeName { get; set; }
         public List<FeatureWithActionsModel> Features { get; set; }
@@ -53,5 +54,11 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
+    }
+
+    public class EmployeeProjection
+    {
+        public int EmployeeId { get; set; }
+        public string FullName { get; set; } = string.Empty;
     }
 }
