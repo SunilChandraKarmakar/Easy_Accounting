@@ -17,8 +17,18 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './feature-create.component.html',
   styleUrls: ['./feature-create.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule, NzButtonModule, RouterLink, NgxSpinnerModule, NzInputModule, NzIconModule, NzBreadCrumbModule, 
-    NzDividerModule, NzSelectModule],
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    NzButtonModule, 
+    RouterLink, 
+    NgxSpinnerModule, 
+    NzInputModule, 
+    NzIconModule, 
+    NzBreadCrumbModule, 
+    NzDividerModule, 
+    NzSelectModule
+  ],
   providers: [FeatureService]
 })
 
