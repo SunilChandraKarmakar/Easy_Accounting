@@ -40,6 +40,19 @@
             return Ok(employeeFeatureActionVM);
         }
 
+        [HttpPut]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        public async Task<ActionResult<bool>> UpdateAsync(UpdateEmployeeFeatureActionCommand updateEmployeeFeatureActionCommand)
+        {
+            if (ModelState.IsValid)
+            {
+                var isUpdate = await Mediator.Send(updateEmployeeFeatureActionCommand);
+                return Ok(isUpdate);
+            }
+
+            return BadRequest(updateEmployeeFeatureActionCommand);
+        }
+
         [HttpDelete("{employeeId}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         public async Task<ActionResult<bool>> DeleteAsync(int employeeId)

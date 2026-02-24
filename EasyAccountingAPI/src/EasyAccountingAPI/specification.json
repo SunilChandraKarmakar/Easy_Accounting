@@ -1100,6 +1100,38 @@
         }
       }
     },
+    "/api/EmployeeFeatureAction/Update": {
+      "put": {
+        "tags": [
+          "EmployeeFeatureAction"
+        ],
+        "operationId": "EmployeeFeatureAction_Update",
+        "requestBody": {
+          "x-name": "updateEmployeeFeatureActionCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateEmployeeFeatureActionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Feature/Create": {
       "post": {
         "tags": [
@@ -2765,6 +2797,19 @@
             "type": "integer",
             "format": "int32"
           },
+          "employeeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "moduleId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "featureId": {
             "type": "integer",
             "format": "int32"
@@ -2773,6 +2818,12 @@
             "type": "integer",
             "format": "int32"
           }
+        }
+      },
+      "UpdateEmployeeFeatureActionCommand": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/EmployeeFeatureActionUpdateModel"
         }
       },
       "FilterPageResultModelOfFeatureActionGridModel": {

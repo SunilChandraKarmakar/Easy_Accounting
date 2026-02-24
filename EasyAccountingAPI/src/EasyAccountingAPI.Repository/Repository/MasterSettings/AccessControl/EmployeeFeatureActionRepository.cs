@@ -96,6 +96,10 @@
             var employeeFeatureActions = await db.EmployeeFeatureActions
                 .AsNoTracking()
                 .Where(efa => efa.EmployeeId == employeeId)
+                .Include(efa => efa.Employee)
+                    .ThenInclude(e => e.Company)
+                .Include(efa => efa.Feature)
+                    .ThenInclude(f => f.Module)
                 .ToListAsync(cancellationToken);
 
             return employeeFeatureActions;

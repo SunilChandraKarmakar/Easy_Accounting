@@ -1738,6 +1738,7 @@ export interface IEmployeeFeatureActionService {
     delete(employeeId: number): Observable<boolean>;
     getById(employeeId: string): Observable<EmployeeFeatureActionViewModel>;
     getFilterEmployeeFeatureActions(emloyeeFeatureActionsQuery: GetEmloyeeFeatureActionsByFilterQuery): Observable<FilterPageResultModelOfEmployeeFeatureActionGridModel>;
+    update(updateEmployeeFeatureActionCommand: EmployeeFeatureActionUpdateModel[]): Observable<boolean>;
 }
 
 @Injectable()
@@ -1949,6 +1950,59 @@ export class EmployeeFeatureActionService implements IEmployeeFeatureActionServi
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = FilterPageResultModelOfEmployeeFeatureActionGridModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(updateEmployeeFeatureActionCommand: EmployeeFeatureActionUpdateModel[]): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/EmployeeFeatureAction/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(updateEmployeeFeatureActionCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -5331,6 +5385,9 @@ export interface IEmployeeFeatureActionViewModel {
 export class EmployeeFeatureActionUpdateModel implements IEmployeeFeatureActionUpdateModel {
     id?: number;
     employeeId?: number;
+    employeeName?: string | undefined;
+    companyName?: string | undefined;
+    moduleId?: number | undefined;
     featureId?: number;
     actionId?: number;
 
@@ -5347,6 +5404,9 @@ export class EmployeeFeatureActionUpdateModel implements IEmployeeFeatureActionU
         if (_data) {
             this.id = _data["id"];
             this.employeeId = _data["employeeId"];
+            this.employeeName = _data["employeeName"];
+            this.companyName = _data["companyName"];
+            this.moduleId = _data["moduleId"];
             this.featureId = _data["featureId"];
             this.actionId = _data["actionId"];
         }
@@ -5363,6 +5423,9 @@ export class EmployeeFeatureActionUpdateModel implements IEmployeeFeatureActionU
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["employeeId"] = this.employeeId;
+        data["employeeName"] = this.employeeName;
+        data["companyName"] = this.companyName;
+        data["moduleId"] = this.moduleId;
         data["featureId"] = this.featureId;
         data["actionId"] = this.actionId;
         return data;
@@ -5372,6 +5435,9 @@ export class EmployeeFeatureActionUpdateModel implements IEmployeeFeatureActionU
 export interface IEmployeeFeatureActionUpdateModel {
     id?: number;
     employeeId?: number;
+    employeeName?: string | undefined;
+    companyName?: string | undefined;
+    moduleId?: number | undefined;
     featureId?: number;
     actionId?: number;
 }

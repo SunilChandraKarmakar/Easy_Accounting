@@ -25,13 +25,20 @@
     {
         public int Id { get; set; }
         public int EmployeeId { get; set; }
+        [NotMapped] public string? EmployeeName { get; set; }
+        [NotMapped] public string? CompanyName { get; set; }
+        [NotMapped] public int? ModuleId { get; set; }
         public int FeatureId { get; set; }
         public int ActionId { get; set; }
+
 
         public void Mapping(Profile profile)
         {
             profile.CreateMap<EmployeeFeatureActionUpdateModel, EmployeeFeatureAction>();
-            profile.CreateMap<EmployeeFeatureAction, EmployeeFeatureActionUpdateModel>();
+            profile.CreateMap<EmployeeFeatureAction, EmployeeFeatureActionUpdateModel>()
+                .ForMember(d => d.EmployeeName, s => s.MapFrom(m => m.Employee.FullName))
+                .ForMember(d => d.CompanyName, s => s.MapFrom(m => m.Employee.Company == null ? string.Empty : m.Employee.Company.Name))
+                .ForMember(d => d.ModuleId, s => s.MapFrom(m => m.Feature.ModuleId));
         }
     }
 
