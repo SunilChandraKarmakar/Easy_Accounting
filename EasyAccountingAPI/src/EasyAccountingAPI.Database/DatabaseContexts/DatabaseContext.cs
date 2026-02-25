@@ -1,6 +1,6 @@
 ﻿namespace EasyAccountingAPI.Database.DatabaseContexts
 {
-    public class DatabaseContext : IdentityDbContext
+    public class DatabaseContext : IdentityDbContext<User>
     {
         public DatabaseContext() { }
 
@@ -27,6 +27,7 @@
         public DbSet<Feature> Features { get; set; }
         public DbSet<FeatureAction> FeatureActions { get; set; }
         public DbSet<EmployeeFeatureAction> EmployeeFeatureActions { get; set; }
+        public DbSet<VatTax> VatTaxes { get; set; }
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

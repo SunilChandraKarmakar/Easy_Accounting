@@ -51,7 +51,9 @@
                         Phone = request.Phone,
                         Email = request.Email,
                         Image = string.Empty,
-                        Company = null
+                        Company = null,
+                        CreatedById = "System",
+                        CreatedDateTime = DateTime.UtcNow
                     };
                     await _employeeRepository.CreateAsync(newEmployee, cancellationToken);
 

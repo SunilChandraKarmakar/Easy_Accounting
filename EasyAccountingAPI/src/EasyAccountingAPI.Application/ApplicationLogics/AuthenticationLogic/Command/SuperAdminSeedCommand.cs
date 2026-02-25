@@ -51,7 +51,9 @@
                         FullName = "Super Admin",
                         Phone = "+8801743909840",
                         Email = "super_admin@gmail.com",
-                        Image = string.Empty
+                        Image = string.Empty,
+                        CreatedById = "System",
+                        CreatedDateTime = DateTime.UtcNow
                     };
                     await _employeeRepository.CreateAsync(newEmployee, cancellationToken);
 

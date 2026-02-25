@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EasyAccountingAPI.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class InitializeDatabase : Migration
+    public partial class Initialatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -298,7 +298,13 @@ namespace EasyAccountingAPI.Database.Migrations
                     Phone = table.Column<string>(type: "nvarchar(30)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CompanyId = table.Column<int>(type: "int", nullable: true)
+                    CompanyId = table.Column<int>(type: "int", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -351,12 +357,42 @@ namespace EasyAccountingAPI.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "VatTaxes",
+                schema: "MasterSettings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TaxName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Rate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    TaxNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VatTaxes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_VatTaxes_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalSchema: "MasterSettings",
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    FullName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     EmployeeId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -681,6 +717,12 @@ namespace EasyAccountingAPI.Database.Migrations
                 schema: "MasterSettings",
                 table: "InvoiceSettings",
                 column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VatTaxes_CompanyId",
+                schema: "MasterSettings",
+                table: "VatTaxes",
+                column: "CompanyId");
         }
 
         /// <inheritdoc />
@@ -720,6 +762,10 @@ namespace EasyAccountingAPI.Database.Migrations
             migrationBuilder.DropTable(
                 name: "UserLoginHistories",
                 schema: "Authentication");
+
+            migrationBuilder.DropTable(
+                name: "VatTaxes",
+                schema: "MasterSettings");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

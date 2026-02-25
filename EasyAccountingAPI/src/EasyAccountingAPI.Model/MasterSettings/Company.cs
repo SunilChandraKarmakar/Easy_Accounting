@@ -7,6 +7,7 @@
         {
             InvoiceSettings = new HashSet<InvoiceSetting>();
             Employees = new HashSet<Employee>();
+            VatTaxes = new HashSet<VatTax>();
         }
 
         public int Id { get; set; }
@@ -46,5 +47,6 @@
         public Currency Currency { get; set; }
         public ICollection<InvoiceSetting> InvoiceSettings { get; set; }
         public ICollection<Employee> Employees { get; set; }
+        public ICollection<VatTax> VatTaxes { get; set; }
     }
 }

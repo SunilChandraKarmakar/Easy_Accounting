@@ -1,7 +1,7 @@
 ﻿namespace EasyAccountingAPI.Model.Authentication
 {
     [Table("Employees", Schema = "Authentication")]
-    public class Employee
+    public class Employee : IAuditableEntity, IDelatableEntity
     {
         public Employee()
         {
@@ -28,6 +28,12 @@
         public string? Image { get; set; }
 
         public int? CompanyId { get; set; }
+        public string CreatedById { get; set; }
+        public DateTime CreatedDateTime { get; set; }
+        public string? UpdatedById { get; set; }
+        public DateTime? UpdatedDateTime { get; set; }
+        public bool IsDeleted { get; set; }
+        public DateTime? DeletedDateTime { get; set; }
 
         public Company? Company { get; set; }
         public User? User { get; set; }
