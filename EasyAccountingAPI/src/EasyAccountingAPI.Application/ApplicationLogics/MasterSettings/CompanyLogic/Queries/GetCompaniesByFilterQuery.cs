@@ -20,15 +20,10 @@
             {
                 // Retrieve the login user info from the current HTTP context
                 var userId = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
-                var userEmail = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value;
 
                 // Check if the user Id is null or not
                 if (string.IsNullOrEmpty(userId) || string.IsNullOrWhiteSpace(userId))
                     throw new UnauthorizedAccessException(ProvideErrorMessage.UserNotAuthenticated);
-
-                // Check, login user is super admin or not
-                if (userEmail == "super_admin@gmail.com")
-                    userId = null;
 
                 // Get currency and map to grid model
                 var getCompany = await _companyRepository.GetCompaniesByFilterAsync(request, userId, cancellationToken);

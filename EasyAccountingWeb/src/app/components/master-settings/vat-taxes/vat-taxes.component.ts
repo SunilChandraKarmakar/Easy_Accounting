@@ -10,13 +10,13 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { FilterPageModel, FilterPageResultModelOfModuleGridModel, ModuleGridModel, ModuleService } from '../../../../api/base-api';
+import { FilterPageModel, FilterPageResultModelOfVatTaxGridModel, SelectModel, VatTaxGridModel, VatTaxService, VatTaxViewModel } from '../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-modules',
-  templateUrl: './modules.component.html',
-  styleUrls: ['./modules.component.css'],
+  selector: 'app-vat-taxes',
+  templateUrl: './vat-taxes.component.html',
+  styleUrls: ['./vat-taxes.component.css'],
   standalone: true,
   imports: [
     CommonModule, 
@@ -30,26 +30,35 @@ import { ToastrService } from 'ngx-toastr';
     NzIconModule, 
     NzBreadCrumbModule, 
     NzPopconfirmModule],
-  providers: [ModuleService]
+  providers: [VatTaxService]
 })
 
-export class ModulesComponent implements OnInit {
+export class VatTaxesComponent implements OnInit {
+
+  // Default vat tax id
+  private _vatTaxIs: string = "-1";
 
   // Table property
-  modules: ModuleGridModel[] = [];
+  vatTaxes: VatTaxGridModel[] = [];
   totalRecord: number = 0;
+
+  // Select list
+  companies: SelectModel[] = [];
 
   // Filter page model
   filterPageModel: FilterPageModel = new FilterPageModel();
-  
-  constructor(private moduleService: ModuleService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService) { }
+
+  constructor(
+    private vatTaxService: VatTaxService, 
+    private spinnerService: NgxSpinnerService, 
+    private toastrService: ToastrService) { }
 
   ngOnInit() {
     // Initialize page filter model
     this.initializeFilterModel();
 
-    // Get modules
-    this.getModules();
+    // Get vat taxes
+    this.getVatTaxes();
   }
 
   // Initialize filter model
@@ -61,16 +70,16 @@ export class ModulesComponent implements OnInit {
     this.filterPageModel.filterValue = "";
   }
 
-  // Get modules
-  private getModules(): void {
+  // Get vat taxes
+  private getVatTaxes(): void {
     this.spinnerService.show();
 
     // Clear before loading 
-    this.modules = [];
+    this.vatTaxes = [];
     this.totalRecord = 0;
 
-    this.moduleService.getFilterModules(this.filterPageModel).subscribe((result: FilterPageResultModelOfModuleGridModel) => {
-      this.modules = result.items || [];
+    this.vatTaxService.getFilterVatTaxes(this.filterPageModel).subscribe((result: FilterPageResultModelOfVatTaxGridModel) => {
+      this.vatTaxes = result.items || [];
       this.totalRecord = result.totalCount || 0;
       this.spinnerService.hide();
       return;
@@ -79,10 +88,10 @@ export class ModulesComponent implements OnInit {
       this.spinnerService.hide();
 
       // Keep cleared state on error
-      this.modules = [];
+      this.vatTaxes = [];
       this.totalRecord = 0;
 
-      this.toastrService.error("Module list is not show at this time! Please, try again.", "Error");
+      this.toastrService.error("VatTax list is not show at this time! Please, try again.", "Error");
       return;
     });
   }
@@ -92,8 +101,8 @@ export class ModulesComponent implements OnInit {
     this.filterPageModel.filterValue = filterValue;
     this.filterPageModel.pageIndex = 0;
 
-    // Get modules
-    this.getModules();
+    // Get vat taxes
+    this.getVatTaxes();
   }
 
   // Table query params
@@ -110,37 +119,37 @@ export class ModulesComponent implements OnInit {
       });
     }
 
-    // Get modules
-    this.getModules();
+    // Get vat taxes
+    this.getVatTaxes();
   }
 
   // On click open delete modal
-  onClickDelete(moduleId: string | undefined): void {
-    this.deleteModule(moduleId);
+  onClickDelete(vatTaxId: string | undefined): void {
+    this.deleteVatTax(vatTaxId);
   }
 
-  // Delete module
-  private deleteModule(moduleId: string | undefined): void {
-    if(moduleId == null || moduleId == undefined) {
-      this.toastrService.error("Module is not found. Please, try again.", "Error");
+  // Delete vat tax
+  private deleteVatTax(vatTAxId: string | undefined): void {
+    if(vatTAxId == null || vatTAxId == undefined) {
+      this.toastrService.error("Vat Tax is not found. Please, try again.", "Error");
       return;
     }
 
     this.spinnerService.show();
-    this.moduleService.delete(moduleId).subscribe((result: boolean) => {
+    this.vatTaxService.delete(vatTAxId).subscribe((result: boolean) => {
       this.spinnerService.hide();
       if(result) {
-        this.toastrService.success("Module deleted successfully.", "Success"); 
-        this.getModules();
+        this.toastrService.success("Vat Tax deleted successfully.", "Success"); 
+        this.getVatTaxes();
       } else {
-        this.toastrService.error("Module is not deleted. Please, try again.", "Error");
+        this.toastrService.error("Vat Tax is not deleted. Please, try again.", "Error");
       }
 
       return;
     },
     (error: any) => {
       this.spinnerService.hide();
-      this.toastrService.error("Module is not deleted. Please, try again.", "Error");
+      this.toastrService.error("Vat Tax is not deleted. Please, try again.", "Error");
       return;
     });
   }

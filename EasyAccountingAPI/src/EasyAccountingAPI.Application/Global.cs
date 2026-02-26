@@ -53,3 +53,4 @@ global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.Acce
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.EmployeeFeatureActionLogic.Model;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.RoleLogic.Command;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.EmployeeFeatureActionLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.VatTaxLogic.Model;

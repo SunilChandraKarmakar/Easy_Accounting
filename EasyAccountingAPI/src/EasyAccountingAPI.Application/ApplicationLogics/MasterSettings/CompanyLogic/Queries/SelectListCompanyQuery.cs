@@ -22,7 +22,7 @@
                 if (string.IsNullOrEmpty(userId) || string.IsNullOrWhiteSpace(userId))
                     throw new UnauthorizedAccessException(ProvideErrorMessage.UserNotAuthenticated);
 
-                var getCompanies = await _companyRepository.GetCompanySelectList(_httpContextAccessor, cancellationToken);
+                var getCompanies = await _companyRepository.GetCompanySelectList(_httpContextAccessor, userId, cancellationToken);
                 return getCompanies;
             }
         }

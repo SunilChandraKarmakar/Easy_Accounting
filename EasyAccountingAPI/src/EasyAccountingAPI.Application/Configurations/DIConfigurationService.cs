@@ -40,7 +40,7 @@
             services.AddScoped<IFeatureRepository, FeatureRepository>();
             services.AddScoped<IFeatureActionRepository, FeatureActionRepository>();
             services.AddScoped<IEmployeeFeatureActionRepository, EmployeeFeatureActionRepository>();
-
+            services.AddScoped<IVatTaxRepository, VatTaxRepository>();
             #endregion
 
             return services;

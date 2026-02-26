@@ -1798,6 +1798,164 @@
           }
         }
       }
+    },
+    "/api/VatTax/Create": {
+      "post": {
+        "tags": [
+          "VatTax"
+        ],
+        "operationId": "VatTax_Create",
+        "requestBody": {
+          "x-name": "createVatTaxCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVatTaxCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/VatTax/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "VatTax"
+        ],
+        "operationId": "VatTax_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/VatTax/GetById/{id}": {
+      "get": {
+        "tags": [
+          "VatTax"
+        ],
+        "operationId": "VatTax_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VatTaxViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/VatTax/GetFilterVatTaxes": {
+      "post": {
+        "tags": [
+          "VatTax"
+        ],
+        "operationId": "VatTax_GetFilterVatTaxes",
+        "requestBody": {
+          "x-name": "getVatTaxByFilterQuery",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetVatTaxByFilterQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilterPageResultModelOfVatTaxGridModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/VatTax/Update": {
+      "put": {
+        "tags": [
+          "VatTax"
+        ],
+        "operationId": "VatTax_Update",
+        "requestBody": {
+          "x-name": "updateVatTaxCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVatTaxCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2546,6 +2704,166 @@
         "allOf": [
           {
             "$ref": "#/components/schemas/ModuleUpdateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "FilterPageResultModelOfVatTaxGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VatTaxGridModel"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "VatTaxGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "taxName": {
+            "type": "string"
+          },
+          "rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "companyName": {
+            "type": "string"
+          },
+          "taxNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "GetVatTaxByFilterQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FilterPageModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "VatTaxViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "createModel": {
+            "$ref": "#/components/schemas/VatTaxCreateModel"
+          },
+          "updateModel": {
+            "$ref": "#/components/schemas/VatTaxUpdateModel"
+          },
+          "gridModel": {
+            "$ref": "#/components/schemas/VatTaxGridModel"
+          },
+          "optionsDataSources": {}
+        }
+      },
+      "VatTaxCreateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "taxName",
+          "rate",
+          "companyId"
+        ],
+        "properties": {
+          "taxName": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2
+          },
+          "rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "companyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "taxNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "VatTaxUpdateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "taxName",
+          "rate",
+          "companyId"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "taxName": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2
+          },
+          "rate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "companyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "taxNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateVatTaxCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/VatTaxCreateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "UpdateVatTaxCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/VatTaxUpdateModel"
           },
           {
             "type": "object",

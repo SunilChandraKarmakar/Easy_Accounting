@@ -34,6 +34,9 @@ import { FeatureActionUpdateComponent } from './components/master-settings/Acces
 import { EmployeeFeatureActionsComponent } from './components/master-settings/AccessControl/employee-feature-actions/employee-feature-actions.component';
 import { CreateEmployeeFeatureActionComponent } from './components/master-settings/AccessControl/employee-feature-actions/create-employee-feature-action/create-employee-feature-action.component';
 import { UpdateEmployeeFeatureActionComponent } from './components/master-settings/AccessControl/employee-feature-actions/update-employee-feature-action/update-employee-feature-action.component';
+import { CreateVatTaxComponent } from './components/master-settings/vat-taxes/create-vat-tax/create-vat-tax.component';
+import { UpdateVatTaxComponent } from './components/master-settings/vat-taxes/update-vat-tax/update-vat-tax.component';
+import { VatTaxesComponent } from './components/master-settings/vat-taxes/vat-taxes.component';
 
 export const routes: Routes = [
 
@@ -97,6 +100,11 @@ export const routes: Routes = [
       { path: "employee-feature-actions", component: EmployeeFeatureActionsComponent, pathMatch: "full" },
       { path: "employee-feature-action/create", component: CreateEmployeeFeatureActionComponent, pathMatch: "full" },
       { path: "employee-feature-action/update/:recordId", component: UpdateEmployeeFeatureActionComponent, pathMatch: "full" },
+
+      // Vat Taxes
+      { path: "vat-taxes", component: VatTaxesComponent, pathMatch: "full" },
+      { path: "vat-tax/create", component: CreateVatTaxComponent, pathMatch: "full" },
+      { path: "vat-tax/update/:recordId", component: UpdateVatTaxComponent, pathMatch: "full" }
     ],
     
     canActivate: [AuthGuard] 

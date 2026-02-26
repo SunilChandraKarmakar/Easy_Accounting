@@ -20,9 +20,12 @@
         public Task<FilterPageResultModel<Company>> GetCompaniesByFilterAsync(FilterPageModel model, string? userId,
             CancellationToken cancellationToken)
         {
+            // Get employee based company ids
+            var companyIds = GetEmployeeBasedCompanyIdsAsync(userId!, cancellationToken).Result;
+
             Expression<Func<Company, bool>> filter = c =>
                  !c.IsDeleted
-                 && (string.IsNullOrWhiteSpace(userId) || c.CreatedById == userId)
+                 && (string.IsNullOrWhiteSpace(userId) || companyIds.Contains(c.Id))
                  && (string.IsNullOrWhiteSpace(model.FilterValue)
                  || c.Name.Contains(model.FilterValue)
                  || c.Email.Contains(model.FilterValue)
@@ -39,16 +42,13 @@
                 include: q => q.Include(c => c.Country).Include(c => c.City).Include(c => c.Currency), cancellationToken);
         }
 
-        public async Task<IEnumerable<SelectModel>> GetCompanySelectList(IHttpContextAccessor httpContextAccessor, CancellationToken cancellationToken)
+        public async Task<IEnumerable<SelectModel>> GetCompanySelectList(IHttpContextAccessor httpContextAccessor,
+           string userId, CancellationToken cancellationToken)
         {
-            // Retrieve the login user's info from the current HTTP context
-            var userId = httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
-            var userEmail = httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value;
+            // Get employee based company ids
+            var companyIds = await GetEmployeeBasedCompanyIdsAsync(userId, cancellationToken);
 
-            var getCompaines = db.Companies.AsNoTracking().Where(c => !c.IsDeleted);     
-            
-            if (userEmail is not "super_admin@gmail.com")
-                getCompaines = getCompaines.Where(c => c.CreatedById == userId);
+            var getCompaines = db.Companies.AsNoTracking().Where(c => companyIds.Contains(c.Id) && !c.IsDeleted);     
 
             return await getCompaines
                 .OrderBy(c => c.Name)
@@ -92,6 +92,55 @@
                 .FirstOrDefaultAsync(cancellationToken);
 
             return defaultCompany!;
+        }
+
+        // Get employee based company ids
+        public async Task<List<int>> GetEmployeeBasedCompanyIdsAsync(string userId, CancellationToken cancellationToken)
+        {
+            var employeeId = await db.Users
+                .AsNoTracking()
+                .Where(u => u.Id == userId)
+                .Select(u => u.EmployeeId)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            var roleName = await db.EmployeeRoles
+                .AsNoTracking()
+                .Where(er => er.EmployeeId == employeeId)
+                .Select(er => er.Role.Name)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            // Admin
+            if (roleName == "Admin")
+            {
+                return await db.Companies
+                    .AsNoTracking()
+                    .Where(c => c.CreatedById == userId && !c.IsDeleted)
+                    .Select(c => c.Id)
+                    .ToListAsync(cancellationToken);
+            }
+
+            // Employee
+            if (roleName == "Employee")
+            {
+                var adminCreatorId = await db.Employees
+                    .AsNoTracking()
+                    .Where(e => e.Id == employeeId && !e.IsDeleted)
+                    .Select(e => e.CreatedById)
+                    .FirstOrDefaultAsync(cancellationToken);
+
+                return await db.Companies
+                    .AsNoTracking()
+                    .Where(c => c.CreatedById == adminCreatorId && !c.IsDeleted)
+                    .Select(c => c.Id)
+                    .ToListAsync(cancellationToken);
+            }
+
+            // Super Admin
+            return await db.Companies
+                .AsNoTracking()
+                .Where(c => !c.IsDeleted)
+                .Select(c => c.Id)
+                .ToListAsync(cancellationToken);
         }
     }
 }

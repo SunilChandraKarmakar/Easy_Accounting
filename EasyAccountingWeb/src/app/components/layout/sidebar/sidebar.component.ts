@@ -20,7 +20,7 @@ export class SidebarComponent implements OnInit {
     users: ['users', 'user-groups', 'permissions'],
     userGroups: ['user-groups', 'permissions'],
     permissions: ['role-management'],
-    settings: ['countries', 'cities', 'currencies', 'companies', 'invoice-settings', 'modules'], 
+    settings: ['countries', 'cities', 'currencies', 'companies', 'invoice-settings', 'modules', 'vat-taxes'], 
     accessControl: ['actions', 'features', 'feature-actions', 'employee-feature-actions']
   };
 

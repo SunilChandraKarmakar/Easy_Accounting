@@ -3198,6 +3198,287 @@ export class ModuleService implements IModuleService {
     }
 }
 
+export interface IVatTaxService {
+    create(createVatTaxCommand: CreateVatTaxCommand): Observable<boolean>;
+    delete(id: string): Observable<boolean>;
+    getById(id: string): Observable<VatTaxViewModel>;
+    getFilterVatTaxes(getVatTaxByFilterQuery: GetVatTaxByFilterQuery): Observable<FilterPageResultModelOfVatTaxGridModel>;
+    update(updateVatTaxCommand: UpdateVatTaxCommand): Observable<boolean>;
+}
+
+@Injectable()
+export class VatTaxService implements IVatTaxService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    create(createVatTaxCommand: CreateVatTaxCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/VatTax/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(createVatTaxCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(id: string): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/VatTax/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getById(id: string): Observable<VatTaxViewModel> {
+        let url_ = this.baseUrl + "/api/VatTax/GetById/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<VatTaxViewModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<VatTaxViewModel>;
+        }));
+    }
+
+    protected processGetById(response: HttpResponseBase): Observable<VatTaxViewModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = VatTaxViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getFilterVatTaxes(getVatTaxByFilterQuery: GetVatTaxByFilterQuery): Observable<FilterPageResultModelOfVatTaxGridModel> {
+        let url_ = this.baseUrl + "/api/VatTax/GetFilterVatTaxes";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(getVatTaxByFilterQuery);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFilterVatTaxes(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFilterVatTaxes(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FilterPageResultModelOfVatTaxGridModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FilterPageResultModelOfVatTaxGridModel>;
+        }));
+    }
+
+    protected processGetFilterVatTaxes(response: HttpResponseBase): Observable<FilterPageResultModelOfVatTaxGridModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FilterPageResultModelOfVatTaxGridModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(updateVatTaxCommand: UpdateVatTaxCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/VatTax/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(updateVatTaxCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export class FilterPageResultModelOfCompanyGridModel implements IFilterPageResultModelOfCompanyGridModel {
     items?: CompanyGridModel[];
     totalCount?: number;
@@ -4768,6 +5049,347 @@ export class UpdateModuleCommand extends ModuleUpdateModel implements IUpdateMod
 }
 
 export interface IUpdateModuleCommand extends IModuleUpdateModel {
+}
+
+export class FilterPageResultModelOfVatTaxGridModel implements IFilterPageResultModelOfVatTaxGridModel {
+    items?: VatTaxGridModel[];
+    totalCount?: number;
+
+    constructor(data?: IFilterPageResultModelOfVatTaxGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(VatTaxGridModel.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): FilterPageResultModelOfVatTaxGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPageResultModelOfVatTaxGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item ? item.toJSON() : undefined as any);
+        }
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+}
+
+export interface IFilterPageResultModelOfVatTaxGridModel {
+    items?: VatTaxGridModel[];
+    totalCount?: number;
+}
+
+export class VatTaxGridModel implements IVatTaxGridModel {
+    id?: string;
+    taxName?: string;
+    rate?: number;
+    companyName?: string;
+    taxNumber?: string | undefined;
+    description?: string | undefined;
+
+    constructor(data?: IVatTaxGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.taxName = _data["taxName"];
+            this.rate = _data["rate"];
+            this.companyName = _data["companyName"];
+            this.taxNumber = _data["taxNumber"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): VatTaxGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new VatTaxGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["taxName"] = this.taxName;
+        data["rate"] = this.rate;
+        data["companyName"] = this.companyName;
+        data["taxNumber"] = this.taxNumber;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+export interface IVatTaxGridModel {
+    id?: string;
+    taxName?: string;
+    rate?: number;
+    companyName?: string;
+    taxNumber?: string | undefined;
+    description?: string | undefined;
+}
+
+export class GetVatTaxByFilterQuery extends FilterPageModel implements IGetVatTaxByFilterQuery {
+
+    constructor(data?: IGetVatTaxByFilterQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetVatTaxByFilterQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetVatTaxByFilterQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetVatTaxByFilterQuery extends IFilterPageModel {
+}
+
+export class VatTaxViewModel implements IVatTaxViewModel {
+    createModel?: VatTaxCreateModel;
+    updateModel?: VatTaxUpdateModel;
+    gridModel?: VatTaxGridModel;
+    optionsDataSources?: any;
+
+    constructor(data?: IVatTaxViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.createModel = _data["createModel"] ? VatTaxCreateModel.fromJS(_data["createModel"]) : undefined as any;
+            this.updateModel = _data["updateModel"] ? VatTaxUpdateModel.fromJS(_data["updateModel"]) : undefined as any;
+            this.gridModel = _data["gridModel"] ? VatTaxGridModel.fromJS(_data["gridModel"]) : undefined as any;
+            this.optionsDataSources = _data["optionsDataSources"];
+        }
+    }
+
+    static fromJS(data: any): VatTaxViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new VatTaxViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["createModel"] = this.createModel ? this.createModel.toJSON() : undefined as any;
+        data["updateModel"] = this.updateModel ? this.updateModel.toJSON() : undefined as any;
+        data["gridModel"] = this.gridModel ? this.gridModel.toJSON() : undefined as any;
+        data["optionsDataSources"] = this.optionsDataSources;
+        return data;
+    }
+}
+
+export interface IVatTaxViewModel {
+    createModel?: VatTaxCreateModel;
+    updateModel?: VatTaxUpdateModel;
+    gridModel?: VatTaxGridModel;
+    optionsDataSources?: any;
+}
+
+export class VatTaxCreateModel implements IVatTaxCreateModel {
+    taxName!: string;
+    rate!: number;
+    companyId!: number;
+    taxNumber?: string | undefined;
+    description?: string | undefined;
+
+    constructor(data?: IVatTaxCreateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.taxName = _data["taxName"];
+            this.rate = _data["rate"];
+            this.companyId = _data["companyId"];
+            this.taxNumber = _data["taxNumber"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): VatTaxCreateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new VatTaxCreateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["taxName"] = this.taxName;
+        data["rate"] = this.rate;
+        data["companyId"] = this.companyId;
+        data["taxNumber"] = this.taxNumber;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+export interface IVatTaxCreateModel {
+    taxName: string;
+    rate: number;
+    companyId: number;
+    taxNumber?: string | undefined;
+    description?: string | undefined;
+}
+
+export class VatTaxUpdateModel implements IVatTaxUpdateModel {
+    id?: number;
+    taxName!: string;
+    rate!: number;
+    companyId!: number;
+    taxNumber?: string | undefined;
+    description?: string | undefined;
+
+    constructor(data?: IVatTaxUpdateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.taxName = _data["taxName"];
+            this.rate = _data["rate"];
+            this.companyId = _data["companyId"];
+            this.taxNumber = _data["taxNumber"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): VatTaxUpdateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new VatTaxUpdateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["taxName"] = this.taxName;
+        data["rate"] = this.rate;
+        data["companyId"] = this.companyId;
+        data["taxNumber"] = this.taxNumber;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+export interface IVatTaxUpdateModel {
+    id?: number;
+    taxName: string;
+    rate: number;
+    companyId: number;
+    taxNumber?: string | undefined;
+    description?: string | undefined;
+}
+
+export class CreateVatTaxCommand extends VatTaxCreateModel implements ICreateVatTaxCommand {
+
+    constructor(data?: ICreateVatTaxCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): CreateVatTaxCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateVatTaxCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ICreateVatTaxCommand extends IVatTaxCreateModel {
+}
+
+export class UpdateVatTaxCommand extends VatTaxUpdateModel implements IUpdateVatTaxCommand {
+
+    constructor(data?: IUpdateVatTaxCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): UpdateVatTaxCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateVatTaxCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IUpdateVatTaxCommand extends IVatTaxUpdateModel {
 }
 
 export class FilterPageResultModelOfActionGridModel implements IFilterPageResultModelOfActionGridModel {
