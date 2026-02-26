@@ -1,3 +1,68 @@
-<p>
-  update-vat-tax works!
-</p>
+<nz-breadcrumb>
+  <nz-breadcrumb-item>Settings</nz-breadcrumb-item>
+    <nz-breadcrumb-item><a routerLink="/app/at-taxes" class="breadcrumb-link">Vat Tax</a></nz-breadcrumb-item>
+  <nz-breadcrumb-item>Create Vat Tax</nz-breadcrumb-item>
+</nz-breadcrumb>
+<div class="row mt-3">
+  <div class="col-md-12">
+    <div class="card shadow-lg">
+      <div class="card-header">
+        <h5 class="card-title text-center">Update Vat Tax</h5>
+      </div>
+      <div class="card-body">
+        <form class="row g-3" autocomplete="off">
+          <div class="col-md-3">
+            <label for="taxName" class="form-label">Tax Name <span class="text-danger fw-bold">*</span></label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="container" />
+              <input nz-input placeholder="Enter tax name" nzSize="default" id="taxName" name="taxName" 
+                [(ngModel)]="vatTaxUpdateModel.taxName" />
+            </nz-input-wrapper>
+          </div>  
+          <div class="col-md-3">
+            <label for="taxNumber" class="form-label">Tax Number <span class="text-danger fw-bold">*</span></label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="borderless-table" />
+              <input nz-input placeholder="Enter tax name" nzSize="default" id="taxNumber" name="taxNumber" 
+                [(ngModel)]="vatTaxUpdateModel.taxNumber" />
+            </nz-input-wrapper>
+          </div>    
+          <div class="col-md-3">
+            <label for="rate" class="form-label">Rate <span class="text-danger fw-bold">*</span></label> <br>
+            <nz-input-number [(ngModel)]="vatTaxUpdateModel.rate" id="rate" name="rate" nzMin="1" nzSize="default" 
+              [style.width.%]="100" />
+          </div>
+          <div class="col-md-3">
+            <label for="companyId" class="form-label">Company <span class="text-danger fw-bold">*</span></label>
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Company" 
+              [(ngModel)]="vatTaxUpdateModel.companyId" name="countryId" style="width: 100%;">
+                @for (company of companies; track company.id) {
+                  <nz-option [nzValue]="company.id" [nzLabel]="company.name!"></nz-option>
+                }
+              </nz-select>
+          </div>
+          <div class="col-md-9">
+            <label for="description" class="form-label">Description</label>
+            <nz-textarea-count [nzMaxCharacterCount]="500">
+              <textarea rows="4" id="description" name="description" placeholder="Enter full description" 
+                [(ngModel)]="vatTaxUpdateModel.description" nz-input></textarea>
+            </nz-textarea-count>
+          </div>   
+        </form>
+      </div>
+      <div class="card-footer text-end">
+        <button nz-button nzType="primary" class="btn-save" (click)="onClickUpdateVatTax()">
+          <nz-icon nzType="save" nzTheme="outline" />
+          Save
+        </button>
+        <button nz-button nzType="primary" class="btn-cancel" routerLink="/app/vat-taxes">
+          <nz-icon nzType="close" nzTheme="outline" />
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
