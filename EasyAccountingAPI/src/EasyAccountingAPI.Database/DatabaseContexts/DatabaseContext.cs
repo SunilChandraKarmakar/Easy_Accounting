@@ -28,6 +28,7 @@
         public DbSet<FeatureAction> FeatureActions { get; set; }
         public DbSet<EmployeeFeatureAction> EmployeeFeatureActions { get; set; }
         public DbSet<VatTax> VatTaxes { get; set; }
+        public DbSet<ProductUnit> ProductUnits { get; set; }
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

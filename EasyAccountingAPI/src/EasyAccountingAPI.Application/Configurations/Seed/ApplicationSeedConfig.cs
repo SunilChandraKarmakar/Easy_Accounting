@@ -35,6 +35,9 @@
 
             // Seed super admin permissions
             await mediator.Send(new CreateSuperAdminFeatureAcionSeedCommand());
+
+            // Seed product unit
+            await mediator.Send(new CreateProductUnitSeedCommand());
         }
     }
 }
