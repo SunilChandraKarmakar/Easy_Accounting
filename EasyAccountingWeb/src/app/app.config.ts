@@ -7,7 +7,7 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi
 import { API_BASE_URL, AuthenticationService } from '../api/base-api';
 import { environment } from '../environments/environment.prod';
 import { provideNzIcons } from 'ng-zorro-antd/icon';
-import { FastBackwardOutline, PlusCircleOutline, PlusOutline, SaveOutline, CloseOutline, BankOutline, HomeOutline, TagOutline, AimOutline, FormOutline, DeleteOutline, DollarOutline, PayCircleOutline, InfoOutline, MailOutline, PhoneOutline, BorderlessTableOutline, FireOutline, BranchesOutline, NumberOutline, TableOutline, ProfileOutline, AppstoreOutline, UserOutline, ContainerOutline } from '@ant-design/icons-angular/icons';
+import { FastBackwardOutline, PlusCircleOutline, PlusOutline, SaveOutline, CloseOutline, BankOutline, HomeOutline, TagOutline, AimOutline, FormOutline, DeleteOutline, DollarOutline, PayCircleOutline, InfoOutline, MailOutline, PhoneOutline, BorderlessTableOutline, FireOutline, BranchesOutline, NumberOutline, TableOutline, ProfileOutline, AppstoreOutline, UserOutline, ContainerOutline, UnderlineOutline, UnorderedListOutline } from '@ant-design/icons-angular/icons';
 import { IdentityService } from './identity-shared/identity.service';
 import { IdentityInterceptor } from './identity-shared/identity-interceptor';
 import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
@@ -61,7 +61,9 @@ export const appConfig: ApplicationConfig = {
       ProfileOutline,
       AppstoreOutline,
       UserOutline,
-      ContainerOutline
+      ContainerOutline,
+      UnderlineOutline,
+      UnorderedListOutline
     ]),
 
     AuthenticationService,

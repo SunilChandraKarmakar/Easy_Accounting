@@ -10,13 +10,13 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { FilterPageModel, FilterPageResultModelOfVatTaxGridModel, SelectModel, VatTaxGridModel, VatTaxService, VatTaxViewModel } from '../../../../api/base-api';
+import { FilterPageModel, FilterPageResultModelOfProductUnitGridModel, ProductUnitGridModel, ProductUnitService } from '../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-vat-taxes',
-  templateUrl: './vat-taxes.component.html',
-  styleUrls: ['./vat-taxes.component.css'],
+  selector: 'app-product-units',
+  templateUrl: './product-units.component.html',
+  styleUrls: ['./product-units.component.css'],
   standalone: true,
   imports: [
     CommonModule, 
@@ -30,20 +30,23 @@ import { ToastrService } from 'ngx-toastr';
     NzIconModule, 
     NzBreadCrumbModule, 
     NzPopconfirmModule],
-  providers: [VatTaxService]
+  providers: [ProductUnitService]
 })
 
-export class VatTaxesComponent implements OnInit {
+export class ProductUnitsComponent implements OnInit {
+
+ // Default product unit id
+  private _productUnitId: string = "-1";
 
   // Table property
-  vatTaxes: VatTaxGridModel[] = [];
+  productUnits: ProductUnitGridModel[] = [];
   totalRecord: number = 0;
 
   // Filter page model
   filterPageModel: FilterPageModel = new FilterPageModel();
 
   constructor(
-    private vatTaxService: VatTaxService, 
+    private productUnitService: ProductUnitService, 
     private spinnerService: NgxSpinnerService, 
     private toastrService: ToastrService) { }
 
@@ -51,8 +54,8 @@ export class VatTaxesComponent implements OnInit {
     // Initialize page filter model
     this.initializeFilterModel();
 
-    // Get vat taxes
-    this.getVatTaxes();
+    // Get product units
+    this.getProductUnits();
   }
 
   // Initialize filter model
@@ -64,16 +67,17 @@ export class VatTaxesComponent implements OnInit {
     this.filterPageModel.filterValue = "";
   }
 
-  // Get vat taxes
-  private getVatTaxes(): void {
+  // Get product units
+  private getProductUnits(): void {
     this.spinnerService.show();
 
     // Clear before loading 
-    this.vatTaxes = [];
+    this.productUnits = [];
     this.totalRecord = 0;
 
-    this.vatTaxService.getFilterVatTaxes(this.filterPageModel).subscribe((result: FilterPageResultModelOfVatTaxGridModel) => {
-      this.vatTaxes = result.items || [];
+    this.productUnitService.getFilterProductUnits(this.filterPageModel)
+    .subscribe((result: FilterPageResultModelOfProductUnitGridModel) => {
+      this.productUnits = result.items || [];
       this.totalRecord = result.totalCount || 0;
       this.spinnerService.hide();
       return;
@@ -82,10 +86,10 @@ export class VatTaxesComponent implements OnInit {
       this.spinnerService.hide();
 
       // Keep cleared state on error
-      this.vatTaxes = [];
+      this.productUnits = [];
       this.totalRecord = 0;
 
-      this.toastrService.error("VatTax list is not show at this time! Please, try again.", "Error");
+      this.toastrService.error("Product Unit list is not show at this time! Please, try again.", "Error");
       return;
     });
   }
@@ -95,8 +99,8 @@ export class VatTaxesComponent implements OnInit {
     this.filterPageModel.filterValue = filterValue;
     this.filterPageModel.pageIndex = 0;
 
-    // Get vat taxes
-    this.getVatTaxes();
+    // Get product units
+    this.getProductUnits();
   }
 
   // Table query params
@@ -113,37 +117,37 @@ export class VatTaxesComponent implements OnInit {
       });
     }
 
-    // Get vat taxes
-    this.getVatTaxes();
+    // Get product units
+    this.getProductUnits();
   }
 
-  // On click open delete modal
-  onClickDelete(vatTaxId: string | undefined): void {
-    this.deleteVatTax(vatTaxId);
+  // On click open delete product unit
+  onClickDelete(productUnitId: string | undefined): void {
+    this.deleteProductUnit(productUnitId);
   }
 
   // Delete vat tax
-  private deleteVatTax(vatTAxId: string | undefined): void {
-    if(vatTAxId == null || vatTAxId == undefined) {
-      this.toastrService.error("Vat Tax is not found. Please, try again.", "Error");
+  private deleteProductUnit(productUnitId: string | undefined): void {
+    if(productUnitId == null || productUnitId == undefined) {
+      this.toastrService.error("Product Unit is not found. Please, try again.", "Error");
       return;
     }
 
     this.spinnerService.show();
-    this.vatTaxService.delete(vatTAxId).subscribe((result: boolean) => {
+    this.productUnitService.delete(productUnitId).subscribe((result: boolean) => {
       this.spinnerService.hide();
       if(result) {
-        this.toastrService.success("Vat Tax deleted successfully.", "Success"); 
-        this.getVatTaxes();
+        this.toastrService.success("Product Unit deleted successfully.", "Success"); 
+        this.getProductUnits();
       } else {
-        this.toastrService.error("Vat Tax is not deleted. Please, try again.", "Error");
+        this.toastrService.error("Product Unit is not deleted. Please, try again.", "Error");
       }
 
       return;
     },
     (error: any) => {
       this.spinnerService.hide();
-      this.toastrService.error("Vat Tax is not deleted. Please, try again.", "Error");
+      this.toastrService.error("Product Unit is not deleted. Please, try again.", "Error");
       return;
     });
   }

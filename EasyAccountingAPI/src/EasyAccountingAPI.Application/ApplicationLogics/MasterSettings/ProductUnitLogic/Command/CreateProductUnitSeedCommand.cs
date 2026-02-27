@@ -73,7 +73,6 @@
                     "Centimeter",
                     "Foot",
                     "Inch",
-                    "Meter",
                     "Kilometer",
                     "Pound",
                     "Yard"

@@ -32,6 +32,9 @@
 
                 // Create product unit entity
                 var productUnit = _mapper.Map<ProductUnit>(request);
+                productUnit.CreatedById = userId;
+                productUnit.CreatedDateTime = DateTime.UtcNow;
+
                 await _productUnitRepository.CreateAsync(productUnit, cancellationToken);
                 await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);
 

@@ -39,6 +39,9 @@
                 try
                 {
                     _mapper.Map((ProductUnitUpdateModel)request, getExistingProductUnit);
+                    getExistingProductUnit.UpdatedById = userId;
+                    getExistingProductUnit.UpdatedDateTime = DateTime.UtcNow;
+
                     _productUnitRepository.Update(getExistingProductUnit);
                     await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);
                     await _unitOfWorkRepository.CommitTransactionAsync(cancellationToken);

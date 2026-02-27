@@ -37,6 +37,9 @@ import { UpdateEmployeeFeatureActionComponent } from './components/master-settin
 import { CreateVatTaxComponent } from './components/master-settings/vat-taxes/create-vat-tax/create-vat-tax.component';
 import { UpdateVatTaxComponent } from './components/master-settings/vat-taxes/update-vat-tax/update-vat-tax.component';
 import { VatTaxesComponent } from './components/master-settings/vat-taxes/vat-taxes.component';
+import { ProductUnitsComponent } from './components/master-settings/product-units/product-units.component';
+import { UpdateProductUnitComponent } from './components/master-settings/product-units/update-product-unit/update-product-unit.component';
+import { CreateProductUnitComponent } from './components/master-settings/product-units/create-product-unit/create-product-unit.component';
 
 export const routes: Routes = [
 
@@ -104,7 +107,12 @@ export const routes: Routes = [
       // Vat Taxes
       { path: "vat-taxes", component: VatTaxesComponent, pathMatch: "full" },
       { path: "vat-tax/create", component: CreateVatTaxComponent, pathMatch: "full" },
-      { path: "vat-tax/update/:recordId", component: UpdateVatTaxComponent, pathMatch: "full" }
+      { path: "vat-tax/update/:recordId", component: UpdateVatTaxComponent, pathMatch: "full" },
+
+      // Product Unit
+      { path: "product-units", component: ProductUnitsComponent, pathMatch: "full" },
+      { path: "product-unit/create", component: CreateProductUnitComponent, pathMatch: "full" },
+      { path: "product-unit/update/:recordId", component: UpdateProductUnitComponent, pathMatch: "full" }
     ],
     
     canActivate: [AuthGuard] 
