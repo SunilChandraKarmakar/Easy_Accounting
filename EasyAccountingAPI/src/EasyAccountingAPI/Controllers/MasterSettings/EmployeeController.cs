@@ -45,5 +45,13 @@
             var employees = await Mediator.Send(new SelectListEmployeeByCompanyQuery { CompanyId = companyId });
             return Ok(employees);
         }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        public async Task<ActionResult<bool>> DeleteAsync(string id)
+        {
+            var isDeleteEmployee = await Mediator.Send(new DeleteEmployeeCommand { Id = id });
+            return Ok(isDeleteEmployee);
+        }
     }
 }

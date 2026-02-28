@@ -970,6 +970,37 @@
         }
       }
     },
+    "/api/Employee/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "Employee"
+        ],
+        "operationId": "Employee_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Employee/GetById/{id}": {
       "get": {
         "tags": [

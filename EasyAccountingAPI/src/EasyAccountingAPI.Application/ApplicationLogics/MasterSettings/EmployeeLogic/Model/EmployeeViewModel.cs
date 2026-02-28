@@ -71,6 +71,7 @@
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Employee, EmployeeGridModel>()
+                .ForMember(d => d.Id, s => s.MapFrom(m => EncryptionService.Encrypt(m.Id.ToString())))
                 .ForMember(d => d.CompanyName, s => s.MapFrom(m => m.Company.Name));
         }
     }
