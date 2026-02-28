@@ -938,6 +938,69 @@
         }
       }
     },
+    "/api/Employee/Create": {
+      "post": {
+        "tags": [
+          "Employee"
+        ],
+        "operationId": "Employee_Create",
+        "requestBody": {
+          "x-name": "createEmployeeCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEmployeeCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Employee/GetById/{id}": {
+      "get": {
+        "tags": [
+          "Employee"
+        ],
+        "operationId": "Employee_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Employee/GetEmployeeByCompanyId/{companyId}": {
       "get": {
         "tags": [
@@ -966,6 +1029,38 @@
                   "items": {
                     "$ref": "#/components/schemas/SelectModel"
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Employee/GetFilterEmployees": {
+      "post": {
+        "tags": [
+          "Employee"
+        ],
+        "operationId": "Employee_GetFilterEmployees",
+        "requestBody": {
+          "x-name": "getEmployeesByFilterQuery",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetEmployeeByFilterQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilterPageResultModelOfEmployeeGridModel"
                 }
               }
             }
@@ -2509,6 +2604,159 @@
         "allOf": [
           {
             "$ref": "#/components/schemas/CurrencyUpdateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "FilterPageResultModelOfEmployeeGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmployeeGridModel"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "EmployeeGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "GetEmployeeByFilterQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FilterPageModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "EmployeeViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "createModel": {
+            "$ref": "#/components/schemas/EmployeeCreateModel"
+          },
+          "updateModel": {
+            "$ref": "#/components/schemas/EmployeeUpdateModel"
+          },
+          "gridModel": {
+            "$ref": "#/components/schemas/EmployeeGridModel"
+          },
+          "optionsDataSources": {}
+        }
+      },
+      "EmployeeCreateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "fullName",
+          "email"
+        ],
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 50,
+            "minLength": 10
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        }
+      },
+      "EmployeeUpdateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "fullName",
+          "email"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fullName": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 50,
+            "minLength": 10
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        }
+      },
+      "CreateEmployeeCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EmployeeCreateModel"
           },
           {
             "type": "object",

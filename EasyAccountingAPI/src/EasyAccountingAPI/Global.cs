@@ -56,3 +56,5 @@ global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.VatT
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.ProductUnitLogic.Command; 
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.ProductUnitLogic.Model;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.ProductUnitLogic.Queries;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.EmployeeLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.EmployeeLogic.Model;

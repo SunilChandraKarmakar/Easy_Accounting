@@ -1660,7 +1660,10 @@ export class CurrencyService implements ICurrencyService {
 }
 
 export interface IEmployeeService {
+    create(createEmployeeCommand: CreateEmployeeCommand): Observable<boolean>;
+    getById(id: string): Observable<EmployeeViewModel>;
     getEmployeeByCompanyId(companyId: number): Observable<SelectModel[]>;
+    getFilterEmployees(getEmployeesByFilterQuery: GetEmployeeByFilterQuery): Observable<FilterPageResultModelOfEmployeeGridModel>;
 }
 
 @Injectable()
@@ -1672,6 +1675,110 @@ export class EmployeeService implements IEmployeeService {
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
         this.baseUrl = baseUrl ?? "";
+    }
+
+    create(createEmployeeCommand: CreateEmployeeCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Employee/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(createEmployeeCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getById(id: string): Observable<EmployeeViewModel> {
+        let url_ = this.baseUrl + "/api/Employee/GetById/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<EmployeeViewModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<EmployeeViewModel>;
+        }));
+    }
+
+    protected processGetById(response: HttpResponseBase): Observable<EmployeeViewModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = EmployeeViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
     }
 
     getEmployeeByCompanyId(companyId: number): Observable<SelectModel[]> {
@@ -1722,6 +1829,58 @@ export class EmployeeService implements IEmployeeService {
             else {
                 result200 = null as any;
             }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getFilterEmployees(getEmployeesByFilterQuery: GetEmployeeByFilterQuery): Observable<FilterPageResultModelOfEmployeeGridModel> {
+        let url_ = this.baseUrl + "/api/Employee/GetFilterEmployees";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(getEmployeesByFilterQuery);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFilterEmployees(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFilterEmployees(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FilterPageResultModelOfEmployeeGridModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FilterPageResultModelOfEmployeeGridModel>;
+        }));
+    }
+
+    protected processGetFilterEmployees(response: HttpResponseBase): Observable<FilterPageResultModelOfEmployeeGridModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FilterPageResultModelOfEmployeeGridModel.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -4548,6 +4707,320 @@ export class UpdateCurrencyCommand extends CurrencyUpdateModel implements IUpdat
 }
 
 export interface IUpdateCurrencyCommand extends ICurrencyUpdateModel {
+}
+
+export class FilterPageResultModelOfEmployeeGridModel implements IFilterPageResultModelOfEmployeeGridModel {
+    items?: EmployeeGridModel[];
+    totalCount?: number;
+
+    constructor(data?: IFilterPageResultModelOfEmployeeGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(EmployeeGridModel.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): FilterPageResultModelOfEmployeeGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPageResultModelOfEmployeeGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item ? item.toJSON() : undefined as any);
+        }
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+}
+
+export interface IFilterPageResultModelOfEmployeeGridModel {
+    items?: EmployeeGridModel[];
+    totalCount?: number;
+}
+
+export class EmployeeGridModel implements IEmployeeGridModel {
+    id?: string;
+    fullName?: string;
+    phone?: string | undefined;
+    email?: string;
+    image?: string | undefined;
+    companyName?: string | undefined;
+
+    constructor(data?: IEmployeeGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.fullName = _data["fullName"];
+            this.phone = _data["phone"];
+            this.email = _data["email"];
+            this.image = _data["image"];
+            this.companyName = _data["companyName"];
+        }
+    }
+
+    static fromJS(data: any): EmployeeGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new EmployeeGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["fullName"] = this.fullName;
+        data["phone"] = this.phone;
+        data["email"] = this.email;
+        data["image"] = this.image;
+        data["companyName"] = this.companyName;
+        return data;
+    }
+}
+
+export interface IEmployeeGridModel {
+    id?: string;
+    fullName?: string;
+    phone?: string | undefined;
+    email?: string;
+    image?: string | undefined;
+    companyName?: string | undefined;
+}
+
+export class GetEmployeeByFilterQuery extends FilterPageModel implements IGetEmployeeByFilterQuery {
+
+    constructor(data?: IGetEmployeeByFilterQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetEmployeeByFilterQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetEmployeeByFilterQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetEmployeeByFilterQuery extends IFilterPageModel {
+}
+
+export class EmployeeViewModel implements IEmployeeViewModel {
+    createModel?: EmployeeCreateModel;
+    updateModel?: EmployeeUpdateModel;
+    gridModel?: EmployeeGridModel;
+    optionsDataSources?: any;
+
+    constructor(data?: IEmployeeViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.createModel = _data["createModel"] ? EmployeeCreateModel.fromJS(_data["createModel"]) : undefined as any;
+            this.updateModel = _data["updateModel"] ? EmployeeUpdateModel.fromJS(_data["updateModel"]) : undefined as any;
+            this.gridModel = _data["gridModel"] ? EmployeeGridModel.fromJS(_data["gridModel"]) : undefined as any;
+            this.optionsDataSources = _data["optionsDataSources"];
+        }
+    }
+
+    static fromJS(data: any): EmployeeViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new EmployeeViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["createModel"] = this.createModel ? this.createModel.toJSON() : undefined as any;
+        data["updateModel"] = this.updateModel ? this.updateModel.toJSON() : undefined as any;
+        data["gridModel"] = this.gridModel ? this.gridModel.toJSON() : undefined as any;
+        data["optionsDataSources"] = this.optionsDataSources;
+        return data;
+    }
+}
+
+export interface IEmployeeViewModel {
+    createModel?: EmployeeCreateModel;
+    updateModel?: EmployeeUpdateModel;
+    gridModel?: EmployeeGridModel;
+    optionsDataSources?: any;
+}
+
+export class EmployeeCreateModel implements IEmployeeCreateModel {
+    fullName!: string;
+    phone?: string | undefined;
+    email!: string;
+    image?: string | undefined;
+    companyId?: number | undefined;
+
+    constructor(data?: IEmployeeCreateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.fullName = _data["fullName"];
+            this.phone = _data["phone"];
+            this.email = _data["email"];
+            this.image = _data["image"];
+            this.companyId = _data["companyId"];
+        }
+    }
+
+    static fromJS(data: any): EmployeeCreateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new EmployeeCreateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["fullName"] = this.fullName;
+        data["phone"] = this.phone;
+        data["email"] = this.email;
+        data["image"] = this.image;
+        data["companyId"] = this.companyId;
+        return data;
+    }
+}
+
+export interface IEmployeeCreateModel {
+    fullName: string;
+    phone?: string | undefined;
+    email: string;
+    image?: string | undefined;
+    companyId?: number | undefined;
+}
+
+export class EmployeeUpdateModel implements IEmployeeUpdateModel {
+    id?: number;
+    fullName!: string;
+    phone?: string | undefined;
+    email!: string;
+    image?: string | undefined;
+    companyId?: number | undefined;
+
+    constructor(data?: IEmployeeUpdateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.fullName = _data["fullName"];
+            this.phone = _data["phone"];
+            this.email = _data["email"];
+            this.image = _data["image"];
+            this.companyId = _data["companyId"];
+        }
+    }
+
+    static fromJS(data: any): EmployeeUpdateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new EmployeeUpdateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["fullName"] = this.fullName;
+        data["phone"] = this.phone;
+        data["email"] = this.email;
+        data["image"] = this.image;
+        data["companyId"] = this.companyId;
+        return data;
+    }
+}
+
+export interface IEmployeeUpdateModel {
+    id?: number;
+    fullName: string;
+    phone?: string | undefined;
+    email: string;
+    image?: string | undefined;
+    companyId?: number | undefined;
+}
+
+export class CreateEmployeeCommand extends EmployeeCreateModel implements ICreateEmployeeCommand {
+
+    constructor(data?: ICreateEmployeeCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): CreateEmployeeCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateEmployeeCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ICreateEmployeeCommand extends IEmployeeCreateModel {
 }
 
 export class SelectModel implements ISelectModel {

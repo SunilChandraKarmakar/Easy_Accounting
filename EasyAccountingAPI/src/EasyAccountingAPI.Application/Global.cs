@@ -56,3 +56,4 @@ global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.Acce
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.VatTaxLogic.Model;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.ProductUnitLogic.Model;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.ProductUnitLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.EmployeeLogic.Model;
