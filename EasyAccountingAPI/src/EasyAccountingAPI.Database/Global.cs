@@ -6,3 +6,4 @@ global using EasyAccountingAPI.Model.Authentication;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using EasyAccountingAPI.Model.MasterSettings;
 global using EasyAccountingAPI.Model.MasterSettings.AccessControl;
+global using EasyAccountingAPI.Model.ProductService;

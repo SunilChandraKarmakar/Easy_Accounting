@@ -58,3 +58,6 @@ global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.Prod
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.ProductUnitLogic.Queries;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.EmployeeLogic.Command;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.EmployeeLogic.Model;
+global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.BrandLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.BrandLogic.Model;
+global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.BrandLogic.Queries;

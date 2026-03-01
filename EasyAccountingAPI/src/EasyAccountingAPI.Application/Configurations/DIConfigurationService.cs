@@ -44,6 +44,10 @@
             services.AddScoped<IProductUnitRepository, ProductUnitRepository>();
             #endregion
 
+            #region Product & Service
+            services.AddScoped<IBrandRepository, BrandRepository>();
+            #endregion
+
             return services;
         }
     }

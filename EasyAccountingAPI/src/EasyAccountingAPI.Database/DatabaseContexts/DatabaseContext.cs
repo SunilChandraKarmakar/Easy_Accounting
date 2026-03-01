@@ -31,6 +31,10 @@
         public DbSet<ProductUnit> ProductUnits { get; set; }
         #endregion
 
+        #region Product & Service
+        public DbSet<Brand> Brands { get; set; }
+        #endregion
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // optionsBuilder.UseLazyLoadingProxies();
