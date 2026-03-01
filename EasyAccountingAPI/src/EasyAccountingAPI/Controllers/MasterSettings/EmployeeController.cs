@@ -46,6 +46,19 @@
             return Ok(employees);
         }
 
+        [HttpPut]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        public async Task<ActionResult<bool>> UpdateAsync(UpdateEmployeeCommand updateEmployeeCommand)
+        {
+            if (ModelState.IsValid)
+            {
+                var isEmployeeUpdate = await Mediator.Send(updateEmployeeCommand);
+                return Ok(isEmployeeUpdate);
+            }
+
+            return BadRequest(updateEmployeeCommand);
+        }
+
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         public async Task<ActionResult<bool>> DeleteAsync(string id)

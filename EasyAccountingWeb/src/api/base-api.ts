@@ -1665,6 +1665,7 @@ export interface IEmployeeService {
     getById(id: string): Observable<EmployeeViewModel>;
     getEmployeeByCompanyId(companyId: number): Observable<SelectModel[]>;
     getFilterEmployees(getEmployeesByFilterQuery: GetEmployeeByFilterQuery): Observable<FilterPageResultModelOfEmployeeGridModel>;
+    update(updateEmployeeCommand: UpdateEmployeeCommand): Observable<boolean>;
 }
 
 @Injectable()
@@ -1934,6 +1935,59 @@ export class EmployeeService implements IEmployeeService {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = FilterPageResultModelOfEmployeeGridModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(updateEmployeeCommand: UpdateEmployeeCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Employee/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(updateEmployeeCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -4945,6 +4999,7 @@ export class EmployeeCreateModel implements IEmployeeCreateModel {
     fullName!: string;
     phone?: string | undefined;
     email!: string;
+    password!: string;
     image?: string | undefined;
     companyId?: number | undefined;
 
@@ -4962,6 +5017,7 @@ export class EmployeeCreateModel implements IEmployeeCreateModel {
             this.fullName = _data["fullName"];
             this.phone = _data["phone"];
             this.email = _data["email"];
+            this.password = _data["password"];
             this.image = _data["image"];
             this.companyId = _data["companyId"];
         }
@@ -4979,6 +5035,7 @@ export class EmployeeCreateModel implements IEmployeeCreateModel {
         data["fullName"] = this.fullName;
         data["phone"] = this.phone;
         data["email"] = this.email;
+        data["password"] = this.password;
         data["image"] = this.image;
         data["companyId"] = this.companyId;
         return data;
@@ -4989,6 +5046,7 @@ export interface IEmployeeCreateModel {
     fullName: string;
     phone?: string | undefined;
     email: string;
+    password: string;
     image?: string | undefined;
     companyId?: number | undefined;
 }
@@ -5142,6 +5200,33 @@ export interface ISelectModel {
     valueThree?: any;
     valueFour?: any;
     displayOrder?: number;
+}
+
+export class UpdateEmployeeCommand extends EmployeeUpdateModel implements IUpdateEmployeeCommand {
+
+    constructor(data?: IUpdateEmployeeCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): UpdateEmployeeCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateEmployeeCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IUpdateEmployeeCommand extends IEmployeeUpdateModel {
 }
 
 export class FilterPageResultModelOfInvoiceSettingGridModel implements IFilterPageResultModelOfInvoiceSettingGridModel {

@@ -19,5 +19,14 @@
 
             return employeeRoleName;
         }
+
+        public async Task<EmployeeRole?> GetEmployeeRoleByEmployeeIdAsync(int employeeId, CancellationToken cancellationToken)
+        {
+            var emoloyeeRole = await db.EmployeeRoles
+                .Where(er => er.EmployeeId == employeeId)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            return emoloyeeRole;
+        }
     }
 }

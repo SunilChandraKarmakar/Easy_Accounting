@@ -37,9 +37,10 @@
 
         public override async Task<Employee?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
-            var employee = await db.Employees
+            var employee = await db.Employees                
                 .Where(e => e.Id == id && !e.IsDeleted)
                 .Include(e => e.Company)
+                .Include(e => e.EmployeeRoles)
                 .FirstOrDefaultAsync();
 
             return employee;

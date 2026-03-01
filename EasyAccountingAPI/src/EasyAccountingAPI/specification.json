@@ -1099,6 +1099,38 @@
         }
       }
     },
+    "/api/Employee/Update": {
+      "put": {
+        "tags": [
+          "Employee"
+        ],
+        "operationId": "Employee_Update",
+        "requestBody": {
+          "x-name": "updateEmployeeCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateEmployeeCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/EmployeeFeatureAction/Create": {
       "post": {
         "tags": [
@@ -2717,7 +2749,8 @@
         "additionalProperties": false,
         "required": [
           "fullName",
-          "email"
+          "email",
+          "password"
         ],
         "properties": {
           "fullName": {
@@ -2734,6 +2767,11 @@
             "format": "email",
             "maxLength": 50,
             "minLength": 10
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 6
           },
           "image": {
             "type": "string",
@@ -2818,6 +2856,17 @@
             "format": "int32"
           }
         }
+      },
+      "UpdateEmployeeCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EmployeeUpdateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
       },
       "FilterPageResultModelOfInvoiceSettingGridModel": {
         "type": "object",

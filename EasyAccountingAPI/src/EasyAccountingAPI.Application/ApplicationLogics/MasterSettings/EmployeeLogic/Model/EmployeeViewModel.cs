@@ -1,4 +1,6 @@
-﻿namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.EmployeeLogic.Model
+﻿using System.ComponentModel;
+
+namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.EmployeeLogic.Model
 {
     public class EmployeeViewModel
     {
@@ -22,6 +24,11 @@
         [EmailAddress]
         [StringLength(maximumLength: 50, MinimumLength = 10)]
         public string Email { get; set; }
+
+        [Required(ErrorMessage = "Please, provide password.")]
+        [PasswordPropertyText]
+        [StringLength(maximumLength: 100, MinimumLength = 6)]
+        [NotMapped] public string Password { get; set; }
 
         public string? Image { get; set; }
         public int? CompanyId { get; set; }

@@ -25,6 +25,7 @@
                 _unitOfWorkRepository = unitOfWorkRepository;
                 _employeeRepository = employeeRepository;
                 _userManager = userManager;
+                _roleRepository = roleRepository;
                 _employeeRoleRepository = employeeRoleRepository;
                 _mapper = mapper;
             }
@@ -66,12 +67,12 @@
                     await _employeeRoleRepository.CreateAsync(employeeRole, cancellationToken);
 
                     // Create user for employee
-                    var registerUser = _mapper.Map<User>(request);
+                    var registerUser = new User();
                     registerUser.UserName = request.Email;
                     registerUser.Email = request.Email;
                     registerUser.FullName = request.FullName;
                     registerUser.Employee = createdEmployee;
-                    await _userManager.CreateAsync(registerUser, "System@Employee#123");
+                    await _userManager.CreateAsync(registerUser, request.Password);
 
                     // Final save + commit
                     await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);
