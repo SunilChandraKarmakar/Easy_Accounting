@@ -43,6 +43,9 @@ import { CreateProductUnitComponent } from './components/master-settings/product
 import { EmployeesComponent } from './components/master-settings/employees/employees.component';
 import { UpdateEmployeeComponent } from './components/master-settings/employees/update-employee/update-employee.component';
 import { CreateEmployeeComponent } from './components/master-settings/employees/create-employee/create-employee.component';
+import { BrandsComponent } from './components/product-service/brands/brands.component';
+import { CreateBrandComponent } from './components/product-service/brands/create-brand/create-brand.component';
+import { UpdateBrandComponent } from './components/product-service/brands/update-brand/update-brand.component';
 
 export const routes: Routes = [
 
@@ -120,7 +123,12 @@ export const routes: Routes = [
       // Employee
       { path: "employees", component: EmployeesComponent, pathMatch: "full" },
       { path: "employee/create", component: CreateEmployeeComponent, pathMatch: "full" },
-      { path: "employee/update/:recordId", component: UpdateEmployeeComponent, pathMatch: "full" }
+      { path: "employee/update/:recordId", component: UpdateEmployeeComponent, pathMatch: "full" },
+
+      // Brand
+      { path: "brands", component: BrandsComponent, pathMatch: "full" },
+      { path: "brand/create", component: CreateBrandComponent, pathMatch: "full" },
+      { path: "brand/update/:recordId", component: UpdateBrandComponent, pathMatch: "full" }
     ],
     
     canActivate: [AuthGuard] 

@@ -29,6 +29,10 @@
                 if (string.IsNullOrEmpty(userId) || string.IsNullOrWhiteSpace(userId))
                     throw new UnauthorizedAccessException(ProvideErrorMessage.UserNotAuthenticated);
 
+                // Check if the brand id is null, empty, whitespace, or equals to -1
+                if (string.IsNullOrEmpty(request.Id) || string.IsNullOrWhiteSpace(request.Id) || request.Id == "-1")
+                    return new BrandUpdateModel();
+
                 // Decrypt the brand id
                 var decryptedId = EncryptionService.Decrypt(request.Id);
                 if (!int.TryParse(decryptedId, out var brandId))

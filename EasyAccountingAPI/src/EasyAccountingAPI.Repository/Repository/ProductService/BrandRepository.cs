@@ -23,14 +23,14 @@
             CancellationToken cancellationToken)
         {
             // Get employee based company ids
-            var companyIds = this._companyRepository.GetEmployeeBasedCompanyIdsAsync(userId!, cancellationToken).Result;
+            var companyIds = _companyRepository.GetEmployeeBasedCompanyIdsAsync(userId!, cancellationToken).Result;
 
-            Expression<Func<Brand, bool>> filter = b =>
-                 !b.IsDeleted
-                 && (string.IsNullOrWhiteSpace(userId) || companyIds.Contains(b.Id))
-                 && (string.IsNullOrWhiteSpace(model.FilterValue)
-                 || b.Name.Contains(model.FilterValue)
-                 || b.Company.Name.Contains(model.FilterValue));
+            Expression<Func<Brand, bool>> filter = c =>
+                  !c.IsDeleted
+                  && (string.IsNullOrWhiteSpace(userId) || companyIds.Contains(c.Id))
+                  && (string.IsNullOrWhiteSpace(model.FilterValue)
+                  || c.Name.Contains(model.FilterValue)
+                  || c.Company.Name.Contains(model.FilterValue));
 
             var sortableColumns = new Dictionary<string, Expression<Func<Brand, object>>>
             {
@@ -40,7 +40,7 @@
             };
 
             return GetAllFilterAsync(model, filter, c => c.Id, sortableColumns, 
-                include: q => q.Include(c => c.Company), cancellationToken);
+                include: q => q.Include(x => x.Company), cancellationToken);
         }
 
         public async Task<IEnumerable<SelectModel>> GetBrandSelectList(string userId, CancellationToken cancellationToken)
