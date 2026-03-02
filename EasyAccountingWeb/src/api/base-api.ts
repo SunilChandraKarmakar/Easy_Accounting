@@ -701,6 +701,287 @@ export class BrandService implements IBrandService {
     }
 }
 
+export interface ICategoryService {
+    create(createCategoryCommand: CreateCategoryCommand): Observable<boolean>;
+    delete(id: string): Observable<boolean>;
+    getById(id: string): Observable<CategoryViewModel>;
+    getFilterCategories(getCategoriesByFilterQuery: GetCategoriesByFilterQuery): Observable<FilterPageResultModelOfCategoryGridModel>;
+    update(updateCategoryCommand: UpdateCategoryCommand): Observable<boolean>;
+}
+
+@Injectable()
+export class CategoryService implements ICategoryService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    create(createCategoryCommand: CreateCategoryCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Category/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(createCategoryCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(id: string): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Category/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getById(id: string): Observable<CategoryViewModel> {
+        let url_ = this.baseUrl + "/api/Category/GetById/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<CategoryViewModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<CategoryViewModel>;
+        }));
+    }
+
+    protected processGetById(response: HttpResponseBase): Observable<CategoryViewModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CategoryViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getFilterCategories(getCategoriesByFilterQuery: GetCategoriesByFilterQuery): Observable<FilterPageResultModelOfCategoryGridModel> {
+        let url_ = this.baseUrl + "/api/Category/GetFilterCategories";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(getCategoriesByFilterQuery);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFilterCategories(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFilterCategories(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FilterPageResultModelOfCategoryGridModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FilterPageResultModelOfCategoryGridModel>;
+        }));
+    }
+
+    protected processGetFilterCategories(response: HttpResponseBase): Observable<FilterPageResultModelOfCategoryGridModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FilterPageResultModelOfCategoryGridModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(updateCategoryCommand: UpdateCategoryCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Category/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(updateCategoryCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface ICityService {
     create(createCityCommand: CreateCityCommand): Observable<boolean>;
     delete(id: string): Observable<boolean>;
@@ -4662,6 +4943,323 @@ export class UpdateBrandCommand extends BrandUpdateModel implements IUpdateBrand
 }
 
 export interface IUpdateBrandCommand extends IBrandUpdateModel {
+}
+
+export class FilterPageResultModelOfCategoryGridModel implements IFilterPageResultModelOfCategoryGridModel {
+    items?: CategoryGridModel[];
+    totalCount?: number;
+
+    constructor(data?: IFilterPageResultModelOfCategoryGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(CategoryGridModel.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): FilterPageResultModelOfCategoryGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPageResultModelOfCategoryGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item ? item.toJSON() : undefined as any);
+        }
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+}
+
+export interface IFilterPageResultModelOfCategoryGridModel {
+    items?: CategoryGridModel[];
+    totalCount?: number;
+}
+
+export class CategoryGridModel implements ICategoryGridModel {
+    id?: string;
+    name?: string;
+    parentName?: string | undefined;
+    companyName?: string;
+
+    constructor(data?: ICategoryGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.parentName = _data["parentName"];
+            this.companyName = _data["companyName"];
+        }
+    }
+
+    static fromJS(data: any): CategoryGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new CategoryGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["parentName"] = this.parentName;
+        data["companyName"] = this.companyName;
+        return data;
+    }
+}
+
+export interface ICategoryGridModel {
+    id?: string;
+    name?: string;
+    parentName?: string | undefined;
+    companyName?: string;
+}
+
+export class GetCategoriesByFilterQuery extends FilterPageModel implements IGetCategoriesByFilterQuery {
+
+    constructor(data?: IGetCategoriesByFilterQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetCategoriesByFilterQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetCategoriesByFilterQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetCategoriesByFilterQuery extends IFilterPageModel {
+}
+
+export class CategoryViewModel implements ICategoryViewModel {
+    createModel?: CategoryCreateModel;
+    updateModel?: CategoryUpdateModel;
+    gridModel?: CategoryGridModel;
+    optionsDataSources?: any;
+
+    constructor(data?: ICategoryViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.createModel = _data["createModel"] ? CategoryCreateModel.fromJS(_data["createModel"]) : undefined as any;
+            this.updateModel = _data["updateModel"] ? CategoryUpdateModel.fromJS(_data["updateModel"]) : undefined as any;
+            this.gridModel = _data["gridModel"] ? CategoryGridModel.fromJS(_data["gridModel"]) : undefined as any;
+            this.optionsDataSources = _data["optionsDataSources"];
+        }
+    }
+
+    static fromJS(data: any): CategoryViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new CategoryViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["createModel"] = this.createModel ? this.createModel.toJSON() : undefined as any;
+        data["updateModel"] = this.updateModel ? this.updateModel.toJSON() : undefined as any;
+        data["gridModel"] = this.gridModel ? this.gridModel.toJSON() : undefined as any;
+        data["optionsDataSources"] = this.optionsDataSources;
+        return data;
+    }
+}
+
+export interface ICategoryViewModel {
+    createModel?: CategoryCreateModel;
+    updateModel?: CategoryUpdateModel;
+    gridModel?: CategoryGridModel;
+    optionsDataSources?: any;
+}
+
+export class CategoryCreateModel implements ICategoryCreateModel {
+    name!: string;
+    parentId?: number | undefined;
+    companyId!: number;
+
+    constructor(data?: ICategoryCreateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.parentId = _data["parentId"];
+            this.companyId = _data["companyId"];
+        }
+    }
+
+    static fromJS(data: any): CategoryCreateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new CategoryCreateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["parentId"] = this.parentId;
+        data["companyId"] = this.companyId;
+        return data;
+    }
+}
+
+export interface ICategoryCreateModel {
+    name: string;
+    parentId?: number | undefined;
+    companyId: number;
+}
+
+export class CategoryUpdateModel implements ICategoryUpdateModel {
+    id?: number;
+    name!: string;
+    parentId?: number | undefined;
+    companyId!: number;
+
+    constructor(data?: ICategoryUpdateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.parentId = _data["parentId"];
+            this.companyId = _data["companyId"];
+        }
+    }
+
+    static fromJS(data: any): CategoryUpdateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new CategoryUpdateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["parentId"] = this.parentId;
+        data["companyId"] = this.companyId;
+        return data;
+    }
+}
+
+export interface ICategoryUpdateModel {
+    id?: number;
+    name: string;
+    parentId?: number | undefined;
+    companyId: number;
+}
+
+export class CreateCategoryCommand extends CategoryCreateModel implements ICreateCategoryCommand {
+
+    constructor(data?: ICreateCategoryCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): CreateCategoryCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateCategoryCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ICreateCategoryCommand extends ICategoryCreateModel {
+}
+
+export class UpdateCategoryCommand extends CategoryUpdateModel implements IUpdateCategoryCommand {
+
+    constructor(data?: IUpdateCategoryCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): UpdateCategoryCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateCategoryCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IUpdateCategoryCommand extends ICategoryUpdateModel {
 }
 
 export class FilterPageResultModelOfCompanyGridModel implements IFilterPageResultModelOfCompanyGridModel {

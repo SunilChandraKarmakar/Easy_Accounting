@@ -9,6 +9,7 @@
             Employees = new HashSet<Employee>();
             VatTaxes = new HashSet<VatTax>();
             Brands = new HashSet<Brand>();
+            Categories = new HashSet<Category>();
         }
 
         public int Id { get; set; }
@@ -50,5 +51,6 @@
         public ICollection<Employee> Employees { get; set; }
         public ICollection<VatTax> VatTaxes { get; set; }
         public ICollection<Brand> Brands { get; set; }
+        public ICollection<Category> Categories { get; set; }
     }
 }

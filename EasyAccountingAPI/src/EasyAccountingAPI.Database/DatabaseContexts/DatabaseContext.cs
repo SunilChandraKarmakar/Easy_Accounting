@@ -33,6 +33,7 @@
 
         #region Product & Service
         public DbSet<Brand> Brands { get; set; }
+        public DbSet<Category> Categories { get; set; }
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -61,3 +61,6 @@ global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.Empl
 global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.BrandLogic.Command;
 global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.BrandLogic.Model;
 global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.BrandLogic.Queries;
+global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.CategoryLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.CategoryLogic.Model;
+global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.CategoryLogic.Queries;
