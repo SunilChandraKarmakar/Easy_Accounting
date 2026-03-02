@@ -25,34 +25,34 @@
             // Get employee based company ids
             var companyIds = _companyRepository.GetEmployeeBasedCompanyIdsAsync(userId!, cancellationToken).Result;
 
-            Expression<Func<Brand, bool>> filter = c =>
-                  !c.IsDeleted
-                  && (string.IsNullOrWhiteSpace(userId) || companyIds.Contains(c.Id))
+            Expression<Func<Brand, bool>> filter = b =>
+                  !b.IsDeleted
+                  && (string.IsNullOrWhiteSpace(userId) || companyIds.Contains(b.CompanyId))
                   && (string.IsNullOrWhiteSpace(model.FilterValue)
-                  || c.Name.Contains(model.FilterValue)
-                  || c.Company.Name.Contains(model.FilterValue));
+                  || b.Name.Contains(model.FilterValue)
+                  || b.Company.Name.Contains(model.FilterValue));
 
             var sortableColumns = new Dictionary<string, Expression<Func<Brand, object>>>
             {
-                ["name"] = c => c.Name,
-                ["company"] = c => c.Company.Name,
-                ["id"] = c => c.Id
+                ["name"] = b => b.Name,
+                ["company"] = b => b.Company.Name,
+                ["id"] = b => b.Id
             };
 
-            return GetAllFilterAsync(model, filter, c => c.Id, sortableColumns, 
+            return GetAllFilterAsync(model, filter, b => b.Id, sortableColumns, 
                 include: q => q.Include(x => x.Company), cancellationToken);
         }
 
         public async Task<IEnumerable<SelectModel>> GetBrandSelectList(string userId, CancellationToken cancellationToken)
         {
             // Get employee based company ids
-            var companyIds = await this._companyRepository.GetEmployeeBasedCompanyIdsAsync(userId, cancellationToken);
+            var companyIds = await _companyRepository.GetEmployeeBasedCompanyIdsAsync(userId, cancellationToken);
 
             var getBrands = db.Brands.AsNoTracking().Where(b => companyIds.Contains(b.Id) && !b.IsDeleted);
 
             return await getBrands
-                .OrderBy(c => c.Name)
-                .Select(c => new SelectModel { Id = c.Id, Name = c.Name })
+                .OrderBy(b => b.Name)
+                .Select(s => new SelectModel { Id = s.Id, Name = s.Name })
                 .ToListAsync(cancellationToken);
         }
     }

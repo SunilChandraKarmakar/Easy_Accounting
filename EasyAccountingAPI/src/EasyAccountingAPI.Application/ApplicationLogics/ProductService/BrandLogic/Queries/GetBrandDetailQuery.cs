@@ -7,16 +7,16 @@
         public class Handler : IRequestHandler<GetBrandDetailQuery, BrandUpdateModel>
         {
             private readonly IHttpContextAccessor _httpContextAccessor;
-            private readonly IModuleRepository _moduleRepository;
+            private readonly IBrandRepository _brandRepository;
             private readonly IMapper _mapper;
 
             public Handler(
                 IHttpContextAccessor httpContextAccessor,
-                IModuleRepository moduleRepository,                 
+                IBrandRepository brandRepository,                 
                 IMapper mapper)
             {
                 _httpContextAccessor = httpContextAccessor;
-                _moduleRepository = moduleRepository;
+                _brandRepository = brandRepository;
                 _mapper = mapper;
             }
 
@@ -39,7 +39,7 @@
                     return new BrandUpdateModel();
 
                 // Get brand by id
-                var getBrand = await _moduleRepository.GetByIdAsync(brandId, cancellationToken);
+                var getBrand = await _brandRepository.GetByIdAsync(brandId, cancellationToken);
 
                 if (getBrand is null)
                     return new BrandUpdateModel();
