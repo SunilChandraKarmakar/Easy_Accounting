@@ -46,6 +46,9 @@ import { CreateEmployeeComponent } from './components/master-settings/employees/
 import { BrandsComponent } from './components/product-service/brands/brands.component';
 import { CreateBrandComponent } from './components/product-service/brands/create-brand/create-brand.component';
 import { UpdateBrandComponent } from './components/product-service/brands/update-brand/update-brand.component';
+import { CategoriesComponent } from './components/product-service/categories/categories.component';
+import { CreateCategoryComponent } from './components/product-service/categories/create-category/create-category.component';
+import { UpdateCategoryComponent } from './components/product-service/categories/update-category/update-category.component';
 
 export const routes: Routes = [
 
@@ -128,7 +131,12 @@ export const routes: Routes = [
       // Brand
       { path: "brands", component: BrandsComponent, pathMatch: "full" },
       { path: "brand/create", component: CreateBrandComponent, pathMatch: "full" },
-      { path: "brand/update/:recordId", component: UpdateBrandComponent, pathMatch: "full" }
+      { path: "brand/update/:recordId", component: UpdateBrandComponent, pathMatch: "full" },
+
+      // Category
+      { path: "categories", component: CategoriesComponent, pathMatch: "full" },
+      { path: "category/create", component: CreateCategoryComponent, pathMatch: "full" },
+      { path: "category/update/:recordId", component: UpdateCategoryComponent, pathMatch: "full" }
     ],
     
     canActivate: [AuthGuard] 
