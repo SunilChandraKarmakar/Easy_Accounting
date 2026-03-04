@@ -47,6 +47,7 @@
             #region Product & Service
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IVariationRepository, VariationRepository>();
             #endregion
 
             return services;

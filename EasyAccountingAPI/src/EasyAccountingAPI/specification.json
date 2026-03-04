@@ -2431,6 +2431,164 @@
         }
       }
     },
+    "/api/Variation/Create": {
+      "post": {
+        "tags": [
+          "Variation"
+        ],
+        "operationId": "Variation_Create",
+        "requestBody": {
+          "x-name": "createVariationCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVariationCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Variation/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "Variation"
+        ],
+        "operationId": "Variation_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Variation/GetById/{id}": {
+      "get": {
+        "tags": [
+          "Variation"
+        ],
+        "operationId": "Variation_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VariationViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Variation/GetFilterVariations": {
+      "post": {
+        "tags": [
+          "Variation"
+        ],
+        "operationId": "Variation_GetFilterVariations",
+        "requestBody": {
+          "x-name": "getVariationsByFilterQuery",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetVariationsByFilterQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilterPageResultModelOfVariationGridModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Variation/Update": {
+      "put": {
+        "tags": [
+          "Variation"
+        ],
+        "operationId": "Variation_Update",
+        "requestBody": {
+          "x-name": "updateVariationCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVariationCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/VatTax/Create": {
       "post": {
         "tags": [
@@ -2869,6 +3027,148 @@
         "allOf": [
           {
             "$ref": "#/components/schemas/CategoryUpdateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "FilterPageResultModelOfVariationGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VariationGridModel"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "VariationGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "companyName": {
+            "type": "string"
+          }
+        }
+      },
+      "GetVariationsByFilterQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FilterPageModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "VariationViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "createModel": {
+            "$ref": "#/components/schemas/VariationCreateModel"
+          },
+          "updateModel": {
+            "$ref": "#/components/schemas/VariationUpdateModel"
+          },
+          "gridModel": {
+            "$ref": "#/components/schemas/VariationGridModel"
+          },
+          "optionsDataSources": {}
+        }
+      },
+      "VariationCreateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "values",
+          "companyId"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "companyId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "VariationUpdateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "values",
+          "companyId"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "companyId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "CreateVariationCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/VariationCreateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "UpdateVariationCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/VariationUpdateModel"
           },
           {
             "type": "object",

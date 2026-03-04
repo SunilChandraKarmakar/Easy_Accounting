@@ -64,3 +64,6 @@ global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.Bran
 global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.CategoryLogic.Command;
 global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.CategoryLogic.Model;
 global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.CategoryLogic.Queries;
+global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.VariationLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.VariationLogic.Model;
+global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.VariationLogic.Queries;

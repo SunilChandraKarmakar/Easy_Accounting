@@ -10,6 +10,7 @@
             VatTaxes = new HashSet<VatTax>();
             Brands = new HashSet<Brand>();
             Categories = new HashSet<Category>();
+            Variations = new HashSet<Variation>();
         }
 
         public int Id { get; set; }
@@ -52,5 +53,6 @@
         public ICollection<VatTax> VatTaxes { get; set; }
         public ICollection<Brand> Brands { get; set; }
         public ICollection<Category> Categories { get; set; }
+        public ICollection<Variation> Variations { get; set; }
     }
 }
