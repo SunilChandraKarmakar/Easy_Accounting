@@ -22,7 +22,7 @@
 
             // Select list
             categoryVm.OptionsDataSources.CompanySelectList = await Mediator.Send(new SelectListCompanyQuery());
-            categoryVm.OptionsDataSources.ParentCategorySelectList = await Mediator.Send(new SelectListCategoryQuery());
+            categoryVm.OptionsDataSources.ParentCategorySelectList = await Mediator.Send(new SelectListParentCategoryQuery());
 
             return Ok(categoryVm);
         }

@@ -5,5 +5,6 @@
         Task<FilterPageResultModel<Category>> GetCategoriesByFilterAsync(FilterPageModel filterPageModel, string? userId,
             CancellationToken cancellationToken);
         Task<IEnumerable<SelectModel>> GetCategorySelectList(string userId, CancellationToken cancellationToken);
+        Task<IEnumerable<SelectModel>> GetParentCategorySelectList(string userId, CancellationToken cancellationToken);
     }
 }
