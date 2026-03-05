@@ -2431,6 +2431,164 @@
         }
       }
     },
+    "/api/StorageLocation/Create": {
+      "post": {
+        "tags": [
+          "StorageLocation"
+        ],
+        "operationId": "StorageLocation_Create",
+        "requestBody": {
+          "x-name": "createStorageLocationCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateStorageLocationCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/StorageLocation/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "StorageLocation"
+        ],
+        "operationId": "StorageLocation_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/StorageLocation/GetById/{id}": {
+      "get": {
+        "tags": [
+          "StorageLocation"
+        ],
+        "operationId": "StorageLocation_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StorageLocationViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/StorageLocation/GetFilterStorageLocations": {
+      "post": {
+        "tags": [
+          "StorageLocation"
+        ],
+        "operationId": "StorageLocation_GetFilterStorageLocations",
+        "requestBody": {
+          "x-name": "getStorageLocationsByFilterQuery",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetStorageLocationsByFilterQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilterPageResultModelOfStorageLocationGridModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/StorageLocation/Update": {
+      "put": {
+        "tags": [
+          "StorageLocation"
+        ],
+        "operationId": "StorageLocation_Update",
+        "requestBody": {
+          "x-name": "updateStorageLocationCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStorageLocationCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Variation/Create": {
       "post": {
         "tags": [
@@ -2750,6 +2908,178 @@
   },
   "components": {
     "schemas": {
+      "FilterPageResultModelOfStorageLocationGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StorageLocationGridModel"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "StorageLocationGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "companyName": {
+            "type": "string"
+          },
+          "capacity": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "GetStorageLocationsByFilterQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FilterPageModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "FilterPageModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "pageIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sortColumn": {
+            "type": "string",
+            "nullable": true
+          },
+          "sortOrder": {
+            "type": "string",
+            "nullable": true
+          },
+          "filterValue": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "StorageLocationViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "createModel": {
+            "$ref": "#/components/schemas/StorageLocationCreateModel"
+          },
+          "updateModel": {
+            "$ref": "#/components/schemas/StorageLocationUpdateModel"
+          },
+          "gridModel": {
+            "$ref": "#/components/schemas/StorageLocationGridModel"
+          },
+          "optionsDataSources": {}
+        }
+      },
+      "StorageLocationCreateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "companyId"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "companyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "capacity": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "StorageLocationUpdateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "companyId"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "companyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "capacity": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateStorageLocationCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StorageLocationCreateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "UpdateStorageLocationCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StorageLocationUpdateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
       "FilterPageResultModelOfBrandGridModel": {
         "type": "object",
         "additionalProperties": false,
@@ -2791,32 +3121,6 @@
             "additionalProperties": false
           }
         ]
-      },
-      "FilterPageModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "pageIndex": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "pageSize": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "sortColumn": {
-            "type": "string",
-            "nullable": true
-          },
-          "sortOrder": {
-            "type": "string",
-            "nullable": true
-          },
-          "filterValue": {
-            "type": "string",
-            "nullable": true
-          }
-        }
       },
       "BrandViewModel": {
         "type": "object",

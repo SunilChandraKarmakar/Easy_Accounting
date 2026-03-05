@@ -48,7 +48,7 @@
             // Get employee based company ids
             var companyIds = await _companyRepository.GetEmployeeBasedCompanyIdsAsync(userId, cancellationToken);
 
-            var getBrands = db.Brands.AsNoTracking().Where(b => companyIds.Contains(b.Id) && !b.IsDeleted);
+            var getBrands = db.Brands.AsNoTracking().Where(b => companyIds.Contains(b.CompanyId) && !b.IsDeleted);
 
             return await getBrands
                 .OrderBy(b => b.Name)

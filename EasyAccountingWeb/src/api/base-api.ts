@@ -4307,6 +4307,287 @@ export class ProductUnitService implements IProductUnitService {
     }
 }
 
+export interface IStorageLocationService {
+    create(createStorageLocationCommand: CreateStorageLocationCommand): Observable<boolean>;
+    delete(id: string): Observable<boolean>;
+    getById(id: string): Observable<StorageLocationViewModel>;
+    getFilterStorageLocations(getStorageLocationsByFilterQuery: GetStorageLocationsByFilterQuery): Observable<FilterPageResultModelOfStorageLocationGridModel>;
+    update(updateStorageLocationCommand: UpdateStorageLocationCommand): Observable<boolean>;
+}
+
+@Injectable()
+export class StorageLocationService implements IStorageLocationService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    create(createStorageLocationCommand: CreateStorageLocationCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/StorageLocation/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(createStorageLocationCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(id: string): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/StorageLocation/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getById(id: string): Observable<StorageLocationViewModel> {
+        let url_ = this.baseUrl + "/api/StorageLocation/GetById/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<StorageLocationViewModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<StorageLocationViewModel>;
+        }));
+    }
+
+    protected processGetById(response: HttpResponseBase): Observable<StorageLocationViewModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = StorageLocationViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getFilterStorageLocations(getStorageLocationsByFilterQuery: GetStorageLocationsByFilterQuery): Observable<FilterPageResultModelOfStorageLocationGridModel> {
+        let url_ = this.baseUrl + "/api/StorageLocation/GetFilterStorageLocations";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(getStorageLocationsByFilterQuery);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFilterStorageLocations(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFilterStorageLocations(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FilterPageResultModelOfStorageLocationGridModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FilterPageResultModelOfStorageLocationGridModel>;
+        }));
+    }
+
+    protected processGetFilterStorageLocations(response: HttpResponseBase): Observable<FilterPageResultModelOfStorageLocationGridModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FilterPageResultModelOfStorageLocationGridModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(updateStorageLocationCommand: UpdateStorageLocationCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/StorageLocation/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(updateStorageLocationCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface IVariationService {
     create(createVariationCommand: CreateVariationCommand): Observable<boolean>;
     delete(id: string): Observable<boolean>;
@@ -4869,6 +5150,387 @@ export class VatTaxService implements IVatTaxService {
     }
 }
 
+export class FilterPageResultModelOfStorageLocationGridModel implements IFilterPageResultModelOfStorageLocationGridModel {
+    items?: StorageLocationGridModel[];
+    totalCount?: number;
+
+    constructor(data?: IFilterPageResultModelOfStorageLocationGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(StorageLocationGridModel.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): FilterPageResultModelOfStorageLocationGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPageResultModelOfStorageLocationGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item ? item.toJSON() : undefined as any);
+        }
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+}
+
+export interface IFilterPageResultModelOfStorageLocationGridModel {
+    items?: StorageLocationGridModel[];
+    totalCount?: number;
+}
+
+export class StorageLocationGridModel implements IStorageLocationGridModel {
+    id?: string;
+    name?: string;
+    companyName?: string;
+    capacity?: string | undefined;
+    description?: string | undefined;
+
+    constructor(data?: IStorageLocationGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.companyName = _data["companyName"];
+            this.capacity = _data["capacity"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): StorageLocationGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new StorageLocationGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["companyName"] = this.companyName;
+        data["capacity"] = this.capacity;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+export interface IStorageLocationGridModel {
+    id?: string;
+    name?: string;
+    companyName?: string;
+    capacity?: string | undefined;
+    description?: string | undefined;
+}
+
+export class FilterPageModel implements IFilterPageModel {
+    pageIndex?: number;
+    pageSize?: number;
+    sortColumn?: string | undefined;
+    sortOrder?: string | undefined;
+    filterValue?: string | undefined;
+
+    constructor(data?: IFilterPageModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageIndex = _data["pageIndex"];
+            this.pageSize = _data["pageSize"];
+            this.sortColumn = _data["sortColumn"];
+            this.sortOrder = _data["sortOrder"];
+            this.filterValue = _data["filterValue"];
+        }
+    }
+
+    static fromJS(data: any): FilterPageModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPageModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageIndex"] = this.pageIndex;
+        data["pageSize"] = this.pageSize;
+        data["sortColumn"] = this.sortColumn;
+        data["sortOrder"] = this.sortOrder;
+        data["filterValue"] = this.filterValue;
+        return data;
+    }
+}
+
+export interface IFilterPageModel {
+    pageIndex?: number;
+    pageSize?: number;
+    sortColumn?: string | undefined;
+    sortOrder?: string | undefined;
+    filterValue?: string | undefined;
+}
+
+export class GetStorageLocationsByFilterQuery extends FilterPageModel implements IGetStorageLocationsByFilterQuery {
+
+    constructor(data?: IGetStorageLocationsByFilterQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetStorageLocationsByFilterQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetStorageLocationsByFilterQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetStorageLocationsByFilterQuery extends IFilterPageModel {
+}
+
+export class StorageLocationViewModel implements IStorageLocationViewModel {
+    createModel?: StorageLocationCreateModel;
+    updateModel?: StorageLocationUpdateModel;
+    gridModel?: StorageLocationGridModel;
+    optionsDataSources?: any;
+
+    constructor(data?: IStorageLocationViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.createModel = _data["createModel"] ? StorageLocationCreateModel.fromJS(_data["createModel"]) : undefined as any;
+            this.updateModel = _data["updateModel"] ? StorageLocationUpdateModel.fromJS(_data["updateModel"]) : undefined as any;
+            this.gridModel = _data["gridModel"] ? StorageLocationGridModel.fromJS(_data["gridModel"]) : undefined as any;
+            this.optionsDataSources = _data["optionsDataSources"];
+        }
+    }
+
+    static fromJS(data: any): StorageLocationViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new StorageLocationViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["createModel"] = this.createModel ? this.createModel.toJSON() : undefined as any;
+        data["updateModel"] = this.updateModel ? this.updateModel.toJSON() : undefined as any;
+        data["gridModel"] = this.gridModel ? this.gridModel.toJSON() : undefined as any;
+        data["optionsDataSources"] = this.optionsDataSources;
+        return data;
+    }
+}
+
+export interface IStorageLocationViewModel {
+    createModel?: StorageLocationCreateModel;
+    updateModel?: StorageLocationUpdateModel;
+    gridModel?: StorageLocationGridModel;
+    optionsDataSources?: any;
+}
+
+export class StorageLocationCreateModel implements IStorageLocationCreateModel {
+    name!: string;
+    companyId!: number;
+    capacity?: string | undefined;
+    description?: string | undefined;
+
+    constructor(data?: IStorageLocationCreateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.companyId = _data["companyId"];
+            this.capacity = _data["capacity"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): StorageLocationCreateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new StorageLocationCreateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["companyId"] = this.companyId;
+        data["capacity"] = this.capacity;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+export interface IStorageLocationCreateModel {
+    name: string;
+    companyId: number;
+    capacity?: string | undefined;
+    description?: string | undefined;
+}
+
+export class StorageLocationUpdateModel implements IStorageLocationUpdateModel {
+    id?: number;
+    name!: string;
+    companyId!: number;
+    capacity?: string | undefined;
+    description?: string | undefined;
+
+    constructor(data?: IStorageLocationUpdateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.companyId = _data["companyId"];
+            this.capacity = _data["capacity"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): StorageLocationUpdateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new StorageLocationUpdateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["companyId"] = this.companyId;
+        data["capacity"] = this.capacity;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+export interface IStorageLocationUpdateModel {
+    id?: number;
+    name: string;
+    companyId: number;
+    capacity?: string | undefined;
+    description?: string | undefined;
+}
+
+export class CreateStorageLocationCommand extends StorageLocationCreateModel implements ICreateStorageLocationCommand {
+
+    constructor(data?: ICreateStorageLocationCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): CreateStorageLocationCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateStorageLocationCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ICreateStorageLocationCommand extends IStorageLocationCreateModel {
+}
+
+export class UpdateStorageLocationCommand extends StorageLocationUpdateModel implements IUpdateStorageLocationCommand {
+
+    constructor(data?: IUpdateStorageLocationCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): UpdateStorageLocationCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateStorageLocationCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IUpdateStorageLocationCommand extends IStorageLocationUpdateModel {
+}
+
 export class FilterPageResultModelOfBrandGridModel implements IFilterPageResultModelOfBrandGridModel {
     items?: BrandGridModel[];
     totalCount?: number;
@@ -4959,58 +5621,6 @@ export interface IBrandGridModel {
     id?: string;
     name?: string;
     companyName?: string;
-}
-
-export class FilterPageModel implements IFilterPageModel {
-    pageIndex?: number;
-    pageSize?: number;
-    sortColumn?: string | undefined;
-    sortOrder?: string | undefined;
-    filterValue?: string | undefined;
-
-    constructor(data?: IFilterPageModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.pageIndex = _data["pageIndex"];
-            this.pageSize = _data["pageSize"];
-            this.sortColumn = _data["sortColumn"];
-            this.sortOrder = _data["sortOrder"];
-            this.filterValue = _data["filterValue"];
-        }
-    }
-
-    static fromJS(data: any): FilterPageModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new FilterPageModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["pageIndex"] = this.pageIndex;
-        data["pageSize"] = this.pageSize;
-        data["sortColumn"] = this.sortColumn;
-        data["sortOrder"] = this.sortOrder;
-        data["filterValue"] = this.filterValue;
-        return data;
-    }
-}
-
-export interface IFilterPageModel {
-    pageIndex?: number;
-    pageSize?: number;
-    sortColumn?: string | undefined;
-    sortOrder?: string | undefined;
-    filterValue?: string | undefined;
 }
 
 export class GetBrandsByFilterQuery extends FilterPageModel implements IGetBrandsByFilterQuery {

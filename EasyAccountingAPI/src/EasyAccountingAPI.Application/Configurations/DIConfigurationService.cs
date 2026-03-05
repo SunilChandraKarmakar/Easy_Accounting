@@ -50,6 +50,10 @@
             services.AddScoped<IVariationRepository, VariationRepository>();
             #endregion
 
+            #region Purchase
+            services.AddScoped<IStorageLocationRepository, StorageLocationRepository>();
+            #endregion
+
             return services;
         }
     }

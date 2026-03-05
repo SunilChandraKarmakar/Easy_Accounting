@@ -63,3 +63,7 @@ global using System.Security.Claims;
 global using System.Text;
 global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.CategoryLogic.Model;
 global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.VariationLogic.Model;
+global using EasyAccountingAPI.Model.Purchase;
+global using EasyAccountingAPI.Application.ApplicationLogics.Purchase.StorageLocationLogic.Model;
+global using EasyAccountingAPI.Repository.Contracts.Purchase;
+global using EasyAccountingAPI.Repository.Repository.Purchase;

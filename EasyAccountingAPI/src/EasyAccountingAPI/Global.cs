@@ -67,3 +67,6 @@ global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.Cate
 global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.VariationLogic.Command;
 global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.VariationLogic.Model;
 global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.VariationLogic.Queries;
+global using EasyAccountingAPI.Application.ApplicationLogics.Purchase.StorageLocationLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.Purchase.StorageLocationLogic.Model;
+global using EasyAccountingAPI.Application.ApplicationLogics.Purchase.StorageLocationLogic.Queries;

@@ -37,6 +37,10 @@
         public DbSet<Variation> Variations { get; set; }
         #endregion
 
+        #region Purchase
+        public DbSet<StorageLocation> StorageLocations { get; set; }
+        #endregion        
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // optionsBuilder.UseLazyLoadingProxies();

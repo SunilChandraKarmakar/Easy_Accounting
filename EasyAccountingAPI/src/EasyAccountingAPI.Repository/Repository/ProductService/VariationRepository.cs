@@ -50,7 +50,7 @@
             // Get employee based company ids
             var companyIds = await _companyRepository.GetEmployeeBasedCompanyIdsAsync(userId, cancellationToken);
 
-            var getVariations = db.Variations.AsNoTracking().Where(c => companyIds.Contains(c.Id) && !c.IsDeleted);
+            var getVariations = db.Variations.AsNoTracking().Where(c => companyIds.Contains(c.CompanyId) && !c.IsDeleted);
 
             return await getVariations
                 .OrderBy(b => b.Name)
