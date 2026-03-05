@@ -50,7 +50,7 @@ export class CreateCategoryComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router) { }
 
-   ngOnInit() {
+  ngOnInit() {
     this.getCategoryById(this._categoryId);
   }
 

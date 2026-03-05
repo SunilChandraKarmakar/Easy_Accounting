@@ -49,6 +49,9 @@ import { UpdateBrandComponent } from './components/product-service/brands/update
 import { CategoriesComponent } from './components/product-service/categories/categories.component';
 import { CreateCategoryComponent } from './components/product-service/categories/create-category/create-category.component';
 import { UpdateCategoryComponent } from './components/product-service/categories/update-category/update-category.component';
+import { VariationsComponent } from './components/product-service/variations/variations.component';
+import { CreateVariationComponent } from './components/product-service/variations/create-variation/create-variation.component';
+import { UpdateVariationComponent } from './components/product-service/variations/update-variation/update-variation.component';
 
 export const routes: Routes = [
 
@@ -136,7 +139,12 @@ export const routes: Routes = [
       // Category
       { path: "categories", component: CategoriesComponent, pathMatch: "full" },
       { path: "category/create", component: CreateCategoryComponent, pathMatch: "full" },
-      { path: "category/update/:recordId", component: UpdateCategoryComponent, pathMatch: "full" }
+      { path: "category/update/:recordId", component: UpdateCategoryComponent, pathMatch: "full" },
+
+      // Variation
+      { path: "variations", component: VariationsComponent, pathMatch: "full" },
+      { path: "variation/create", component: CreateVariationComponent, pathMatch: "full" },
+      { path: "variation/update/:recordId", component: UpdateVariationComponent, pathMatch: "full" }
     ],
     
     canActivate: [AuthGuard] 

@@ -1,13 +1,13 @@
 <nz-breadcrumb>
   <nz-breadcrumb-item>Product & Service</nz-breadcrumb-item>
-    <nz-breadcrumb-item><a routerLink="/app/categories" class="breadcrumb-link">Category</a></nz-breadcrumb-item>
-  <nz-breadcrumb-item>Create Category</nz-breadcrumb-item>
+    <nz-breadcrumb-item><a routerLink="/app/variations" class="breadcrumb-link">Variation</a></nz-breadcrumb-item>
+  <nz-breadcrumb-item>Create Variation</nz-breadcrumb-item>
 </nz-breadcrumb>
 <div class="row mt-3">
   <div class="col-md-12">
     <div class="card shadow-lg">
       <div class="card-header">
-        <h5 class="card-title text-center">Create Category</h5>
+        <h5 class="card-title text-center">Create Variation</h5>
       </div>
       <div class="card-body">
         <form class="row g-3" autocomplete="off">
@@ -15,23 +15,23 @@
             <label for="name" class="form-label">Name <span class="text-danger fw-bold">*</span></label>
             <nz-input-wrapper>
               <nz-icon nzInputPrefix nzType="home" />
-              <input nz-input placeholder="Enter category name" nzSize="default" id="name" name="name" 
-                [(ngModel)]="categoryCreateModel.name" />
+              <input nz-input placeholder="Enter brand name" nzSize="default" id="name" name="name" 
+                [(ngModel)]="variationCreateModel.name" />
             </nz-input-wrapper>
           </div>  
           <div class="col-md-3">
-            <label for="parentId" class="form-label">Parent Category</label>
-             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Parent Category" 
-              [(ngModel)]="categoryCreateModel.parentId" name="parentId" style="width: 100%;">
-                @for (parentCategory of parentCategories; track parentCategory.id) {
-                  <nz-option [nzValue]="parentCategory.id" [nzLabel]="parentCategory.name!"></nz-option>
-                }
-              </nz-select>
+            <label for="values" class="form-label">Values <span class="text-danger fw-bold">*</span></label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Insert values" nzMode="tags" id="values" name="values" 
+              [(ngModel)]="variationCreateModel.values" style="width: 100%;">
+              @for (value of variationCreateModel.values; track value) {
+                <nz-option [nzLabel]="value" [nzValue]="value" />
+              }
+            </nz-select>
           </div>  
           <div class="col-md-3">
             <label for="companyId" class="form-label">Company <span class="text-danger fw-bold">*</span></label>
              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Company" 
-              [(ngModel)]="categoryCreateModel.companyId" name="countryId" style="width: 100%;">
+              [(ngModel)]="variationCreateModel.companyId" id="countryId" name="countryId" style="width: 100%;">
                 @for (company of companies; track company.id) {
                   <nz-option [nzValue]="company.id" [nzLabel]="company.name!"></nz-option>
                 }
@@ -40,11 +40,11 @@
         </form>
       </div>
       <div class="card-footer text-end">
-        <button nz-button nzType="primary" class="btn-save" (click)="onClickSaveCategory()">
+        <button nz-button nzType="primary" class="btn-save" (click)="onClickSaveVariation()">
           <nz-icon nzType="save" nzTheme="outline" />
           Save
         </button>
-        <button nz-button nzType="primary" class="btn-cancel" routerLink="/app/categories">
+        <button nz-button nzType="primary" class="btn-cancel" routerLink="/app/variations">
           <nz-icon nzType="close" nzTheme="outline" />
           Cancel
         </button>

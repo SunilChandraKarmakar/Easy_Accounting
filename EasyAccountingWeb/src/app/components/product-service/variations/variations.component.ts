@@ -10,13 +10,14 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { CategoryGridModel, CategoryService, FilterPageModel, FilterPageResultModelOfCategoryGridModel } from '../../../../api/base-api';
+import { FilterPageModel, FilterPageResultModelOfVariationGridModel, VariationGridModel, VariationService } from '../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 
 @Component({
-  selector: 'app-categories',
-  templateUrl: './categories.component.html',
-  styleUrls: ['./categories.component.css'],
+  selector: 'app-variations',
+  templateUrl: './variations.component.html',
+  styleUrls: ['./variations.component.css'],
   standalone: true,
   imports: [
     CommonModule, 
@@ -29,31 +30,32 @@ import { ToastrService } from 'ngx-toastr';
     NzInputModule, 
     NzIconModule, 
     NzBreadCrumbModule, 
-    NzPopconfirmModule
+    NzPopconfirmModule,
+    NzTagModule
   ],
-  providers: [CategoryService]
+  providers: [VariationService]
 })
 
-export class CategoriesComponent implements OnInit {
+export class VariationsComponent implements OnInit {
 
   // Table property
-  categories: CategoryGridModel[] = [];
+  variations: VariationGridModel[] = [];
   totalRecord: number = 0;
 
   // Filter page model
   filterPageModel: FilterPageModel = new FilterPageModel();
 
   constructor(
-    private categoryService: CategoryService, 
+    private variationService: VariationService, 
     private spinnerService: NgxSpinnerService, 
     private toastrService: ToastrService) { }
 
-  ngOnInit() {
+ ngOnInit() {
     // Initialize page filter model
     this.initializeFilterModel();
 
-    // Get categories
-    this.getCategories();
+    // Get variations
+    this.getVariations();
   }
 
   // Initialize filter model
@@ -65,16 +67,16 @@ export class CategoriesComponent implements OnInit {
     this.filterPageModel.filterValue = "";
   }
 
-  // Get categories
-  private getCategories(): void {
+  // Get variations
+  private getVariations(): void {
     this.spinnerService.show();
 
     // Clear before loading 
-    this.categories = [];
+    this.variations = [];
     this.totalRecord = 0;
 
-    this.categoryService.getFilterCategories(this.filterPageModel).subscribe((result: FilterPageResultModelOfCategoryGridModel) => {
-      this.categories = result.items || [];
+    this.variationService.getFilterVariations(this.filterPageModel).subscribe((result: FilterPageResultModelOfVariationGridModel) => {
+      this.variations = result.items || [];
       this.totalRecord = result.totalCount || 0;
       this.spinnerService.hide();
       return;
@@ -83,10 +85,10 @@ export class CategoriesComponent implements OnInit {
       this.spinnerService.hide();
 
       // Keep cleared state on error
-      this.categories = [];
+      this.variations = [];
       this.totalRecord = 0;
 
-      this.toastrService.error("Category list is not show at this time! Please, try again.", "Error");
+      this.toastrService.error("Variation list is not show at this time! Please, try again.", "Error");
       return;
     });
   }
@@ -96,8 +98,8 @@ export class CategoriesComponent implements OnInit {
     this.filterPageModel.filterValue = filterValue;
     this.filterPageModel.pageIndex = 0;
 
-    // Get categories
-    this.getCategories();
+    // Get variations
+    this.getVariations();
   }
 
   // Table query params
@@ -114,37 +116,37 @@ export class CategoriesComponent implements OnInit {
       });
     }
 
-    // Get categories
-    this.getCategories();
+    // Get variations
+    this.getVariations();
   }
 
-  // On click open delete category
-  onClickDelete(categoryId: string | undefined): void {
-    this.deleteCategory(categoryId);
+  // On click open delete variation
+  onClickDelete(variationId: string | undefined): void {
+    this.deleteVariation(variationId);
   }
 
-  // Delete category
-  private deleteCategory(categoryId: string | undefined): void {
-    if(categoryId == null || categoryId == undefined) {
-      this.toastrService.error("Category is not found. Please, try again.", "Error");
+  // Delete variation
+  private deleteVariation(variationId: string | undefined): void {
+    if(variationId == null || variationId == undefined) {
+      this.toastrService.error("Variation is not found. Please, try again.", "Error");
       return;
     }
 
     this.spinnerService.show();
-    this.categoryService.delete(categoryId).subscribe((result: boolean) => {
+    this.variationService.delete(variationId).subscribe((result: boolean) => {
       this.spinnerService.hide();
       if(result) {
-        this.toastrService.success("Category deleted successfully.", "Success"); 
-        this.getCategories();
+        this.toastrService.success("Variation deleted successfully.", "Success"); 
+        this.getVariations();
       } else {
-        this.toastrService.error("Category is not deleted. Please, try again.", "Error");
+        this.toastrService.error("Variation is not deleted. Please, try again.", "Error");
       }
 
       return;
     },
     (error: any) => {
       this.spinnerService.hide();
-      this.toastrService.error("Category is not deleted. Please, try again.", "Error");
+      this.toastrService.error("Variation is not deleted. Please, try again.", "Error");
       return;
     });
   }

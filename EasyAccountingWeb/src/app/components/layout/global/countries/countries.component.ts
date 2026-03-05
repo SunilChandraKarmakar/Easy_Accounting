@@ -19,8 +19,19 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
   templateUrl: './countries.component.html',
   styleUrls: ['./countries.component.css'],
   standalone: true,
-  imports: [NzButtonModule, NzDividerModule, NzTableModule, RouterLink, NgxSpinnerModule, NzSpaceModule, NzInputModule, NzIconModule, 
-    NzTagModule, NzBadgeModule, NzBreadCrumbModule, NzPopconfirmModule],
+  imports: [
+    NzButtonModule, 
+    NzDividerModule, 
+    NzTableModule, 
+    RouterLink, 
+    NgxSpinnerModule, 
+    NzSpaceModule, 
+    NzInputModule, 
+    NzIconModule, 
+    NzTagModule, 
+    NzBadgeModule, 
+    NzBreadCrumbModule, 
+    NzPopconfirmModule],
   providers: [CountryService]
 })
 
