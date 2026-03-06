@@ -43,7 +43,7 @@ export class UpdateBrandComponent implements OnInit {
   // Brand update model
   brandUpdateModel: BrandUpdateModel = new BrandUpdateModel();
 
-   constructor(
+  constructor(
     private brandService: BrandService, 
     private spinnerService: NgxSpinnerService, 
     private toastrService: ToastrService,

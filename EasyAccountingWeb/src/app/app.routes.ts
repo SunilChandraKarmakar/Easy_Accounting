@@ -52,6 +52,9 @@ import { UpdateCategoryComponent } from './components/product-service/categories
 import { VariationsComponent } from './components/product-service/variations/variations.component';
 import { CreateVariationComponent } from './components/product-service/variations/create-variation/create-variation.component';
 import { UpdateVariationComponent } from './components/product-service/variations/update-variation/update-variation.component';
+import { StorageLocationsComponent } from './components/purchase/storage-locations/storage-locations.component';
+import { CreateStorageLocationComponent } from './components/purchase/storage-locations/create-storage-location/create-storage-location.component';
+import { UpdateStorageLocationComponent } from './components/purchase/storage-locations/update-storage-location/update-storage-location.component';
 
 export const routes: Routes = [
 
@@ -144,7 +147,12 @@ export const routes: Routes = [
       // Variation
       { path: "variations", component: VariationsComponent, pathMatch: "full" },
       { path: "variation/create", component: CreateVariationComponent, pathMatch: "full" },
-      { path: "variation/update/:recordId", component: UpdateVariationComponent, pathMatch: "full" }
+      { path: "variation/update/:recordId", component: UpdateVariationComponent, pathMatch: "full" },
+
+      // Storage Location
+      { path: "storage-locations", component: StorageLocationsComponent, pathMatch: "full" },
+      { path: "storage-location/create", component: CreateStorageLocationComponent, pathMatch: "full" },
+      { path: "storage-location/update/:recordId", component: UpdateStorageLocationComponent, pathMatch: "full" }
     ],
     
     canActivate: [AuthGuard] 
