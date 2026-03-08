@@ -3,6 +3,11 @@
     [Table("ProductUnits", Schema = "MasterSettings")]
     public class ProductUnit : IAuditableEntity, IDelatableEntity
     {
+        public ProductUnit()
+        {
+            Products = new HashSet<Product>();
+        }
+
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Unit name is required.")]
@@ -15,5 +20,7 @@
         public DateTime? UpdatedDateTime { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime? DeletedDateTime { get; set; }
+
+        public ICollection<Product> Products { get; set; }
     }
 }

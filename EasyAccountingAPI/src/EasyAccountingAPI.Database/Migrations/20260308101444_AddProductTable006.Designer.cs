@@ -4,6 +4,7 @@ using EasyAccountingAPI.Database.DatabaseContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EasyAccountingAPI.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20260308101444_AddProductTable006")]
+    partial class AddProductTable006
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -804,9 +807,6 @@ namespace EasyAccountingAPI.Database.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("CostPrice")
                         .HasColumnType("decimal(18,2)");
 
@@ -857,8 +857,6 @@ namespace EasyAccountingAPI.Database.Migrations
                     b.HasIndex("BrandId");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("CompanyId");
 
                     b.HasIndex("ProductUnitId");
 
@@ -1334,12 +1332,6 @@ namespace EasyAccountingAPI.Database.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("EasyAccountingAPI.Model.MasterSettings.Company", "Company")
-                        .WithMany("Products")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("EasyAccountingAPI.Model.MasterSettings.ProductUnit", "ProductUnit")
                         .WithMany("Products")
                         .HasForeignKey("ProductUnitId")
@@ -1354,8 +1346,6 @@ namespace EasyAccountingAPI.Database.Migrations
                     b.Navigation("Brand");
 
                     b.Navigation("Category");
-
-                    b.Navigation("Company");
 
                     b.Navigation("ProductUnit");
 
@@ -1497,8 +1487,6 @@ namespace EasyAccountingAPI.Database.Migrations
                     b.Navigation("Employees");
 
                     b.Navigation("InvoiceSettings");
-
-                    b.Navigation("Products");
 
                     b.Navigation("StorageLocations");
 

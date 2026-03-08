@@ -1,6 +1,4 @@
-﻿using EasyAccountingAPI.Model.Purchase;
-
-namespace EasyAccountingAPI.Model.MasterSettings
+﻿namespace EasyAccountingAPI.Model.MasterSettings
 {
     [Table("Companies", Schema = "MasterSettings")]
     public class Company : IAuditableEntity, IDelatableEntity
@@ -14,6 +12,7 @@ namespace EasyAccountingAPI.Model.MasterSettings
             Categories = new HashSet<Category>();
             Variations = new HashSet<Variation>();
             StorageLocations = new HashSet<StorageLocation>();
+            Products = new HashSet<Product>();
         }
 
         public int Id { get; set; }
@@ -58,5 +57,6 @@ namespace EasyAccountingAPI.Model.MasterSettings
         public ICollection<Category> Categories { get; set; }
         public ICollection<Variation> Variations { get; set; }
         public ICollection<StorageLocation> StorageLocations { get; set; }
+        public ICollection<Product> Products { get; set; }
     }
 }

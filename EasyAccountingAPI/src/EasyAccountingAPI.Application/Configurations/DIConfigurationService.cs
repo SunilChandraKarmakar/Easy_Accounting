@@ -16,6 +16,13 @@
             // HttpContextAccessor
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            // FluentValidation
+            services.AddFluentValidationAutoValidation();
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+            // MediatR pipeline validation behavior for FluentValidation
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Pipeline.RequestValidationBehavior<,>));
+
             // Unit of Work
             services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
 
@@ -48,6 +55,8 @@
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IVariationRepository, VariationRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductInventoryRepository, ProductInventoryRepository>();
             #endregion
 
             #region Purchase

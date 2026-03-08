@@ -4026,6 +4026,75 @@ export class ModuleService implements IModuleService {
     }
 }
 
+export interface IProductService {
+    create(createProductCommand: CreateProductCommand): Observable<boolean>;
+}
+
+@Injectable()
+export class ProductService implements IProductService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    create(createProductCommand: CreateProductCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Product/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(createProductCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface IProductUnitService {
     create(createProductUnitCommand: CreateProductUnitCommand): Observable<boolean>;
     delete(id: string): Observable<boolean>;
@@ -6153,6 +6222,169 @@ export class UpdateCategoryCommand extends CategoryUpdateModel implements IUpdat
 export interface IUpdateCategoryCommand extends ICategoryUpdateModel {
 }
 
+export class ProductCreateModel implements IProductCreateModel {
+    name?: string;
+    code?: string;
+    productUnitId?: number;
+    categoryId?: number;
+    brandId?: number;
+    companyId?: number;
+    costPrice?: number;
+    sellPrice?: number;
+    vatTaxId?: number | undefined;
+    image?: string | undefined;
+    description?: string | undefined;
+    haveProductInventory?: boolean;
+    productInventory?: ProductInventoryCreateModel;
+
+    constructor(data?: IProductCreateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.code = _data["code"];
+            this.productUnitId = _data["productUnitId"];
+            this.categoryId = _data["categoryId"];
+            this.brandId = _data["brandId"];
+            this.companyId = _data["companyId"];
+            this.costPrice = _data["costPrice"];
+            this.sellPrice = _data["sellPrice"];
+            this.vatTaxId = _data["vatTaxId"];
+            this.image = _data["image"];
+            this.description = _data["description"];
+            this.haveProductInventory = _data["haveProductInventory"];
+            this.productInventory = _data["productInventory"] ? ProductInventoryCreateModel.fromJS(_data["productInventory"]) : undefined as any;
+        }
+    }
+
+    static fromJS(data: any): ProductCreateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductCreateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["code"] = this.code;
+        data["productUnitId"] = this.productUnitId;
+        data["categoryId"] = this.categoryId;
+        data["brandId"] = this.brandId;
+        data["companyId"] = this.companyId;
+        data["costPrice"] = this.costPrice;
+        data["sellPrice"] = this.sellPrice;
+        data["vatTaxId"] = this.vatTaxId;
+        data["image"] = this.image;
+        data["description"] = this.description;
+        data["haveProductInventory"] = this.haveProductInventory;
+        data["productInventory"] = this.productInventory ? this.productInventory.toJSON() : undefined as any;
+        return data;
+    }
+}
+
+export interface IProductCreateModel {
+    name?: string;
+    code?: string;
+    productUnitId?: number;
+    categoryId?: number;
+    brandId?: number;
+    companyId?: number;
+    costPrice?: number;
+    sellPrice?: number;
+    vatTaxId?: number | undefined;
+    image?: string | undefined;
+    description?: string | undefined;
+    haveProductInventory?: boolean;
+    productInventory?: ProductInventoryCreateModel;
+}
+
+export class CreateProductCommand extends ProductCreateModel implements ICreateProductCommand {
+
+    constructor(data?: ICreateProductCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): CreateProductCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateProductCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ICreateProductCommand extends IProductCreateModel {
+}
+
+export class ProductInventoryCreateModel implements IProductInventoryCreateModel {
+    productId?: number;
+    openingStock?: number;
+    expiryDate?: Date | undefined;
+    haveStockAlert?: boolean;
+    stockAlertQty?: number | undefined;
+
+    constructor(data?: IProductInventoryCreateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.productId = _data["productId"];
+            this.openingStock = _data["openingStock"];
+            this.expiryDate = _data["expiryDate"] ? new Date(_data["expiryDate"].toString()) : undefined as any;
+            this.haveStockAlert = _data["haveStockAlert"];
+            this.stockAlertQty = _data["stockAlertQty"];
+        }
+    }
+
+    static fromJS(data: any): ProductInventoryCreateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductInventoryCreateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["productId"] = this.productId;
+        data["openingStock"] = this.openingStock;
+        data["expiryDate"] = this.expiryDate ? this.expiryDate.toISOString() : undefined as any;
+        data["haveStockAlert"] = this.haveStockAlert;
+        data["stockAlertQty"] = this.stockAlertQty;
+        return data;
+    }
+}
+
+export interface IProductInventoryCreateModel {
+    productId?: number;
+    openingStock?: number;
+    expiryDate?: Date | undefined;
+    haveStockAlert?: boolean;
+    stockAlertQty?: number | undefined;
+}
+
 export class FilterPageResultModelOfVariationGridModel implements IFilterPageResultModelOfVariationGridModel {
     items?: VariationGridModel[];
     totalCount?: number;
@@ -6708,12 +6940,12 @@ export interface ICompanyViewModel {
 }
 
 export class CompanyCreateModel implements ICompanyCreateModel {
-    name!: string;
+    name?: string;
     email?: string | undefined;
-    phone!: string;
-    countryId!: number;
-    cityId!: number;
-    currencyId!: number;
+    phone?: string;
+    countryId?: number;
+    cityId?: number;
+    currencyId?: number;
     logo?: string | undefined;
     taxNo?: string | undefined;
     isSellWithPos?: boolean;
@@ -6773,12 +7005,12 @@ export class CompanyCreateModel implements ICompanyCreateModel {
 }
 
 export interface ICompanyCreateModel {
-    name: string;
+    name?: string;
     email?: string | undefined;
-    phone: string;
-    countryId: number;
-    cityId: number;
-    currencyId: number;
+    phone?: string;
+    countryId?: number;
+    cityId?: number;
+    currencyId?: number;
     logo?: string | undefined;
     taxNo?: string | undefined;
     isSellWithPos?: boolean;
@@ -6789,12 +7021,12 @@ export interface ICompanyCreateModel {
 
 export class CompanyUpdateModel implements ICompanyUpdateModel {
     id?: number;
-    name!: string;
+    name?: string;
     email?: string | undefined;
-    phone!: string;
-    countryId!: number;
-    cityId!: number;
-    currencyId!: number;
+    phone?: string;
+    countryId?: number;
+    cityId?: number;
+    currencyId?: number;
     logo?: string | undefined;
     taxNo?: string | undefined;
     isSellWithPos?: boolean;
@@ -6857,12 +7089,12 @@ export class CompanyUpdateModel implements ICompanyUpdateModel {
 
 export interface ICompanyUpdateModel {
     id?: number;
-    name: string;
+    name?: string;
     email?: string | undefined;
-    phone: string;
-    countryId: number;
-    cityId: number;
-    currencyId: number;
+    phone?: string;
+    countryId?: number;
+    cityId?: number;
+    currencyId?: number;
     logo?: string | undefined;
     taxNo?: string | undefined;
     isSellWithPos?: boolean;

@@ -10,34 +10,17 @@
 
     public class CompanyCreateModel : IMapFrom<Company>
     {
-        [Column(TypeName = "nvarchar(100)")]
-        [Required(ErrorMessage = "Company name is required.")]
-        [StringLength(100, MinimumLength = 2)]
         public string Name { get; set; }
-
         public string? Email { get; set; }
-
-        [Column(TypeName = "nvarchar(30)")]
-        [Required(ErrorMessage = "Phone number is required.")]
-        [StringLength(30, MinimumLength = 11)]
         public string Phone { get; set; }
-
-        [Required(ErrorMessage = "Please, provide country.")]
         public int CountryId { get; set; }
-
-        [Required(ErrorMessage = "Please, provide city.")]
         public int CityId { get; set; }
-
-        [Required(ErrorMessage = "Please, provide currency.")]
         public int CurrencyId { get; set; }
-
         public string? Logo { get; set; }
         public string? TaxNo { get; set; }
         public bool IsSellWithPos { get; set; }
         public bool IsProductHaveBrand { get; set; }
         public bool IsDefaultCompany { get; set; }
-
-        [Column(TypeName = "nvarchar(500)")]
         public string? Address { get; set; }
 
         public void Mapping(Profile profile)
@@ -50,35 +33,17 @@
     public class CompanyUpdateModel : IMapFrom<Company>
     {
         public int Id { get; set; }
-
-        [Column(TypeName = "nvarchar(100)")]
-        [Required(ErrorMessage = "Company name is required.")]
-        [StringLength(100, MinimumLength = 2)]
         public string Name { get; set; }
-
         public string? Email { get; set; }
-
-        [Column(TypeName = "nvarchar(30)")]
-        [Required(ErrorMessage = "Phone number is required.")]
-        [StringLength(30, MinimumLength = 11)]
         public string Phone { get; set; }
-
-        [Required(ErrorMessage = "Please, provide country.")]
         public int CountryId { get; set; }
-
-        [Required(ErrorMessage = "Please, provide city.")]
         public int CityId { get; set; }
-
-        [Required(ErrorMessage = "Please, provide currency.")]
         public int CurrencyId { get; set; }
-
         public string? Logo { get; set; }
         public string? TaxNo { get; set; }
         public bool IsSellWithPos { get; set; }
         public bool IsProductHaveBrand { get; set; }
         public bool IsDefaultCompany { get; set; }
-
-        [Column(TypeName = "nvarchar(500)")]
         public string? Address { get; set; }
 
         public void Mapping(Profile profile)

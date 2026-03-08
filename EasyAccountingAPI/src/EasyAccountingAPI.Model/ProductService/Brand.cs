@@ -3,6 +3,11 @@
     [Table("Brands", Schema = "ProductService")]
     public class Brand : IAuditableEntity, IDelatableEntity
     {
+        public Brand()
+        {
+            Products = new HashSet<Product>();
+        }
+
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Brand name is required.")]
@@ -20,5 +25,6 @@
         public DateTime? DeletedDateTime { get; set; }
 
         public Company Company { get; set; }
+        public ICollection<Product> Products { get; set; }  
     }
 }

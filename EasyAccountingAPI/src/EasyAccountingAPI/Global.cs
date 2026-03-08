@@ -70,3 +70,4 @@ global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.Vari
 global using EasyAccountingAPI.Application.ApplicationLogics.Purchase.StorageLocationLogic.Command;
 global using EasyAccountingAPI.Application.ApplicationLogics.Purchase.StorageLocationLogic.Model;
 global using EasyAccountingAPI.Application.ApplicationLogics.Purchase.StorageLocationLogic.Queries;
+global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.ProductLogic.Command;

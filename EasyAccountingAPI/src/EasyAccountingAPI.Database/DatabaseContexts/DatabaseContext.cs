@@ -35,6 +35,8 @@
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Variation> Variations { get; set; }
+        public DbSet<Product> Products { get; set; }    
+        public DbSet<ProductInventory> ProductInventories { get; set; }
         #endregion
 
         #region Purchase

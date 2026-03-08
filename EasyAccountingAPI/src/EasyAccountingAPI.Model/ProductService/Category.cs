@@ -3,6 +3,12 @@
     [Table("Categories", Schema = "ProductService")]
     public class Category : IAuditableEntity, IDelatableEntity
     {
+        public Category()
+        {
+            SubCategories = new HashSet<Category>();
+            Products = new HashSet<Product>();
+        }
+
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Category name is required.")]
@@ -24,5 +30,6 @@
         public Company Company { get; set; }
         public Category ParentCategory { get; set; }
         public ICollection<Category> SubCategories { get; set; }
+        public ICollection<Product> Products { get; set; }
     }
 }

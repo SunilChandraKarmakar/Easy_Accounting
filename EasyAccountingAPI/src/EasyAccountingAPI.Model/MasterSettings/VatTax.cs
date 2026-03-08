@@ -3,6 +3,11 @@
     [Table("VatTaxes", Schema = "MasterSettings")]
     public class VatTax : IAuditableEntity, IDelatableEntity
     {
+        public VatTax()
+        {
+            Products = new HashSet<Product>();
+        }
+
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Tax Name is required.")]
@@ -26,5 +31,6 @@
         public DateTime? DeletedDateTime { get; set; }
 
         public Company Company { get; set; }
+        public ICollection<Product> Products { get; set; }
     }
 }
