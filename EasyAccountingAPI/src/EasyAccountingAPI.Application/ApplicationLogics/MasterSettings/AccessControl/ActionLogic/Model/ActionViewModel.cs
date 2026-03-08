@@ -9,8 +9,6 @@
 
     public class ActionCreateModel : IMapFrom<EasyAccountingAPI.Model.MasterSettings.AccessControl.Action>
     {
-        [Required(ErrorMessage = "Name is required.")]
-        [StringLength(50, MinimumLength = 2)]
         public string Name { get; set; }
 
         public void Mapping(Profile profile)
@@ -22,9 +20,6 @@
     public class ActionUpdateModel : IMapFrom<EasyAccountingAPI.Model.MasterSettings.AccessControl.Action>
     {
         public int Id { get; set; }
-
-        [Required(ErrorMessage = "Name is required.")]
-        [StringLength(50, MinimumLength = 2)]
         public string Name { get; set; }
 
         public void Mapping(Profile profile)

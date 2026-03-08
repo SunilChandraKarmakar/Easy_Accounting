@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.EmployeeLogic.Model
+﻿namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.EmployeeLogic.Model
 {
     public class EmployeeViewModel
     {
@@ -12,24 +10,10 @@ namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.Employe
 
     public class EmployeeCreateModel : IMapFrom<Employee>
     {
-        [Column(TypeName = "nvarchar(100)")]
-        [Required(ErrorMessage = "Please, provide full name.")]
-        [StringLength(maximumLength: 100, MinimumLength = 2)]
         public string FullName { get; set; }
-
-        [Column(TypeName = "nvarchar(30)")]
         public string? Phone { get; set; }
-
-        [Required(ErrorMessage = "Please, provide email address.")]
-        [EmailAddress]
-        [StringLength(maximumLength: 50, MinimumLength = 10)]
         public string Email { get; set; }
-
-        [Required(ErrorMessage = "Please, provide password.")]
-        [PasswordPropertyText]
-        [StringLength(maximumLength: 100, MinimumLength = 6)]
-        [NotMapped] public string Password { get; set; }
-
+        public string Password { get; set; }
         public string? Image { get; set; }
         public int? CompanyId { get; set; }
 
@@ -42,20 +26,9 @@ namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.Employe
     public class EmployeeUpdateModel : IMapFrom<Employee>
     {
         public int Id { get; set; }
-
-        [Column(TypeName = "nvarchar(100)")]
-        [Required(ErrorMessage = "Please, provide full name.")]
-        [StringLength(maximumLength: 100, MinimumLength = 2)]
         public string FullName { get; set; }
-
-        [Column(TypeName = "nvarchar(30)")]
         public string? Phone { get; set; }
-
-        [Required(ErrorMessage = "Please, provide email address.")]
-        [EmailAddress]
-        [StringLength(maximumLength: 50, MinimumLength = 10)]
         public string Email { get; set; }
-
         public string? Image { get; set; }
         public int? CompanyId { get; set; }
 

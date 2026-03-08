@@ -69,7 +69,7 @@ export class CompanyUpdateComponent implements OnInit {
       this.currencies = result.optionsDataSources.CurrencySelectList;
 
       // Get cities by country
-      this.getCitiesByCountryId(this.companyUpdateModel.countryId);
+      this.getCitiesByCountryId(this.companyUpdateModel.countryId!);
 
       this.spinnerService.hide();
       return;

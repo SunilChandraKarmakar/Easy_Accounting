@@ -7325,8 +7325,8 @@ export interface ICurrencyViewModel {
 }
 
 export class CurrencyCreateModel implements ICurrencyCreateModel {
-    name!: string;
-    baseRate!: number;
+    name?: string;
+    baseRate?: number;
     symble?: string | undefined;
 
     constructor(data?: ICurrencyCreateModel) {
@@ -7363,15 +7363,15 @@ export class CurrencyCreateModel implements ICurrencyCreateModel {
 }
 
 export interface ICurrencyCreateModel {
-    name: string;
-    baseRate: number;
+    name?: string;
+    baseRate?: number;
     symble?: string | undefined;
 }
 
 export class CurrencyUpdateModel implements ICurrencyUpdateModel {
     id?: number;
-    name!: string;
-    baseRate!: number;
+    name?: string;
+    baseRate?: number;
     symble?: string | undefined;
 
     constructor(data?: ICurrencyUpdateModel) {
@@ -7411,8 +7411,8 @@ export class CurrencyUpdateModel implements ICurrencyUpdateModel {
 
 export interface ICurrencyUpdateModel {
     id?: number;
-    name: string;
-    baseRate: number;
+    name?: string;
+    baseRate?: number;
     symble?: string | undefined;
 }
 
@@ -7650,10 +7650,10 @@ export interface IEmployeeViewModel {
 }
 
 export class EmployeeCreateModel implements IEmployeeCreateModel {
-    fullName!: string;
+    fullName?: string;
     phone?: string | undefined;
-    email!: string;
-    password!: string;
+    email?: string;
+    password?: string;
     image?: string | undefined;
     companyId?: number | undefined;
 
@@ -7697,19 +7697,19 @@ export class EmployeeCreateModel implements IEmployeeCreateModel {
 }
 
 export interface IEmployeeCreateModel {
-    fullName: string;
+    fullName?: string;
     phone?: string | undefined;
-    email: string;
-    password: string;
+    email?: string;
+    password?: string;
     image?: string | undefined;
     companyId?: number | undefined;
 }
 
 export class EmployeeUpdateModel implements IEmployeeUpdateModel {
     id?: number;
-    fullName!: string;
+    fullName?: string;
     phone?: string | undefined;
-    email!: string;
+    email?: string;
     image?: string | undefined;
     companyId?: number | undefined;
 
@@ -7754,9 +7754,9 @@ export class EmployeeUpdateModel implements IEmployeeUpdateModel {
 
 export interface IEmployeeUpdateModel {
     id?: number;
-    fullName: string;
+    fullName?: string;
     phone?: string | undefined;
-    email: string;
+    email?: string;
     image?: string | undefined;
     companyId?: number | undefined;
 }
@@ -8468,7 +8468,7 @@ export interface IModuleViewModel {
 }
 
 export class ModuleCreateModel implements IModuleCreateModel {
-    name!: string;
+    name?: string;
 
     constructor(data?: IModuleCreateModel) {
         if (data) {
@@ -8500,12 +8500,12 @@ export class ModuleCreateModel implements IModuleCreateModel {
 }
 
 export interface IModuleCreateModel {
-    name: string;
+    name?: string;
 }
 
 export class ModuleUpdateModel implements IModuleUpdateModel {
     id?: number;
-    name!: string;
+    name?: string;
 
     constructor(data?: IModuleUpdateModel) {
         if (data) {
@@ -8540,7 +8540,7 @@ export class ModuleUpdateModel implements IModuleUpdateModel {
 
 export interface IModuleUpdateModel {
     id?: number;
-    name: string;
+    name?: string;
 }
 
 export class CreateModuleCommand extends ModuleCreateModel implements ICreateModuleCommand {
@@ -8647,7 +8647,7 @@ export interface IFilterPageResultModelOfProductUnitGridModel {
 
 export class ProductUnitGridModel implements IProductUnitGridModel {
     id?: string;
-    name!: string;
+    name?: string;
 
     constructor(data?: IProductUnitGridModel) {
         if (data) {
@@ -8682,7 +8682,7 @@ export class ProductUnitGridModel implements IProductUnitGridModel {
 
 export interface IProductUnitGridModel {
     id?: string;
-    name: string;
+    name?: string;
 }
 
 export class GetProductUnitsByFilterQuery extends FilterPageModel implements IGetProductUnitsByFilterQuery {
@@ -8757,7 +8757,7 @@ export interface IProductUnitViewModel {
 }
 
 export class ProductUnitCreateModel implements IProductUnitCreateModel {
-    name!: string;
+    name?: string;
 
     constructor(data?: IProductUnitCreateModel) {
         if (data) {
@@ -8789,12 +8789,12 @@ export class ProductUnitCreateModel implements IProductUnitCreateModel {
 }
 
 export interface IProductUnitCreateModel {
-    name: string;
+    name?: string;
 }
 
 export class ProductUnitUpdateModel implements IProductUnitUpdateModel {
     id?: number;
-    name!: string;
+    name?: string;
 
     constructor(data?: IProductUnitUpdateModel) {
         if (data) {
@@ -8829,7 +8829,7 @@ export class ProductUnitUpdateModel implements IProductUnitUpdateModel {
 
 export interface IProductUnitUpdateModel {
     id?: number;
-    name: string;
+    name?: string;
 }
 
 export class CreateProductUnitCommand extends ProductUnitCreateModel implements ICreateProductUnitCommand {
@@ -9066,9 +9066,9 @@ export interface IVatTaxViewModel {
 }
 
 export class VatTaxCreateModel implements IVatTaxCreateModel {
-    taxName!: string;
-    rate!: number;
-    companyId!: number;
+    taxName?: string;
+    rate?: number;
+    companyId?: number;
     taxNumber?: string | undefined;
     description?: string | undefined;
 
@@ -9110,18 +9110,18 @@ export class VatTaxCreateModel implements IVatTaxCreateModel {
 }
 
 export interface IVatTaxCreateModel {
-    taxName: string;
-    rate: number;
-    companyId: number;
+    taxName?: string;
+    rate?: number;
+    companyId?: number;
     taxNumber?: string | undefined;
     description?: string | undefined;
 }
 
 export class VatTaxUpdateModel implements IVatTaxUpdateModel {
     id?: number;
-    taxName!: string;
-    rate!: number;
-    companyId!: number;
+    taxName?: string;
+    rate?: number;
+    companyId?: number;
     taxNumber?: string | undefined;
     description?: string | undefined;
 
@@ -9166,9 +9166,9 @@ export class VatTaxUpdateModel implements IVatTaxUpdateModel {
 
 export interface IVatTaxUpdateModel {
     id?: number;
-    taxName: string;
-    rate: number;
-    companyId: number;
+    taxName?: string;
+    rate?: number;
+    companyId?: number;
     taxNumber?: string | undefined;
     description?: string | undefined;
 }
@@ -9387,7 +9387,7 @@ export interface IActionViewModel {
 }
 
 export class ActionCreateModel implements IActionCreateModel {
-    name!: string;
+    name?: string;
 
     constructor(data?: IActionCreateModel) {
         if (data) {
@@ -9419,12 +9419,12 @@ export class ActionCreateModel implements IActionCreateModel {
 }
 
 export interface IActionCreateModel {
-    name: string;
+    name?: string;
 }
 
 export class ActionUpdateModel implements IActionUpdateModel {
     id?: number;
-    name!: string;
+    name?: string;
 
     constructor(data?: IActionUpdateModel) {
         if (data) {
@@ -9459,7 +9459,7 @@ export class ActionUpdateModel implements IActionUpdateModel {
 
 export interface IActionUpdateModel {
     id?: number;
-    name: string;
+    name?: string;
 }
 
 export class CreateActionCommand extends ActionCreateModel implements ICreateActionCommand {

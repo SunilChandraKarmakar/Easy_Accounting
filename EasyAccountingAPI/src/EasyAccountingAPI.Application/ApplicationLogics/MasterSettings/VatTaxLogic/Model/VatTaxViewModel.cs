@@ -10,16 +10,9 @@
 
     public class VatTaxCreateModel : IMapFrom<VatTax>
     {
-        [Required(ErrorMessage = "Tax Name is required.")]
-        [StringLength(100, MinimumLength = 2)]
         public string TaxName { get; set; }
-
-        [Required(ErrorMessage = "Tax Rate is required.")]
         public decimal Rate { get; set; }
-
-        [Required(ErrorMessage = "Company is required.")]
         public int CompanyId { get; set; }
-
         public string? TaxNumber { get; set; }
         public string? Description { get; set; }
 
@@ -32,17 +25,9 @@
     public class VatTaxUpdateModel : IMapFrom<VatTax>
     {
         public int Id { get; set; }
-
-        [Required(ErrorMessage = "Tax Name is required.")]
-        [StringLength(100, MinimumLength = 2)]
         public string TaxName { get; set; }
-
-        [Required(ErrorMessage = "Tax Rate is required.")]
         public decimal Rate { get; set; }
-
-        [Required(ErrorMessage = "Company is required.")]
         public int CompanyId { get; set; }
-
         public string? TaxNumber { get; set; }
         public string? Description { get; set; }
 

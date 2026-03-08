@@ -9,8 +9,6 @@
 
     public class ModuleCreateModel : IMapFrom<EasyAccountingAPI.Model.MasterSettings.Module>
     {
-        [Required(ErrorMessage = "Module name is required.")]
-        [StringLength(100, MinimumLength = 2, ErrorMessage = "Module name must be between 2 and 100 characters.")]
         public string Name { get; set; }
 
         public void Mapping(Profile profile)
@@ -22,9 +20,6 @@
     public class ModuleUpdateModel : IMapFrom<EasyAccountingAPI.Model.MasterSettings.Module>
     {
         public int Id { get; set; }
-
-        [Required(ErrorMessage = "Module name is required.")]
-        [StringLength(100, MinimumLength = 2, ErrorMessage = "Module name must be between 2 and 100 characters.")]
         public string Name { get; set; }
 
         public void Mapping(Profile profile)

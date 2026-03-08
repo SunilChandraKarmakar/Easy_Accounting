@@ -9,9 +9,6 @@
 
     public class ProductUnitCreateModel : IMapFrom<ProductUnit>
     {
-
-        [Required(ErrorMessage = "Unit name is required.")]
-        [StringLength(50, ErrorMessage = "Unit name cannot exceed 50 characters.")]
         public string Name { get; set; }
 
         public void Mapping(Profile profile)
@@ -23,9 +20,6 @@
     public class ProductUnitUpdateModel : IMapFrom<ProductUnit>
     {
         public int Id { get; set; }
-
-        [Required(ErrorMessage = "Unit name is required.")]
-        [StringLength(50, ErrorMessage = "Unit name cannot exceed 50 characters.")]
         public string Name { get; set; }
 
         public void Mapping(Profile profile)
@@ -38,9 +32,6 @@
     public class ProductUnitGridModel : IMapFrom<ProductUnit>
     {
         public string Id { get; set; }
-
-        [Required(ErrorMessage = "Unit name is required.")]
-        [StringLength(50, ErrorMessage = "Unit name cannot exceed 50 characters.")]
         public string Name { get; set; }
 
         public void Mapping(Profile profile)
