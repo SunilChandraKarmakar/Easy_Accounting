@@ -55,6 +55,9 @@ import { UpdateVariationComponent } from './components/product-service/variation
 import { StorageLocationsComponent } from './components/purchase/storage-locations/storage-locations.component';
 import { CreateStorageLocationComponent } from './components/purchase/storage-locations/create-storage-location/create-storage-location.component';
 import { UpdateStorageLocationComponent } from './components/purchase/storage-locations/update-storage-location/update-storage-location.component';
+import { ProductsComponent } from './components/product-service/products/products.component';
+import { CreateProductComponent } from './components/product-service/products/create-product/create-product.component';
+import { UpdateProductComponent } from './components/product-service/products/update-product/update-product.component';
 
 export const routes: Routes = [
 
@@ -152,7 +155,12 @@ export const routes: Routes = [
       // Storage Location
       { path: "storage-locations", component: StorageLocationsComponent, pathMatch: "full" },
       { path: "storage-location/create", component: CreateStorageLocationComponent, pathMatch: "full" },
-      { path: "storage-location/update/:recordId", component: UpdateStorageLocationComponent, pathMatch: "full" }
+      { path: "storage-location/update/:recordId", component: UpdateStorageLocationComponent, pathMatch: "full" },
+
+      // Product
+      { path: "products", component: ProductsComponent, pathMatch: "full" },
+      { path: "product/create", component: CreateProductComponent, pathMatch: "full" },
+      { path: "product/update/:recordId", component: UpdateProductComponent, pathMatch: "full" }
     ],
     
     canActivate: [AuthGuard] 
