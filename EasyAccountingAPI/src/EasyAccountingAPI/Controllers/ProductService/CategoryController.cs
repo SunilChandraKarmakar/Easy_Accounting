@@ -60,5 +60,13 @@
             var isDeleteCategory = await Mediator.Send(new DeleteCategoryCommand { Id = id });
             return Ok(isDeleteCategory);
         }
+
+        [HttpGet("{parentId}")]
+        [ProducesResponseType(typeof(IEnumerable<SelectModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<SelectModel>>> GetCategoriesByParentIdAsync(int parentId)
+        {
+            var categories = await Mediator.Send(new SelectListCategoryByParentIdQuery { ParentId = parentId });
+            return Ok(categories);
+        }
     }
 }

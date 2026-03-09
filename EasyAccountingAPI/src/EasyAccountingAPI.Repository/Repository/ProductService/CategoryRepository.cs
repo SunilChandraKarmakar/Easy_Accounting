@@ -77,5 +77,21 @@
                 .Select(s => new SelectModel { Id = s.Id, Name = s.Name })
                 .ToListAsync(cancellationToken);
         }
+
+        public async Task<IEnumerable<SelectModel>> GetCategorySelectListByParentIdAsync(int parentId, string userId,
+            CancellationToken cancellationToken)
+        {
+            // Get employee based company ids
+            var companyIds = await _companyRepository.GetEmployeeBasedCompanyIdsAsync(userId, cancellationToken);
+
+            var getCategories = db.Categories
+                .AsNoTracking()
+                .Where(c => companyIds.Contains(c.CompanyId) && c.ParentId == parentId && !c.IsDeleted);
+
+            return await getCategories
+                .OrderBy(b => b.Name)
+                .Select(s => new SelectModel { Id = s.Id, Name = s.Name })
+                .ToListAsync(cancellationToken);
+        }
     }
 }

@@ -500,6 +500,41 @@
         }
       }
     },
+    "/api/Category/GetCategoriesByParentId/{parentId}": {
+      "get": {
+        "tags": [
+          "Category"
+        ],
+        "operationId": "Category_GetCategoriesByParentId",
+        "parameters": [
+          {
+            "name": "parentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SelectModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Category/GetFilterCategories": {
       "post": {
         "tags": [
@@ -3496,6 +3531,30 @@
           }
         ]
       },
+      "SelectModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {},
+          "name": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "isDefault": {
+            "type": "boolean"
+          },
+          "valueOne": {},
+          "valueTwo": {},
+          "valueThree": {},
+          "valueFour": {},
+          "displayOrder": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "FilterPageResultModelOfProductGridModel": {
         "type": "object",
         "additionalProperties": false,
@@ -4432,30 +4491,6 @@
             "additionalProperties": false
           }
         ]
-      },
-      "SelectModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {},
-          "name": {
-            "type": "string"
-          },
-          "group": {
-            "type": "string"
-          },
-          "isDefault": {
-            "type": "boolean"
-          },
-          "valueOne": {},
-          "valueTwo": {},
-          "valueThree": {},
-          "valueFour": {},
-          "displayOrder": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
       },
       "UpdateEmployeeCommand": {
         "allOf": [
