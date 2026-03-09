@@ -43,11 +43,11 @@
                 include: q => q.Include(x => x.Company), cancellationToken);
         }
 
-        public async Task<IEnumerable<SelectModel>> GetBrandSelectList(string userId, CancellationToken cancellationToken)
+        public async Task<IEnumerable<SelectModel>> GetBrandSelectList(string userId, 
+            CancellationToken cancellationToken)
         {
             // Get employee based company ids
             var companyIds = await _companyRepository.GetEmployeeBasedCompanyIdsAsync(userId, cancellationToken);
-
             var getBrands = db.Brands.AsNoTracking().Where(b => companyIds.Contains(b.CompanyId) && !b.IsDeleted);
 
             return await getBrands

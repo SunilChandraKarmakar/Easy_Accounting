@@ -4028,6 +4028,10 @@ export class ModuleService implements IModuleService {
 
 export interface IProductService {
     create(createProductCommand: CreateProductCommand): Observable<boolean>;
+    delete(id: string): Observable<boolean>;
+    getById(id: string): Observable<ProductViewModel>;
+    getFilterProducts(getProductsByFilterQuery: GetProductsByFilterQuery): Observable<FilterPageResultModelOfProductGridModel>;
+    update(updateProductCommand: UpdateProductCommand): Observable<boolean>;
 }
 
 @Injectable()
@@ -4072,6 +4076,214 @@ export class ProductService implements IProductService {
     }
 
     protected processCreate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(id: string): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Product/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getById(id: string): Observable<ProductViewModel> {
+        let url_ = this.baseUrl + "/api/Product/GetById/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ProductViewModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ProductViewModel>;
+        }));
+    }
+
+    protected processGetById(response: HttpResponseBase): Observable<ProductViewModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProductViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getFilterProducts(getProductsByFilterQuery: GetProductsByFilterQuery): Observable<FilterPageResultModelOfProductGridModel> {
+        let url_ = this.baseUrl + "/api/Product/GetFilterProducts";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(getProductsByFilterQuery);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFilterProducts(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFilterProducts(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FilterPageResultModelOfProductGridModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FilterPageResultModelOfProductGridModel>;
+        }));
+    }
+
+    protected processGetFilterProducts(response: HttpResponseBase): Observable<FilterPageResultModelOfProductGridModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FilterPageResultModelOfProductGridModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(updateProductCommand: UpdateProductCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Product/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(updateProductCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<boolean> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -6222,6 +6434,273 @@ export class UpdateCategoryCommand extends CategoryUpdateModel implements IUpdat
 export interface IUpdateCategoryCommand extends ICategoryUpdateModel {
 }
 
+export class FilterPageResultModelOfProductGridModel implements IFilterPageResultModelOfProductGridModel {
+    items?: ProductGridModel[];
+    totalCount?: number;
+
+    constructor(data?: IFilterPageResultModelOfProductGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(ProductGridModel.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): FilterPageResultModelOfProductGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPageResultModelOfProductGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item ? item.toJSON() : undefined as any);
+        }
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+}
+
+export interface IFilterPageResultModelOfProductGridModel {
+    items?: ProductGridModel[];
+    totalCount?: number;
+}
+
+export class ProductGridModel implements IProductGridModel {
+    id?: string;
+    name?: string;
+    code?: string;
+    productUnitName?: string;
+    categoryName?: string;
+    brandName?: string;
+    companyName?: string;
+    costPrice?: number;
+    sellPrice?: number;
+    vatTaxName?: string | undefined;
+    image?: string | undefined;
+    description?: string | undefined;
+    haveProductInventory?: boolean;
+    productInventory?: ProductInventoryGridModel;
+
+    constructor(data?: IProductGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.code = _data["code"];
+            this.productUnitName = _data["productUnitName"];
+            this.categoryName = _data["categoryName"];
+            this.brandName = _data["brandName"];
+            this.companyName = _data["companyName"];
+            this.costPrice = _data["costPrice"];
+            this.sellPrice = _data["sellPrice"];
+            this.vatTaxName = _data["vatTaxName"];
+            this.image = _data["image"];
+            this.description = _data["description"];
+            this.haveProductInventory = _data["haveProductInventory"];
+            this.productInventory = _data["productInventory"] ? ProductInventoryGridModel.fromJS(_data["productInventory"]) : undefined as any;
+        }
+    }
+
+    static fromJS(data: any): ProductGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["code"] = this.code;
+        data["productUnitName"] = this.productUnitName;
+        data["categoryName"] = this.categoryName;
+        data["brandName"] = this.brandName;
+        data["companyName"] = this.companyName;
+        data["costPrice"] = this.costPrice;
+        data["sellPrice"] = this.sellPrice;
+        data["vatTaxName"] = this.vatTaxName;
+        data["image"] = this.image;
+        data["description"] = this.description;
+        data["haveProductInventory"] = this.haveProductInventory;
+        data["productInventory"] = this.productInventory ? this.productInventory.toJSON() : undefined as any;
+        return data;
+    }
+}
+
+export interface IProductGridModel {
+    id?: string;
+    name?: string;
+    code?: string;
+    productUnitName?: string;
+    categoryName?: string;
+    brandName?: string;
+    companyName?: string;
+    costPrice?: number;
+    sellPrice?: number;
+    vatTaxName?: string | undefined;
+    image?: string | undefined;
+    description?: string | undefined;
+    haveProductInventory?: boolean;
+    productInventory?: ProductInventoryGridModel;
+}
+
+export class ProductInventoryGridModel implements IProductInventoryGridModel {
+    id?: string;
+    productName?: string;
+    openingStock?: number;
+    expiryDate?: Date | undefined;
+    haveStockAlert?: boolean;
+    stockAlertQty?: number | undefined;
+
+    constructor(data?: IProductInventoryGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.productName = _data["productName"];
+            this.openingStock = _data["openingStock"];
+            this.expiryDate = _data["expiryDate"] ? new Date(_data["expiryDate"].toString()) : undefined as any;
+            this.haveStockAlert = _data["haveStockAlert"];
+            this.stockAlertQty = _data["stockAlertQty"];
+        }
+    }
+
+    static fromJS(data: any): ProductInventoryGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductInventoryGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["productName"] = this.productName;
+        data["openingStock"] = this.openingStock;
+        data["expiryDate"] = this.expiryDate ? this.expiryDate.toISOString() : undefined as any;
+        data["haveStockAlert"] = this.haveStockAlert;
+        data["stockAlertQty"] = this.stockAlertQty;
+        return data;
+    }
+}
+
+export interface IProductInventoryGridModel {
+    id?: string;
+    productName?: string;
+    openingStock?: number;
+    expiryDate?: Date | undefined;
+    haveStockAlert?: boolean;
+    stockAlertQty?: number | undefined;
+}
+
+export class GetProductsByFilterQuery extends FilterPageModel implements IGetProductsByFilterQuery {
+
+    constructor(data?: IGetProductsByFilterQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetProductsByFilterQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetProductsByFilterQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetProductsByFilterQuery extends IFilterPageModel {
+}
+
+export class ProductViewModel implements IProductViewModel {
+    createModel?: ProductCreateModel;
+    updateModel?: ProductUpdateModel;
+    gridModel?: ProductGridModel;
+    optionsDataSources?: any;
+
+    constructor(data?: IProductViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.createModel = _data["createModel"] ? ProductCreateModel.fromJS(_data["createModel"]) : undefined as any;
+            this.updateModel = _data["updateModel"] ? ProductUpdateModel.fromJS(_data["updateModel"]) : undefined as any;
+            this.gridModel = _data["gridModel"] ? ProductGridModel.fromJS(_data["gridModel"]) : undefined as any;
+            this.optionsDataSources = _data["optionsDataSources"];
+        }
+    }
+
+    static fromJS(data: any): ProductViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["createModel"] = this.createModel ? this.createModel.toJSON() : undefined as any;
+        data["updateModel"] = this.updateModel ? this.updateModel.toJSON() : undefined as any;
+        data["gridModel"] = this.gridModel ? this.gridModel.toJSON() : undefined as any;
+        data["optionsDataSources"] = this.optionsDataSources;
+        return data;
+    }
+}
+
+export interface IProductViewModel {
+    createModel?: ProductCreateModel;
+    updateModel?: ProductUpdateModel;
+    gridModel?: ProductGridModel;
+    optionsDataSources?: any;
+}
+
 export class ProductCreateModel implements IProductCreateModel {
     name?: string;
     code?: string;
@@ -6306,33 +6785,6 @@ export interface IProductCreateModel {
     productInventory?: ProductInventoryCreateModel;
 }
 
-export class CreateProductCommand extends ProductCreateModel implements ICreateProductCommand {
-
-    constructor(data?: ICreateProductCommand) {
-        super(data);
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-    }
-
-    static override fromJS(data: any): CreateProductCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new CreateProductCommand();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface ICreateProductCommand extends IProductCreateModel {
-}
-
 export class ProductInventoryCreateModel implements IProductInventoryCreateModel {
     productId?: number;
     openingStock?: number;
@@ -6383,6 +6835,204 @@ export interface IProductInventoryCreateModel {
     expiryDate?: Date | undefined;
     haveStockAlert?: boolean;
     stockAlertQty?: number | undefined;
+}
+
+export class ProductUpdateModel implements IProductUpdateModel {
+    id?: number;
+    name?: string;
+    code?: string;
+    productUnitId?: number;
+    categoryId?: number;
+    brandId?: number;
+    companyId?: number;
+    costPrice?: number;
+    sellPrice?: number;
+    vatTaxId?: number | undefined;
+    image?: string | undefined;
+    description?: string | undefined;
+    haveProductInventory?: boolean;
+    productInventory?: ProductInventoryUpdateModel;
+
+    constructor(data?: IProductUpdateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.code = _data["code"];
+            this.productUnitId = _data["productUnitId"];
+            this.categoryId = _data["categoryId"];
+            this.brandId = _data["brandId"];
+            this.companyId = _data["companyId"];
+            this.costPrice = _data["costPrice"];
+            this.sellPrice = _data["sellPrice"];
+            this.vatTaxId = _data["vatTaxId"];
+            this.image = _data["image"];
+            this.description = _data["description"];
+            this.haveProductInventory = _data["haveProductInventory"];
+            this.productInventory = _data["productInventory"] ? ProductInventoryUpdateModel.fromJS(_data["productInventory"]) : undefined as any;
+        }
+    }
+
+    static fromJS(data: any): ProductUpdateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductUpdateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["code"] = this.code;
+        data["productUnitId"] = this.productUnitId;
+        data["categoryId"] = this.categoryId;
+        data["brandId"] = this.brandId;
+        data["companyId"] = this.companyId;
+        data["costPrice"] = this.costPrice;
+        data["sellPrice"] = this.sellPrice;
+        data["vatTaxId"] = this.vatTaxId;
+        data["image"] = this.image;
+        data["description"] = this.description;
+        data["haveProductInventory"] = this.haveProductInventory;
+        data["productInventory"] = this.productInventory ? this.productInventory.toJSON() : undefined as any;
+        return data;
+    }
+}
+
+export interface IProductUpdateModel {
+    id?: number;
+    name?: string;
+    code?: string;
+    productUnitId?: number;
+    categoryId?: number;
+    brandId?: number;
+    companyId?: number;
+    costPrice?: number;
+    sellPrice?: number;
+    vatTaxId?: number | undefined;
+    image?: string | undefined;
+    description?: string | undefined;
+    haveProductInventory?: boolean;
+    productInventory?: ProductInventoryUpdateModel;
+}
+
+export class ProductInventoryUpdateModel implements IProductInventoryUpdateModel {
+    id?: number;
+    productId?: number;
+    openingStock?: number;
+    expiryDate?: Date | undefined;
+    haveStockAlert?: boolean;
+    stockAlertQty?: number | undefined;
+
+    constructor(data?: IProductInventoryUpdateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.productId = _data["productId"];
+            this.openingStock = _data["openingStock"];
+            this.expiryDate = _data["expiryDate"] ? new Date(_data["expiryDate"].toString()) : undefined as any;
+            this.haveStockAlert = _data["haveStockAlert"];
+            this.stockAlertQty = _data["stockAlertQty"];
+        }
+    }
+
+    static fromJS(data: any): ProductInventoryUpdateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductInventoryUpdateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["productId"] = this.productId;
+        data["openingStock"] = this.openingStock;
+        data["expiryDate"] = this.expiryDate ? this.expiryDate.toISOString() : undefined as any;
+        data["haveStockAlert"] = this.haveStockAlert;
+        data["stockAlertQty"] = this.stockAlertQty;
+        return data;
+    }
+}
+
+export interface IProductInventoryUpdateModel {
+    id?: number;
+    productId?: number;
+    openingStock?: number;
+    expiryDate?: Date | undefined;
+    haveStockAlert?: boolean;
+    stockAlertQty?: number | undefined;
+}
+
+export class CreateProductCommand extends ProductCreateModel implements ICreateProductCommand {
+
+    constructor(data?: ICreateProductCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): CreateProductCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateProductCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ICreateProductCommand extends IProductCreateModel {
+}
+
+export class UpdateProductCommand extends ProductUpdateModel implements IUpdateProductCommand {
+
+    constructor(data?: IUpdateProductCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): UpdateProductCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateProductCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IUpdateProductCommand extends IProductUpdateModel {
 }
 
 export class FilterPageResultModelOfVariationGridModel implements IFilterPageResultModelOfVariationGridModel {

@@ -4,7 +4,8 @@
     {
         private readonly ICompanyRepository _companyRepository;
 
-        public VatTaxRepository(DatabaseContext databaseContext, ICompanyRepository companyRepository) : base(databaseContext) 
+        public VatTaxRepository(DatabaseContext databaseContext, ICompanyRepository companyRepository) 
+            : base(databaseContext) 
         {
             _companyRepository = companyRepository;
         }
@@ -45,6 +46,22 @@
 
             return await GetAllFilterAsync(model, filter, vt => vt.Id, sortableColumns,
                 include: q => q.Include(x => x.Company), cancellationToken);
+        }
+
+        public async Task<IEnumerable<SelectModel>> GetVatTaxSelectListAsync(string userId, 
+            CancellationToken cancellationToken)
+        {
+            // Get employee based company ids
+            var companyIds = await _companyRepository.GetEmployeeBasedCompanyIdsAsync(userId, cancellationToken);
+            
+            var getVatTaxes = db.VatTaxes
+                .AsNoTracking()
+                .Where(vt => companyIds.Contains(vt.CompanyId) && !vt.IsDeleted);
+
+            return await getVatTaxes
+                .OrderBy(vt => vt.TaxName)
+                .Select(s => new SelectModel { Id = s.Id, Name = s.TaxName })
+                .ToListAsync(cancellationToken);
         }
     }
 }

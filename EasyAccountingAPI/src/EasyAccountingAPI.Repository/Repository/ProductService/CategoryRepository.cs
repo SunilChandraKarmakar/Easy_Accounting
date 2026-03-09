@@ -45,19 +45,24 @@
                 include: q => q.Include(x => x.ParentCategory).Include(x => x.Company), cancellationToken);
         }
 
-        public async Task<IEnumerable<SelectModel>> GetCategorySelectList(string userId, CancellationToken cancellationToken)
+        public async Task<IEnumerable<SelectModel>> GetCategorySelectList(string userId, 
+            CancellationToken cancellationToken)
         {
             // Get employee based company ids
             var companyIds = await _companyRepository.GetEmployeeBasedCompanyIdsAsync(userId, cancellationToken);
 
-            var getCategories = db.Categories.AsNoTracking().Where(c => companyIds.Contains(c.CompanyId) && !c.IsDeleted);
+            var getCategories = db.Categories
+                .AsNoTracking()
+                .Where(c => companyIds.Contains(c.CompanyId) && !c.IsDeleted);
 
             return await getCategories
                 .OrderBy(b => b.Name)
                 .Select(s => new SelectModel { Id = s.Id, Name = s.Name })
                 .ToListAsync(cancellationToken);
         }
-        public async Task<IEnumerable<SelectModel>> GetParentCategorySelectList(string userId, CancellationToken cancellationToken)
+
+        public async Task<IEnumerable<SelectModel>> GetParentCategorySelectList(string userId, 
+            CancellationToken cancellationToken)
         {
             // Get employee based company ids
             var companyIds = await _companyRepository.GetEmployeeBasedCompanyIdsAsync(userId, cancellationToken);
