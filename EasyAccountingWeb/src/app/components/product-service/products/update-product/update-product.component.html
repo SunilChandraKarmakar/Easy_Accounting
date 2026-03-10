@@ -1,3 +1,173 @@
-<p>
-  update-product works!
-</p>
+<nz-breadcrumb>
+  <nz-breadcrumb-item>Product & Service</nz-breadcrumb-item>
+    <nz-breadcrumb-item><a routerLink="/app/products" class="breadcrumb-link">Product</a></nz-breadcrumb-item>
+  <nz-breadcrumb-item>Update Product</nz-breadcrumb-item>
+</nz-breadcrumb>
+<div class="row mt-3">
+  <div class="col-md-12">
+    <div class="card shadow-lg">
+      <div class="card-header">
+        <h5 class="card-title text-center">Update Product</h5>
+      </div>
+      <div class="card-body">
+        <form class="row g-3" autocomplete="off">
+          <div class="col-md-3">
+            <label for="name" class="form-label">Product Name <span class="text-danger fw-bold">*</span></label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="shopping" />
+              <input nz-input placeholder="Enter product name" nzSize="default" id="name" name="name"
+                [(ngModel)]="productUpdateModel.name" />
+            </nz-input-wrapper>
+          </div>
+          <div class="col-md-3">
+            <label for="code" class="form-label">Product Code <span class="text-danger fw-bold">*</span></label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="barcode" />
+              <input nz-input placeholder="Enter product code" nzSize="default" id="code" name="code"
+                [(ngModel)]="productUpdateModel.code" />
+            </nz-input-wrapper>
+          </div>
+          <div class="col-md-3">
+            <label for="productUnitId" class="form-label">Product Unit <span class="text-danger fw-bold">*</span></label>
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Product Unit"
+              [(ngModel)]="productUpdateModel.productUnitId" name="productUnitId" style="width: 100%;">
+                @for (unit of productUnits; track unit.id) {
+                  <nz-option [nzValue]="unit.id" [nzLabel]="unit.name!"></nz-option>
+                }
+              </nz-select>
+          </div>
+          <div class="col-md-3">
+            <label for="parentCategoryId" class="form-label">Category <span class="text-danger fw-bold">*</span></label>
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Category"
+              [(ngModel)]="productUpdateModel.parentCategoryId" id="parentCategoryId" name="parentCategoryId"
+              (ngModelChange)="onChangeParentCategory(productUpdateModel.parentCategoryId!)" style="width: 100%;">
+                @for (parentCategory of parentCategories; track parentCategory.id) {
+                  <nz-option [nzValue]="parentCategory.id" [nzLabel]="parentCategory.name!"></nz-option>
+                }
+              </nz-select>
+          </div>
+          <div class="col-md-3">
+            <label for="categoryId" class="form-label">Sub Category <span class="text-danger fw-bold">*</span></label>
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Sub Category"
+              [(ngModel)]="productUpdateModel.categoryId" id="categoryId" name="categoryId" style="width: 100%;">
+                @for (subCategory of subCategories; track subCategory.id) {
+                  <nz-option [nzValue]="subCategory.id" [nzLabel]="subCategory.name!"></nz-option>
+                }
+              </nz-select>
+          </div>
+          <div class="col-md-3">
+            <label for="brandId" class="form-label">Brand <span class="text-danger fw-bold">*</span></label>
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Brand"
+              [(ngModel)]="productUpdateModel.brandId" name="brandId" style="width: 100%;">
+                @for (brand of brands; track brand.id) {
+                  <nz-option [nzValue]="brand.id" [nzLabel]="brand.name!"></nz-option>
+                }
+              </nz-select>
+          </div>
+          <div class="col-md-3">
+            <label for="companyId" class="form-label">Company <span class="text-danger fw-bold">*</span></label>
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Company"
+              [(ngModel)]="productUpdateModel.companyId" name="companyId" style="width: 100%;">
+                @for (company of companies; track company.id) {
+                  <nz-option [nzValue]="company.id" [nzLabel]="company.name!"></nz-option>
+                }
+              </nz-select>
+          </div>
+          <div class="col-md-3">
+            <label for="vatTaxId" class="form-label">Vat Tax</label>
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select Vat Tax"
+              [(ngModel)]="productUpdateModel.vatTaxId" name="vatTaxId" style="width: 100%;">
+                @for (vatTax of vatTaxes; track vatTax.id) {
+                  <nz-option [nzValue]="vatTax.id" [nzLabel]="vatTax.name!"></nz-option>
+                }
+              </nz-select>
+          </div>
+          <div class="col-md-3">
+            <div class="icon-upload-align">
+              <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76" [nzHeaders]="{ authorization: 'authorization-text' }"
+                (nzChange)="handleChange($event)">
+                <button nz-button>
+                  <nz-icon nzType="upload" />
+                  Click to Upload Image
+                </button>
+              </nz-upload>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <label for="costPrice" class="form-label">Cost Price <span class="text-danger fw-bold">*</span></label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="dollar" />
+              <input nz-input type="number" placeholder="0.00" nzSize="default" id="costPrice" name="costPrice"
+                [(ngModel)]="productUpdateModel.costPrice" step="0.01" min="0" />
+            </nz-input-wrapper>
+          </div>
+          <div class="col-md-3">
+            <label for="sellPrice" class="form-label">Sell Price <span class="text-danger fw-bold">*</span></label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="dollar" />
+              <input nz-input type="number" placeholder="0.00" nzSize="default" id="sellPrice" name="sellPrice"
+                [(ngModel)]="productUpdateModel.sellPrice" step="0.01" min="0" />
+            </nz-input-wrapper>
+          </div>
+          <div class="col-md-9">
+            <label for="description" class="form-label">Description</label>
+            <nz-textarea-count [nzMaxCharacterCount]="1000">
+              <textarea rows="4" id="description" name="description" placeholder="Enter product description" [(ngModel)]="productUpdateModel.description" nz-input></textarea>
+            </nz-textarea-count>
+          </div>
+          <div class="col-md-3 mt-5">
+            <label nz-checkbox [(ngModel)]="productUpdateModel.haveProductInventory" id="haveProductInventory"
+              name="haveProductInventory">
+              Do you want to Manage Inventory?
+            </label>
+          </div>
+        </form>
+        @if (productUpdateModel.haveProductInventory) {
+          <form class="row g-3 mt-3" autocomplete="off">
+            <nz-divider nzDashed [nzText]="text" nzOrientation="left" >
+              <ng-template #text>
+                <nz-icon nzType="plus" />
+                Manage Inventory
+              </ng-template>
+            </nz-divider>
+            <div class="col-md-3">
+              <label for="openingStock" class="form-label">Opening Stock <span class="text-danger fw-bold">*</span></label>
+              <input nz-input type="number" placeholder="0" nzSize="default" id="openingStock" name="openingStock"
+                [(ngModel)]="productUpdateModel.productInventory!.openingStock" min="0" />
+            </div>
+            <div class="col-md-3">
+              <label for="expiryDate" class="form-label">Expiry Date</label>
+              <nz-date-picker [(ngModel)]="productUpdateModel.productInventory!.expiryDate" name="expiryDate" style="width: 100%;"></nz-date-picker>
+            </div>
+            <div class="col-md-3 mt-5">
+              <label nz-checkbox [(ngModel)]="productUpdateModel.productInventory!.haveStockAlert"
+                id="haveStockAlert" name="haveStockAlert">
+                Enable Stock Alert?
+              </label>
+            </div>
+            @if (productUpdateModel.productInventory!.haveStockAlert) {
+              <div class="col-md-3">
+                <label for="stockAlertQty" class="form-label">Stock Alert Quantity <span class="text-danger fw-bold">*</span></label>
+                <input nz-input type="number" placeholder="0" nzSize="default" id="stockAlertQty" name="stockAlertQty"
+                  [(ngModel)]="productUpdateModel.productInventory!.stockAlertQty" min="0" />
+              </div>
+            }
+          </form>
+        }
+      </div>
+      <div class="card-footer text-end">
+        <button nz-button nzType="primary" class="btn-save" (click)="onClickUpdateProduct()">
+          <nz-icon nzType="edit" nzTheme="outline" />
+          Update
+        </button>
+        <button nz-button nzType="primary" class="btn-cancel" routerLink="/app/products">
+          <nz-icon nzType="close" nzTheme="outline" />
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>

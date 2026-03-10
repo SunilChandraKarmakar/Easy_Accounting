@@ -47,12 +47,14 @@
         public string Email { get; set; }
         public string? Image { get; set; }
         public string? CompanyName { get; set; }
+        public string EmployeeRoleName { get; set; }
 
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Employee, EmployeeGridModel>()
                 .ForMember(d => d.Id, s => s.MapFrom(m => EncryptionService.Encrypt(m.Id.ToString())))
-                .ForMember(d => d.CompanyName, s => s.MapFrom(m => m.Company.Name));
+                .ForMember(d => d.CompanyName, s => s.MapFrom(m => m.Company.Name))
+                .ForMember(d => d.EmployeeRoleName, s => s.MapFrom(m => m.EmployeeRoles.FirstOrDefault().Role.Name));
         }
     }
 }

@@ -6969,6 +6969,7 @@ export class ProductUpdateModel implements IProductUpdateModel {
     name?: string;
     code?: string;
     productUnitId?: number;
+    parentCategoryId?: number | undefined;
     categoryId?: number;
     brandId?: number;
     companyId?: number;
@@ -6995,6 +6996,7 @@ export class ProductUpdateModel implements IProductUpdateModel {
             this.name = _data["name"];
             this.code = _data["code"];
             this.productUnitId = _data["productUnitId"];
+            this.parentCategoryId = _data["parentCategoryId"];
             this.categoryId = _data["categoryId"];
             this.brandId = _data["brandId"];
             this.companyId = _data["companyId"];
@@ -7021,6 +7023,7 @@ export class ProductUpdateModel implements IProductUpdateModel {
         data["name"] = this.name;
         data["code"] = this.code;
         data["productUnitId"] = this.productUnitId;
+        data["parentCategoryId"] = this.parentCategoryId;
         data["categoryId"] = this.categoryId;
         data["brandId"] = this.brandId;
         data["companyId"] = this.companyId;
@@ -7040,6 +7043,7 @@ export interface IProductUpdateModel {
     name?: string;
     code?: string;
     productUnitId?: number;
+    parentCategoryId?: number | undefined;
     categoryId?: number;
     brandId?: number;
     companyId?: number;
@@ -8302,6 +8306,7 @@ export class EmployeeGridModel implements IEmployeeGridModel {
     email?: string;
     image?: string | undefined;
     companyName?: string | undefined;
+    employeeRoleName?: string;
 
     constructor(data?: IEmployeeGridModel) {
         if (data) {
@@ -8320,6 +8325,7 @@ export class EmployeeGridModel implements IEmployeeGridModel {
             this.email = _data["email"];
             this.image = _data["image"];
             this.companyName = _data["companyName"];
+            this.employeeRoleName = _data["employeeRoleName"];
         }
     }
 
@@ -8338,6 +8344,7 @@ export class EmployeeGridModel implements IEmployeeGridModel {
         data["email"] = this.email;
         data["image"] = this.image;
         data["companyName"] = this.companyName;
+        data["employeeRoleName"] = this.employeeRoleName;
         return data;
     }
 }
@@ -8349,6 +8356,7 @@ export interface IEmployeeGridModel {
     email?: string;
     image?: string | undefined;
     companyName?: string | undefined;
+    employeeRoleName?: string;
 }
 
 export class GetEmployeeByFilterQuery extends FilterPageModel implements IGetEmployeeByFilterQuery {

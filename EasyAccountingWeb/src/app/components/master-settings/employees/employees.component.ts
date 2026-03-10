@@ -12,6 +12,7 @@ import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { EmployeeGridModel, EmployeeService, FilterPageModel, FilterPageResultModelOfEmployeeGridModel } from '../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 
 @Component({
   selector: 'app-employees',
@@ -29,7 +30,9 @@ import { ToastrService } from 'ngx-toastr';
     NzInputModule, 
     NzIconModule, 
     NzBreadCrumbModule, 
-    NzPopconfirmModule],
+    NzPopconfirmModule,
+    NzTagModule
+  ],
   providers: [EmployeeService]
 })
 

@@ -74,8 +74,8 @@
               </nz-select>
           </div>
           <div class="col-md-3">
-            <label for="vatTaxId" class="form-label">VAT Tax</label>
-             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select VAT Tax"
+            <label for="vatTaxId" class="form-label">Vat Tax</label>
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select Vat Tax"
               [(ngModel)]="productCreateModel.vatTaxId" name="vatTaxId" style="width: 100%;">
                 @for (vatTax of vatTaxes; track vatTax.id) {
                   <nz-option [nzValue]="vatTax.id" [nzLabel]="vatTax.name!"></nz-option>
@@ -93,8 +93,6 @@
               </nz-upload>
             </div>
           </div>
-
-          <!-- Pricing Information -->
           <div class="col-md-3">
             <label for="costPrice" class="form-label">Cost Price <span class="text-danger fw-bold">*</span></label>
             <nz-input-wrapper>
@@ -111,53 +109,51 @@
                 [(ngModel)]="productCreateModel.sellPrice" step="0.01" min="0" />
             </nz-input-wrapper>
           </div>
-
-          <!-- Inventory Management -->
-          <div class="col-md-3 mt-4">
-            <label nz-checkbox [(ngModel)]="productCreateModel.haveProductInventory" id="haveProductInventory" name="haveProductInventory">
-              Manage Inventory?
+          <div class="col-md-9">
+            <label for="description" class="form-label">Description</label>
+            <nz-textarea-count [nzMaxCharacterCount]="1000">
+              <textarea rows="4" id="description" name="description" placeholder="Enter product description" [(ngModel)]="productCreateModel.description" nz-input></textarea>
+            </nz-textarea-count>
+          </div>
+          <div class="col-md-3 mt-5">
+            <label nz-checkbox [(ngModel)]="productCreateModel.haveProductInventory" id="haveProductInventory"
+              name="haveProductInventory">
+              Do you want to Manage Inventory?
             </label>
           </div>
-
-          <!-- Inventory Details (shown only if haveProductInventory is true) -->
-          @if (productCreateModel.haveProductInventory) {
+        </form>
+        @if (productCreateModel.haveProductInventory) {
+          <form class="row g-3 mt-3" autocomplete="off">
+            <nz-divider nzDashed [nzText]="text" nzOrientation="left" >
+              <ng-template #text>
+                <nz-icon nzType="plus" />
+                Manage Inventory
+              </ng-template>              
+            </nz-divider>   
             <div class="col-md-3">
               <label for="openingStock" class="form-label">Opening Stock <span class="text-danger fw-bold">*</span></label>
-              <nz-input-wrapper>
-                <nz-icon nzInputPrefix nzType="inbox" />
-                <input nz-input type="number" placeholder="0" nzSize="default" id="openingStock" name="openingStock"
-                  [(ngModel)]="productCreateModel.productInventory!.openingStock" min="0" />
-              </nz-input-wrapper>
+              <input nz-input type="number" placeholder="0" nzSize="default" id="openingStock" name="openingStock"
+                [(ngModel)]="productCreateModel.productInventory!.openingStock" min="0" />
             </div>
             <div class="col-md-3">
               <label for="expiryDate" class="form-label">Expiry Date</label>
               <nz-date-picker [(ngModel)]="productCreateModel.productInventory!.expiryDate" name="expiryDate" style="width: 100%;"></nz-date-picker>
             </div>
-            <div class="col-md-3 mt-4">
-              <label nz-checkbox [(ngModel)]="productCreateModel.productInventory!.haveStockAlert" id="haveStockAlert" name="haveStockAlert">
+            <div class="col-md-3 mt-5">
+              <label nz-checkbox [(ngModel)]="productCreateModel.productInventory!.haveStockAlert" 
+                id="haveStockAlert" name="haveStockAlert">
                 Enable Stock Alert?
               </label>
             </div>
             @if (productCreateModel.productInventory!.haveStockAlert) {
               <div class="col-md-3">
                 <label for="stockAlertQty" class="form-label">Stock Alert Quantity <span class="text-danger fw-bold">*</span></label>
-                <nz-input-wrapper>
-                  <nz-icon nzInputPrefix nzType="warning" />
-                  <input nz-input type="number" placeholder="0" nzSize="default" id="stockAlertQty" name="stockAlertQty"
-                    [(ngModel)]="productCreateModel.productInventory!.stockAlertQty" min="0" />
-                </nz-input-wrapper>
+                <input nz-input type="number" placeholder="0" nzSize="default" id="stockAlertQty" name="stockAlertQty"
+                  [(ngModel)]="productCreateModel.productInventory!.stockAlertQty" min="0" />
               </div>
-            }
-          }
-
-          <!-- Description -->
-          <div class="col-md-12">
-            <label for="description" class="form-label">Description</label>
-            <nz-textarea-count [nzMaxCharacterCount]="1000">
-              <textarea rows="4" id="description" name="description" placeholder="Enter product description" [(ngModel)]="productCreateModel.description" nz-input></textarea>
-            </nz-textarea-count>
-          </div>
-        </form>
+            }       
+          </form>
+        }
       </div>
       <div class="card-footer text-end">
         <button nz-button nzType="primary" class="btn-save" (click)="onClickSaveProduct()">

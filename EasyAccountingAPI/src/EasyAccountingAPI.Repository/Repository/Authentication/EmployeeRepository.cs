@@ -71,7 +71,10 @@
             };
 
             return await GetAllFilterAsync(model, filter, vt => vt.Id, sortableColumns,
-                include: q => q.Include(x => x.Company), cancellationToken);
+                include: q => q.Include(x => x.Company)
+                .Include(x => x.EmployeeRoles)
+                    .ThenInclude(er => er.Role)
+                , cancellationToken);
         }
     }
 }

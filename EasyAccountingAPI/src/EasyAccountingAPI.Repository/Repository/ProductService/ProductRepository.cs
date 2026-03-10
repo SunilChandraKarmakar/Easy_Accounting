@@ -13,6 +13,7 @@
         public override async Task<Product?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             var product = await db.Products
+                .Include(p => p.Category)
                 .Include(p => p.ProductInventories)
                 .Where(p => p.Id == id && !p.IsDeleted)
                 .FirstOrDefaultAsync(cancellationToken);

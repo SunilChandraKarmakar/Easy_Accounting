@@ -13,6 +13,7 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { FilterPageModel, FilterPageResultModelOfProductGridModel, ProductGridModel, ProductService } from '../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
 
 @Component({
   selector: 'app-products',
@@ -31,7 +32,8 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
     NzIconModule, 
     NzBreadCrumbModule, 
     NzPopconfirmModule,
-    NzTagModule
+    NzTagModule,
+    NzBadgeModule
   ],
   providers: [ProductService]
 })

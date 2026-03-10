@@ -26,7 +26,7 @@
                 await Mediator.Send(new SelectListParentCategoryQuery());
             productVm.OptionsDataSources.BrandSelectList = await Mediator.Send(new SelectListBrandQuery());
             productVm.OptionsDataSources.CompanySelectList = await Mediator.Send(new SelectListCompanyQuery());
-            productVm.OptionsDataSources.TaxSelectList = await Mediator.Send(new SelectListVatTaxQuery());
+            productVm.OptionsDataSources.VatTaxSelectList = await Mediator.Send(new SelectListVatTaxQuery());
 
             return Ok(productVm);
         }

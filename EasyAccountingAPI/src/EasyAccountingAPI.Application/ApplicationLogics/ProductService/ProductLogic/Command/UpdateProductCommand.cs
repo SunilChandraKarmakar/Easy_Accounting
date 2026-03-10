@@ -7,17 +7,20 @@
             private readonly IHttpContextAccessor _httpContextAccessor;
             private readonly IUnitOfWorkRepository _unitOfWorkRepository;
             private readonly IProductRepository _productRepository;
+            private readonly IProductInventoryRepository _productInventoryRepository;
             private readonly IMapper _mapper;
 
             public Handler(
                 IHttpContextAccessor httpContextAccessor,
                 IUnitOfWorkRepository unitOfWorkRepository,
                 IProductRepository productRepository,
+                IProductInventoryRepository productInventoryRepository,
                 IMapper mapper)
             {
                 _httpContextAccessor = httpContextAccessor;
                 _unitOfWorkRepository = unitOfWorkRepository;
                 _productRepository = productRepository;
+                _productInventoryRepository = productInventoryRepository;
                 _mapper = mapper;
             }
 
@@ -38,6 +41,18 @@
 
                 try
                 {
+                    // If the request indicates no product inventory but the product currently has inventories,
+                    // delete those dependent entities to avoid leaving orphaned/invalid relationships.
+                    if (!request.HaveProductInventory && getProduct.ProductInventories != null && getProduct.ProductInventories.Any())
+                    {
+                        // Copy to list to avoid modifying collection during enumeration
+                        var existingInventories = getProduct.ProductInventories.ToList();
+                        foreach (var inv in existingInventories)
+                        {
+                            _productInventoryRepository.Delete(inv);
+                        }
+                    }
+
                     _mapper.Map((ProductUpdateModel)request, getProduct);
                     getProduct.UpdatedById = userId;
                     getProduct.UpdatedDateTime = DateTime.UtcNow;

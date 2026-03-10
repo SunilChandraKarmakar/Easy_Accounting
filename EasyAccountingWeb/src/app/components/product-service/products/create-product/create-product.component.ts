@@ -108,9 +108,12 @@ export class CreateProductComponent implements OnInit {
       || this.productCreateModel.productUnitId <= 0) {
         this.toastrService.warning("Please, select product unit.", "Warning");
         return false;
+    } else if(this.parentCategoryId == undefined || this.parentCategoryId == null || this.parentCategoryId <= 0) {
+        this.toastrService.warning("Please, select category.", "Warning");
+        return false;
     } else if(this.productCreateModel.categoryId == undefined || this.productCreateModel.categoryId == null 
       || this.productCreateModel.categoryId <= 0) {
-        this.toastrService.warning("Please, select category.", "Warning");
+        this.toastrService.warning("Please, select sub category.", "Warning");
         return false;
     } else if(this.productCreateModel.brandId == undefined || this.productCreateModel.brandId == null 
       || this.productCreateModel.brandId <= 0) {

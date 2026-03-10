@@ -3780,6 +3780,11 @@
             "type": "integer",
             "format": "int32"
           },
+          "parentCategoryId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "categoryId": {
             "type": "integer",
             "format": "int32"
@@ -4394,6 +4399,9 @@
           "companyName": {
             "type": "string",
             "nullable": true
+          },
+          "employeeRoleName": {
+            "type": "string"
           }
         }
       },

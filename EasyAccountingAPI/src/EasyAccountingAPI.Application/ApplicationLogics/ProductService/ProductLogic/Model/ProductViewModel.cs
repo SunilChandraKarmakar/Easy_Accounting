@@ -28,7 +28,7 @@ namespace EasyAccountingAPI.Application.ApplicationLogics.ProductService.Product
         public void Mapping(Profile profile)
         {
             profile.CreateMap<ProductCreateModel, Product>()
-                .ForMember(d => d.ProductInventories, s => s.MapFrom(m => m.ProductInventory == null ? Enumerable.Empty<ProductInventoryCreateModel>() : new[] { m.ProductInventory }));
+                .ForMember(d => d.ProductInventories, s => s.MapFrom(m => m.HaveProductInventory && m.ProductInventory != null ? new[] { m.ProductInventory } : Enumerable.Empty<ProductInventoryCreateModel>()));
         }
     }
 
@@ -38,6 +38,7 @@ namespace EasyAccountingAPI.Application.ApplicationLogics.ProductService.Product
         public string Name { get; set; }
         public string Code { get; set; }
         public int ProductUnitId { get; set; }
+        [NotMapped] public int? ParentCategoryId { get; set; }
         public int CategoryId { get; set; }
         public int BrandId { get; set; }
         public int CompanyId { get; set; }
@@ -53,9 +54,38 @@ namespace EasyAccountingAPI.Application.ApplicationLogics.ProductService.Product
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Product, ProductUpdateModel>()
-                .ForMember(d => d.ProductInventory, s => s.MapFrom(m => m.ProductInventories.FirstOrDefault()));
+                .ForMember(d => d.ProductInventory, s => s.MapFrom(m => m.HaveProductInventory ? m.ProductInventories.FirstOrDefault() : new ProductInventory()))
+                .ForMember(d => d.ParentCategoryId, s => s.MapFrom(m => m.Category.ParentId ?? null));
             profile.CreateMap<ProductUpdateModel, Product>()
-                .ForMember(d => d.ProductInventories, s => s.MapFrom(m => m.ProductInventory == null ? Enumerable.Empty<ProductInventoryUpdateModel>() : new[] { m.ProductInventory }));
+                // Prevent AutoMapper from replacing the destination collection. We'll merge in AfterMap.
+                .ForMember(d => d.ProductInventories, opt =>
+                {
+                    opt.UseDestinationValue();
+                    // Skip default mapping when there's no inventory in source so we don't clear the tracked collection.
+                    opt.PreCondition(src => src.HaveProductInventory && src.ProductInventory != null);
+                    opt.Ignore();
+                })
+                .AfterMap((src, dest, ctx) =>
+                {
+                    // If source indicates it has inventory, map/merge into the existing collection on the tracked entity.
+                    if (src.HaveProductInventory && src.ProductInventory != null)
+                    {
+                        dest.ProductInventories ??= new List<ProductInventory>();
+                        var existing = dest.ProductInventories.FirstOrDefault();
+                        if (existing != null)
+                        {
+                            // Map update model onto existing tracked entity to avoid severing relationship
+                            ctx.Mapper.Map(src.ProductInventory, existing);
+                        }
+                        else
+                        {
+                            // Create new entity from update model and add to the tracked collection
+                            var newInv = ctx.Mapper.Map<ProductInventory>(src.ProductInventory);
+                            dest.ProductInventories.Add(newInv);
+                        }
+                    }
+                    // If source does not have inventory, do not modify the existing collection here to avoid EF delete issues.
+                });
         }
     }
 
@@ -86,7 +116,7 @@ namespace EasyAccountingAPI.Application.ApplicationLogics.ProductService.Product
                 .ForMember(d => d.BrandName, s => s.MapFrom(m => m.Brand.Name))
                 .ForMember(d => d.CompanyName, s => s.MapFrom(m => m.Company.Name))
                 .ForMember(d => d.VatTaxName, s => s.MapFrom(m => m.VatTax != null ? m.VatTax.TaxName : null))
-                .ForMember(d => d.ProductInventory, s => s.MapFrom(m => m.ProductInventories.FirstOrDefault()));
+                .ForMember(d => d.ProductInventory, s => s.MapFrom(m => m.HaveProductInventory ? m.ProductInventories.FirstOrDefault() : null));
         }
     }
 }

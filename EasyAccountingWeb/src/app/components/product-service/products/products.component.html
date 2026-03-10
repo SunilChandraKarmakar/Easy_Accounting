@@ -48,8 +48,23 @@
                     <td>{{ data.brandName }}</td>
                     <td>{{ data.companyName }}</td>
                     <td>
-                      <span>Cost: <nz-tag nzColor="blue">{{ data.costPrice }}</nz-tag></span> <br>
-                      <span>Sell: <nz-tag nzColor="blue">{{ data.sellPrice }}</nz-tag></span>
+                      <div class="price-container">
+                        <div class="price-item cost-price-item">
+                          <div class="price-label">
+                            <nz-icon nzType="tag" nzTheme="outline" class="price-icon"></nz-icon>
+                            <span>Cost</span>
+                          </div>
+                          <div class="price-value">{{ data.costPrice | currency }}</div>
+                        </div>
+                        <div class="price-divider"></div>
+                        <div class="price-item sell-price-item">
+                          <div class="price-label">
+                            <nz-icon nzType="dollar" nzTheme="outline" class="price-icon"></nz-icon>
+                            <span>Sell</span>
+                          </div>
+                          <div class="price-value">{{ data.sellPrice | currency }}</div>
+                        </div>
+                      </div>
                     </td>
                     <td class="text-center action-cell">
                       <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Edit" class="action-btn edit-btn"
