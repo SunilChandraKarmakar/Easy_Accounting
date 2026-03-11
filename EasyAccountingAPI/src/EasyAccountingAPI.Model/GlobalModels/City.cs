@@ -6,6 +6,7 @@
         public City()
         {
             Companies = new HashSet<Company>();
+            VendorAddresses = new HashSet<VendorAddress>();
         }
 
         public int Id { get; set; }
@@ -24,5 +25,6 @@
 
         public Country Country { get; set; }
         public ICollection<Company> Companies { get; set; }
+        public ICollection<VendorAddress> VendorAddresses { get; set; }
     }
 }

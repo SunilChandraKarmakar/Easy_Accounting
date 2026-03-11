@@ -13,6 +13,7 @@
             Variations = new HashSet<Variation>();
             StorageLocations = new HashSet<StorageLocation>();
             Products = new HashSet<Product>();
+            Vendors = new HashSet<Vendor>();
         }
 
         public int Id { get; set; }
@@ -58,5 +59,6 @@
         public ICollection<Variation> Variations { get; set; }
         public ICollection<StorageLocation> StorageLocations { get; set; }
         public ICollection<Product> Products { get; set; }
+        public ICollection<Vendor> Vendors { get; set; }
     }
 }

@@ -8,3 +8,4 @@ global using EasyAccountingAPI.Model.MasterSettings;
 global using EasyAccountingAPI.Model.MasterSettings.AccessControl;
 global using EasyAccountingAPI.Model.ProductService;
 global using EasyAccountingAPI.Model.Purchase;
+global using EasyAccountingAPI.Model.MasterSettings.VendorInformation;

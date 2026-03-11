@@ -7,6 +7,7 @@
         {
             Cities = new HashSet<City>();
             Companies = new HashSet<Company>();
+            VendorAddresses = new HashSet<VendorAddress>();
         }
 
         public int Id { get; set; }
@@ -27,5 +28,6 @@
 
         public ICollection<City> Cities { get; set; } 
         public ICollection<Company> Companies { get; set; }
+        public ICollection<VendorAddress> VendorAddresses { get; set; }
     }
 }

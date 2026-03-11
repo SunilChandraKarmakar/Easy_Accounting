@@ -29,6 +29,8 @@
         public DbSet<EmployeeFeatureAction> EmployeeFeatureActions { get; set; }
         public DbSet<VatTax> VatTaxes { get; set; }
         public DbSet<ProductUnit> ProductUnits { get; set; }
+        public DbSet<Vendor> Vendors { get; set; }
+        public DbSet<VendorAddress> VendorAddresses { get; set; }
         #endregion
 
         #region Product & Service
