@@ -128,3 +128,57 @@
   height: 36px;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
 }
+
+/* new product details column styling */
+.product-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.product-image img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* round card wrapper */
+.image-card {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.image-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.no-image-link {
+  font-size: 11px;
+  color: #1890ff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.product-meta h6 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.product-meta p {
+  margin: 0;
+}
+
+.product-meta .badge {
+  margin-right: 4px;
+  font-size: 11px;
+}
