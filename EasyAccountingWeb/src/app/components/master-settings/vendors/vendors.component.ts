@@ -9,16 +9,15 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
-import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { FilterPageModel, FilterPageResultModelOfProductGridModel, ProductGridModel, ProductService } from '../../../../api/base-api';
-import { ToastrService } from 'ngx-toastr';
 import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { FilterPageModel, FilterPageResultModelOfVendorGridModel, VendorGridModel, VendorService } from '../../../../api/base-api';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-products',
-  templateUrl: './products.component.html',
-  styleUrls: ['./products.component.css'],
+  selector: 'app-vendors',
+  templateUrl: './vendors.component.html',
+  styleUrls: ['./vendors.component.css'],
   standalone: true,
   imports: [
     CommonModule, 
@@ -32,23 +31,22 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
     NzIconModule, 
     NzBreadCrumbModule, 
     NzPopconfirmModule,
-    NzTagModule,
-    NzBadgeModule
+    NzTagModule
   ],
-  providers: [ProductService]
+  providers: [VendorService]
 })
 
-export class ProductsComponent implements OnInit {
+export class VendorsComponent implements OnInit {
 
   // Table property
-  products: ProductGridModel[] = [];
+  vendors: VendorGridModel[] = [];
   totalRecord: number = 0;
 
   // Filter page model
   filterPageModel: FilterPageModel = new FilterPageModel();
-  
+
   constructor(
-    private productService: ProductService, 
+    private vendorService: VendorService, 
     private spinnerService: NgxSpinnerService, 
     private toastrService: ToastrService) { }
 
@@ -56,29 +54,29 @@ export class ProductsComponent implements OnInit {
     // Initialize page filter model
     this.initializeFilterModel();
 
-    // Get products
-    this.getProducts();
+    // Get vendors
+    this.getVendors();
   }
 
   // Initialize filter model
   private initializeFilterModel(): void {
     this.filterPageModel.pageIndex = 0;
     this.filterPageModel.pageSize = 10;
-    this.filterPageModel.sortColumn = "name";
+    this.filterPageModel.sortColumn = "business";
     this.filterPageModel.sortOrder = "ascend"
     this.filterPageModel.filterValue = "";
   }
 
-  // Get products
-  private getProducts(): void {
+  // Get vendors
+  private getVendors(): void {
     this.spinnerService.show();
 
     // Clear before loading 
-    this.products = [];
+    this.vendors = [];
     this.totalRecord = 0;
 
-    this.productService.getFilterProducts(this.filterPageModel).subscribe((result: FilterPageResultModelOfProductGridModel) => {
-      this.products = result.items || [];
+    this.vendorService.getFilterVendors(this.filterPageModel).subscribe((result: FilterPageResultModelOfVendorGridModel) => {
+      this.vendors = result.items || [];
       this.totalRecord = result.totalCount || 0;
       this.spinnerService.hide();
       return;
@@ -87,10 +85,10 @@ export class ProductsComponent implements OnInit {
       this.spinnerService.hide();
 
       // Keep cleared state on error
-      this.products = [];
+      this.vendors = [];
       this.totalRecord = 0;
 
-      this.toastrService.error("Product list is not show at this time! Please, try again.", "Error");
+      this.toastrService.error("Vendor list is not show at this time! Please, try again.", "Error");
       return;
     });
   }
@@ -100,8 +98,8 @@ export class ProductsComponent implements OnInit {
     this.filterPageModel.filterValue = filterValue;
     this.filterPageModel.pageIndex = 0;
 
-    // Get products
-    this.getProducts();
+    // Get vendors
+    this.getVendors();
   }
 
   // Table query params
@@ -118,37 +116,37 @@ export class ProductsComponent implements OnInit {
       });
     }
 
-    // Get products
-    this.getProducts();
+    // Get vendors
+    this.getVendors();
   }
 
-  // On click open delete product
-  onClickDelete(productId: string | undefined): void {
-    this.deleteProduct(productId);
+  // On click open delete vendor
+  onClickDelete(vendorId: string | undefined): void {
+    this.deleteVendor(vendorId);
   }
 
-  // Delete product
-  private deleteProduct(productId: string | undefined): void {
-    if(productId == null || productId == undefined) {
-      this.toastrService.error("Product is not found. Please, try again.", "Error");
+  // Delete vendor
+  private deleteVendor(vendorId: string | undefined): void {
+    if(vendorId == null || vendorId == undefined) {
+      this.toastrService.error("Vendor is not found. Please, try again.", "Error");
       return;
     }
 
     this.spinnerService.show();
-    this.productService.delete(productId).subscribe((result: boolean) => {
+    this.vendorService.delete(vendorId).subscribe((result: boolean) => {
       this.spinnerService.hide();
       if(result) {
-        this.toastrService.success("Product deleted successfully.", "Success"); 
-        this.getProducts();
+        this.toastrService.success("Vendor deleted successfully.", "Success"); 
+        this.getVendors();
       } else {
-        this.toastrService.error("Product is not deleted. Please, try again.", "Error");
+        this.toastrService.error("Vendor is not deleted. Please, try again.", "Error");
       }
 
       return;
     },
     (error: any) => {
       this.spinnerService.hide();
-      this.toastrService.error("Product is not deleted. Please, try again.", "Error");
+      this.toastrService.error("Vendor is not deleted. Please, try again.", "Error");
       return;
     });
   }

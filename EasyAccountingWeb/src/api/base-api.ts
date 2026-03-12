@@ -10278,6 +10278,8 @@ export class VendorGridModel implements IVendorGridModel {
     businessName?: string;
     fullName?: string;
     email?: string;
+    phone?: string | undefined;
+    image?: string | undefined;
     companyName?: string;
     vendorAddress?: VendorAddressGridModel;
 
@@ -10296,6 +10298,8 @@ export class VendorGridModel implements IVendorGridModel {
             this.businessName = _data["businessName"];
             this.fullName = _data["fullName"];
             this.email = _data["email"];
+            this.phone = _data["phone"];
+            this.image = _data["image"];
             this.companyName = _data["companyName"];
             this.vendorAddress = _data["vendorAddress"] ? VendorAddressGridModel.fromJS(_data["vendorAddress"]) : undefined as any;
         }
@@ -10314,6 +10318,8 @@ export class VendorGridModel implements IVendorGridModel {
         data["businessName"] = this.businessName;
         data["fullName"] = this.fullName;
         data["email"] = this.email;
+        data["phone"] = this.phone;
+        data["image"] = this.image;
         data["companyName"] = this.companyName;
         data["vendorAddress"] = this.vendorAddress ? this.vendorAddress.toJSON() : undefined as any;
         return data;
@@ -10325,6 +10331,8 @@ export interface IVendorGridModel {
     businessName?: string;
     fullName?: string;
     email?: string;
+    phone?: string | undefined;
+    image?: string | undefined;
     companyName?: string;
     vendorAddress?: VendorAddressGridModel;
 }
@@ -10473,6 +10481,8 @@ export class VendorCreateModel implements IVendorCreateModel {
     fullName!: string;
     email!: string;
     companyId!: number;
+    phone?: string | undefined;
+    image?: string | undefined;
     vendorAddress?: VendorAddressCreateModel;
 
     constructor(data?: IVendorCreateModel) {
@@ -10490,6 +10500,8 @@ export class VendorCreateModel implements IVendorCreateModel {
             this.fullName = _data["fullName"];
             this.email = _data["email"];
             this.companyId = _data["companyId"];
+            this.phone = _data["phone"];
+            this.image = _data["image"];
             this.vendorAddress = _data["vendorAddress"] ? VendorAddressCreateModel.fromJS(_data["vendorAddress"]) : undefined as any;
         }
     }
@@ -10507,6 +10519,8 @@ export class VendorCreateModel implements IVendorCreateModel {
         data["fullName"] = this.fullName;
         data["email"] = this.email;
         data["companyId"] = this.companyId;
+        data["phone"] = this.phone;
+        data["image"] = this.image;
         data["vendorAddress"] = this.vendorAddress ? this.vendorAddress.toJSON() : undefined as any;
         return data;
     }
@@ -10517,6 +10531,8 @@ export interface IVendorCreateModel {
     fullName: string;
     email: string;
     companyId: number;
+    phone?: string | undefined;
+    image?: string | undefined;
     vendorAddress?: VendorAddressCreateModel;
 }
 
@@ -10586,6 +10602,8 @@ export class VendorUpdateModel implements IVendorUpdateModel {
     fullName!: string;
     email!: string;
     companyId!: number;
+    phone?: string | undefined;
+    image?: string | undefined;
     vendorAddress?: VendorAddressUpdateModel;
 
     constructor(data?: IVendorUpdateModel) {
@@ -10604,6 +10622,8 @@ export class VendorUpdateModel implements IVendorUpdateModel {
             this.fullName = _data["fullName"];
             this.email = _data["email"];
             this.companyId = _data["companyId"];
+            this.phone = _data["phone"];
+            this.image = _data["image"];
             this.vendorAddress = _data["vendorAddress"] ? VendorAddressUpdateModel.fromJS(_data["vendorAddress"]) : undefined as any;
         }
     }
@@ -10622,6 +10642,8 @@ export class VendorUpdateModel implements IVendorUpdateModel {
         data["fullName"] = this.fullName;
         data["email"] = this.email;
         data["companyId"] = this.companyId;
+        data["phone"] = this.phone;
+        data["image"] = this.image;
         data["vendorAddress"] = this.vendorAddress ? this.vendorAddress.toJSON() : undefined as any;
         return data;
     }
@@ -10633,6 +10655,8 @@ export interface IVendorUpdateModel {
     fullName: string;
     email: string;
     companyId: number;
+    phone?: string | undefined;
+    image?: string | undefined;
     vendorAddress?: VendorAddressUpdateModel;
 }
 

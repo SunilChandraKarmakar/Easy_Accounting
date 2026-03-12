@@ -5264,6 +5264,14 @@
           "email": {
             "type": "string"
           },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          },
           "companyName": {
             "type": "string"
           },
@@ -5363,6 +5371,14 @@
             "type": "integer",
             "format": "int32"
           },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          },
           "vendorAddress": {
             "$ref": "#/components/schemas/VendorAddressCreateModel"
           }
@@ -5441,6 +5457,14 @@
           "companyId": {
             "type": "integer",
             "format": "int32"
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
           },
           "vendorAddress": {
             "$ref": "#/components/schemas/VendorAddressUpdateModel"

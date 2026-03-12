@@ -58,6 +58,9 @@ import { UpdateStorageLocationComponent } from './components/purchase/storage-lo
 import { ProductsComponent } from './components/product-service/products/products.component';
 import { CreateProductComponent } from './components/product-service/products/create-product/create-product.component';
 import { UpdateProductComponent } from './components/product-service/products/update-product/update-product.component';
+import { CreateVendorComponent } from './components/master-settings/vendors/create-vendor/create-vendor.component';
+import { UpdateVendorComponent } from './components/master-settings/vendors/update-vendor/update-vendor.component';
+import { VendorsComponent } from './components/master-settings/vendors/vendors.component';
 
 export const routes: Routes = [
 
@@ -160,7 +163,12 @@ export const routes: Routes = [
       // Product
       { path: "products", component: ProductsComponent, pathMatch: "full" },
       { path: "product/create", component: CreateProductComponent, pathMatch: "full" },
-      { path: "product/update/:recordId", component: UpdateProductComponent, pathMatch: "full" }
+      { path: "product/update/:recordId", component: UpdateProductComponent, pathMatch: "full" },
+
+      // Vendor
+      { path: "vendors", component: VendorsComponent, pathMatch: "full" },
+      { path: "vendor/create", component: CreateVendorComponent, pathMatch: "full" },
+      { path: "vendor/update/:recordId", component: UpdateVendorComponent, pathMatch: "full" }
     ],
     
     canActivate: [AuthGuard] 

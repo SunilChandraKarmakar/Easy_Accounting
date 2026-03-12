@@ -26,6 +26,9 @@
         [Required(ErrorMessage = "Company is required.")]
         public int CompanyId { get; set; }
 
+        public string? Phone { get; set; }
+        public string? Image { get; set; }
+
         public VendorAddressCreateModel VendorAddress { get; set; }
 
         public void Mapping(Profile profile)
@@ -55,6 +58,9 @@
         [Required(ErrorMessage = "Company is required.")]
         public int CompanyId { get; set; }
 
+        public string? Phone { get; set; }
+        public string? Image { get; set; }
+
         public VendorAddressUpdateModel VendorAddress { get; set; }
 
         public void Mapping(Profile profile)
@@ -73,6 +79,8 @@
         public string BusinessName { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
+        public string? Phone { get; set; }
+        public string? Image { get; set; }
         public string CompanyName { get; set; }
 
         public VendorAddressGridModel VendorAddress { get; set; }

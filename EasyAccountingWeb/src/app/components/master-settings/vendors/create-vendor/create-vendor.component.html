@@ -1,0 +1,148 @@
+<nz-breadcrumb>
+  <nz-breadcrumb-item>Settings</nz-breadcrumb-item>
+    <nz-breadcrumb-item><a routerLink="/app/vendors" class="breadcrumb-link">Vendor</a></nz-breadcrumb-item>
+  <nz-breadcrumb-item>Create Vendor</nz-breadcrumb-item>
+</nz-breadcrumb>
+<div class="row mt-3">
+  <div class="col-md-12">
+    <div class="card shadow-lg">
+      <div class="card-header">
+        <h5 class="card-title text-center">Create Vendor</h5>
+      </div>
+      <div class="card-body">
+        <form class="row g-3" autocomplete="off">
+          <div class="col-md-3">
+            <label for="businessName" class="form-label">Business Name <span class="text-danger fw-bold">*</span></label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="shopping" />
+              <input nz-input placeholder="Enter business name" nzSize="default" id="businessName" name="businessName"
+                [(ngModel)]="vendorCreateModel.businessName" />
+            </nz-input-wrapper>
+          </div>
+          <div class="col-md-3">
+            <label for="fullName" class="form-label">Full Name <span class="text-danger fw-bold">*</span></label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="user" />
+              <input nz-input placeholder="Enter full name" nzSize="default" id="fullName" name="fullName"
+                [(ngModel)]="vendorCreateModel.fullName" />
+            </nz-input-wrapper>
+          </div>
+          <div class="col-md-3">
+            <div class="icon-upload-align">
+              <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76" [nzHeaders]="{ authorization: 'authorization-text' }"
+                (nzChange)="handleChange($event)">
+                <button nz-button>
+                  <nz-icon nzType="upload" />
+                  Click to Upload Image
+                </button>
+              </nz-upload>
+            </div>
+          </div>    
+          <div class="col-md-3">
+            <label for="email" class="form-label">Email <span class="text-danger fw-bold">*</span></label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="mail" />
+              <input nz-input placeholder="Enter email address" nzSize="default" id="email" name="email"
+                [(ngModel)]="vendorCreateModel.email" />
+            </nz-input-wrapper>
+          </div>
+          <div class="col-md-3">
+            <label for="phone" class="form-label">Phone <span class="text-danger fw-bold">*</span></label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="phone" />
+              <input nz-input placeholder="Enter phone number" nzSize="default" id="phone" name="phone"
+                [(ngModel)]="vendorCreateModel.phone" />
+            </nz-input-wrapper>
+          </div>
+          <div class="col-md-3">
+            <label for="companyId" class="form-label">Company <span class="text-danger fw-bold">*</span></label>
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Company"
+              [(ngModel)]="vendorCreateModel.companyId" name="companyId" style="width: 100%;">
+                @for (company of companies; track company.id) {
+                  <nz-option [nzValue]="company.id" [nzLabel]="company.name!"></nz-option>
+                }
+              </nz-select>
+          </div>
+        </form>
+        <form class="row g-3 mt-3" autocomplete="off">
+          <nz-divider nzDashed [nzText]="text" nzOrientation="left" >
+            <ng-template #text>
+              <nz-icon nzType="plus" />
+              Vendor Address
+            </ng-template>              
+          </nz-divider>   
+          <div class="col-md-3">
+            <label for="fax" class="form-label">Fax</label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="printer"/>
+              <input nz-input placeholder="Enter fax number" nzSize="default" id="fax" name="fax"
+                [(ngModel)]="vendorCreateModel.vendorAddress!.fax" />
+            </nz-input-wrapper>
+          </div>
+          <div class="col-md-3">
+            <label for="website" class="form-label">Website</label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="global"/>
+              <input nz-input placeholder="Enter website" nzSize="default" id="website" name="website"
+                [(ngModel)]="vendorCreateModel.vendorAddress!.website" />
+            </nz-input-wrapper>
+          </div>
+          <div class="col-md-3">
+            <label for="zip" class="form-label">Zip</label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="number"/>
+              <input nz-input placeholder="Enter zip code" nzSize="default" id="zip" name="zip"
+                [(ngModel)]="vendorCreateModel.vendorAddress!.zip" />
+            </nz-input-wrapper>
+          </div>
+          <div class="col-md-3">
+            <label for="countryId" class="form-label">Country <span class="text-danger fw-bold">*</span></label>
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Country" 
+              (ngModelChange)="onChangeCountry(vendorCreateModel.vendorAddress!.countryId)"
+              [(ngModel)]="vendorCreateModel.vendorAddress!.countryId" id="countryId" name="countryId" style="width: 100%;">
+                @for (country of countries; track country.id) {
+                  <nz-option [nzValue]="country.id" [nzLabel]="country.name!"></nz-option>
+                }
+              </nz-select>
+          </div>
+          <div class="col-md-3">
+            <label for="cityId" class="form-label">City <span class="text-danger fw-bold">*</span></label>
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a City"
+              [(ngModel)]="vendorCreateModel.vendorAddress!.cityId" name="cityId" style="width: 100%;">
+                @for (city of cities; track city.id) {
+                  <nz-option [nzValue]="city.id" [nzLabel]="city.name!"></nz-option>
+                }
+              </nz-select>
+          </div>
+          <div class="col-md-3">
+            <label for="notes" class="form-label">Notes</label>
+            <nz-textarea-count [nzMaxCharacterCount]="500">
+              <textarea rows="4" id="notes" name="notes" placeholder="Enter your note" 
+                [(ngModel)]="vendorCreateModel.vendorAddress!.notes" nz-input></textarea>
+            </nz-textarea-count>
+          </div>
+          <div class="col-md-6">
+            <label for="address" class="form-label">Address <span class="text-danger fw-bold">*</span></label>
+            <nz-textarea-count [nzMaxCharacterCount]="500">
+              <textarea rows="4" id="address" name="address" placeholder="Enter full address" 
+                [(ngModel)]="vendorCreateModel.vendorAddress!.address" nz-input></textarea>
+            </nz-textarea-count>
+          </div>
+        </form>
+      </div>
+      <div class="card-footer text-end">
+        <button nz-button nzType="primary" class="btn-save" (click)="onClickSaveVendor()">
+          <nz-icon nzType="save" nzTheme="outline" />
+          Save
+        </button>
+        <button nz-button nzType="primary" class="btn-cancel" routerLink="/app/vendors">
+          <nz-icon nzType="close" nzTheme="outline" />
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
