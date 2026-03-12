@@ -5490,6 +5490,287 @@ export class VatTaxService implements IVatTaxService {
     }
 }
 
+export interface IVendorService {
+    create(createVendorCommand: CreateVendorCommand): Observable<boolean>;
+    delete(id: string): Observable<boolean>;
+    getById(id: string): Observable<VendorViewModel>;
+    getFilterVendors(getVendorsByFilterQuery: GetVendorsByFilterQuery): Observable<FilterPageResultModelOfVendorGridModel>;
+    update(updateVendorCommand: UpdateVendorCommand): Observable<boolean>;
+}
+
+@Injectable()
+export class VendorService implements IVendorService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    create(createVendorCommand: CreateVendorCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Vendor/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(createVendorCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(id: string): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Vendor/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getById(id: string): Observable<VendorViewModel> {
+        let url_ = this.baseUrl + "/api/Vendor/GetById/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<VendorViewModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<VendorViewModel>;
+        }));
+    }
+
+    protected processGetById(response: HttpResponseBase): Observable<VendorViewModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = VendorViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getFilterVendors(getVendorsByFilterQuery: GetVendorsByFilterQuery): Observable<FilterPageResultModelOfVendorGridModel> {
+        let url_ = this.baseUrl + "/api/Vendor/GetFilterVendors";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(getVendorsByFilterQuery);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFilterVendors(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFilterVendors(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FilterPageResultModelOfVendorGridModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FilterPageResultModelOfVendorGridModel>;
+        }));
+    }
+
+    protected processGetFilterVendors(response: HttpResponseBase): Observable<FilterPageResultModelOfVendorGridModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FilterPageResultModelOfVendorGridModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(updateVendorCommand: UpdateVendorCommand): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Vendor/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(updateVendorCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export class FilterPageResultModelOfStorageLocationGridModel implements IFilterPageResultModelOfStorageLocationGridModel {
     items?: StorageLocationGridModel[];
     totalCount?: number;
@@ -9942,6 +10223,535 @@ export class UpdateVatTaxCommand extends VatTaxUpdateModel implements IUpdateVat
 }
 
 export interface IUpdateVatTaxCommand extends IVatTaxUpdateModel {
+}
+
+export class FilterPageResultModelOfVendorGridModel implements IFilterPageResultModelOfVendorGridModel {
+    items?: VendorGridModel[];
+    totalCount?: number;
+
+    constructor(data?: IFilterPageResultModelOfVendorGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(VendorGridModel.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): FilterPageResultModelOfVendorGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FilterPageResultModelOfVendorGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item ? item.toJSON() : undefined as any);
+        }
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+}
+
+export interface IFilterPageResultModelOfVendorGridModel {
+    items?: VendorGridModel[];
+    totalCount?: number;
+}
+
+export class VendorGridModel implements IVendorGridModel {
+    id?: string;
+    businessName?: string;
+    fullName?: string;
+    email?: string;
+    companyName?: string;
+    vendorAddress?: VendorAddressGridModel;
+
+    constructor(data?: IVendorGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.businessName = _data["businessName"];
+            this.fullName = _data["fullName"];
+            this.email = _data["email"];
+            this.companyName = _data["companyName"];
+            this.vendorAddress = _data["vendorAddress"] ? VendorAddressGridModel.fromJS(_data["vendorAddress"]) : undefined as any;
+        }
+    }
+
+    static fromJS(data: any): VendorGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new VendorGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["businessName"] = this.businessName;
+        data["fullName"] = this.fullName;
+        data["email"] = this.email;
+        data["companyName"] = this.companyName;
+        data["vendorAddress"] = this.vendorAddress ? this.vendorAddress.toJSON() : undefined as any;
+        return data;
+    }
+}
+
+export interface IVendorGridModel {
+    id?: string;
+    businessName?: string;
+    fullName?: string;
+    email?: string;
+    companyName?: string;
+    vendorAddress?: VendorAddressGridModel;
+}
+
+export class VendorAddressGridModel implements IVendorAddressGridModel {
+    id?: string;
+    address?: string;
+    fax?: string | undefined;
+    zip?: string | undefined;
+    website?: string | undefined;
+    notes?: string | undefined;
+    cityName?: string;
+    countryName?: string;
+
+    constructor(data?: IVendorAddressGridModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.address = _data["address"];
+            this.fax = _data["fax"];
+            this.zip = _data["zip"];
+            this.website = _data["website"];
+            this.notes = _data["notes"];
+            this.cityName = _data["cityName"];
+            this.countryName = _data["countryName"];
+        }
+    }
+
+    static fromJS(data: any): VendorAddressGridModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new VendorAddressGridModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["address"] = this.address;
+        data["fax"] = this.fax;
+        data["zip"] = this.zip;
+        data["website"] = this.website;
+        data["notes"] = this.notes;
+        data["cityName"] = this.cityName;
+        data["countryName"] = this.countryName;
+        return data;
+    }
+}
+
+export interface IVendorAddressGridModel {
+    id?: string;
+    address?: string;
+    fax?: string | undefined;
+    zip?: string | undefined;
+    website?: string | undefined;
+    notes?: string | undefined;
+    cityName?: string;
+    countryName?: string;
+}
+
+export class GetVendorsByFilterQuery extends FilterPageModel implements IGetVendorsByFilterQuery {
+
+    constructor(data?: IGetVendorsByFilterQuery) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): GetVendorsByFilterQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetVendorsByFilterQuery();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IGetVendorsByFilterQuery extends IFilterPageModel {
+}
+
+export class VendorViewModel implements IVendorViewModel {
+    createModel?: VendorCreateModel;
+    updateModel?: VendorUpdateModel;
+    gridModel?: VendorGridModel;
+    optionsDataSources?: any;
+
+    constructor(data?: IVendorViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.createModel = _data["createModel"] ? VendorCreateModel.fromJS(_data["createModel"]) : undefined as any;
+            this.updateModel = _data["updateModel"] ? VendorUpdateModel.fromJS(_data["updateModel"]) : undefined as any;
+            this.gridModel = _data["gridModel"] ? VendorGridModel.fromJS(_data["gridModel"]) : undefined as any;
+            this.optionsDataSources = _data["optionsDataSources"];
+        }
+    }
+
+    static fromJS(data: any): VendorViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new VendorViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["createModel"] = this.createModel ? this.createModel.toJSON() : undefined as any;
+        data["updateModel"] = this.updateModel ? this.updateModel.toJSON() : undefined as any;
+        data["gridModel"] = this.gridModel ? this.gridModel.toJSON() : undefined as any;
+        data["optionsDataSources"] = this.optionsDataSources;
+        return data;
+    }
+}
+
+export interface IVendorViewModel {
+    createModel?: VendorCreateModel;
+    updateModel?: VendorUpdateModel;
+    gridModel?: VendorGridModel;
+    optionsDataSources?: any;
+}
+
+export class VendorCreateModel implements IVendorCreateModel {
+    businessName!: string;
+    fullName!: string;
+    email!: string;
+    companyId!: number;
+    vendorAddress?: VendorAddressCreateModel;
+
+    constructor(data?: IVendorCreateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.businessName = _data["businessName"];
+            this.fullName = _data["fullName"];
+            this.email = _data["email"];
+            this.companyId = _data["companyId"];
+            this.vendorAddress = _data["vendorAddress"] ? VendorAddressCreateModel.fromJS(_data["vendorAddress"]) : undefined as any;
+        }
+    }
+
+    static fromJS(data: any): VendorCreateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new VendorCreateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["businessName"] = this.businessName;
+        data["fullName"] = this.fullName;
+        data["email"] = this.email;
+        data["companyId"] = this.companyId;
+        data["vendorAddress"] = this.vendorAddress ? this.vendorAddress.toJSON() : undefined as any;
+        return data;
+    }
+}
+
+export interface IVendorCreateModel {
+    businessName: string;
+    fullName: string;
+    email: string;
+    companyId: number;
+    vendorAddress?: VendorAddressCreateModel;
+}
+
+export class VendorAddressCreateModel implements IVendorAddressCreateModel {
+    address!: string;
+    fax?: string | undefined;
+    zip?: string | undefined;
+    website?: string | undefined;
+    notes?: string | undefined;
+    cityId!: number;
+    countryId!: number;
+
+    constructor(data?: IVendorAddressCreateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.address = _data["address"];
+            this.fax = _data["fax"];
+            this.zip = _data["zip"];
+            this.website = _data["website"];
+            this.notes = _data["notes"];
+            this.cityId = _data["cityId"];
+            this.countryId = _data["countryId"];
+        }
+    }
+
+    static fromJS(data: any): VendorAddressCreateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new VendorAddressCreateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["address"] = this.address;
+        data["fax"] = this.fax;
+        data["zip"] = this.zip;
+        data["website"] = this.website;
+        data["notes"] = this.notes;
+        data["cityId"] = this.cityId;
+        data["countryId"] = this.countryId;
+        return data;
+    }
+}
+
+export interface IVendorAddressCreateModel {
+    address: string;
+    fax?: string | undefined;
+    zip?: string | undefined;
+    website?: string | undefined;
+    notes?: string | undefined;
+    cityId: number;
+    countryId: number;
+}
+
+export class VendorUpdateModel implements IVendorUpdateModel {
+    id?: number;
+    businessName!: string;
+    fullName!: string;
+    email!: string;
+    companyId!: number;
+    vendorAddress?: VendorAddressUpdateModel;
+
+    constructor(data?: IVendorUpdateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.businessName = _data["businessName"];
+            this.fullName = _data["fullName"];
+            this.email = _data["email"];
+            this.companyId = _data["companyId"];
+            this.vendorAddress = _data["vendorAddress"] ? VendorAddressUpdateModel.fromJS(_data["vendorAddress"]) : undefined as any;
+        }
+    }
+
+    static fromJS(data: any): VendorUpdateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new VendorUpdateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["businessName"] = this.businessName;
+        data["fullName"] = this.fullName;
+        data["email"] = this.email;
+        data["companyId"] = this.companyId;
+        data["vendorAddress"] = this.vendorAddress ? this.vendorAddress.toJSON() : undefined as any;
+        return data;
+    }
+}
+
+export interface IVendorUpdateModel {
+    id?: number;
+    businessName: string;
+    fullName: string;
+    email: string;
+    companyId: number;
+    vendorAddress?: VendorAddressUpdateModel;
+}
+
+export class VendorAddressUpdateModel implements IVendorAddressUpdateModel {
+    id?: number;
+    address!: string;
+    fax?: string | undefined;
+    zip?: string | undefined;
+    website?: string | undefined;
+    notes?: string | undefined;
+    cityId!: number;
+    countryId!: number;
+
+    constructor(data?: IVendorAddressUpdateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.address = _data["address"];
+            this.fax = _data["fax"];
+            this.zip = _data["zip"];
+            this.website = _data["website"];
+            this.notes = _data["notes"];
+            this.cityId = _data["cityId"];
+            this.countryId = _data["countryId"];
+        }
+    }
+
+    static fromJS(data: any): VendorAddressUpdateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new VendorAddressUpdateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["address"] = this.address;
+        data["fax"] = this.fax;
+        data["zip"] = this.zip;
+        data["website"] = this.website;
+        data["notes"] = this.notes;
+        data["cityId"] = this.cityId;
+        data["countryId"] = this.countryId;
+        return data;
+    }
+}
+
+export interface IVendorAddressUpdateModel {
+    id?: number;
+    address: string;
+    fax?: string | undefined;
+    zip?: string | undefined;
+    website?: string | undefined;
+    notes?: string | undefined;
+    cityId: number;
+    countryId: number;
+}
+
+export class CreateVendorCommand extends VendorCreateModel implements ICreateVendorCommand {
+
+    constructor(data?: ICreateVendorCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): CreateVendorCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateVendorCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface ICreateVendorCommand extends IVendorCreateModel {
+}
+
+export class UpdateVendorCommand extends VendorUpdateModel implements IUpdateVendorCommand {
+
+    constructor(data?: IUpdateVendorCommand) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+    }
+
+    static override fromJS(data: any): UpdateVendorCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateVendorCommand();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IUpdateVendorCommand extends IVendorUpdateModel {
 }
 
 export class FilterPageResultModelOfActionGridModel implements IFilterPageResultModelOfActionGridModel {

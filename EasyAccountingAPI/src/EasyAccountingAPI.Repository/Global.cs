@@ -19,3 +19,5 @@ global using EasyAccountingAPI.Model.ProductService;
 global using EasyAccountingAPI.Repository.Contracts.ProductService;
 global using EasyAccountingAPI.Model.Purchase;
 global using EasyAccountingAPI.Repository.Contracts.Purchase;
+global using EasyAccountingAPI.Model.MasterSettings.VendorInformation;
+global using EasyAccountingAPI.Repository.Contracts.MasterSettings.VendorInformation;

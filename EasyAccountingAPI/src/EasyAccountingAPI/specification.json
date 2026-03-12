@@ -3097,6 +3097,164 @@
           }
         }
       }
+    },
+    "/api/Vendor/Create": {
+      "post": {
+        "tags": [
+          "Vendor"
+        ],
+        "operationId": "Vendor_Create",
+        "requestBody": {
+          "x-name": "createVendorCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVendorCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Vendor/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "Vendor"
+        ],
+        "operationId": "Vendor_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Vendor/GetById/{id}": {
+      "get": {
+        "tags": [
+          "Vendor"
+        ],
+        "operationId": "Vendor_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VendorViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Vendor/GetFilterVendors": {
+      "post": {
+        "tags": [
+          "Vendor"
+        ],
+        "operationId": "Vendor_GetFilterVendors",
+        "requestBody": {
+          "x-name": "getVendorsByFilterQuery",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetVendorsByFilterQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilterPageResultModelOfVendorGridModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Vendor/Update": {
+      "put": {
+        "tags": [
+          "Vendor"
+        ],
+        "operationId": "Vendor_Update",
+        "requestBody": {
+          "x-name": "updateVendorCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVendorCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -5067,6 +5225,287 @@
         "allOf": [
           {
             "$ref": "#/components/schemas/VatTaxUpdateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "FilterPageResultModelOfVendorGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VendorGridModel"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "VendorGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "businessName": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "companyName": {
+            "type": "string"
+          },
+          "vendorAddress": {
+            "$ref": "#/components/schemas/VendorAddressGridModel"
+          }
+        }
+      },
+      "VendorAddressGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "fax": {
+            "type": "string",
+            "nullable": true
+          },
+          "zip": {
+            "type": "string",
+            "nullable": true
+          },
+          "website": {
+            "type": "string",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "cityName": {
+            "type": "string"
+          },
+          "countryName": {
+            "type": "string"
+          }
+        }
+      },
+      "GetVendorsByFilterQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FilterPageModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "VendorViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "createModel": {
+            "$ref": "#/components/schemas/VendorCreateModel"
+          },
+          "updateModel": {
+            "$ref": "#/components/schemas/VendorUpdateModel"
+          },
+          "gridModel": {
+            "$ref": "#/components/schemas/VendorGridModel"
+          },
+          "optionsDataSources": {}
+        }
+      },
+      "VendorCreateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "businessName",
+          "fullName",
+          "email",
+          "companyId"
+        ],
+        "properties": {
+          "businessName": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "fullName": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 100,
+            "minLength": 11
+          },
+          "companyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "vendorAddress": {
+            "$ref": "#/components/schemas/VendorAddressCreateModel"
+          }
+        }
+      },
+      "VendorAddressCreateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "address",
+          "cityId",
+          "countryId"
+        ],
+        "properties": {
+          "address": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 5
+          },
+          "fax": {
+            "type": "string",
+            "nullable": true
+          },
+          "zip": {
+            "type": "string",
+            "nullable": true
+          },
+          "website": {
+            "type": "string",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "cityId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "countryId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "VendorUpdateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "businessName",
+          "fullName",
+          "email",
+          "companyId"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "businessName": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 2
+          },
+          "fullName": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 100,
+            "minLength": 11
+          },
+          "companyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "vendorAddress": {
+            "$ref": "#/components/schemas/VendorAddressUpdateModel"
+          }
+        }
+      },
+      "VendorAddressUpdateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "address",
+          "cityId",
+          "countryId"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "address": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 5
+          },
+          "fax": {
+            "type": "string",
+            "nullable": true
+          },
+          "zip": {
+            "type": "string",
+            "nullable": true
+          },
+          "website": {
+            "type": "string",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "cityId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "countryId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "CreateVendorCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/VendorCreateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "UpdateVendorCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/VendorUpdateModel"
           },
           {
             "type": "object",

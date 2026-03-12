@@ -73,3 +73,6 @@ global using EasyAccountingAPI.Application.ApplicationLogics.Purchase.StorageLoc
 global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.ProductLogic.Command;
 global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.ProductLogic.Model;
 global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.ProductLogic.Queries;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.VendorLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.VendorLogic.Model;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.VendorLogic.Queries;

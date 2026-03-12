@@ -49,6 +49,7 @@
             services.AddScoped<IEmployeeFeatureActionRepository, EmployeeFeatureActionRepository>();
             services.AddScoped<IVatTaxRepository, VatTaxRepository>();
             services.AddScoped<IProductUnitRepository, ProductUnitRepository>();
+            services.AddScoped<IVendorRepository, VendorRepository>();
             #endregion
 
             #region Product & Service
