@@ -35,6 +35,9 @@
     {
         public int Id { get; set; }
 
+        [Required(ErrorMessage = "Vendor is required.")]
+        public int VendorId { get; set; }
+
         [Required(ErrorMessage = "Address is required.")]
         [StringLength(500, MinimumLength = 5, ErrorMessage = "Address must be 5 to 500 character.")]
         public string Address { get; set; }

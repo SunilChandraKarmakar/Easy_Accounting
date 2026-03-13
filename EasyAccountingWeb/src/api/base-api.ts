@@ -10662,6 +10662,7 @@ export interface IVendorUpdateModel {
 
 export class VendorAddressUpdateModel implements IVendorAddressUpdateModel {
     id?: number;
+    vendorId!: number;
     address!: string;
     fax?: string | undefined;
     zip?: string | undefined;
@@ -10682,6 +10683,7 @@ export class VendorAddressUpdateModel implements IVendorAddressUpdateModel {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.vendorId = _data["vendorId"];
             this.address = _data["address"];
             this.fax = _data["fax"];
             this.zip = _data["zip"];
@@ -10702,6 +10704,7 @@ export class VendorAddressUpdateModel implements IVendorAddressUpdateModel {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["vendorId"] = this.vendorId;
         data["address"] = this.address;
         data["fax"] = this.fax;
         data["zip"] = this.zip;
@@ -10715,6 +10718,7 @@ export class VendorAddressUpdateModel implements IVendorAddressUpdateModel {
 
 export interface IVendorAddressUpdateModel {
     id?: number;
+    vendorId: number;
     address: string;
     fax?: string | undefined;
     zip?: string | undefined;

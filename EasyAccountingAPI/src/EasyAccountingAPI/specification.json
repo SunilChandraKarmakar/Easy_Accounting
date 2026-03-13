@@ -5475,12 +5475,17 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
+          "vendorId",
           "address",
           "cityId",
           "countryId"
         ],
         "properties": {
           "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "vendorId": {
             "type": "integer",
             "format": "int32"
           },
