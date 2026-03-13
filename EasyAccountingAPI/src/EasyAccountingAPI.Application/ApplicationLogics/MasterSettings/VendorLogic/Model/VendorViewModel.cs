@@ -89,7 +89,7 @@
         {
             profile.CreateMap<Vendor, VendorGridModel>()
                 .ForMember(d => d.Id, s => s.MapFrom(m => EncryptionService.Encrypt(m.Id.ToString())))
-                .ForMember(d => d.CompanyName, s => s.MapFrom(m => m.Company))
+                .ForMember(d => d.CompanyName, s => s.MapFrom(m => m.Company.Name))
                 .ForMember(d => d.VendorAddress, s => s.MapFrom(m => m.VendorAddresses != null ? m.VendorAddresses.FirstOrDefault() : null));
         }
     }

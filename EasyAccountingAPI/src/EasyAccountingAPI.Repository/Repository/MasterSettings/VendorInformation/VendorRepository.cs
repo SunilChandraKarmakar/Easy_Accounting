@@ -48,7 +48,13 @@
             };
 
             return GetAllFilterAsync(model, filter, b => b.Id, sortableColumns,
-                include: q => q.Include(x => x.Company), cancellationToken);
+                include: q => q.Include(x => x.Company)
+                .Include(v => v.VendorAddresses)
+                    .ThenInclude(a => a.City)
+                .Include(v => v.VendorAddresses)
+                    .ThenInclude(a => a.Country)
+                .AsSplitQuery(), 
+                cancellationToken);
         }
 
         public async Task<IEnumerable<SelectModel>> GetVendorSelectList(string userId,

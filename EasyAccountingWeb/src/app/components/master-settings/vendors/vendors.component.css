@@ -44,6 +44,32 @@
   color: #666;
 }
 
+.contact-info,
+.address-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contact-item,
+.address-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #444;
+}
+
+.contact-icon,
+.address-icon {
+  color: #1677ff;
+  font-size: 14px;
+}
+
+.address-icon {
+  color: #52c41a;
+}
+
 .edit-btn:hover {
   background-color: rgba(22, 119, 255, 0.1);
 }

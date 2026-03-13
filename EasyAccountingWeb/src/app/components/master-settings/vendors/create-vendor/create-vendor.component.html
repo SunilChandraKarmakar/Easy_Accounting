@@ -98,8 +98,8 @@
           <div class="col-md-3">
             <label for="countryId" class="form-label">Country <span class="text-danger fw-bold">*</span></label>
              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Country" 
-              (ngModelChange)="onChangeCountry(vendorCreateModel.vendorAddress!.countryId)"
-              [(ngModel)]="vendorCreateModel.vendorAddress!.countryId" id="countryId" name="countryId" style="width: 100%;">
+              [(ngModel)]="vendorCreateModel.vendorAddress!.countryId"
+              (ngModelChange)="onChangeCountry($event)" id="countryId" name="countryId" style="width: 100%;">
                 @for (country of countries; track country.id) {
                   <nz-option [nzValue]="country.id" [nzLabel]="country.name!"></nz-option>
                 }

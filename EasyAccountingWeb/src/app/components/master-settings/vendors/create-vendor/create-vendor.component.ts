@@ -67,6 +67,9 @@ export class CreateVendorComponent implements OnInit {
     this.spinnerService.show();
     this.vendorService.getById(vendorId).subscribe((result: VendorViewModel) => {
       
+      // Set default id for country
+      this.vendorCreateModel.vendorAddress!.countryId = -1;
+
       // Get select list
       this.companies = result.optionsDataSources.CompanySelectList;
       this.countries = result.optionsDataSources.CountrySelectList;

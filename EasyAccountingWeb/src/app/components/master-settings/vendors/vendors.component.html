@@ -30,34 +30,58 @@
               (nzQueryParams)="onChangeQueryParams($event)">
               <thead>
                 <tr>
-                  <!-- new column showing image plus name/business card -->
-                  <th>Vendor</th>
-                  <th nzColumnKey="business" [nzSortFn]="true">Business</th>
-                  <th nzColumnKey="name" [nzSortFn]="true">Name</th>
-                  <th nzColumnKey="email" [nzSortFn]="true">Email</th>
-                  <th nzColumnKey="phone" [nzSortFn]="true">Phone</th>
-                  <th nzColumnKey="company" [nzSortFn]="true">Company</th>
+                  <th nzColumnKey="business" [nzSortFn]="true">Vendor</th>
+                  <th nzColumnKey="email" [nzSortFn]="true"  class="text-center">Contact</th>
+                  <th class="text-center">Address</th>
                   <th class="text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
                 @for (data of basicTable.data; track data.id) {
                   <tr>
-                    <!-- card showing placeholder image, name, business -->
                     <td>
                       <div class="vendor-card">
-                        <img src="https://via.placeholder.com/40" alt="Vendor" class="vendor-img" />
+                        <img [src]="data.image || 'https://placehold.co/64x64?text=No+Image'" alt="{{ data.fullName }}"
+                          class="vendor-img" />
                         <div class="vendor-info">
                           <div class="vendor-name">{{ data.fullName }}</div>
                           <div class="vendor-business">{{ data.businessName }}</div>
+                          <div class="vendor-company">{{ data.companyName }}</div>
                         </div>
                       </div>
                     </td>
-                    <td>{{ data.businessName }}</td>
-                    <td>{{ data.fullName }}</td>
-                    <td>{{ data.email }}</td>
-                    <td>{{ data.phone }}</td>
-                    <td>{{ data.companyName }}</td>
+                    <td>
+                      <div class="contact-info">
+                        <div class="contact-item">
+                          <nz-icon nzType="phone" class="contact-icon"></nz-icon>
+                          <span>{{ data.phone }}</span>
+                        </div>
+                        <div class="contact-item">
+                          <nz-icon nzType="mail" class="contact-icon"></nz-icon>
+                          <span>{{ data.email }}</span>
+                        </div>
+                        <div class="contact-item">
+                          <nz-icon nzType="global" class="contact-icon"></nz-icon>
+                          <span>{{ data.vendorAddress?.website }}</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="address-info">
+                        <div class="address-item">
+                          <nz-icon nzType="environment" class="address-icon"></nz-icon>
+                          <span>{{ data.vendorAddress?.cityName }}</span>
+                        </div>
+                        <div class="address-item">
+                          <nz-icon nzType="flag" class="address-icon"></nz-icon>
+                          <span>{{ data.vendorAddress?.countryName }}</span>
+                        </div>
+                        <div class="address-item">
+                          <nz-icon nzType="home" class="address-icon"></nz-icon>
+                          <span>{{ data.vendorAddress?.address }}</span>
+                        </div>
+                      </div>
+                    </td>
                     <td class="text-center action-cell">
                       <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Edit" class="action-btn edit-btn"
                         routerLink="/app/vendor/update/{{ data.id }}">
