@@ -42,9 +42,12 @@
         [Range(0.01, double.MaxValue, ErrorMessage = "Product sell price must be greater than 0.")]
         public decimal SellPrice { get; set; }
 
+        [Required(ErrorMessage = "Please, provide total quantity")]
+        public int TotalQuantity { get; set; }
+
         public int? VatTaxId { get; set; }
         public string? Image { get; set; }
-        public string? Description { get; set; }
+        public string? Description { get; set; }        
         public bool HaveProductInventory { get; set; }
         public string CreatedById { get; set; }
         public DateTime CreatedDateTime { get; set; }
