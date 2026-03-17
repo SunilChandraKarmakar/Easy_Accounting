@@ -3762,6 +3762,10 @@
             "type": "number",
             "format": "decimal"
           },
+          "totalQuantity": {
+            "type": "integer",
+            "format": "int32"
+          },
           "vatTaxName": {
             "type": "string",
             "nullable": true

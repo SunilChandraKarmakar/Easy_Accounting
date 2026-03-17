@@ -31,6 +31,7 @@
               <thead>
                 <tr>
                   <th>Product Details</th>
+                  <th>Total Quantity</th>
                   <th>Price</th>
                   <th class="text-center">Action</th>
                 </tr>
@@ -60,6 +61,17 @@
                               {{ data.haveProductInventory ? 'With Inventory' : 'Without Inventory' }}
                             </span>
                           </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="quantity-container">
+                        <div class="quantity-box">
+                          <nz-icon nzType="inbox" nzTheme="outline" class="quantity-icon"></nz-icon>
+                          <div class="quantity-info">
+                            <span class="quantity-value">{{ data.totalQuantity || 0 }}</span>
+                            <span class="quantity-label">In Stock</span>
+                          </div>
                         </div>
                       </div>
                     </td>

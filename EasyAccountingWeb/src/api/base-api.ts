@@ -6900,6 +6900,7 @@ export class ProductGridModel implements IProductGridModel {
     companyName?: string;
     costPrice?: number;
     sellPrice?: number;
+    totalQuantity?: number;
     vatTaxName?: string | undefined;
     image?: string | undefined;
     description?: string | undefined;
@@ -6926,6 +6927,7 @@ export class ProductGridModel implements IProductGridModel {
             this.companyName = _data["companyName"];
             this.costPrice = _data["costPrice"];
             this.sellPrice = _data["sellPrice"];
+            this.totalQuantity = _data["totalQuantity"];
             this.vatTaxName = _data["vatTaxName"];
             this.image = _data["image"];
             this.description = _data["description"];
@@ -6952,6 +6954,7 @@ export class ProductGridModel implements IProductGridModel {
         data["companyName"] = this.companyName;
         data["costPrice"] = this.costPrice;
         data["sellPrice"] = this.sellPrice;
+        data["totalQuantity"] = this.totalQuantity;
         data["vatTaxName"] = this.vatTaxName;
         data["image"] = this.image;
         data["description"] = this.description;
@@ -6971,6 +6974,7 @@ export interface IProductGridModel {
     companyName?: string;
     costPrice?: number;
     sellPrice?: number;
+    totalQuantity?: number;
     vatTaxName?: string | undefined;
     image?: string | undefined;
     description?: string | undefined;

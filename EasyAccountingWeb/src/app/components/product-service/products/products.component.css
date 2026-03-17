@@ -182,3 +182,52 @@
   margin-right: 4px;
   font-size: 11px;
 }
+
+/* Quantity Column Styling */
+.quantity-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+}
+
+.quantity-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f0f5ff 0%, #ffffff 100%);
+  border: 1px solid #adc6ff;
+  transition: all 0.3s ease;
+}
+
+.quantity-box:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.15);
+  border-color: #69b1ff;
+}
+
+.quantity-icon {
+  font-size: 16px;
+  color: #1677ff;
+}
+
+.quantity-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.quantity-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1677ff;
+}
+
+.quantity-label {
+  font-size: 10px;
+  color: #8c8c8c;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}

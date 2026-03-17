@@ -17,7 +17,7 @@ namespace EasyAccountingAPI.Application.ApplicationLogics.ProductService.Product
         public int BrandId { get; set; }
         public int CompanyId { get; set; }
         public decimal CostPrice { get; set; }
-        public decimal SellPrice { get; set; }
+        public decimal SellPrice { get; set; }        
         public int? VatTaxId { get; set; }
         public string? Image { get; set; }
         public string? Description { get; set; }
@@ -28,7 +28,9 @@ namespace EasyAccountingAPI.Application.ApplicationLogics.ProductService.Product
         public void Mapping(Profile profile)
         {
             profile.CreateMap<ProductCreateModel, Product>()
-                .ForMember(d => d.ProductInventories, s => s.MapFrom(m => m.HaveProductInventory && m.ProductInventory != null ? new[] { m.ProductInventory } : Enumerable.Empty<ProductInventoryCreateModel>()));
+                .ForMember(d => d.ProductInventories, s => s.MapFrom(m => m.HaveProductInventory && m.ProductInventory != null ? new[] { m.ProductInventory } : Enumerable.Empty<ProductInventoryCreateModel>()))
+                .ForMember(d => d.TotalQuantity, s => s.MapFrom(m => m.HaveProductInventory 
+                    && m.ProductInventory != null ? m.ProductInventory.OpeningStock : 0));
         }
     }
 
@@ -100,6 +102,7 @@ namespace EasyAccountingAPI.Application.ApplicationLogics.ProductService.Product
         public string CompanyName { get; set; }
         public decimal CostPrice { get; set; }
         public decimal SellPrice { get; set; }
+        public int TotalQuantity { get; set; }
         public string? VatTaxName { get; set; }
         public string? Image { get; set; }
         public string? Description { get; set; }
