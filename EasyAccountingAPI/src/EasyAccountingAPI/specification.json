@@ -2402,6 +2402,38 @@
         }
       }
     },
+    "/api/Product/GetFilterExpiredProducts": {
+      "post": {
+        "tags": [
+          "Product"
+        ],
+        "operationId": "Product_GetFilterExpiredProducts",
+        "requestBody": {
+          "x-name": "getExpiredProductsByFilterQuery",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetExpiredProductsByFilterQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilterPageResultModelOfProductGridModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Product/GetFilterProducts": {
       "post": {
         "tags": [
@@ -3816,6 +3848,17 @@
         }
       },
       "GetProductsByFilterQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FilterPageModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "GetExpiredProductsByFilterQuery": {
         "allOf": [
           {
             "$ref": "#/components/schemas/FilterPageModel"

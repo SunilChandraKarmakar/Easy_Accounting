@@ -61,6 +61,7 @@ import { UpdateProductComponent } from './components/product-service/products/up
 import { CreateVendorComponent } from './components/master-settings/vendors/create-vendor/create-vendor.component';
 import { UpdateVendorComponent } from './components/master-settings/vendors/update-vendor/update-vendor.component';
 import { VendorsComponent } from './components/master-settings/vendors/vendors.component';
+import { ExpiredProductsComponent } from './components/product-service/expired-products/expired-products.component';
 
 export const routes: Routes = [
 
@@ -164,6 +165,9 @@ export const routes: Routes = [
       { path: "products", component: ProductsComponent, pathMatch: "full" },
       { path: "product/create", component: CreateProductComponent, pathMatch: "full" },
       { path: "product/update/:recordId", component: UpdateProductComponent, pathMatch: "full" },
+
+      // Expired product
+      { path: "expired-products", component: ExpiredProductsComponent, pathMatch: "full" },
 
       // Vendor
       { path: "vendors", component: VendorsComponent, pathMatch: "full" },
