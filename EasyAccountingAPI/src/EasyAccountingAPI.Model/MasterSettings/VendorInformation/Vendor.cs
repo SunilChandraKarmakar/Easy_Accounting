@@ -6,6 +6,7 @@
         public Vendor()
         {
             VendorAddresses = new HashSet<VendorAddress>();
+            Purchases = new HashSet<Purchase.Purchase>();
         }
 
         public int Id { get; set; }
@@ -37,5 +38,6 @@
 
         public Company Company { get; set; }
         public ICollection<VendorAddress> VendorAddresses { get; set; }
+        public ICollection<Purchase.Purchase> Purchases { get; set; }
     }
 }

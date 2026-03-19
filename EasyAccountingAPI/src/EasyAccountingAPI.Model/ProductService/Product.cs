@@ -6,6 +6,7 @@
         public Product()
         {
             ProductInventories = new HashSet<ProductInventory>();
+            PurchaseItems = new HashSet<PurchaseItem>();
         }
 
         public int Id { get; set; }
@@ -62,5 +63,6 @@
         public Company Company { get; set; }
         public VatTax? VatTax { get; set; }
         public ICollection<ProductInventory> ProductInventories { get; set; }
+        public ICollection<PurchaseItem> PurchaseItems { get; set; }
     }
 }

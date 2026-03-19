@@ -122,4 +122,20 @@ export class ExpiredProductsComponent implements OnInit {
     // Get products
     this.getProducts();
   }
+
+  getExpiredDays(expiryDate: string | Date): number {
+    if (!expiryDate) return 0;
+
+    const today = new Date();
+    const expiry = new Date(expiryDate);
+
+    // Remove time part for accurate day calculation
+    today.setHours(0, 0, 0, 0);
+    expiry.setHours(0, 0, 0, 0);
+
+    const diffTime = today.getTime() - expiry.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    return diffDays;
+  }
 }

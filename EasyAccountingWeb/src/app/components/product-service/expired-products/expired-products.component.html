@@ -27,6 +27,8 @@
                   <th nzColumnKey="name" [nzSortFn]="true" class="text-center">Product Details</th>
                   <th class="text-center">Total Quantity</th>
                   <th class="text-center">Price</th>
+                  <th class="text-center">Expiry Date</th>
+                  <th class="text-center">Days</th>
                 </tr>
               </thead>
               <tbody>
@@ -86,6 +88,21 @@
                           <div class="price-value">{{ data.sellPrice | currency }}</div>
                         </div>
                       </div>
+                    </td>
+                    <td>
+                      {{ data.productInventory?.expiryDate | date:'longDate' }}
+                    </td>
+                    <td>
+                      @let days = getExpiredDays(data.productInventory?.expiryDate!);
+                      <span [ngClass]="{'text-danger': days > 0, 'text-warning': days === 0, 'text-success': days < 0}">
+                        @if (days > 0) {
+                          {{ days }} days ago
+                        } @else if (days === 0) {
+                          Expires today
+                        } @else {
+                          In {{ -days }} days
+                        }
+                      </span>
                     </td>
                   </tr>
                 }

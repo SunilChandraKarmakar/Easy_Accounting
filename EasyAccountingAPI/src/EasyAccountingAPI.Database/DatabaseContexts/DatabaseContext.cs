@@ -43,6 +43,8 @@
 
         #region Purchase
         public DbSet<StorageLocation> StorageLocations { get; set; }
+        public DbSet<Purchase> Purchase { get; set; }
+        public DbSet<PurchaseItem> PurchaseItems { get; set; }
         #endregion        
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
