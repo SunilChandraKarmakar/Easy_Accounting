@@ -15,4 +15,8 @@
     <ProjectReference Include="..\EasyAccountingAPI.Repository\EasyAccountingAPI.Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ApplicationLogics\Purchase\PurchaseItemLogic\Validator\" />
+  </ItemGroup>
+
 </Project>

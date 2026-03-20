@@ -78,3 +78,6 @@ global using System.Reflection;
 global using System.Security.Claims;
 global using System.Text;
 global using ValidationException = FluentValidation.ValidationException;
+global using EasyAccountingAPI.Application.ApplicationLogics.Purchase.PurchaseItemLogic.Model;
+global using Purchas = EasyAccountingAPI.Model.Purchase.Purchase;
+global using EasyAccountingAPI.Application.ApplicationLogics.Purchase.PurchaseLogic.Model;
