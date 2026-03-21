@@ -76,3 +76,6 @@ global using EasyAccountingAPI.Application.ApplicationLogics.ProductService.Prod
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.VendorLogic.Command;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.VendorLogic.Model;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.VendorLogic.Queries;
+global using EasyAccountingAPI.Application.ApplicationLogics.Purchase.PurchaseLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.Purchase.PurchaseLogic.Model;
+global using EasyAccountingAPI.Application.ApplicationLogics.Purchase.PurchaseLogic.Queries;

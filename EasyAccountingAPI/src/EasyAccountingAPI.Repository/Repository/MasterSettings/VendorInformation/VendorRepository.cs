@@ -69,5 +69,18 @@
                 .Select(s => new SelectModel { Id = s.Id, Name = s.FullName })
                 .ToListAsync(cancellationToken);
         }
+
+        public async Task<IEnumerable<SelectModel>> GetVendorsByCompanyIdAsync(int companyId, CancellationToken ct)
+        {
+            var vendors = db.Vendors
+                .Where(v => v.CompanyId == companyId && !v.IsDeleted)
+                .Select(s => new SelectModel
+                {
+                    Id = s.Id,
+                    Name = s.FullName
+                });
+
+            return await vendors.ToListAsync();
+        }
     }
 }

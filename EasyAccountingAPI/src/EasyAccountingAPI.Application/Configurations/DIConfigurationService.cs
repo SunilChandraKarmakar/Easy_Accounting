@@ -58,6 +58,8 @@
             services.AddScoped<IVariationRepository, VariationRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductInventoryRepository, ProductInventoryRepository>();
+            services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+            services.AddScoped<IPurchaseItemRepository, PurchaseItemRepository>();
             #endregion
 
             #region Purchase

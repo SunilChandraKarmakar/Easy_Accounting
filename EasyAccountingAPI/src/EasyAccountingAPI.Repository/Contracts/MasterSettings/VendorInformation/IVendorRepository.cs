@@ -2,8 +2,9 @@
 {
     public interface IVendorRepository : IBaseRepository<Vendor>
     {
-        Task<FilterPageResultModel<Vendor>> GetVendorsByFilterAsync(FilterPageModel filterPageModel, string? userId,
-            CancellationToken cancellationToken);
-        Task<IEnumerable<SelectModel>> GetVendorSelectList(string userId, CancellationToken cancellationToken);
+        Task<FilterPageResultModel<Vendor>> GetVendorsByFilterAsync(FilterPageModel filterPageModel, string? userId, 
+            CancellationToken ct);
+        Task<IEnumerable<SelectModel>> GetVendorSelectList(string userId, CancellationToken ct);
+        Task<IEnumerable<SelectModel>> GetVendorsByCompanyIdAsync(int companyId, CancellationToken ct);
     }
 }

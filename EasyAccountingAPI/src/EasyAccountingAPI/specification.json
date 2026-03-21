@@ -2656,6 +2656,164 @@
         }
       }
     },
+    "/api/Purchase/Create": {
+      "post": {
+        "tags": [
+          "Purchase"
+        ],
+        "operationId": "Purchase_Create",
+        "requestBody": {
+          "x-name": "createPurchaseCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePurchaseCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Purchase/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "Purchase"
+        ],
+        "operationId": "Purchase_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Purchase/GetById/{id}": {
+      "get": {
+        "tags": [
+          "Purchase"
+        ],
+        "operationId": "Purchase_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Purchase/GetFilterPurchases": {
+      "post": {
+        "tags": [
+          "Purchase"
+        ],
+        "operationId": "Purchase_GetFilterPurchases",
+        "requestBody": {
+          "x-name": "getPurchasesByFilterQuery",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetPurchasesByFilterQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilterPageResultModelOfPurchaseGridModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Purchase/Update": {
+      "put": {
+        "tags": [
+          "Purchase"
+        ],
+        "operationId": "Purchase_Update",
+        "requestBody": {
+          "x-name": "updatePurchaseCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePurchaseCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/StorageLocation/Create": {
       "post": {
         "tags": [
@@ -3256,6 +3414,41 @@
         }
       }
     },
+    "/api/Vendor/GetVendorByCompanyId/{companyId}": {
+      "get": {
+        "tags": [
+          "Vendor"
+        ],
+        "operationId": "Vendor_GetVendorByCompanyId",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SelectModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Vendor/Update": {
       "put": {
         "tags": [
@@ -3291,6 +3484,355 @@
   },
   "components": {
     "schemas": {
+      "FilterPageResultModelOfPurchaseGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseGridModel"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "PurchaseGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "orderNumber": {
+            "type": "string"
+          },
+          "companyName": {
+            "type": "string"
+          },
+          "purchaseDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "paymentDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "vendorName": {
+            "type": "string"
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "purchaseItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseItemGridModel"
+            }
+          }
+        }
+      },
+      "PurchaseItemGridModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "qty": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unitPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "sellPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "expiryDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "decimal"
+          }
+        }
+      },
+      "GetPurchasesByFilterQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FilterPageModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "FilterPageModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "pageIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sortColumn": {
+            "type": "string",
+            "nullable": true
+          },
+          "sortOrder": {
+            "type": "string",
+            "nullable": true
+          },
+          "filterValue": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "PurchaseViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "createModel": {
+            "$ref": "#/components/schemas/PurchaseCreateModel"
+          },
+          "updateModel": {
+            "$ref": "#/components/schemas/PurchaseUpdateModel"
+          },
+          "gridModel": {
+            "$ref": "#/components/schemas/PurchaseGridModel"
+          },
+          "optionsDataSources": {}
+        }
+      },
+      "PurchaseCreateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "orderNumber",
+          "companyId",
+          "purchaseDate",
+          "paymentDate",
+          "vendorId",
+          "totalAmount"
+        ],
+        "properties": {
+          "orderNumber": {
+            "type": "string",
+            "minLength": 1
+          },
+          "companyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "purchaseDate": {
+            "type": "string",
+            "format": "date-time",
+            "minLength": 1
+          },
+          "paymentDate": {
+            "type": "string",
+            "format": "date-time",
+            "minLength": 1
+          },
+          "vendorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "purchaseItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseItemCreateModel"
+            }
+          }
+        }
+      },
+      "PurchaseItemCreateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "productId",
+          "qty",
+          "unitPrice",
+          "sellPrice",
+          "subTotal"
+        ],
+        "properties": {
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "qty": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unitPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "sellPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "expiryDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "decimal"
+          }
+        }
+      },
+      "PurchaseUpdateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "orderNumber",
+          "companyId",
+          "purchaseDate",
+          "paymentDate",
+          "vendorId",
+          "totalAmount"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "orderNumber": {
+            "type": "string",
+            "minLength": 1
+          },
+          "companyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "purchaseDate": {
+            "type": "string",
+            "format": "date-time",
+            "minLength": 1
+          },
+          "paymentDate": {
+            "type": "string",
+            "format": "date-time",
+            "minLength": 1
+          },
+          "vendorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "purchaseItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseItemUpdateModel"
+            }
+          }
+        }
+      },
+      "PurchaseItemUpdateModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "productId",
+          "qty",
+          "unitPrice",
+          "sellPrice",
+          "subTotal"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "qty": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unitPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "sellPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "expiryDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "decimal"
+          }
+        }
+      },
+      "CreatePurchaseCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PurchaseCreateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "UpdatePurchaseCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PurchaseUpdateModel"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
       "FilterPageResultModelOfStorageLocationGridModel": {
         "type": "object",
         "additionalProperties": false,
@@ -3340,32 +3882,6 @@
             "additionalProperties": false
           }
         ]
-      },
-      "FilterPageModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "pageIndex": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "pageSize": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "sortColumn": {
-            "type": "string",
-            "nullable": true
-          },
-          "sortOrder": {
-            "type": "string",
-            "nullable": true
-          },
-          "filterValue": {
-            "type": "string",
-            "nullable": true
-          }
-        }
       },
       "StorageLocationViewModel": {
         "type": "object",

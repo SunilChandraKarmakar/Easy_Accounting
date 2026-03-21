@@ -60,5 +60,13 @@
             var isDeleteVendor = await Mediator.Send(new DeleteVendorCommand { Id = id });
             return Ok(isDeleteVendor);
         }
+
+        [HttpGet("{companyId}")]
+        [ProducesResponseType(typeof(IEnumerable<SelectModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<SelectModel>>> GetVendorByCompanyIdAsync(int companyId)
+        {
+            var vendors = await Mediator.Send(new SelectListVendorByCompanyIdQuery { CompanyId = companyId });
+            return Ok(vendors);
+        }
     }
 }
