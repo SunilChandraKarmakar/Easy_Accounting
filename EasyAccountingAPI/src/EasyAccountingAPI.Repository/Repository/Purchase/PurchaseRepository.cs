@@ -13,6 +13,7 @@
         {
             var purchase = await db.Purchase
                 .Where(p => p.Id == id && !p.IsDeleted)
+                .Include(p => p.PurchaseItems)
                 .FirstOrDefaultAsync(ct);
 
             return purchase;
