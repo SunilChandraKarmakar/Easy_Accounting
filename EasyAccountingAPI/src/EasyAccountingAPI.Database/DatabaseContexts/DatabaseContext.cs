@@ -19,6 +19,8 @@
         #endregion
 
         #region Master Settings Model
+        public DbSet<EnumType> EnumTypes { get; set; }
+        public DbSet<EnumTypeCollection> EnumTypeCollections { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<InvoiceSetting> InvoiceSettings { get; set; }
