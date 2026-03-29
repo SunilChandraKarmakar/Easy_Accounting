@@ -81,3 +81,6 @@ global using ValidationException = FluentValidation.ValidationException;
 global using EasyAccountingAPI.Application.ApplicationLogics.Purchase.PurchaseItemLogic.Model;
 global using Purchas = EasyAccountingAPI.Model.Purchase.Purchase;
 global using EasyAccountingAPI.Application.ApplicationLogics.Purchase.PurchaseLogic.Model;
+global using EasyAccountingAPI.Repository.Contracts.MasterSettings.Enum;
+global using EasyAccountingAPI.Repository.Repository.MasterSettings.Enum;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.EnumTypeLogic.Command;

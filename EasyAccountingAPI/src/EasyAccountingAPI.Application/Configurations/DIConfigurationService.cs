@@ -50,6 +50,8 @@
             services.AddScoped<IVatTaxRepository, VatTaxRepository>();
             services.AddScoped<IProductUnitRepository, ProductUnitRepository>();
             services.AddScoped<IVendorRepository, VendorRepository>();
+            services.AddScoped<IEnumTypeRepository, EnumTypeRepository>();
+            services.AddScoped<IEnumTypeCollectionRepository, EnumTypeCollectionRepository>();
             #endregion
 
             #region Product & Service

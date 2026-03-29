@@ -15,6 +15,9 @@
                 }
             }
 
+            // Seed enum types and collections
+            await mediator.Send(new CreateEnumTypeCollectionSeedCommand());
+
             // Seed data for Role
             await mediator.Send(new CreateRoleSeedCommand());
 
