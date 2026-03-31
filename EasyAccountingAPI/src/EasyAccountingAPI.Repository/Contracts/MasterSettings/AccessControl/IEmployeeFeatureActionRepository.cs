@@ -6,7 +6,7 @@
             CancellationToken cancellationToken);
         Task<bool> DeleteEmployeeFeatureActionByEmployeeAsync(int employeeId, CancellationToken cancellationToken);
         Task<EmployeeFeatureAction?> GetEmployeeFeatureActionByEmployeeAndFeatureAndActionAsync(int employeeId,
-            int featureId, int actionId, CancellationToken cancellationToken);
+            int featureId, int actionId, CancellationToken cancellationToken = default);
         Task<IEnumerable<EmployeeFeatureAction>> GetEmployeeFeatureActionsByEmployeeIdAsync(int employeeId, 
             CancellationToken cancellationToken);
     }

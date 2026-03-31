@@ -86,5 +86,15 @@
 
             return feature;
         }
+
+        public async Task<Feature?> GetFeatureByControllerName(string controllerName)
+        {
+            var feature = await db.Features
+                .AsNoTracking()
+                .Where(f => f.ControllerName!.ToLower() == controllerName.ToLower() && !f.IsDeleted)
+                .FirstOrDefaultAsync();
+
+            return feature;
+        }
     }
 }

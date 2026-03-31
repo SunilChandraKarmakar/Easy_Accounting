@@ -8,5 +8,6 @@
         Task<IEnumerable<SelectModel>> GetActionSelectList(CancellationToken cancellationToken);
         Task<bool> IsExistActionByNameAsync(string actionName, CancellationToken cancellationToken);
         Task<bool> AnyAsync(CancellationToken cancellationToken);
+        Task<Model.MasterSettings.AccessControl.Action?> GetActionByName(string actionName);
     }
 }

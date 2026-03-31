@@ -65,5 +65,14 @@
 
             return hasAction is not null ? true : false;
         }
+
+        public async Task<Model.MasterSettings.AccessControl.Action?> GetActionByName(string actionName)
+        {
+            var action = await db.Actions
+                .Where(c => !c.IsDeleted && c.Name.ToLower() == actionName.ToLower())
+                .FirstOrDefaultAsync();
+
+            return action;
+        }
     }
 }
