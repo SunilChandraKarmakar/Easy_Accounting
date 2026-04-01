@@ -3,7 +3,8 @@
         <div class="menu-section">
             <div class="section-title">Main</div>
             <div class="menu-item">
-                <a class="menu-link" routerLink="/app/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                <a class="menu-link" routerLink="/app/dashboard" routerLinkActive="active" 
+                [routerLinkActiveOptions]="{ exact: true }">
                     <i class="fas fa-home menu-icon"></i>
                     <span class="menu-text">Dashboard</span>
                 </a>
@@ -73,99 +74,119 @@
                 </a>
             </div>
         </div>
-        <div class="menu-section">
-            <div class="section-title">Purchase</div>            
-            <div class="menu-item">
-                <a class="menu-link" routerLink="/app/storage-locations">
-                    <i class="fa-solid fa-location-dot menu-icon"></i>
-                    <span class="menu-text">Storage Location</span>
-                </a>
+        @if(sidebarPermissionService.hasAnyAccessToFeature(['Storage Location'])) {
+            <div class="menu-section">
+                <div class="section-title">Purchase</div>            
+                <div class="menu-item">
+                    @if(sidebarPermissionService.hasAccess('Storage Location', 'List')) {
+                        <a class="menu-link" routerLink="/app/storage-locations">
+                            <i class="fa-solid fa-location-dot menu-icon"></i>
+                            <span class="menu-text">Storage Location</span>
+                        </a>
+                    }                    
+                </div>
             </div>
-        </div>
-        <div class="menu-section">
-            <div class="section-title">System</div>
-            <div class="menu-item">
-                @if(sidebarPermissionService.hasAnyAccessToFeature(['Country', 'City', 'Currency', 'Module', 'Company', 'Invoice Setting', 'Vat Tax', 'Product Unit', 'Vendor', 'Employee'])) {
-                    <div class="menu-link" (click)="toggleMenu('settings')">
-                        <i class="fas fa-cog menu-icon"></i>
-                        <span class="menu-text">Settings</span>
-                        <i class="fas fa-chevron-down menu-arrow"></i>
+        }
+        @if(sidebarPermissionService.hasAnyAccessToFeature(['Country', 'City', 'Currency', 'Module', 'Company', 
+        'Invoice Setting', 'Vat Tax', 'Product Unit', 'Vendor', 'Employee', 'Action', 'Feature', 'Feature Action', 
+        'Employee Feature Action'])) {
+            <div class="menu-section">
+                <div class="section-title">System</div>          
+                <div class="menu-item">
+                    @if(sidebarPermissionService.hasAnyAccessToFeature(['Country', 'City', 'Currency', 'Module', 'Company', 
+                    'Invoice Setting', 'Vat Tax', 'Product Unit', 'Vendor', 'Employee'])) {
+                        <div class="menu-link" (click)="toggleMenu('settings')">
+                            <i class="fas fa-cog menu-icon"></i>
+                            <span class="menu-text">Settings</span>
+                            <i class="fas fa-chevron-down menu-arrow"></i>
+                        </div>
+                    }
+                    <div class="sidebar-submenu" *ngIf="openMenus['settings']">
+                        @if(sidebarPermissionService.hasAccess('Country', 'List')) {
+                            <a class="menu-link" routerLink="/app/countries" routerLinkActive="active" >
+                                Country
+                            </a>
+                        }                 
+                        @if(sidebarPermissionService.hasAccess('City', 'List')) {
+                            <a class="menu-link" routerLink="/app/cities" routerLinkActive="active">
+                                City
+                            </a>
+                        }
+                        @if(sidebarPermissionService.hasAccess('Currency', 'List')) {
+                            <a class="menu-link" routerLink="/app/currencies" routerLinkActive="active">
+                                Currency
+                            </a>
+                        }
+                        @if(sidebarPermissionService.hasAccess('Module', 'List')) {
+                            <a class="menu-link" routerLink="/app/modules" routerLinkActive="active">
+                                Module
+                            </a>
+                        }
+                        @if(sidebarPermissionService.hasAccess('Company', 'List')) {
+                            <a class="menu-link" routerLink="/app/companies" routerLinkActive="active">
+                                Company
+                            </a>
+                        }
+                        @if(sidebarPermissionService.hasAccess('Invoice Setting', 'List')) {
+                            <a class="menu-link" routerLink="/app/invoice-settings" routerLinkActive="active">
+                                Invoice Setting
+                            </a>
+                        }
+                        @if(sidebarPermissionService.hasAccess('Vat Tax', 'List')) {
+                            <a class="menu-link" routerLink="/app/vat-taxes" routerLinkActive="active">
+                                Vat Tax
+                            </a>
+                        }
+                        @if(sidebarPermissionService.hasAccess('Product Unit', 'List')) {
+                            <a class="menu-link" routerLink="/app/product-units" routerLinkActive="active">
+                                Product Unit
+                            </a>
+                        }
+                        @if(sidebarPermissionService.hasAccess('Vendor', 'List')) {
+                            <a class="menu-link" routerLink="/app/vendors" routerLinkActive="active">
+                                Vendor
+                            </a>
+                        }
+                        @if(sidebarPermissionService.hasAccess('Employee', 'List')) {
+                            <a class="menu-link" routerLink="/app/employees" routerLinkActive="active">
+                                Employee
+                            </a>
+                        }
                     </div>
-                }
-                <div class="sidebar-submenu" *ngIf="openMenus['settings']">
-                    @if(sidebarPermissionService.hasAccess('Country', 'List')) {
-                        <a class="menu-link" routerLink="/app/countries" routerLinkActive="active" >
-                            Country
-                        </a>
-                    }                 
-                    @if(sidebarPermissionService.hasAccess('City', 'List')) {
-                        <a class="menu-link" routerLink="/app/cities" routerLinkActive="active">
-                            City
-                        </a>
+                </div>
+                <div class="menu-item">
+                    @if(sidebarPermissionService.hasAnyAccessToFeature(['Action', 'Feature', 'Feature Action', 
+                    'Employee Feature Action'])) {
+                        <div class="menu-link" (click)="toggleMenu('accessControl')">
+                            <i class="fa-solid fa-universal-access menu-icon"></i>
+                            <span class="menu-text">Access Control</span>
+                            <i class="fas fa-chevron-down menu-arrow"></i>
+                        </div>
                     }
-                    @if(sidebarPermissionService.hasAccess('Currency', 'List')) {
-                        <a class="menu-link" routerLink="/app/currencies" routerLinkActive="active">
-                            Currency
-                        </a>
-                    }
-                    @if(sidebarPermissionService.hasAccess('Module', 'List')) {
-                        <a class="menu-link" routerLink="/app/modules" routerLinkActive="active">
-                            Module
-                        </a>
-                    }
-                    @if(sidebarPermissionService.hasAccess('Company', 'List')) {
-                        <a class="menu-link" routerLink="/app/companies" routerLinkActive="active">
-                            Company
-                        </a>
-                    }
-                    @if(sidebarPermissionService.hasAccess('Invoice Setting', 'List')) {
-                        <a class="menu-link" routerLink="/app/invoice-settings" routerLinkActive="active">
-                            Invoice Setting
-                        </a>
-                    }
-                    @if(sidebarPermissionService.hasAccess('Vat Tax', 'List')) {
-                        <a class="menu-link" routerLink="/app/vat-taxes" routerLinkActive="active">
-                            Vat Tax
-                        </a>
-                    }
-                    @if(sidebarPermissionService.hasAccess('Product Unit', 'List')) {
-                        <a class="menu-link" routerLink="/app/product-units" routerLinkActive="active">
-                            Product Unit
-                        </a>
-                    }
-                    @if(sidebarPermissionService.hasAccess('Vendor', 'List')) {
-                        <a class="menu-link" routerLink="/app/vendors" routerLinkActive="active">
-                            Vendor
-                        </a>
-                    }
-                    @if(sidebarPermissionService.hasAccess('Employee', 'List')) {
-                        <a class="menu-link" routerLink="/app/employees" routerLinkActive="active">
-                            Employee
-                        </a>
-                    }
+                    <div class="sidebar-submenu" *ngIf="openMenus['accessControl']">
+                        @if(sidebarPermissionService.hasAccess('Action', 'List')) {
+                            <a class="menu-link" routerLink="/app/actions" routerLinkActive="active">
+                                Action
+                            </a>
+                        }
+                        @if(sidebarPermissionService.hasAccess('Feature', 'List')) {
+                            <a class="menu-link" routerLink="/app/features" routerLinkActive="active">
+                                Feature
+                            </a>
+                        }
+                        @if(sidebarPermissionService.hasAccess('Feature Action', 'List')) {
+                            <a class="menu-link" routerLink="/app/feature-actions" routerLinkActive="active">
+                                Feature Actions
+                            </a>
+                        }
+                        @if(sidebarPermissionService.hasAccess('Employee Feature Action', 'List')) {
+                            <a class="menu-link" routerLink="/app/employee-feature-actions" routerLinkActive="active">
+                                Employee Permission
+                            </a>
+                        }
+                    </div>
                 </div>
             </div>
-            <div class="menu-item">
-                <div class="menu-link" (click)="toggleMenu('accessControl')">
-                    <i class="fa-solid fa-universal-access menu-icon"></i>
-                    <span class="menu-text">Access Control</span>
-                    <i class="fas fa-chevron-down menu-arrow"></i>
-                </div>
-                <div class="sidebar-submenu" *ngIf="openMenus['accessControl']">
-                    <a class="menu-link" routerLink="/app/actions" routerLinkActive="active">
-                       Action
-                    </a>
-                    <a class="menu-link" routerLink="/app/features" routerLinkActive="active">
-                       Feature
-                    </a>
-                    <a class="menu-link" routerLink="/app/feature-actions" routerLinkActive="active">
-                       Feature Actions
-                    </a>
-                    <a class="menu-link" routerLink="/app/employee-feature-actions" routerLinkActive="active">
-                       Employee Permission
-                    </a>
-                </div>
-            </div>
-        </div>
+        }
     </nav>
 </aside>

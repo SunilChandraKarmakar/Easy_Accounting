@@ -4,6 +4,7 @@
     {
         [HttpPost]
         [ProducesResponseType(typeof(FilterPageResultModel<EmployeeFeatureActionGridModel>), StatusCodes.Status200OK)]
+        [CheckAuthorize("EmployeeFeatureAction", "List")]
         public async Task<ActionResult<FilterPageResultModel<EmployeeFeatureActionGridModel>>> GetFilterEmployeeFeatureActionsAsync(GetEmloyeeFeatureActionsByFilterQuery emloyeeFeatureActionsQuery)
         {
             var getEmloyeeFeatureActions = await Mediator.Send(emloyeeFeatureActionsQuery);
@@ -12,6 +13,7 @@
 
         [HttpPost]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("EmployeeFeatureAction", "Create")]
         public async Task<ActionResult<bool>> CreateAsync(CreateEmployeeFeatureActionCommand createEmployeeFeatureActionCommand)
         {
             if (ModelState.IsValid)
@@ -42,6 +44,7 @@
 
         [HttpPut]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("EmployeeFeatureAction", "Update")]
         public async Task<ActionResult<bool>> UpdateAsync(UpdateEmployeeFeatureActionCommand updateEmployeeFeatureActionCommand)
         {
             if (ModelState.IsValid)
@@ -55,6 +58,7 @@
 
         [HttpDelete("{employeeId}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("EmployeeFeatureAction", "Delete")]
         public async Task<ActionResult<bool>> DeleteAsync(int employeeId)
         {
             var isDelete = await Mediator.Send(new DeleteEmployeeFeatureActionCommand { EmployeeId = employeeId });

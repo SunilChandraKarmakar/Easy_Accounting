@@ -62,6 +62,7 @@ import { CreateVendorComponent } from './components/master-settings/vendors/crea
 import { UpdateVendorComponent } from './components/master-settings/vendors/update-vendor/update-vendor.component';
 import { VendorsComponent } from './components/master-settings/vendors/vendors.component';
 import { ExpiredProductsComponent } from './components/product-service/expired-products/expired-products.component';
+import { DashboardComponent } from './components/layout/dashboard/dashboard.component';
 
 export const routes: Routes = [
 
@@ -76,6 +77,9 @@ export const routes: Routes = [
     component: LayoutComponent,
     children: [
       
+      // Dashboard
+      { path: "dashboard", component: DashboardComponent, pathMatch: "full" },
+
       // Country
       { path: "countries", component: CountriesComponent, pathMatch: "full" },
       { path: "country/create", component: CountryCreateComponent, pathMatch: "full" },

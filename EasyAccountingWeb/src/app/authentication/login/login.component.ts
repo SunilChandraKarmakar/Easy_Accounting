@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
 
       if (loginResult.isSuccess) {
         this.toastrService.success("Welcome back! You’re now logged in.", "Success");
-        this.router.navigateByUrl("/app/cities");
+        this.router.navigateByUrl("/app/dashboard");
       } else {
         this.toastrService.error(loginResult.message ?? "Login failed. Please try again.", "Error", 
           { enableHtml: true, timeOut: 10000, closeButton: true });

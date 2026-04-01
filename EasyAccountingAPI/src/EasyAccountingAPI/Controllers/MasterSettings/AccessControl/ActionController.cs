@@ -4,6 +4,7 @@
     {
         [HttpPost]
         [ProducesResponseType(typeof(FilterPageResultModel<ActionGridModel>), StatusCodes.Status200OK)]
+        [CheckAuthorize("Action", "List")]
         public async Task<ActionResult<FilterPageResultModel<ActionGridModel>>> GetFilterActionsAsync(
             GetActionsByFilterQuery getActionsByFilterQuery)
         {
@@ -25,6 +26,7 @@
 
         [HttpPost]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Action", "Create")]
         public async Task<ActionResult<bool>> CreateAsync(CreateActionCommand createActionCommand)
         {
             if (ModelState.IsValid)
@@ -38,6 +40,7 @@
 
         [HttpPut]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Action", "Update")]
         public async Task<ActionResult<bool>> UpdateAsync(UpdateActionCommand updateActionCommand)
         {
             if (ModelState.IsValid)
@@ -51,6 +54,7 @@
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Action", "Delete")]
         public async Task<ActionResult<bool>> DeleteAsync(string id)
         {
             var isDeleteAction = await Mediator.Send(new DeleteActionCommand { Id = id });

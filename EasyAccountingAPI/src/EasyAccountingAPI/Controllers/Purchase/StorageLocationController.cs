@@ -4,6 +4,7 @@
     {
         [HttpPost]
         [ProducesResponseType(typeof(FilterPageResultModel<StorageLocationGridModel>), StatusCodes.Status200OK)]
+        [CheckAuthorize("StorageLocation", "List")]
         public async Task<ActionResult<FilterPageResultModel<StorageLocationGridModel>>> GetFilterStorageLocationsAsync(
             GetStorageLocationsByFilterQuery getStorageLocationsByFilterQuery)
         {
@@ -27,6 +28,7 @@
 
         [HttpPost]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("StorageLocation", "Create")]
         public async Task<ActionResult<bool>> CreateAsync(CreateStorageLocationCommand createStorageLocationCommand)
         {
             if (ModelState.IsValid)
@@ -40,6 +42,7 @@
 
         [HttpPut]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("StorageLocation", "Update")]
         public async Task<ActionResult<bool>> UpdateAsync(UpdateStorageLocationCommand updateStorageLocationCommand)
         {
             if (ModelState.IsValid)
@@ -53,6 +56,7 @@
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("StorageLocation", "Delete")]
         public async Task<ActionResult<bool>> DeleteAsync(string id)
         {
             var isDeleteStorageLocation = await Mediator.Send(new DeleteStorageLocationCommand { Id = id });

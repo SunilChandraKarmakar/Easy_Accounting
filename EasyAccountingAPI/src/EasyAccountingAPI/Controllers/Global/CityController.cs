@@ -4,6 +4,7 @@
     {
         [HttpPost]
         [ProducesResponseType(typeof(FilterPageResultModel<CityGridModel>), StatusCodes.Status200OK)]
+        [CheckAuthorize("City", "List")]
         public async Task<ActionResult<FilterPageResultModel<CityGridModel>>> GetFilterCitiesAsync(
             GetCityByFilterQuery getCitiesByFilterQuery)
         {
@@ -13,6 +14,7 @@
 
         [HttpPost]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("City", "Create")]
         public async Task<ActionResult<bool>> CreateAsync(CreateCityCommand createCityCommand)
         {
             if (ModelState.IsValid)
@@ -41,6 +43,7 @@
 
         [HttpPut]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("City", "Update")]
         public async Task<ActionResult<bool>> UpdateAsync(UpdateCityCommand updateCityCommand)
         {
             if (ModelState.IsValid)
@@ -54,6 +57,7 @@
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("City", "Delete")]
         public async Task<ActionResult<bool>> DeleteAsync(string id)
         {
             var isDeleteCity = await Mediator.Send(new DeleteCityCommand { Id = id });

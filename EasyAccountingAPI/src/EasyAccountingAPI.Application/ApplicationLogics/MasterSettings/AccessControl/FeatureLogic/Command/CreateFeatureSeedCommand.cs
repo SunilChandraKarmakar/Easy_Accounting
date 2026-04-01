@@ -121,8 +121,24 @@
                         new() { Code = "Currency", Name = "Currency", TableName = "Currencies", ControllerName = "Currency" },
                         new() { Code = "Module", Name = "Module", TableName = "Modules", ControllerName = "Module" },
                         new() { Code = "Company", Name = "Company", TableName = "Companies", ControllerName = "Company" },
-                        new() { Code = "InvoiceSetting", Name = "Invoice Setting", TableName = "InvoiceSettings", ControllerName = "InvoiceSetting" },
-                        new() { Code = "Action", Name = "Action", TableName = "Actions", ControllerName = "Action" }
+                        new() { Code = "Action", Name = "Action", TableName = "Actions", ControllerName = "Action" },
+                        new() { Code = "Feature", Name = "Feature", TableName = "Features", ControllerName = "Feature" },
+                        new() { Code = "VT", Name = "Vat Tax", TableName = "VatTaxes", ControllerName = "VatTax" },
+                        new() { Code = "PU", Name = "Product Unit", TableName = "ProductUnits", ControllerName = "ProductUnit" },
+                        new() { Code = "Vendor", Name = "Vendor", TableName = "Vendors", ControllerName = "Vendor" },
+                        new() { Code = "Employee", Name = "Employee", TableName = "Employees", ControllerName = "Employee" },
+                        new() { Code = "InvoiceSetting", Name = "Invoice Setting", TableName = "InvoiceSettings",
+                            ControllerName = "InvoiceSetting" },
+                        new() { Code = "FA", Name = "Feature Action", TableName = "FeatureActions",
+                            ControllerName = "FeatureAction" },
+                        new() { Code = "EFA", Name = "Employee Feature Action", 
+                            TableName = "EmployeeFeatureActions", ControllerName = "EmployeeFeatureAction" }                        
+                    },
+
+                    ["Purchase"] = new()
+                    {
+                        new() { Code = "SL", Name = "Storage Location", TableName = "Storage Locations", 
+                            ControllerName = "StorageLocation" }
                     }
                 };
             }

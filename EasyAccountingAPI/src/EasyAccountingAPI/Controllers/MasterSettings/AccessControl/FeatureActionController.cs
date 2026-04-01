@@ -4,6 +4,7 @@
     {
         [HttpPost]
         [ProducesResponseType(typeof(FilterPageResultModel<FeatureActionGridModel>), StatusCodes.Status200OK)]
+        [CheckAuthorize("FeatureAction", "List")]
         public async Task<ActionResult<FilterPageResultModel<FeatureActionGridModel>>> GetFilterFeatureActionsAsync(
             GetFeatureActionsByFilterQuery getFeatureActionsByFilterQuery)
         {
@@ -13,6 +14,7 @@
 
         [HttpPost]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("FeatureAction", "Create")]
         public async Task<ActionResult<bool>> CreateAsync(CreateFeatureActionCommand createFeatureActionCommand)
         {
             if (ModelState.IsValid)
@@ -41,6 +43,7 @@
 
         [HttpPut]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("FeatureAction", "Update")]
         public async Task<ActionResult<bool>> UpdateAsync(UpdateFeatureActionCommand updateFeatureActionCommand)
         {
             if (ModelState.IsValid)
@@ -54,6 +57,7 @@
 
         [HttpDelete("{featureId}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("FeatureAction", "Delete")]
         public async Task<ActionResult<bool>> DeleteAsync(int featureId)
         {
             var isDeleteFeatureAction = await Mediator.Send(new DeleteFeatureActionCommand { FeatureId = featureId });
