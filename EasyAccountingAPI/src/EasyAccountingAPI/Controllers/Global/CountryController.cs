@@ -4,6 +4,7 @@
     {
         [HttpGet]
         [ProducesResponseType(typeof(ICollection<CountryGridModel>), StatusCodes.Status200OK)]
+        [CheckAuthorize("Country", "List")]
         public async Task<ActionResult<ICollection<CountryGridModel>>> GetAllAsync()
         {
             var getCountries = await Mediator.Send(new GetCountriesQuery());
@@ -12,6 +13,7 @@
 
         [HttpPost]
         [ProducesResponseType(typeof(FilterPageResultModel<CountryGridModel>), StatusCodes.Status200OK)]
+        [CheckAuthorize("Country", "List")]
         public async Task<ActionResult<FilterPageResultModel<CountryGridModel>>> GetFilterCountriesAsync(
             GetCountriesByFilterQuery getCountriesByFilterQuery)
         {
@@ -33,6 +35,7 @@
 
         [HttpPost]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Country", "Create")]
         public async Task<ActionResult<bool>> CreateAsync(CreateCountryCommand createCountryCommand)
         {
             if (ModelState.IsValid)
@@ -46,6 +49,7 @@
 
         [HttpPut]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Country", "Update")]
         public async Task<ActionResult<bool>> UpdateAsync(UpdateCountryCommand updateCountryCommand)
         {
             if (ModelState.IsValid)
@@ -59,6 +63,7 @@
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Country", "Delete")]
         public async Task<ActionResult<bool>> DeleteAsync(string id)
         {
             var isDeleteCountry = await Mediator.Send(new DeleteCountryCommand { Id = id });

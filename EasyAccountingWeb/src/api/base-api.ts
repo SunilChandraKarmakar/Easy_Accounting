@@ -12343,6 +12343,7 @@ export class EmployeeFeatureActionViewModel implements IEmployeeFeatureActionVie
     createModel?: EmployeeFeatureActionCreateModel;
     updateModel?: EmployeeFeatureActionUpdateModel[];
     gridModel?: EmployeeFeatureActionGridModel;
+    detailsModel?: EmployeeFeatureActionDetailsModel;
     optionsDataSources?: any;
 
     constructor(data?: IEmployeeFeatureActionViewModel) {
@@ -12363,6 +12364,7 @@ export class EmployeeFeatureActionViewModel implements IEmployeeFeatureActionVie
                     this.updateModel!.push(EmployeeFeatureActionUpdateModel.fromJS(item));
             }
             this.gridModel = _data["gridModel"] ? EmployeeFeatureActionGridModel.fromJS(_data["gridModel"]) : undefined as any;
+            this.detailsModel = _data["detailsModel"] ? EmployeeFeatureActionDetailsModel.fromJS(_data["detailsModel"]) : undefined as any;
             this.optionsDataSources = _data["optionsDataSources"];
         }
     }
@@ -12383,6 +12385,7 @@ export class EmployeeFeatureActionViewModel implements IEmployeeFeatureActionVie
                 data["updateModel"].push(item ? item.toJSON() : undefined as any);
         }
         data["gridModel"] = this.gridModel ? this.gridModel.toJSON() : undefined as any;
+        data["detailsModel"] = this.detailsModel ? this.detailsModel.toJSON() : undefined as any;
         data["optionsDataSources"] = this.optionsDataSources;
         return data;
     }
@@ -12392,6 +12395,7 @@ export interface IEmployeeFeatureActionViewModel {
     createModel?: EmployeeFeatureActionCreateModel;
     updateModel?: EmployeeFeatureActionUpdateModel[];
     gridModel?: EmployeeFeatureActionGridModel;
+    detailsModel?: EmployeeFeatureActionDetailsModel;
     optionsDataSources?: any;
 }
 
@@ -12453,6 +12457,62 @@ export interface IEmployeeFeatureActionUpdateModel {
     moduleId?: number | undefined;
     featureId?: number;
     actionId?: number;
+}
+
+export class EmployeeFeatureActionDetailsModel implements IEmployeeFeatureActionDetailsModel {
+    id?: number;
+    employeeId?: number;
+    featureId?: number;
+    featureName?: string;
+    actionId?: number;
+    actionName?: string;
+
+    constructor(data?: IEmployeeFeatureActionDetailsModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.employeeId = _data["employeeId"];
+            this.featureId = _data["featureId"];
+            this.featureName = _data["featureName"];
+            this.actionId = _data["actionId"];
+            this.actionName = _data["actionName"];
+        }
+    }
+
+    static fromJS(data: any): EmployeeFeatureActionDetailsModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new EmployeeFeatureActionDetailsModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["employeeId"] = this.employeeId;
+        data["featureId"] = this.featureId;
+        data["featureName"] = this.featureName;
+        data["actionId"] = this.actionId;
+        data["actionName"] = this.actionName;
+        return data;
+    }
+}
+
+export interface IEmployeeFeatureActionDetailsModel {
+    id?: number;
+    employeeId?: number;
+    featureId?: number;
+    featureName?: string;
+    actionId?: number;
+    actionName?: string;
 }
 
 export class FilterPageResultModelOfFeatureActionGridModel implements IFilterPageResultModelOfFeatureActionGridModel {
@@ -13853,6 +13913,7 @@ export class UserModel implements IUserModel {
     token?: string;
     employeeId?: number | undefined;
     image?: string | undefined;
+    employeeFeatureActions?: EmployeeFeatureActionDetailsModel[];
 
     constructor(data?: IUserModel) {
         if (data) {
@@ -13872,6 +13933,11 @@ export class UserModel implements IUserModel {
             this.token = _data["token"];
             this.employeeId = _data["employeeId"];
             this.image = _data["image"];
+            if (Array.isArray(_data["employeeFeatureActions"])) {
+                this.employeeFeatureActions = [] as any;
+                for (let item of _data["employeeFeatureActions"])
+                    this.employeeFeatureActions!.push(EmployeeFeatureActionDetailsModel.fromJS(item));
+            }
         }
     }
 
@@ -13891,6 +13957,11 @@ export class UserModel implements IUserModel {
         data["token"] = this.token;
         data["employeeId"] = this.employeeId;
         data["image"] = this.image;
+        if (Array.isArray(this.employeeFeatureActions)) {
+            data["employeeFeatureActions"] = [];
+            for (let item of this.employeeFeatureActions)
+                data["employeeFeatureActions"].push(item ? item.toJSON() : undefined as any);
+        }
         return data;
     }
 }
@@ -13903,6 +13974,7 @@ export interface IUserModel {
     token?: string;
     employeeId?: number | undefined;
     image?: string | undefined;
+    employeeFeatureActions?: EmployeeFeatureActionDetailsModel[];
 }
 
 export class ProblemDetails implements IProblemDetails {

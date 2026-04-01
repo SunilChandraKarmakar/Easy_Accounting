@@ -5,6 +5,7 @@
         public EmployeeFeatureActionCreateModel CreateModel { get; set; }
         public ICollection<EmployeeFeatureActionUpdateModel> UpdateModel { get; set; }
         public EmployeeFeatureActionGridModel GridModel { get; set; }
+        public EmployeeFeatureActionDetailsModel DetailsModel { get; set; }
         public dynamic OptionsDataSources { get; set; } = new ExpandoObject();
     }
 
@@ -67,5 +68,22 @@
     {
         public int EmployeeId { get; set; }
         public string FullName { get; set; } = string.Empty;
+    }
+
+    public class EmployeeFeatureActionDetailsModel : IMapFrom<EmployeeFeatureAction>
+    {
+        public int Id { get; set; }
+        public int EmployeeId { get; set; }
+        public int FeatureId { get; set; }
+        public string FeatureName { get; set; }
+        public int ActionId { get; set; }
+        public string ActionName { get; set; }
+
+        public void Mapping(Profile profile)
+        {
+            profile.CreateMap<EmployeeFeatureAction, EmployeeFeatureActionDetailsModel>()
+                .ForMember(d => d.FeatureName, s => s.MapFrom(m => m.Feature.Name))
+                .ForMember(d => d.ActionName, s => s.MapFrom(m => m.Action.Name));
+        }
     }
 }

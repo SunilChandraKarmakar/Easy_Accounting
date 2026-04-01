@@ -69,6 +69,7 @@
         public string Token { get; set; }
         public int? EmployeeId { get; set; }
         public string? Image { get; set; }
+        public ICollection<EmployeeFeatureActionDetailsModel> EmployeeFeatureActions { get; set; }
 
         public void Mapping(Profile profile)
         {

@@ -79,3 +79,7 @@ global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.Vend
 global using EasyAccountingAPI.Application.ApplicationLogics.Purchase.PurchaseLogic.Command;
 global using EasyAccountingAPI.Application.ApplicationLogics.Purchase.PurchaseLogic.Model;
 global using EasyAccountingAPI.Application.ApplicationLogics.Purchase.PurchaseLogic.Queries;
+global using EasyAccountingAPI.Repository.Contracts.MasterSettings.AccessControl;
+global using Microsoft.AspNetCore.Mvc.Filters;
+global using System.Security.Claims;
+global using EasyAccountingAPI.AuthorizeExtensions;

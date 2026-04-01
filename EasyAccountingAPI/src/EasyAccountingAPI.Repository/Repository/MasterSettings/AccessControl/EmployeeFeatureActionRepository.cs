@@ -100,6 +100,7 @@
                     .ThenInclude(e => e.Company)
                 .Include(efa => efa.Feature)
                     .ThenInclude(f => f.Module)
+                .Include(efa => efa.Action)
                 .ToListAsync(cancellationToken);
 
             return employeeFeatureActions;

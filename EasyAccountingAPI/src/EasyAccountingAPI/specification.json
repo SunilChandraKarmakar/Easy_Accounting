@@ -6324,6 +6324,9 @@
           "gridModel": {
             "$ref": "#/components/schemas/EmployeeFeatureActionGridModel"
           },
+          "detailsModel": {
+            "$ref": "#/components/schemas/EmployeeFeatureActionDetailsModel"
+          },
           "optionsDataSources": {}
         }
       },
@@ -6359,6 +6362,34 @@
           "actionId": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "EmployeeFeatureActionDetailsModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "employeeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "featureId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "featureName": {
+            "type": "string"
+          },
+          "actionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "actionName": {
+            "type": "string"
           }
         }
       },
@@ -6993,6 +7024,12 @@
           "image": {
             "type": "string",
             "nullable": true
+          },
+          "employeeFeatureActions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmployeeFeatureActionDetailsModel"
+            }
           }
         }
       },

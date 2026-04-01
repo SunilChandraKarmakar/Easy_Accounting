@@ -11,10 +11,17 @@
             private readonly IUserLoginHistoryRepository _userLoginHistoryRepository;
             private readonly IUnitOfWorkRepository _unitOfWorkRepository;
             private readonly IEmployeeRoleRepository _employeeRoleRepository;
+            private readonly IEmployeeFeatureActionRepository _employeeFeatureActionRepository;
 
-            public Handler(UserManager<User> userManager, IOptions<AppSettings> appSeeting, IMapper mapper, 
-                IHttpContextAccessor httpContextAccessor, IUserLoginHistoryRepository userLoginHistoryRepository,
-                IUnitOfWorkRepository unitOfWorkRepository, IEmployeeRoleRepository employeeRoleRepository)
+            public Handler(
+                UserManager<User> userManager, 
+                IOptions<AppSettings> appSeeting, 
+                IMapper mapper, 
+                IHttpContextAccessor httpContextAccessor, 
+                IUserLoginHistoryRepository userLoginHistoryRepository,
+                IUnitOfWorkRepository unitOfWorkRepository, 
+                IEmployeeRoleRepository employeeRoleRepository,
+                IEmployeeFeatureActionRepository employeeFeatureActionRepository)
             {
                 _userManager = userManager;
                 _appSeeting = appSeeting;
@@ -23,6 +30,7 @@
                 _userLoginHistoryRepository = userLoginHistoryRepository;
                 _unitOfWorkRepository = unitOfWorkRepository;
                 _employeeRoleRepository = employeeRoleRepository;
+                _employeeFeatureActionRepository = employeeFeatureActionRepository;
             }
 
             public async Task<UserModel> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -63,6 +71,14 @@
 
                     // Set login user token
                     mapExistUser.Token = token;
+
+                    // Get login user permission
+                    var employeeFeatureActions = await _employeeFeatureActionRepository
+                        .GetEmployeeFeatureActionsByEmployeeIdAsync((int)existUser.EmployeeId!, cancellationToken);
+                    var mapEmployeeFeatureActions = _mapper.Map<ICollection<EmployeeFeatureActionDetailsModel>>(employeeFeatureActions);
+
+                    if (mapEmployeeFeatureActions is not null && mapEmployeeFeatureActions.Count > 0)
+                        mapExistUser.EmployeeFeatureActions = mapEmployeeFeatureActions;
 
                     //Get User IP Address
                     var clientLoginIp = IPHelper.GetIpAddress(_httpContextAccessor.HttpContext!);

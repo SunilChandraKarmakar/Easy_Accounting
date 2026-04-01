@@ -1,8 +1,4 @@
-﻿using EasyAccountingAPI.Repository.Contracts.MasterSettings.AccessControl;
-using Microsoft.AspNetCore.Mvc.Filters;
-using System.Security.Claims;
-
-namespace EasyAccountingAPI.AuthorizeExtensions
+﻿namespace EasyAccountingAPI.AuthorizeExtensions
 {
     public class AuthorizationFilter : IAsyncAuthorizationFilter
     {
@@ -21,7 +17,7 @@ namespace EasyAccountingAPI.AuthorizeExtensions
             IActionRepository actionRepository,
             IEmployeeFeatureActionRepository employeeFeatureActionRepository,
             UserManager<User> userManager,
-            string controllerName, 
+            string controllerName,
             string actionName)
         {
             _httpContextAccessor = httpContextAccessor;
@@ -30,11 +26,10 @@ namespace EasyAccountingAPI.AuthorizeExtensions
             _employeeFeatureActionRepository = employeeFeatureActionRepository;
             _userManager = userManager;
             _controllerName = controllerName;
-            _actionName = actionName;            
+            _actionName = actionName;
         }
-    }
 
-    public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
+        public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
             // Get login user id
             var userId = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value ?? null;
@@ -51,14 +46,17 @@ namespace EasyAccountingAPI.AuthorizeExtensions
                 // Get login user info by id
                 var loginUserInfo = await _userManager.FindByIdAsync(userId);
 
-                var havePermission = await _employeeFeatureActionRepository.GetEmployeeFeatureActionByEmployeeAndFeatureAndActionAsync(userId, feature.Id, action.Id);
+                if (loginUserInfo is null || loginUserInfo.EmployeeId is null)
+                    context.Result = new ForbidResult();
 
-                if (havePermission is null || (loginUserInfo is not null && loginUserInfo.ForcePasswordChanged == false))
+                var havePermission = await _employeeFeatureActionRepository
+                    .GetEmployeeFeatureActionByEmployeeAndFeatureAndActionAsync((int)loginUserInfo?.EmployeeId!, feature.Id, action.Id);
+
+                if (havePermission is null)
                     context.Result = new ForbidResult();
             }
             else
-            {
                 context.Result = new ForbidResult();
-            }
         }
     }
+}
