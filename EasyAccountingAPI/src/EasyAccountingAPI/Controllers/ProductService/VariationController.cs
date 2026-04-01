@@ -4,6 +4,7 @@
     {
         [HttpPost]
         [ProducesResponseType(typeof(FilterPageResultModel<VariationGridModel>), StatusCodes.Status200OK)]
+        [CheckAuthorize("Variation", "List")]
         public async Task<ActionResult<FilterPageResultModel<VariationGridModel>>> GetFilterVariationsAsync(
             GetVariationsByFilterQuery getVariationsByFilterQuery)
         {
@@ -27,6 +28,7 @@
 
         [HttpPost]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Variation", "Create")]
         public async Task<ActionResult<bool>> CreateAsync(CreateVariationCommand createVariationCommand)
         {
             if (ModelState.IsValid)
@@ -40,6 +42,7 @@
 
         [HttpPut]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Variation", "Update")]
         public async Task<ActionResult<bool>> UpdateAsync(UpdateVariationCommand updateVariationCommand)
         {
             if (ModelState.IsValid)
@@ -53,6 +56,7 @@
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Variation", "Delete")]
         public async Task<ActionResult<bool>> DeleteAsync(string id)
         {
             var isDeleteVariation = await Mediator.Send(new DeleteVariationCommand { Id = id });

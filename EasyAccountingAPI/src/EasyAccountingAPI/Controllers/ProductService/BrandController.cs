@@ -4,6 +4,7 @@
     {
         [HttpPost]
         [ProducesResponseType(typeof(FilterPageResultModel<BrandGridModel>), StatusCodes.Status200OK)]
+        [CheckAuthorize("Brand", "List")]
         public async Task<ActionResult<FilterPageResultModel<BrandGridModel>>> GetFilterBrandsAsync(
             GetBrandsByFilterQuery getBrandsByFilterQuery)
         {
@@ -27,6 +28,7 @@
 
         [HttpPost]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Brand", "Create")]
         public async Task<ActionResult<bool>> CreateAsync(CreateBrandCommand createBrandCommand)
         {
             if (ModelState.IsValid)
@@ -40,6 +42,7 @@
 
         [HttpPut]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Brand", "Update")]
         public async Task<ActionResult<bool>> UpdateAsync(UpdateBrandCommand updateBrandCommand)
         {
             if (ModelState.IsValid)
@@ -53,6 +56,7 @@
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Brand", "Delete")]
         public async Task<ActionResult<bool>> DeleteAsync(string id)
         {
             var isDeleteBrand = await Mediator.Send(new DeleteBrandCommand { Id = id });

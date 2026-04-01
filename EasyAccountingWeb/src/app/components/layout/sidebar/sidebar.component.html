@@ -49,37 +49,50 @@
                 </div>
             </div>
         </div> -->
-        <div class="menu-section">
-            <div class="section-title">Product & Service</div>            
-            <div class="menu-item">
-                <a class="menu-link" routerLink="/app/brands">
-                    <i class="fa-solid fa-shield-halved menu-icon"></i>
-                    <span class="menu-text">Brand</span>
-                </a>
-                <a class="menu-link" routerLink="/app/categories">
-                    <i class="fa-solid fa-table-list menu-icon"></i>
-                    <span class="menu-text">Category</span>
-                </a>
-                <a class="menu-link" routerLink="/app/variations">
-                    <i class="fa-brands fa-airbnb menu-icon"></i>
-                    <span class="menu-text">Variation</span>
-                </a>
-                <a class="menu-link" routerLink="/app/products">
-                    <i class="fa-brands fa-product-hunt menu-icon"></i>
-                    <span class="menu-text">Product</span>
-                </a>
-                <a class="menu-link" routerLink="/app/expired-products">
-                    <i class="fa-solid fa-list-ul menu-icon"></i>
-                    <span class="menu-text">Expired Product</span>
-                </a>
+        @if(sidebarPermissionService.hasAnyAccessToFeature(['Brand', 'Category', 'Variation', 'Product'])) {
+            <div class="menu-section">
+                <div class="section-title">Product & Service</div>            
+                <div class="menu-item">
+                    @if(sidebarPermissionService.hasAccess('Brand', 'List')) {
+                        <a class="menu-link" routerLink="/app/brands" routerLinkActive="active">
+                            <i class="fa-solid fa-shield-halved menu-icon"></i>
+                            <span class="menu-text">Brand</span>
+                        </a>
+                    }  
+                    @if(sidebarPermissionService.hasAccess('Category', 'List')) {
+                        <a class="menu-link" routerLink="/app/categories" routerLinkActive="active">
+                            <i class="fa-solid fa-table-list menu-icon"></i>
+                            <span class="menu-text">Category</span>
+                        </a>
+                    }
+                    @if(sidebarPermissionService.hasAccess('Variation', 'List')) {
+                        <a class="menu-link" routerLink="/app/variations" routerLinkActive="active">
+                            <i class="fa-brands fa-airbnb menu-icon"></i>
+                            <span class="menu-text">Variation</span>
+                        </a>
+                    } 
+                    @if(sidebarPermissionService.hasAccess('Product', 'List')) {
+                        <a class="menu-link" routerLink="/app/products" routerLinkActive="active">
+                            <i class="fa-brands fa-product-hunt menu-icon"></i>
+                            <span class="menu-text">Product</span>
+                        </a>
+                    }  
+                    @if(sidebarPermissionService.hasAccess('Product', 'List')) {
+                        <a class="menu-link" routerLink="/app/expired-products" routerLinkActive="active">
+                            <i class="fa-solid fa-list-ul menu-icon"></i>
+                            <span class="menu-text">Expired Product</span>
+                        </a>
+                    }                             
+                   
+                </div>
             </div>
-        </div>
+        }
         @if(sidebarPermissionService.hasAnyAccessToFeature(['Storage Location'])) {
             <div class="menu-section">
                 <div class="section-title">Purchase</div>            
                 <div class="menu-item">
                     @if(sidebarPermissionService.hasAccess('Storage Location', 'List')) {
-                        <a class="menu-link" routerLink="/app/storage-locations">
+                        <a class="menu-link" routerLink="/app/storage-locations" routerLinkActive="active">
                             <i class="fa-solid fa-location-dot menu-icon"></i>
                             <span class="menu-text">Storage Location</span>
                         </a>
@@ -103,7 +116,7 @@
                     }
                     <div class="sidebar-submenu" *ngIf="openMenus['settings']">
                         @if(sidebarPermissionService.hasAccess('Country', 'List')) {
-                            <a class="menu-link" routerLink="/app/countries" routerLinkActive="active" >
+                            <a class="menu-link" routerLink="/app/countries" routerLinkActive="active">
                                 Country
                             </a>
                         }                 

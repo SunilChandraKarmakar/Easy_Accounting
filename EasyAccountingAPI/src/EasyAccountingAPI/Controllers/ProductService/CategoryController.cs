@@ -4,6 +4,7 @@
     {
         [HttpPost]
         [ProducesResponseType(typeof(FilterPageResultModel<CategoryGridModel>), StatusCodes.Status200OK)]
+        [CheckAuthorize("Category", "List")]
         public async Task<ActionResult<FilterPageResultModel<CategoryGridModel>>> GetFilterCategoriesAsync(
             GetCategoriesByFilterQuery getCategoriesByFilterQuery)
         {
@@ -29,6 +30,7 @@
 
         [HttpPost]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Category", "Create")]
         public async Task<ActionResult<bool>> CreateAsync(CreateCategoryCommand createCategoryCommand)
         {
             if (ModelState.IsValid)
@@ -42,6 +44,7 @@
 
         [HttpPut]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Category", "Update")]
         public async Task<ActionResult<bool>> UpdateAsync(UpdateCategoryCommand updateCategoryCommand)
         {
             if (ModelState.IsValid)
@@ -55,6 +58,7 @@
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Category", "Delete")]
         public async Task<ActionResult<bool>> DeleteAsync(string id)
         {
             var isDeleteCategory = await Mediator.Send(new DeleteCategoryCommand { Id = id });

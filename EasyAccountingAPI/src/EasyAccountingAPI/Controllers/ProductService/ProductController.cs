@@ -4,6 +4,7 @@
     {
         [HttpPost]
         [ProducesResponseType(typeof(FilterPageResultModel<ProductGridModel>), StatusCodes.Status200OK)]
+        [CheckAuthorize("Product", "List")]
         public async Task<ActionResult<FilterPageResultModel<ProductGridModel>>> GetFilterProductsAsync(
             GetProductsByFilterQuery getProductsByFilterQuery)
         {
@@ -13,6 +14,7 @@
 
         [HttpPost]
         [ProducesResponseType(typeof(FilterPageResultModel<ProductGridModel>), StatusCodes.Status200OK)]
+        [CheckAuthorize("Product", "List")]
         public async Task<ActionResult<FilterPageResultModel<ProductGridModel>>> GetFilterExpiredProductsAsync(
             GetExpiredProductsByFilterQuery getExpiredProductsByFilterQuery)
         {
@@ -41,6 +43,7 @@
 
         [HttpPost]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Product", "Create")]
         public async Task<ActionResult<bool>> CreateAsync(CreateProductCommand createProductCommand)
         {
             if (ModelState.IsValid)
@@ -54,6 +57,7 @@
 
         [HttpPut]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Product", "Update")]
         public async Task<ActionResult<bool>> UpdateAsync(UpdateProductCommand updateProductCommand)
         {
             if (ModelState.IsValid)
@@ -67,6 +71,7 @@
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Product", "Delete")]
         public async Task<ActionResult<bool>> DeleteAsync(string id)
         {
             var isDeleteProduct = await Mediator.Send(new DeleteProductCommand { Id = id });

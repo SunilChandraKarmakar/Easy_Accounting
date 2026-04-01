@@ -31,7 +31,7 @@
                     // Create lookup for existing modules and features
                     var existingModuleDict = existingModules.ToDictionary(m => m.Name, m => m);
 
-                    // Use HashSet for O(1) lookups on existing feature table names
+                    // Use HashSet for O(1) look-ups on existing feature table names
                     var existingFeatureTableSet = existingFeatures
                         .Select(f => f.TableName)
                         .ToHashSet(StringComparer.OrdinalIgnoreCase);
@@ -139,6 +139,14 @@
                     {
                         new() { Code = "SL", Name = "Storage Location", TableName = "Storage Locations", 
                             ControllerName = "StorageLocation" }
+                    },
+
+                    ["Product & Service"] = new()
+                    {
+                        new() { Code = "Brand", Name = "Brand", TableName = "Brands", ControllerName = "Brand" },
+                        new() { Code = "Category", Name = "Category", TableName = "Categories", ControllerName = "Category" },
+                        new() { Code = "Variation", Name = "Variation", TableName = "Variations", ControllerName = "Variation" },
+                        new() { Code = "Product", Name = "Product", TableName = "Products", ControllerName = "Product" }
                     }
                 };
             }
