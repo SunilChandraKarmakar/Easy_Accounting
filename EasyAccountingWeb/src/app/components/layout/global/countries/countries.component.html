@@ -19,7 +19,8 @@
             </nz-space-compact>
           </div>
           <div class="col-md-6 text-end">
-            <button nz-button nzType="primary" routerLink="/app/country/create">
+            <button nz-button nzType="primary" routerLink="/app/country/create" 
+              *appCheckPermission="{ feature: 'Country', action: 'Create' }">
               <nz-icon nzType="plus" nzTheme="outline" />
               Create
             </button>
@@ -53,12 +54,14 @@
                     </td>
                     <td class="text-center action-cell">
                       <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Edit" class="action-btn edit-btn"
-                        routerLink="/app/country/update/{{ data.id }}">
+                        routerLink="/app/country/update/{{ data.id }}"
+                        *appCheckPermission="{ feature: 'Country', action: 'Update' }">
                         <nz-icon nzType="edit" />
                       </button>
                       <nz-divider nzType="vertical"></nz-divider>
                       <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Delete" nzDanger class="action-btn delete-btn" nz-popconfirm [nzPopconfirmTitle]="deleteTpl" [nzIcon]="iconTpl"
-                        (nzOnConfirm)="onClickDelete(data.id)" (nzOnCancel)="cancel()">
+                        (nzOnConfirm)="onClickDelete(data.id)" (nzOnCancel)="cancel()"
+                        *appCheckPermission="{ feature: 'Country', action: 'Delete' }">
                         <nz-icon nzType="delete" />
                       </button>
                       <ng-template #deleteTpl>

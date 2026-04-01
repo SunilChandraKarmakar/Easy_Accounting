@@ -12,14 +12,26 @@ import { NzUploadChangeParam, NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { CheckPermissionDirective } from '../../../../../identity-shared/directive/check-permission.directive';
 
 @Component({
   selector: 'app-country-create',
   templateUrl: './country-create.component.html',
   styleUrls: ['./country-create.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule, NzButtonModule, RouterLink, NgxSpinnerModule, NzInputModule, NzIconModule, NzUploadModule,
-    NzTableModule, NzBreadCrumbModule, NzDividerModule],
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    NzButtonModule, 
+    RouterLink, 
+    NgxSpinnerModule, 
+    NzInputModule, 
+    NzIconModule, 
+    NzUploadModule,
+    NzTableModule, 
+    NzBreadCrumbModule, 
+    NzDividerModule,
+    CheckPermissionDirective],
   providers: [CountryService]
 })
 

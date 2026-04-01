@@ -26,12 +26,12 @@
                 // Retrieve the user's Id from the current HTTP context
                 var userId = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
 
-                // Check if the user Id is null or not
-                if (string.IsNullOrEmpty(userId) || string.IsNullOrWhiteSpace(userId))
+                // Check if the user Id is null or empty
+                if (string.IsNullOrWhiteSpace(userId))
                     throw new UnauthorizedAccessException(ProvideErrorMessage.UserNotAuthenticated);
 
-                // Check, if the request is null or empty, then return false
-                if (request is null || !request.Any() || request.Any(x => x.EmployeeId <= 0))
+                // Validate request
+                if (request == null || !request.Any() || request.Any(x => x.EmployeeId <= 0))
                     return false;
 
                 // Get employee id
@@ -43,13 +43,26 @@
                 try
                 {
                     // Delete existing EmployeeFeatureAction by employee id
-                    await _employeeFeatureActionRepository.DeleteEmployeeFeatureActionByEmployeeAsync(employeeId, cancellationToken);
+                    await _employeeFeatureActionRepository
+                        .DeleteEmployeeFeatureActionByEmployeeAsync(employeeId, cancellationToken);
 
-                    // Newly create EmployeeFeatureAction
-                    var employeeFeatureActions = _mapper.Map<List<EmployeeFeatureAction>>(request);
-                    await _employeeFeatureActionRepository.BulkCreateAsync(employeeFeatureActions, cancellationToken);
+                    // Filter valid feature-action pairs
+                    var validRequests = request
+                        .Where(x => x.FeatureId > 0 && x.ActionId > 0)
+                        .ToList();
 
-                    // Final save + commit
+                    if (validRequests.Any())
+                    {
+                        // Map to entity
+                        var employeeFeatureActions = _mapper
+                            .Map<List<EmployeeFeatureAction>>(validRequests);
+
+                        // Bulk insert
+                        await _employeeFeatureActionRepository
+                            .BulkCreateAsync(employeeFeatureActions, cancellationToken);
+                    }
+
+                    // Save + Commit (even if empty, because delete happened)
                     await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);
                     await _unitOfWorkRepository.CommitTransactionAsync(cancellationToken);
 

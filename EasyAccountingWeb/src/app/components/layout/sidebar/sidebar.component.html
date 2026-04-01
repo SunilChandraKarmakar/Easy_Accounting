@@ -85,42 +85,64 @@
         <div class="menu-section">
             <div class="section-title">System</div>
             <div class="menu-item">
-                <div class="menu-link" (click)="toggleMenu('settings')">
-                    <i class="fas fa-cog menu-icon"></i>
-                    <span class="menu-text">Settings</span>
-                    <i class="fas fa-chevron-down menu-arrow"></i>
-                </div>
+                @if(sidebarPermissionService.hasAnyAccessToFeature(['Country', 'City', 'Currency', 'Module', 'Company', 'Invoice Setting', 'Vat Tax', 'Product Unit', 'Vendor', 'Employee'])) {
+                    <div class="menu-link" (click)="toggleMenu('settings')">
+                        <i class="fas fa-cog menu-icon"></i>
+                        <span class="menu-text">Settings</span>
+                        <i class="fas fa-chevron-down menu-arrow"></i>
+                    </div>
+                }
                 <div class="sidebar-submenu" *ngIf="openMenus['settings']">
-                    <a class="menu-link" routerLink="/app/countries" routerLinkActive="active">
-                       Country
-                    </a>
-                    <a class="menu-link" routerLink="/app/cities" routerLinkActive="active">
-                       City
-                    </a>
-                    <a class="menu-link" routerLink="/app/currencies" routerLinkActive="active">
-                       Currency
-                    </a>
-                    <a class="menu-link" routerLink="/app/modules" routerLinkActive="active">
-                       Module
-                    </a>
-                    <a class="menu-link" routerLink="/app/companies" routerLinkActive="active">
-                       Company
-                    </a>
-                    <a class="menu-link" routerLink="/app/invoice-settings" routerLinkActive="active">
-                       Invoice Setting
-                    </a>
-                    <a class="menu-link" routerLink="/app/vat-taxes" routerLinkActive="active">
-                       Vat Tax
-                    </a>
-                    <a class="menu-link" routerLink="/app/product-units" routerLinkActive="active">
-                       Product Unit
-                    </a>
-                    <a class="menu-link" routerLink="/app/vendors" routerLinkActive="active">
-                       Vendor
-                    </a>
-                    <a class="menu-link" routerLink="/app/employees" routerLinkActive="active">
-                       Employee
-                    </a>
+                    @if(sidebarPermissionService.hasAccess('Country', 'List')) {
+                        <a class="menu-link" routerLink="/app/countries" routerLinkActive="active" >
+                            Country
+                        </a>
+                    }                 
+                    @if(sidebarPermissionService.hasAccess('City', 'List')) {
+                        <a class="menu-link" routerLink="/app/cities" routerLinkActive="active">
+                            City
+                        </a>
+                    }
+                    @if(sidebarPermissionService.hasAccess('Currency', 'List')) {
+                        <a class="menu-link" routerLink="/app/currencies" routerLinkActive="active">
+                            Currency
+                        </a>
+                    }
+                    @if(sidebarPermissionService.hasAccess('Module', 'List')) {
+                        <a class="menu-link" routerLink="/app/modules" routerLinkActive="active">
+                            Module
+                        </a>
+                    }
+                    @if(sidebarPermissionService.hasAccess('Company', 'List')) {
+                        <a class="menu-link" routerLink="/app/companies" routerLinkActive="active">
+                            Company
+                        </a>
+                    }
+                    @if(sidebarPermissionService.hasAccess('Invoice Setting', 'List')) {
+                        <a class="menu-link" routerLink="/app/invoice-settings" routerLinkActive="active">
+                            Invoice Setting
+                        </a>
+                    }
+                    @if(sidebarPermissionService.hasAccess('Vat Tax', 'List')) {
+                        <a class="menu-link" routerLink="/app/vat-taxes" routerLinkActive="active">
+                            Vat Tax
+                        </a>
+                    }
+                    @if(sidebarPermissionService.hasAccess('Product Unit', 'List')) {
+                        <a class="menu-link" routerLink="/app/product-units" routerLinkActive="active">
+                            Product Unit
+                        </a>
+                    }
+                    @if(sidebarPermissionService.hasAccess('Vendor', 'List')) {
+                        <a class="menu-link" routerLink="/app/vendors" routerLinkActive="active">
+                            Vendor
+                        </a>
+                    }
+                    @if(sidebarPermissionService.hasAccess('Employee', 'List')) {
+                        <a class="menu-link" routerLink="/app/employees" routerLinkActive="active">
+                            Employee
+                        </a>
+                    }
                 </div>
             </div>
             <div class="menu-item">

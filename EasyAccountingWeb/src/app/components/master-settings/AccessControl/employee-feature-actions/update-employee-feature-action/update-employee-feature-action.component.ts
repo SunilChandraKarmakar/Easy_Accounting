@@ -150,10 +150,12 @@ export class UpdateEmployeeFeatureActionComponent implements OnInit {
     if(this.employeeName == undefined || this.employeeName == null || this.employeeName == "") {
       this.toastrService.warning("Please, provide employee.", "Warning");
       return false;
-    } else if(this.selectedPermissions.length == 0 || this.selectedPermissions == undefined || this.selectedPermissions == null) {
-        this.toastrService.warning("Please, provide at last one employee permission.", "Warning");
-      return false;
-    } else {
+    } 
+    // else if(this.selectedPermissions.length == 0 || this.selectedPermissions == undefined || this.selectedPermissions == null) {
+    //     this.toastrService.warning("Please, provide at last one employee permission.", "Warning");
+    //   return false;
+    // } 
+    else {
       return true;
     }
   }
@@ -173,6 +175,13 @@ export class UpdateEmployeeFeatureActionComponent implements OnInit {
         model.actionId = x.actionId;
         return model;
       });
+
+      if(this.employeeFeatureActionUpdateModels.length == 0) {
+        // If no permissions are selected, we need to send at least one model with employeeId to clear existing permissions
+        const model = new EmployeeFeatureActionUpdateModel();
+        model.employeeId = this._getSelectedEmployeeId;
+        this.employeeFeatureActionUpdateModels.push(model);
+      }
 
       this.employeeFeatureActionService.update(this.employeeFeatureActionUpdateModels).subscribe((result: boolean) => {
         this.spinnerService.hide();

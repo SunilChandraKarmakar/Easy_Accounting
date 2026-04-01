@@ -13,6 +13,7 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { CheckPermissionDirective } from '../../../../identity-shared/directive/check-permission.directive';
 
 @Component({
   selector: 'app-countries',
@@ -31,7 +32,8 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     NzTagModule, 
     NzBadgeModule, 
     NzBreadCrumbModule, 
-    NzPopconfirmModule],
+    NzPopconfirmModule,
+    CheckPermissionDirective],
   providers: [CountryService]
 })
 

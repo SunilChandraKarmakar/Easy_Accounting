@@ -77,7 +77,8 @@
         </div>
       </div>
       <div class="card-footer text-end">
-        <button nz-button nzType="primary" class="btn-save" (click)="onClickSaveCountry()">
+        <button nz-button nzType="primary" class="btn-save" (click)="onClickSaveCountry()"
+          *appCheckPermission="{ feature: 'Country', action: 'Create' }">
           <nz-icon nzType="save" nzTheme="outline" />
           Save
         </button>

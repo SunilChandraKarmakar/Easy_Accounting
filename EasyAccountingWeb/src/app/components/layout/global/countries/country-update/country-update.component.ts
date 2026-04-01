@@ -12,14 +12,26 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { CityService, CityUpdateModel, CountryService, CountryUpdateModel, CountryViewModel } from '../../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { CheckPermissionDirective } from '../../../../../identity-shared/directive/check-permission.directive';
 
 @Component({
   selector: 'app-country-update',
   templateUrl: './country-update.component.html',
   styleUrls: ['./country-update.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule, NzButtonModule, NgxSpinnerModule, NzInputModule, NzIconModule, NzUploadModule,
-    NzTableModule, NzBreadCrumbModule, RouterLink, NzPopconfirmModule],
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    NzButtonModule, 
+    NgxSpinnerModule, 
+    NzInputModule, 
+    NzIconModule,
+    NzUploadModule,
+    NzTableModule, 
+    NzBreadCrumbModule, 
+    RouterLink, 
+    NzPopconfirmModule,
+    CheckPermissionDirective],
   providers: [CountryService, CityService]
 })
 
