@@ -19,8 +19,18 @@ import { CommonModule } from '@angular/common';
   templateUrl: './companies.component.html',
   styleUrls: ['./companies.component.css'],
   standalone: true,
-  imports: [CommonModule, NzButtonModule, NzDividerModule, NzTableModule, RouterLink, NgxSpinnerModule, NzSpaceModule, NzInputModule, 
-    NzIconModule, NzBreadCrumbModule, NzPopconfirmModule, NzTagModule],
+  imports: [CommonModule, 
+    NzButtonModule, 
+    NzDividerModule, 
+    NzTableModule, 
+    RouterLink, 
+    NgxSpinnerModule, 
+    NzSpaceModule, 
+    NzInputModule, 
+    NzIconModule, 
+    NzBreadCrumbModule, 
+    NzPopconfirmModule, 
+    NzTagModule],
   providers: [CompanyService]
 })
 
@@ -33,7 +43,10 @@ export class CompaniesComponent implements OnInit {
   // Filter page model
   filterPageModel: FilterPageModel = new FilterPageModel();
   
-  constructor(private companyService: CompanyService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService) { }
+  constructor(
+    private companyService: CompanyService, 
+    private spinnerService: NgxSpinnerService, 
+    private toastrService: ToastrService) { }
 
   ngOnInit() {
     // Initialize page filter model

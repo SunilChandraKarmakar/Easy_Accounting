@@ -10,5 +10,7 @@
         Task<bool> IsRemoveOldDefaultCompanyOfCreatedUser(string userId, CancellationToken cancellationToken);
         Task<Company> GetLoginUserDefaultCompany(string userId, CancellationToken cancellationToken);
         Task<List<int>> GetEmployeeBasedCompanyIdsAsync(string userId, CancellationToken cancellationToken);
+        Task<string?> SaveCompanyLogoAsync(IFormFile? file, CancellationToken cancellationToken);
+        void DeleteLogoFile(string? relativePath);
     }
 }

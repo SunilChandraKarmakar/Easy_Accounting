@@ -22,3 +22,4 @@ global using EasyAccountingAPI.Repository.Contracts.Purchase;
 global using EasyAccountingAPI.Model.MasterSettings.VendorInformation;
 global using EasyAccountingAPI.Repository.Contracts.MasterSettings.VendorInformation;
 global using EasyAccountingAPI.Repository.Contracts.MasterSettings.Enum;
+global using Microsoft.AspNetCore.Hosting;

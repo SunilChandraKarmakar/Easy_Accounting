@@ -2,7 +2,16 @@
 {
     public class CompanyRepository : BaseRepository<Company>, ICompanyRepository
     {
-        public CompanyRepository(DatabaseContext databaseContext) : base(databaseContext) { }
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        // For file or image validation
+        private static readonly string[] AllowedExtensions = { ".jpg", ".jpeg", ".png", ".webp" };
+        private const long MaxFileSize = 2 * 1024 * 1024; // 2 MB
+
+        public CompanyRepository(DatabaseContext databaseContext, IWebHostEnvironment webHostEnvironment) : base(databaseContext) 
+        {
+            _webHostEnvironment = webHostEnvironment;
+        }
 
         public override async Task<Company?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
@@ -141,6 +150,45 @@
                 .Where(c => !c.IsDeleted)
                 .Select(c => c.Id)
                 .ToListAsync(cancellationToken);
+        }
+
+        public async Task<string?> SaveCompanyLogoAsync(IFormFile? file, CancellationToken cancellationToken)
+        {
+            if (file == null || file.Length == 0)
+                return null;
+
+            if (file.Length > MaxFileSize)
+                throw new InvalidOperationException("Logo file size must not exceed 2 MB.");
+
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+            if (string.IsNullOrWhiteSpace(extension) || !AllowedExtensions.Contains(extension))
+                throw new InvalidOperationException("Only .jpg, .jpeg, .png, and .webp files are allowed.");
+
+            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "upload_images", "company");
+
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            var safeFileName = $"{Guid.NewGuid():N}{extension}";
+            var physicalPath = Path.Combine(uploadsFolder, safeFileName);
+
+            await using var stream = new FileStream(physicalPath, FileMode.Create);
+            await file.CopyToAsync(stream, cancellationToken);
+
+            return $"/upload_images/company/{safeFileName}";
+        }
+
+        public void DeleteLogoFile(string? relativePath)
+        {
+            if (string.IsNullOrWhiteSpace(relativePath))
+                return;
+
+            var cleanedPath = relativePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar);
+            var physicalPath = Path.Combine(_webHostEnvironment.WebRootPath, cleanedPath);
+
+            if (File.Exists(physicalPath))
+                File.Delete(physicalPath);
         }
     }
 }

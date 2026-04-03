@@ -30,7 +30,7 @@
 
         [HttpPost]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
-        public async Task<ActionResult<bool>> CreateAsync(CompanyCreateCommand createCompanyCommand)
+        public async Task<ActionResult<bool>> CreateAsync([FromForm] CompanyCreateCommand createCompanyCommand)
         {
             if (ModelState.IsValid)
             {

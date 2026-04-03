@@ -8,10 +8,10 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { CityService, CompanyCreateModel, CompanyService, CompanyViewModel, SelectModel } from '../../../../../api/base-api';
+import { CityService, CompanyCreateModel, CompanyService, CompanyViewModel, FileParameter, SelectModel } from '../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzUploadChangeParam, NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzUploadChangeParam, NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 
 @Component({
@@ -19,8 +19,20 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
   templateUrl: './company-create.component.html',
   styleUrls: ['./company-create.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule, NzButtonModule, RouterLink, NgxSpinnerModule, NzInputModule, NzIconModule, NzBreadCrumbModule, 
-    NzDividerModule, NzSelectModule, NzUploadModule, NzCheckboxModule],
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    NzButtonModule, 
+    RouterLink, 
+    NgxSpinnerModule, 
+    NzInputModule, 
+    NzIconModule, 
+    NzBreadCrumbModule, 
+    NzDividerModule, 
+    NzSelectModule, 
+    NzUploadModule, 
+    NzCheckboxModule
+  ],
   providers: [CompanyService, CityService]
 })
 
@@ -36,6 +48,11 @@ export class CompanyCreateComponent implements OnInit {
 
   // Company create model
   companyCreateModel: CompanyCreateModel = new CompanyCreateModel();
+
+  // For logo upload
+  selectedLogoFile: File | null = null;
+  logoFileList: NzUploadFile[] = [];
+  logoPreviewUrl: string | null = null;
 
   constructor(private companyService: CompanyService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService,
     private router: Router, private cityService: CityService) { }
@@ -100,29 +117,51 @@ export class CompanyCreateComponent implements OnInit {
 
   // on click save company
   onClickSaveCompany(): void {
+    const isValid = this.getCompanyCreateFromValidationResult();
 
-    // Get create from validation result
-    let getCreateFormValidationResult: boolean = this.getCompanyCreateFromValidationResult();
+    if (!isValid) {
+      return;
+    }
 
-    if(getCreateFormValidationResult) {
-      this.spinnerService.show();
-      this.companyService.create(this.companyCreateModel).subscribe((result: boolean) => {
+    this.spinnerService.show();
+    let logoFileParameter: FileParameter | null = null;
+
+    if (this.selectedLogoFile) {
+      logoFileParameter = {
+        data: this.selectedLogoFile,
+        fileName: this.selectedLogoFile.name
+      };
+    }
+
+    this.companyService.create(
+      this.companyCreateModel.name,
+      this.companyCreateModel.email,
+      this.companyCreateModel.phone,
+      this.companyCreateModel.countryId,
+      this.companyCreateModel.cityId,
+      this.companyCreateModel.currencyId,
+      logoFileParameter,
+      this.companyCreateModel.taxNo,
+      this.companyCreateModel.isSellWithPos,
+      this.companyCreateModel.isProductHaveBrand,
+      this.companyCreateModel.isDefaultCompany,
+      this.companyCreateModel.address
+    ).subscribe({
+      next: (result: boolean) => {
         this.spinnerService.hide();
-        
-        if(result) {
+
+        if (result) {
           this.toastrService.success("Company create successful.", "Successful");
-          return this.router.navigateByUrl("/app/companies");
+          this.router.navigateByUrl("/app/companies");
         } else {
           this.toastrService.error("Company cannot created! Please, try again.", "Error");
-          return;
         }
       },
-      (error: any) => {
+      error: (error: any) => {
         this.spinnerService.hide();
         this.toastrService.error("Company is not created! Please, try again.", "Error.");
-        return;
-      })
-    }
+      }
+    });
   }
 
   // On change country
@@ -149,10 +188,44 @@ export class CompanyCreateComponent implements OnInit {
   }
 
   handleChange(info: NzUploadChangeParam): void {
-    if (info.file.status !== 'uploading') {
+    this.logoFileList = info.fileList.slice(-1);
+
+    if (this.logoFileList.length === 0) {
+      this.selectedLogoFile = null;
+      this.logoPreviewUrl = null;
     }
-    if (info.file.status === 'done') {
-    } else if (info.file.status === 'error') {
+  }
+
+  beforeUpload = (file: NzUploadFile): boolean => {
+    const originFile = file.originFileObj;
+
+    if (!originFile) {
+      return false;
     }
+
+    const isImage =
+      originFile.type === 'image/png' ||
+      originFile.type === 'image/jpeg' ||
+      originFile.type === 'image/jpg';
+
+    if (!isImage) {
+      this.toastrService.warning('Please select a PNG or JPG image only.', 'Warning');
+      return false;
+    }
+
+    this.selectedLogoFile = originFile;
+
+    const reader = new FileReader();
+    reader.onload = (e: ProgressEvent<FileReader>) => {
+      this.logoPreviewUrl = e.target?.result as string;
+    };
+    reader.readAsDataURL(originFile);
+
+    return false;
+  };
+
+  removeLogo(): void {
+    this.selectedLogoFile = null;
+    this.logoPreviewUrl = null;
   }
 }

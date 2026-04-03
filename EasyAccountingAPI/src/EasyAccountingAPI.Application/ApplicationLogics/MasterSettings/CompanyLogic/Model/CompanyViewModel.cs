@@ -16,7 +16,7 @@
         public int CountryId { get; set; }
         public int CityId { get; set; }
         public int CurrencyId { get; set; }
-        public string? Logo { get; set; }
+        public IFormFile? LogoFile { get; set; }
         public string? TaxNo { get; set; }
         public bool IsSellWithPos { get; set; }
         public bool IsProductHaveBrand { get; set; }

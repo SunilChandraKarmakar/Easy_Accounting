@@ -26,6 +26,8 @@
                 if (string.IsNullOrEmpty(userId) || string.IsNullOrWhiteSpace(userId))
                     throw new UnauthorizedAccessException(ProvideErrorMessage.UserNotAuthenticated);
 
+                string? logoPath = null;
+
                 // Start Transaction
                 await _unitOfWorkRepository.BeginTransactionAsync(cancellationToken);
 
@@ -44,6 +46,10 @@
                     if (!await _companyRepository.IsCreatedUserHaveDefaultCompany(userId, cancellationToken))
                         company.IsDefaultCompany = true;
 
+                    // Working on the company logo
+                    logoPath = await _companyRepository.SaveCompanyLogoAsync(request.LogoFile, cancellationToken);
+                    company.Logo = logoPath;
+
                     await _companyRepository.CreateAsync(company, cancellationToken);
 
                     // Final save + commit
@@ -55,6 +61,10 @@
                 catch
                 {
                     await _unitOfWorkRepository.RollbackTransactionAsync(cancellationToken);
+
+                    if (!string.IsNullOrWhiteSpace(logoPath))
+                        _companyRepository.DeleteLogoFile(logoPath);
+
                     return false;
                 }
             }

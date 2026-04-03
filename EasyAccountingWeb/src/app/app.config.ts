@@ -27,12 +27,24 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
 
     provideToastr({
-      timeOut: 3000, 
-      positionClass: "toast-bottom-right", 
+      timeOut: 3000,
+      positionClass: 'toast-bottom-right',
       closeButton: true,
-      progressBar: true, 
+      progressBar: true,
       preventDuplicates: true,
-      newestOnTop: true
+      newestOnTop: true,
+
+      // custom theme classes
+      toastClass: 'ngx-toastr app-glass-toast',
+      titleClass: 'app-glass-toast-title',
+      messageClass: 'app-glass-toast-message',
+
+      iconClasses: {
+        error: 'app-toast-error',
+        info: 'app-toast-info',
+        success: 'app-toast-success',
+        warning: 'app-toast-warning'
+      }
     }),
 
     // NG Zorro Icons

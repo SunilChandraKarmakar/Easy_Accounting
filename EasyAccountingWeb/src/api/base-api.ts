@@ -1382,7 +1382,7 @@ export class CityService implements ICityService {
 }
 
 export interface ICompanyService {
-    create(createCompanyCommand: CompanyCreateCommand): Observable<boolean>;
+    create(name: string | undefined, email: string | null | undefined, phone: string | undefined, countryId: number | undefined, cityId: number | undefined, currencyId: number | undefined, logoFile: FileParameter | null | undefined, taxNo: string | null | undefined, isSellWithPos: boolean | undefined, isProductHaveBrand: boolean | undefined, isDefaultCompany: boolean | undefined, address: string | null | undefined): Observable<boolean>;
     delete(id: string): Observable<boolean>;
     getById(id: string): Observable<CompanyViewModel>;
     getFilterCompanies(getCompaniesByFilterQuery: GetCompaniesByFilterQuery): Observable<FilterPageResultModelOfCompanyGridModel>;
@@ -1400,18 +1400,57 @@ export class CompanyService implements ICompanyService {
         this.baseUrl = baseUrl ?? "";
     }
 
-    create(createCompanyCommand: CompanyCreateCommand): Observable<boolean> {
+    create(name: string | undefined, email: string | null | undefined, phone: string | undefined, countryId: number | undefined, cityId: number | undefined, currencyId: number | undefined, logoFile: FileParameter | null | undefined, taxNo: string | null | undefined, isSellWithPos: boolean | undefined, isProductHaveBrand: boolean | undefined, isDefaultCompany: boolean | undefined, address: string | null | undefined): Observable<boolean> {
         let url_ = this.baseUrl + "/api/Company/Create";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(createCompanyCommand);
+        const content_ = new FormData();
+        if (name === null || name === undefined)
+            throw new globalThis.Error("The parameter 'name' cannot be null.");
+        else
+            content_.append("Name", name.toString());
+        if (email !== null && email !== undefined)
+            content_.append("Email", email.toString());
+        if (phone === null || phone === undefined)
+            throw new globalThis.Error("The parameter 'phone' cannot be null.");
+        else
+            content_.append("Phone", phone.toString());
+        if (countryId === null || countryId === undefined)
+            throw new globalThis.Error("The parameter 'countryId' cannot be null.");
+        else
+            content_.append("CountryId", countryId.toString());
+        if (cityId === null || cityId === undefined)
+            throw new globalThis.Error("The parameter 'cityId' cannot be null.");
+        else
+            content_.append("CityId", cityId.toString());
+        if (currencyId === null || currencyId === undefined)
+            throw new globalThis.Error("The parameter 'currencyId' cannot be null.");
+        else
+            content_.append("CurrencyId", currencyId.toString());
+        if (logoFile !== null && logoFile !== undefined)
+            content_.append("LogoFile", logoFile.data, logoFile.fileName ? logoFile.fileName : "LogoFile");
+        if (taxNo !== null && taxNo !== undefined)
+            content_.append("TaxNo", taxNo.toString());
+        if (isSellWithPos === null || isSellWithPos === undefined)
+            throw new globalThis.Error("The parameter 'isSellWithPos' cannot be null.");
+        else
+            content_.append("IsSellWithPos", isSellWithPos.toString());
+        if (isProductHaveBrand === null || isProductHaveBrand === undefined)
+            throw new globalThis.Error("The parameter 'isProductHaveBrand' cannot be null.");
+        else
+            content_.append("IsProductHaveBrand", isProductHaveBrand.toString());
+        if (isDefaultCompany === null || isDefaultCompany === undefined)
+            throw new globalThis.Error("The parameter 'isDefaultCompany' cannot be null.");
+        else
+            content_.append("IsDefaultCompany", isDefaultCompany.toString());
+        if (address !== null && address !== undefined)
+            content_.append("Address", address.toString());
 
         let options_ : any = {
             body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
                 "Accept": "application/json"
             })
         };
@@ -9009,7 +9048,7 @@ export class CompanyCreateModel implements ICompanyCreateModel {
     countryId?: number;
     cityId?: number;
     currencyId?: number;
-    logo?: string | undefined;
+    logoFile?: string | undefined;
     taxNo?: string | undefined;
     isSellWithPos?: boolean;
     isProductHaveBrand?: boolean;
@@ -9033,7 +9072,7 @@ export class CompanyCreateModel implements ICompanyCreateModel {
             this.countryId = _data["countryId"];
             this.cityId = _data["cityId"];
             this.currencyId = _data["currencyId"];
-            this.logo = _data["logo"];
+            this.logoFile = _data["logoFile"];
             this.taxNo = _data["taxNo"];
             this.isSellWithPos = _data["isSellWithPos"];
             this.isProductHaveBrand = _data["isProductHaveBrand"];
@@ -9057,7 +9096,7 @@ export class CompanyCreateModel implements ICompanyCreateModel {
         data["countryId"] = this.countryId;
         data["cityId"] = this.cityId;
         data["currencyId"] = this.currencyId;
-        data["logo"] = this.logo;
+        data["logoFile"] = this.logoFile;
         data["taxNo"] = this.taxNo;
         data["isSellWithPos"] = this.isSellWithPos;
         data["isProductHaveBrand"] = this.isProductHaveBrand;
@@ -9074,7 +9113,7 @@ export interface ICompanyCreateModel {
     countryId?: number;
     cityId?: number;
     currencyId?: number;
-    logo?: string | undefined;
+    logoFile?: string | undefined;
     taxNo?: string | undefined;
     isSellWithPos?: boolean;
     isProductHaveBrand?: boolean;
@@ -9164,33 +9203,6 @@ export interface ICompanyUpdateModel {
     isProductHaveBrand?: boolean;
     isDefaultCompany?: boolean;
     address?: string | undefined;
-}
-
-export class CompanyCreateCommand extends CompanyCreateModel implements ICompanyCreateCommand {
-
-    constructor(data?: ICompanyCreateCommand) {
-        super(data);
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-    }
-
-    static override fromJS(data: any): CompanyCreateCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new CompanyCreateCommand();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface ICompanyCreateCommand extends ICompanyCreateModel {
 }
 
 export class CompanyUpdateCommand extends CompanyUpdateModel implements ICompanyUpdateCommand {
@@ -14233,6 +14245,11 @@ export class LoginCommand extends LoginModel implements ILoginCommand {
 }
 
 export interface ILoginCommand extends ILoginModel {
+}
+
+export interface FileParameter {
+    data: any;
+    fileName: string;
 }
 
 export class SwaggerException extends Error {
