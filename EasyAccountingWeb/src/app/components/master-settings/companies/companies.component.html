@@ -14,7 +14,7 @@
             <nz-space-compact nzSize="default">
               <nz-input-wrapper class="search-input">
                 <nz-icon nzInputAddonBefore nzType="search" />
-                <input nz-input (keyup)="onChangeApplyFilter($event)" placeholder="Search by name | Email | Phone" />
+                <input nz-input (keyup)="onChangeApplyFilter($event)" placeholder="Search" />
               </nz-input-wrapper>              
             </nz-space-compact>
           </div>
@@ -25,18 +25,25 @@
             </button>
           </div>
           <div class="col-md-12">
-            <nz-table #basicTable [nzData]="companies" [nzBordered]="true" [nzOuterBordered]="true" [nzFrontPagination]="false" 
-              [nzTotal]="totalRecord" [nzSize]="'default'" [nzPaginationType]="'default'" [nzShowSizeChanger]="true" 
+            <nz-table
+              #basicTable
+              [nzData]="companies"
+              [nzBordered]="true"
+              [nzOuterBordered]="true"
+              [nzFrontPagination]="false"
+              [nzTotal]="totalRecord"
+              [nzSize]="'default'"
+              [nzPaginationType]="'default'"
+              [nzShowSizeChanger]="true"
               (nzQueryParams)="onChangeQueryParams($event)">
               <thead>
                 <tr>
-                  <th nzColumnKey="name" [nzSortFn]="true">Name</th>
+                  <th nzColumnKey="name" [nzSortFn]="true">Company</th>
                   <th nzColumnKey="email" [nzSortFn]="true">Email</th>
                   <th>Phone</th>
                   <th>Country</th>
                   <th>City</th>
                   <th>Currency</th>
-                  <th>Logo</th>
                   <th class="text-center">Action</th>
                 </tr>
               </thead>
@@ -44,27 +51,53 @@
                 @for (data of basicTable.data; track data.id) {
                   <tr>
                     <td>
-                      <span>{{ data.name }}</span> &nbsp;
-                      <span *ngIf="data.isDefaultCompany">
-                        <nz-tag nzColor="success">
-                          <nz-icon nzType="check-circle" />
-                        </nz-tag>
-                      </span>
+                      <div class="company-info">
+                        <div class="company-logo-wrapper">
+                          <img
+                            class="company-logo"
+                            [src]="data.logo ? applicationBaseUrl + data.logo : 'assets/images/no_image.png'"
+                            [alt]="data.name" />
+                        </div>
+                        <div class="company-text">
+                          <div class="company-name-row">
+                            <span class="company-name">{{ data.name }}</span>
+                            <span *ngIf="data.isDefaultCompany">
+                              <nz-tag nzColor="success" class="default-tag">
+                                <nz-icon nzType="check-circle" />
+                                Default
+                              </nz-tag>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     </td>
                     <td>{{ data.email }}</td>
                     <td>{{ data.phone }}</td>
                     <td>{{ data.countryName }}</td>
                     <td>{{ data.cityName }}</td>
                     <td>{{ data.currencyName }}</td>
-                    <td><img [src]="data.logo"></td>
                     <td class="text-center action-cell">
-                      <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Edit" class="action-btn edit-btn"
+                      <button
+                        nz-button
+                        nzType="text"
+                        nz-tooltip
+                        nzTooltipTitle="Edit"
+                        class="action-btn edit-btn"
                         routerLink="/app/company/update/{{ data.id }}">
                         <nz-icon nzType="edit" />
                       </button>
                       <nz-divider nzType="vertical"></nz-divider>
-                      <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Delete" nzDanger class="action-btn delete-btn" 
-                        nz-popconfirm [nzPopconfirmTitle]="deleteTpl" [nzIcon]="iconTpl" (nzOnConfirm)="onClickDelete(data.id)" 
+                      <button
+                        nz-button
+                        nzType="text"
+                        nz-tooltip
+                        nzTooltipTitle="Delete"
+                        nzDanger
+                        class="action-btn delete-btn"
+                        nz-popconfirm
+                        [nzPopconfirmTitle]="deleteTpl"
+                        [nzIcon]="iconTpl"
+                        (nzOnConfirm)="onClickDelete(data.id)"
                         (nzOnCancel)="cancel()">
                         <nz-icon nzType="delete" />
                       </button>

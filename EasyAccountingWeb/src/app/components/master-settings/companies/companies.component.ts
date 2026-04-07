@@ -13,6 +13,7 @@ import { CompanyGridModel, CompanyService, FilterPageModel, FilterPageResultMode
 import { ToastrService } from 'ngx-toastr';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-companies',
@@ -36,6 +37,9 @@ import { CommonModule } from '@angular/common';
 
 export class CompaniesComponent implements OnInit {
 
+  // Application base url
+  applicationBaseUrl: string | undefined;
+
   // Table property
   companies: CompanyGridModel[] = [];
   totalRecord: number = 0;
@@ -49,6 +53,9 @@ export class CompaniesComponent implements OnInit {
     private toastrService: ToastrService) { }
 
   ngOnInit() {
+    // Get application base url
+    this.applicationBaseUrl = environment.coreBaseUrl;
+
     // Initialize page filter model
     this.initializeFilterModel();
 

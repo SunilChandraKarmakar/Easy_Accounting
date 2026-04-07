@@ -40,6 +40,8 @@
         public int CityId { get; set; }
         public int CurrencyId { get; set; }
         public string? Logo { get; set; }
+        public IFormFile? LogoFile { get; set; }
+        public bool IsRemoveLogo { get; set; }
         public string? TaxNo { get; set; }
         public bool IsSellWithPos { get; set; }
         public bool IsProductHaveBrand { get; set; }
@@ -48,8 +50,11 @@
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<CompanyUpdateModel, Company>();
-            profile.CreateMap<Company, CompanyUpdateModel>();
+            profile.CreateMap<CompanyUpdateModel, Company>()
+             .ForMember(d => d.Logo, s => s.Ignore()); 
+
+            profile.CreateMap<Company, CompanyUpdateModel>()
+                .ForMember(d => d.LogoFile, s => s.Ignore());
         }
     }
 

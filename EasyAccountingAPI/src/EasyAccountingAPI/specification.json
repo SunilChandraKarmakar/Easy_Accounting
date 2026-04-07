@@ -968,16 +968,70 @@
         ],
         "operationId": "Company_Update",
         "requestBody": {
-          "x-name": "updateCompanyCommand",
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/CompanyUpdateCommand"
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Name": {
+                    "type": "string"
+                  },
+                  "Email": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "Phone": {
+                    "type": "string"
+                  },
+                  "CountryId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "CityId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "CurrencyId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Logo": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "LogoFile": {
+                    "type": "string",
+                    "format": "binary",
+                    "nullable": true
+                  },
+                  "IsRemoveLogo": {
+                    "type": "boolean"
+                  },
+                  "TaxNo": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "IsSellWithPos": {
+                    "type": "boolean"
+                  },
+                  "IsProductHaveBrand": {
+                    "type": "boolean"
+                  },
+                  "IsDefaultCompany": {
+                    "type": "boolean"
+                  },
+                  "Address": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                }
               }
             }
-          },
-          "required": true,
-          "x-position": 1
+          }
         },
         "responses": {
           "200": {
@@ -4961,6 +5015,14 @@
             "type": "string",
             "nullable": true
           },
+          "logoFile": {
+            "type": "string",
+            "format": "binary",
+            "nullable": true
+          },
+          "isRemoveLogo": {
+            "type": "boolean"
+          },
           "taxNo": {
             "type": "string",
             "nullable": true
@@ -4979,17 +5041,6 @@
             "nullable": true
           }
         }
-      },
-      "CompanyUpdateCommand": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CompanyUpdateModel"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false
-          }
-        ]
       },
       "FilterPageResultModelOfCurrencyGridModel": {
         "type": "object",

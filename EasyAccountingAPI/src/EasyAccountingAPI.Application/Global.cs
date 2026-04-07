@@ -84,3 +84,4 @@ global using EasyAccountingAPI.Application.ApplicationLogics.Purchase.PurchaseLo
 global using EasyAccountingAPI.Repository.Contracts.MasterSettings.Enum;
 global using EasyAccountingAPI.Repository.Repository.MasterSettings.Enum;
 global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.EnumTypeLogic.Command;
+global using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.ActionLogic.Model;

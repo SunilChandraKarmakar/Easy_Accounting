@@ -30,6 +30,10 @@
                 var getExistingCompany = await _companyRepository.GetByIdAsync(request.Id, cancellationToken);
                 if (getExistingCompany is null) return false;
 
+                // For the logo, if user select new logo then we will update otherwise keep old logo, so get old logo path and set new logo path null
+                string? oldLogoPath = getExistingCompany.Logo;
+                string? newLogoPath = null;
+
                 await _unitOfWorkRepository.BeginTransactionAsync(cancellationToken);
 
                 try
@@ -49,15 +53,51 @@
                     if (defaultCompany is not null && defaultCompany.Id != getExistingCompany.Id && request.IsDefaultCompany)
                         await _companyRepository.IsRemoveOldDefaultCompanyOfCreatedUser(userId, cancellationToken);
 
+                    // Working on the company logo
+                    if (request.LogoFile is not null && request.LogoFile.Length > 0)
+                    {
+                        newLogoPath = await _companyRepository.SaveCompanyLogoAsync(request.LogoFile, cancellationToken);
+                        getExistingCompany.Logo = newLogoPath;
+                    }
+                    else if (request.IsRemoveLogo)
+                    {
+                        getExistingCompany.Logo = null;
+                    }
+                    else
+                    {
+                        getExistingCompany.Logo = oldLogoPath;
+                    }
+
                     _companyRepository.Update(getExistingCompany);
                     await _unitOfWorkRepository.SaveChangesAsync(cancellationToken);
                     await _unitOfWorkRepository.CommitTransactionAsync(cancellationToken);
+
+                    // delete old file after success
+                    if (!string.IsNullOrWhiteSpace(newLogoPath) &&
+                        !string.IsNullOrWhiteSpace(oldLogoPath) &&
+                        !string.Equals(oldLogoPath, newLogoPath, StringComparison.OrdinalIgnoreCase))
+                    {
+                        _companyRepository.DeleteLogoFile(oldLogoPath);
+                    }
+
+                    // remove old file if explicitly deleted
+                    if (request.IsRemoveLogo &&
+                        request.LogoFile is null &&
+                        !string.IsNullOrWhiteSpace(oldLogoPath))
+                    {
+                        _companyRepository.DeleteLogoFile(oldLogoPath);
+                    }
 
                     return true;
                 }
                 catch
                 {
                     await _unitOfWorkRepository.RollbackTransactionAsync(cancellationToken);
+
+                    // Delete newly uploaded logo if transaction failed
+                    if (!string.IsNullOrWhiteSpace(newLogoPath))
+                        _companyRepository.DeleteLogoFile(newLogoPath);
+
                     return false;
                 }
             }

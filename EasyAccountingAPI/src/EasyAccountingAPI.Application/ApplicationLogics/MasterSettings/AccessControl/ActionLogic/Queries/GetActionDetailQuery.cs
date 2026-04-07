@@ -1,6 +1,4 @@
-﻿using EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.ActionLogic.Model;
-
-namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.ActionLogic.Queries
+﻿namespace EasyAccountingAPI.Application.ApplicationLogics.MasterSettings.AccessControl.ActionLogic.Queries
 {
     public class GetActionDetailQuery : IRequest<ActionUpdateModel>
     {

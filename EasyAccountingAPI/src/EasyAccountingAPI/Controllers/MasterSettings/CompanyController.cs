@@ -43,7 +43,7 @@
 
         [HttpPut]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
-        public async Task<ActionResult<bool>> UpdateAsync(CompanyUpdateCommand updateCompanyCommand)
+        public async Task<ActionResult<bool>> UpdateAsync([FromForm] CompanyUpdateCommand updateCompanyCommand)
         {
             if (ModelState.IsValid)
             {

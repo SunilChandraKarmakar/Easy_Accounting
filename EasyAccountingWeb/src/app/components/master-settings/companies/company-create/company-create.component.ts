@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
@@ -36,7 +36,7 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
   providers: [CompanyService, CityService]
 })
 
-export class CompanyCreateComponent implements OnInit {
+export class CompanyCreateComponent implements OnInit, OnDestroy {
 
   // Default company id
   private _companyId: string = "-1";
@@ -54,12 +54,22 @@ export class CompanyCreateComponent implements OnInit {
   logoFileList: NzUploadFile[] = [];
   logoPreviewUrl: string | null = null;
 
-  constructor(private companyService: CompanyService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService,
-    private router: Router, private cityService: CityService) { }
+  private readonly maxLogoSizeInMb = 2;
+
+  constructor(
+    private companyService: CompanyService, 
+    private spinnerService: NgxSpinnerService, 
+    private toastrService: ToastrService,
+    private router: Router, 
+    private cityService: CityService) { }
 
   ngOnInit() {
     // Get company by id
     this.getCompanyByIdAsync();  
+  }
+
+  ngOnDestroy(): void {
+    this.clearLogoPreview();
   }
 
   // Get company by id
@@ -188,44 +198,68 @@ export class CompanyCreateComponent implements OnInit {
   }
 
   handleChange(info: NzUploadChangeParam): void {
-    this.logoFileList = info.fileList.slice(-1);
-
-    if (this.logoFileList.length === 0) {
-      this.selectedLogoFile = null;
-      this.logoPreviewUrl = null;
+    if (!info.fileList || info.fileList.length === 0) {
+      this.removeLogo();
     }
   }
 
   beforeUpload = (file: NzUploadFile): boolean => {
-    const originFile = file.originFileObj;
+    const originFile = file as unknown as File;
 
     if (!originFile) {
       return false;
     }
 
-    const isImage =
-      originFile.type === 'image/png' ||
-      originFile.type === 'image/jpeg' ||
-      originFile.type === 'image/jpg';
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+    const isValidType = allowedTypes.includes(originFile.type);
+    const isValidSize = originFile.size / 1024 / 1024 <= this.maxLogoSizeInMb;
 
-    if (!isImage) {
+    if (!isValidType) {
       this.toastrService.warning('Please select a PNG or JPG image only.', 'Warning');
       return false;
     }
 
+    if (!isValidSize) {
+      this.toastrService.warning(`Logo size must be within ${this.maxLogoSizeInMb} MB.`, 'Warning');
+      return false;
+    }
+
+    this.clearLogoPreview();
+
     this.selectedLogoFile = originFile;
+    this.logoPreviewUrl = URL.createObjectURL(originFile);
 
-    const reader = new FileReader();
-    reader.onload = (e: ProgressEvent<FileReader>) => {
-      this.logoPreviewUrl = e.target?.result as string;
-    };
-    reader.readAsDataURL(originFile);
+    this.logoFileList = [
+      {
+        uid: `${Date.now()}`,
+        name: originFile.name,
+        status: 'done',
+        size: originFile.size,
+        type: originFile.type
+      }
+    ];
 
+    // this.toastrService.success('Logo selected successfully.', 'Success');
     return false;
   };
 
   removeLogo(): void {
     this.selectedLogoFile = null;
+    this.logoFileList = [];
+    this.clearLogoPreview();
+  }
+
+  private clearLogoPreview(): void {
+    if (this.logoPreviewUrl) {
+      URL.revokeObjectURL(this.logoPreviewUrl);
+    }
     this.logoPreviewUrl = null;
+  }
+
+  get logoFileSizeKb(): string {
+    if (!this.selectedLogoFile?.size) {
+      return '0.00';
+    }
+    return (this.selectedLogoFile.size / 1024).toFixed(2);
   }
 }

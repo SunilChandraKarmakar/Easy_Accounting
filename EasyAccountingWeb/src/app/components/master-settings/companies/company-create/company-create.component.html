@@ -5,14 +5,12 @@
   </nz-breadcrumb-item>
   <nz-breadcrumb-item>Create Company</nz-breadcrumb-item>
 </nz-breadcrumb>
-
 <div class="row mt-3">
   <div class="col-md-12">
     <div class="card shadow-lg">
       <div class="card-header">
         <h5 class="card-title text-center">Create Company</h5>
       </div>
-
       <div class="card-body">
         <form class="row g-3" autocomplete="off">
           <div class="col-md-3">
@@ -30,7 +28,6 @@
                 [(ngModel)]="companyCreateModel.name" />
             </nz-input-wrapper>
           </div>
-
           <div class="col-md-3">
             <label for="email" class="form-label">Email</label>
             <nz-input-wrapper>
@@ -44,7 +41,6 @@
                 [(ngModel)]="companyCreateModel.email" />
             </nz-input-wrapper>
           </div>
-
           <div class="col-md-3">
             <label for="phone" class="form-label">
               Phone <span class="text-danger fw-bold">*</span>
@@ -60,7 +56,6 @@
                 [(ngModel)]="companyCreateModel.phone" />
             </nz-input-wrapper>
           </div>
-
           <div class="col-md-3">
             <label for="taxNo" class="form-label">Tax No</label>
             <nz-input-wrapper>
@@ -74,7 +69,6 @@
                 [(ngModel)]="companyCreateModel.taxNo" />
             </nz-input-wrapper>
           </div>
-
           <div class="col-md-3">
             <label for="countryId" class="form-label">
               Country <span class="text-danger fw-bold">*</span>
@@ -95,7 +89,6 @@
               }
             </nz-select>
           </div>
-
           <div class="col-md-3">
             <label for="cityId" class="form-label">
               City <span class="text-danger fw-bold">*</span>
@@ -115,7 +108,6 @@
               }
             </nz-select>
           </div>
-
           <div class="col-md-3">
             <label for="currencyId" class="form-label">
               Currency <span class="text-danger fw-bold">*</span>
@@ -135,57 +127,68 @@
               }
             </nz-select>
           </div>
-
           <div class="col-md-3">
             <label class="form-label">Company Logo</label>
-
-            <div class="icon-upload-align">
+            <div class="logo-upload-wrapper">
               <nz-upload
                 [nzBeforeUpload]="beforeUpload"
+                (nzChange)="handleChange($event)"
                 [nzMultiple]="false"
                 [nzShowUploadList]="false"
+                [nzFileList]="logoFileList"
                 nzAccept="image/png,image/jpeg,image/jpg">
                 <button nz-button type="button">
                   <nz-icon nzType="upload"></nz-icon>
-                  Click to Upload logo
+                  Click to Upload Logo
                 </button>
               </nz-upload>
-            </div>
-
-            @if (selectedLogoFile) {
-              <div class="logo-preview-box mt-2">
-
-                @if (logoPreviewUrl) {
-                  <div class="logo-preview-image">
-                    <img
-                      [src]="logoPreviewUrl"
-                      alt="Company Logo Preview"
-                      class="logo-image" />
-                  </div>
-                }
-
-                <div class="logo-preview-info mt-2">
-                  <small class="text-success d-block">
-                    Uploaded: {{ selectedLogoFile.name }}
-                  </small>
-                  <small class="text-muted d-block">
-                    Size: {{ (selectedLogoFile.size / 1024).toFixed(2) }} KB
+              @if (!selectedLogoFile) {
+                <div class="logo-upload-hint mt-2">
+                  <small class="text-muted">
+                    Accepted formats: PNG, JPG, JPEG | Max size: 2 MB
                   </small>
                 </div>
-
-                <button
-                  nz-button
-                  nzType="default"
-                  type="button"
-                  class="mt-2 delete-btn"
-                  (click)="removeLogo()">
-                  <nz-icon nzType="delete"></nz-icon>
-                  Remove
-                </button>
-              </div>
-            }
+              }
+              @if (selectedLogoFile) {
+                <div class="logo-preview-box mt-3">
+                  <div class="logo-preview-header">
+                    <span class="upload-status-badge">Selected</span>
+                  </div>
+                  @if (logoPreviewUrl) {
+                    <div class="logo-preview-image mt-2">
+                      <img
+                        [src]="logoPreviewUrl"
+                        alt="Company Logo Preview"
+                        class="logo-image" />
+                    </div>
+                  }
+                  <div class="logo-preview-info mt-3">
+                    <div class="file-name-row">
+                      <strong>File Name:</strong>
+                      <span>{{ selectedLogoFile.name }}</span>
+                    </div>
+                    <div class="file-name-row">
+                      <strong>File Size:</strong>
+                      <span>{{ logoFileSizeKb }} KB</span>
+                    </div>
+                    <div class="file-name-row">
+                      <strong>Status:</strong>
+                      <span class="text-success">Ready to upload</span>
+                    </div>
+                  </div>
+                  <button
+                    nz-button
+                    nzType="default"
+                    type="button"
+                    class="mt-3 delete-btn"
+                    (click)="removeLogo()">
+                    <nz-icon nzType="delete"></nz-icon>
+                    Remove
+                  </button>
+                </div>
+              }
+            </div>
           </div>
-
           <div class="col-md-3 mt-4">
             <label
               nz-checkbox
@@ -195,7 +198,6 @@
               Sell with POS?
             </label>
           </div>
-
           <div class="col-md-3 mt-4">
             <label
               nz-checkbox
@@ -205,7 +207,6 @@
               Product Have Brand?
             </label>
           </div>
-
           <div class="col-md-3 mt-4">
             <label
               nz-checkbox
@@ -215,7 +216,6 @@
               This is your default company?
             </label>
           </div>
-
           <div class="col-md-9">
             <label for="address" class="form-label">Address</label>
             <nz-textarea-count [nzMaxCharacterCount]="500">
@@ -231,7 +231,6 @@
           </div>
         </form>
       </div>
-
       <div class="card-footer text-end">
         <button
           nz-button
@@ -241,7 +240,6 @@
           <nz-icon nzType="save" nzTheme="outline"></nz-icon>
           Save
         </button>
-
         <button
           nz-button
           nzType="primary"
@@ -254,7 +252,6 @@
     </div>
   </div>
 </div>
-
 <ngx-spinner
   bdColor="rgba(51,51,51,0.8)"
   size="medium"
