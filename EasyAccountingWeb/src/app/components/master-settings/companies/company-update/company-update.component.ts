@@ -144,12 +144,15 @@ export class CompanyUpdateComponent implements OnInit, OnDestroy {
     this.spinnerService.show();
 
     let logoFileParameter: FileParameter | null = null;
+    let logoPath: string | undefined = this.companyUpdateModel.logo;
 
     if (this.selectedLogoFile) {
       logoFileParameter = {
         data: this.selectedLogoFile,
         fileName: this.selectedLogoFile.name
       };
+
+      logoPath = undefined;
     }
 
     this.companyService.update(
@@ -160,13 +163,13 @@ export class CompanyUpdateComponent implements OnInit, OnDestroy {
       this.companyUpdateModel.countryId,
       this.companyUpdateModel.cityId,
       this.companyUpdateModel.currencyId,
-      this.companyUpdateModel.logo,  
-      logoFileParameter, 
-      this.companyUpdateModel.isRemoveLogo, 
+      logoPath,
+      logoFileParameter,
+      this.companyUpdateModel.isRemoveLogo,
       this.companyUpdateModel.taxNo,
-      this.companyUpdateModel.isSellWithPos,
-      this.companyUpdateModel.isProductHaveBrand,
-      this.companyUpdateModel.isDefaultCompany,
+      this.companyUpdateModel.isSellWithPos ?? false,
+      this.companyUpdateModel.isProductHaveBrand ?? false,
+      this.companyUpdateModel.isDefaultCompany ?? false,
       this.companyUpdateModel.address
     ).subscribe({
       next: (result: boolean) => {
@@ -213,7 +216,7 @@ export class CompanyUpdateComponent implements OnInit, OnDestroy {
   }
 
   beforeUpload = (file: NzUploadFile): boolean => {
-    const originFile = file.originFileObj as File;
+    const originFile = file as unknown as File;
 
     if (!originFile) {
       return false;
@@ -236,8 +239,10 @@ export class CompanyUpdateComponent implements OnInit, OnDestroy {
     this.clearLogoPreview();
 
     this.selectedLogoFile = originFile;
-    this.companyUpdateModel.logoFile = originFile.name;
+    this.companyUpdateModel.logo = undefined;
+    this.companyUpdateModel.logoFile = undefined;
     this.companyUpdateModel.isRemoveLogo = false;
+    this.existingLogoUrl = null;
 
     this.logoPreviewUrl = URL.createObjectURL(originFile);
 
@@ -259,6 +264,11 @@ export class CompanyUpdateComponent implements OnInit, OnDestroy {
     this.companyUpdateModel.logoFile = undefined;
     this.logoFileList = [];
     this.clearLogoPreview();
+
+    // restore previous logo if it exists and was not deleted
+    if (!this.companyUpdateModel.isRemoveLogo && this.companyUpdateModel.logo) {
+      this.existingLogoUrl = `${environment.coreBaseUrl}${this.companyUpdateModel.logo}`;
+    }
   }
 
   removeExistingLogo(): void {

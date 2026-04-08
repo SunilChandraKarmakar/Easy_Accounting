@@ -143,6 +143,11 @@ export class CompanyCreateComponent implements OnInit, OnDestroy {
       };
     }
 
+    // Set default values for boolean fields if they are undefined
+    this.companyCreateModel.isSellWithPos = this.companyCreateModel.isSellWithPos ?? false;
+    this.companyCreateModel.isProductHaveBrand = this.companyCreateModel.isProductHaveBrand ?? false;
+    this.companyCreateModel.isDefaultCompany = this.companyCreateModel.isDefaultCompany ?? false;
+
     this.companyService.create(
       this.companyCreateModel.name,
       this.companyCreateModel.email,

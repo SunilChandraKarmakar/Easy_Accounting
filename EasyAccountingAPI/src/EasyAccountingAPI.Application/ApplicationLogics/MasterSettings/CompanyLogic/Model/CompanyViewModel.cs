@@ -19,7 +19,7 @@
         public IFormFile? LogoFile { get; set; }
         public string? TaxNo { get; set; }
         public bool IsSellWithPos { get; set; }
-        public bool IsProductHaveBrand { get; set; }
+        public bool IsProductHaveBrand { get; set; } 
         public bool IsDefaultCompany { get; set; }
         public string? Address { get; set; }
 
