@@ -5,14 +5,12 @@
   </nz-breadcrumb-item>
   <nz-breadcrumb-item>Update Company</nz-breadcrumb-item>
 </nz-breadcrumb>
-
 <div class="row mt-3">
   <div class="col-md-12">
     <div class="card shadow-lg">
       <div class="card-header">
         <h5 class="card-title text-center">Update Company</h5>
       </div>
-
       <div class="card-body">
         <form class="row g-3" autocomplete="off">
           <div class="col-md-3">
@@ -23,7 +21,6 @@
                 [(ngModel)]="companyUpdateModel.name" />
             </nz-input-wrapper>
           </div>
-
           <div class="col-md-3">
             <label for="email" class="form-label">Email</label>
             <nz-input-wrapper>
@@ -32,7 +29,6 @@
                 [(ngModel)]="companyUpdateModel.email" />
             </nz-input-wrapper>
           </div>
-
           <div class="col-md-3">
             <label for="phone" class="form-label">Phone <span class="text-danger fw-bold">*</span></label>
             <nz-input-wrapper>
@@ -41,7 +37,6 @@
                 [(ngModel)]="companyUpdateModel.phone" />
             </nz-input-wrapper>
           </div>
-
           <div class="col-md-3">
             <label for="taxNo" class="form-label">Tax No</label>
             <nz-input-wrapper>
@@ -50,7 +45,6 @@
                 [(ngModel)]="companyUpdateModel.taxNo" />
             </nz-input-wrapper>
           </div>
-
           <div class="col-md-3">
             <label for="countryId" class="form-label">Country <span class="text-danger fw-bold">*</span></label>
             <nz-select
@@ -66,7 +60,6 @@
               }
             </nz-select>
           </div>
-
           <div class="col-md-3">
             <label for="cityId" class="form-label">City <span class="text-danger fw-bold">*</span></label>
             <nz-select
@@ -81,7 +74,6 @@
               }
             </nz-select>
           </div>
-
           <div class="col-md-3">
             <label for="currencyId" class="form-label">Currency <span class="text-danger fw-bold">*</span></label>
             <nz-select
@@ -96,10 +88,8 @@
               }
             </nz-select>
           </div>
-
           <div class="col-md-3">
             <label class="form-label d-block">Company Logo</label>
-
             <div class="logo-upload-wrapper">
               <nz-upload
                 [nzMultiple]="false"
@@ -112,39 +102,32 @@
                   Select Logo
                 </button>
               </nz-upload>
-
               <div class="logo-upload-hint text-muted mt-2">
                 Accepted: PNG, JPG, JPEG | Max size: 2 MB
               </div>
-
               <div class="logo-preview-box mt-3" *ngIf="currentLogoUrl || selectedLogoFile">
                 <div class="logo-preview-header mb-3">
                   <strong>Logo Preview</strong>
                   <span class="upload-status-badge" *ngIf="selectedLogoFile">New File Selected</span>
                   <span class="upload-status-badge" *ngIf="!selectedLogoFile && currentLogoUrl">Current Logo</span>
                 </div>
-
                 <div class="logo-preview-image mb-3" *ngIf="currentLogoUrl; else noLogoBlock">
                   <img [src]="currentLogoUrl" alt="Company Logo Preview" class="logo-image" />
                 </div>
-
                 <ng-template #noLogoBlock>
                   <div class="logo-preview-image mb-3">
                     <span class="text-muted">No logo available</span>
                   </div>
                 </ng-template>
-
                 <div class="logo-preview-info">
                   <div class="file-name-row">
                     <strong>File Name:</strong>
                     <span>{{ currentLogoName }}</span>
                   </div>
-
                   <div *ngIf="selectedLogoFile">
                     <strong>File Size:</strong>
                     <span>{{ logoFileSizeKb }} KB</span>
                   </div>
-
                   <div class="mt-2 d-flex gap-2">
                     <button
                       nz-button
@@ -155,7 +138,6 @@
                       <nz-icon nzType="delete" />
                       Remove New File
                     </button>
-
                     <button
                       nz-button
                       nzDanger
@@ -170,25 +152,21 @@
               </div>
             </div>
           </div>
-
           <div class="col-md-3 mt-4">
             <label nz-checkbox [(ngModel)]="companyUpdateModel.isSellWithPos" id="isSellWithPos" name="isSellWithPos">
               Sell with POS?
             </label>
           </div>
-
           <div class="col-md-3 mt-4">
             <label nz-checkbox [(ngModel)]="companyUpdateModel.isProductHaveBrand" id="isProductHaveBrand" name="isProductHaveBrand">
               Product Have Brand?
             </label>
           </div>
-
           <div class="col-md-3 mt-4">
             <label nz-checkbox [(ngModel)]="companyUpdateModel.isDefaultCompany" id="isDefaultCompany" name="isDefaultCompany">
               This is your default company?
             </label>
           </div>
-
           <div class="col-md-9">
             <label for="address" class="form-label">Address</label>
             <nz-textarea-count [nzMaxCharacterCount]="500">
@@ -204,13 +182,11 @@
           </div>
         </form>
       </div>
-
       <div class="card-footer text-end">
         <button nz-button nzType="primary" class="btn-save" (click)="onClickUpdateCompany()">
           <nz-icon nzType="save" nzTheme="outline" />
           Update
         </button>
-
         <button nz-button nzType="primary" class="btn-cancel" routerLink="/app/companies">
           <nz-icon nzType="close" nzTheme="outline" />
           Cancel
@@ -219,7 +195,6 @@
     </div>
   </div>
 </div>
-
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
   <p style="font-size: 20px; color: white">Loading...</p>
 </ngx-spinner>
