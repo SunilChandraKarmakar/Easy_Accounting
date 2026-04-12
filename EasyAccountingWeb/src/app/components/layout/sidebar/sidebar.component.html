@@ -96,6 +96,12 @@
                             <i class="fa-solid fa-location-dot menu-icon"></i>
                             <span class="menu-text">Storage Location</span>
                         </a>
+                    }
+                    @if(sidebarPermissionService.hasAccess('Purchase', 'List')) {
+                        <a class="menu-link" routerLink="/app/purchase-items" routerLinkActive="active">
+                            <i class="fa-solid fa-location-dot menu-icon"></i>
+                            <span class="menu-text">Purchase Items</span>
+                        </a>
                     }                    
                 </div>
             </div>

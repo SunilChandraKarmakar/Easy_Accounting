@@ -63,6 +63,9 @@ import { UpdateVendorComponent } from './components/master-settings/vendors/upda
 import { VendorsComponent } from './components/master-settings/vendors/vendors.component';
 import { ExpiredProductsComponent } from './components/product-service/expired-products/expired-products.component';
 import { DashboardComponent } from './components/layout/dashboard/dashboard.component';
+import { PurchaseItemsComponent } from './components/purchase/purchase-items/purchase-items.component';
+import { PurchaseItemCreateComponent } from './components/purchase/purchase-items/purchase-item-create/purchase-item-create.component';
+import { PurchaseItemUpdateComponent } from './components/purchase/purchase-items/purchase-item-update/purchase-item-update.component';
 
 export const routes: Routes = [
 
@@ -176,7 +179,12 @@ export const routes: Routes = [
       // Vendor
       { path: "vendors", component: VendorsComponent, pathMatch: "full" },
       { path: "vendor/create", component: CreateVendorComponent, pathMatch: "full" },
-      { path: "vendor/update/:recordId", component: UpdateVendorComponent, pathMatch: "full" }
+      { path: "vendor/update/:recordId", component: UpdateVendorComponent, pathMatch: "full" },
+
+      // Purchase Items
+      { path: "purchase-items", component: PurchaseItemsComponent, pathMatch: "full" },
+      { path: "purchase-item/create", component: PurchaseItemCreateComponent, pathMatch: "full" },
+      { path: "purchase-item/update/:recordId", component: PurchaseItemUpdateComponent, pathMatch: "full" }
     ],
     
     canActivate: [AuthGuard] 

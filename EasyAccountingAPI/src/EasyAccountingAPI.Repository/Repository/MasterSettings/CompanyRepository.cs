@@ -56,7 +56,6 @@
         {
             // Get employee based company ids
             var companyIds = await GetEmployeeBasedCompanyIdsAsync(userId, cancellationToken);
-
             var getCompaines = db.Companies.AsNoTracking().Where(c => companyIds.Contains(c.Id) && !c.IsDeleted);     
 
             return await getCompaines

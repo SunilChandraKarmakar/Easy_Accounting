@@ -4,6 +4,7 @@
     {
         [HttpPost]
         [ProducesResponseType(typeof(FilterPageResultModel<PurchaseGridModel>), StatusCodes.Status200OK)]
+        [CheckAuthorize("Purchase", "List")]
         public async Task<ActionResult<FilterPageResultModel<PurchaseGridModel>>> GetFilterPurchasesAsync(
             GetPurchasesByFilterQuery getPurchasesByFilterQuery)
         {
@@ -22,13 +23,12 @@
 
             // Select list
             purchaseVm.OptionsDataSources.CompanySelectList = await Mediator.Send(new SelectListCompanyQuery());
-            purchaseVm.OptionsDataSources.ProductSelectList = await Mediator.Send(new SelectListProductQuery());
-
             return Ok(purchaseVm);
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Purchase", "Create")]
         public async Task<ActionResult<bool>> CreateAsync(CreatePurchaseCommand createPurchaseCommand)
         {
             if (ModelState.IsValid)
@@ -42,6 +42,7 @@
 
         [HttpPut]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Purchase", "Update")]
         public async Task<ActionResult<bool>> UpdateAsync(UpdatePurchaseCommand updatePurchaseCommand)
         {
             if (ModelState.IsValid)
@@ -55,6 +56,7 @@
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Purchase", "Delete")]
         public async Task<ActionResult<bool>> DeleteAsync(string id)
         {
             var isDeletePurchase = await Mediator.Send(new DeletePurchaseCommand { Id = id });
