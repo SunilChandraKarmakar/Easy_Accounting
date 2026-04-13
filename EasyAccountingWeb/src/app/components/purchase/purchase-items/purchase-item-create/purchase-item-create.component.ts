@@ -10,6 +10,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { PurchaseCreateModel, PurchaseService, SelectModel } from '../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 @Component({
   selector: 'app-purchase-item-create',
@@ -25,7 +26,9 @@ import { ToastrService } from 'ngx-toastr';
     NzInputModule, 
     NzIconModule, 
     NzBreadCrumbModule, 
-    NzDividerModule],
+    NzDividerModule,
+    NzSelectModule
+  ],
   providers: [PurchaseService]
 })
 
@@ -55,13 +58,14 @@ export class PurchaseItemCreateComponent implements OnInit {
     this.purchaseService.getById(this.purchaseId).subscribe((result) => {
       
       // Get select list
-      this.purchaseCreateModel = result;
+      this.companies = result.optionsDataSources.CompanySelectList;
     },
     (error: any) => {
       this.spinnerService.hide();
-      this.toastrService.error("Purchase cannot found! Please, try again.", "Error.");
+      this.toastrService.error("Dropdown list cannot found! Please, try again.", "Error.");
       return;
-    }
+    })
+  }
 
   // Purchase create form validation
   private getPurchaseCreateFromValidationResult(): boolean {
