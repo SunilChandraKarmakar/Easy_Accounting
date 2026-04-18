@@ -8,9 +8,10 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { PurchaseCreateModel, PurchaseService, SelectModel } from '../../../../../api/base-api';
+import { PurchaseCreateModel, PurchaseService, SelectModel, VendorService } from '../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 
 @Component({
   selector: 'app-purchase-item-create',
@@ -27,12 +28,15 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
     NzIconModule, 
     NzBreadCrumbModule, 
     NzDividerModule,
-    NzSelectModule
+    NzSelectModule,
+    NzDatePickerModule
   ],
-  providers: [PurchaseService]
+  providers: [PurchaseService, VendorService]
 })
 
 export class PurchaseItemCreateComponent implements OnInit {
+
+  date = null;
 
   // Default purchase id
   private purchaseId: string = "-1";
@@ -42,27 +46,53 @@ export class PurchaseItemCreateComponent implements OnInit {
 
   // Select list
   companies: SelectModel[] = [];
+  vendors: SelectModel[] = [];
 
   constructor(
     private purchaseService: PurchaseService, 
+    private vendorService: VendorService,
     private spinnerService: NgxSpinnerService, 
     private toastrService: ToastrService,
     private router: Router) { }
 
   ngOnInit() {
+    this.getPurchaseById(this.purchaseId);
   }
 
   // Get purchase by id
   private getPurchaseById(purchaseId: string): void {
     this.spinnerService.show();
-    this.purchaseService.getById(this.purchaseId).subscribe((result) => {
+    this.purchaseService.getById(purchaseId).subscribe((result) => {
       
       // Get select list
       this.companies = result.optionsDataSources.CompanySelectList;
+      this.spinnerService.hide();
     },
     (error: any) => {
       this.spinnerService.hide();
-      this.toastrService.error("Dropdown list cannot found! Please, try again.", "Error.");
+      this.toastrService.error("Company dropdown list cannot found! Please, try again.", "Error.");
+      return;
+    })
+  }
+
+  // On change company
+  onChangeCompany(companyId: number): void {
+    if(companyId != undefined && companyId != null && companyId > 0) {
+      this.getVendors(companyId);
+    }
+  }
+
+  // Get vendor dropdown list based on the selected company id
+  private getVendors(companyId: number): void {
+    this.spinnerService.show();
+    this.vendorService.getVendorByCompanyId(companyId).subscribe((result: SelectModel[]) => {
+      this.vendors = result;
+      this.spinnerService.hide();
+      return;
+    },
+    (error: any) => {
+      this.spinnerService.hide();
+      this.toastrService.warning("Vendor dropdown is not load based on the selected company! Please, try again.", "Error.");
       return;
     })
   }

@@ -12,13 +12,50 @@
       <div class="card-body">
         <form class="row g-3" autocomplete="off">
           <div class="col-md-3">
+            <label for="orderNumber" class="form-label">Order Number <span class="text-danger fw-bold">*</span></label>
+            <nz-input-wrapper>
+              <nz-icon nzInputPrefix nzType="borderless-table" />
+              <input nz-input placeholder="Enter order number" nzSize="default" id="orderNumber" name="orderNumber" 
+                [(ngModel)]="purchaseCreateModel.orderNumber" />
+            </nz-input-wrapper>
+          </div>  
+          <div class="col-md-3">
             <label for="companyId" class="form-label">Company <span class="text-danger fw-bold">*</span></label>
              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Company" 
-              [(ngModel)]="purchaseCreateModel.companyId" name="countryId" style="width: 100%;">
+              [(ngModel)]="purchaseCreateModel.companyId" name="companyId" id="companyId" style="width: 100%;"
+              (ngModelChange)="onChangeCompany($event)">
                 @for (company of companies; track company.id) {
                   <nz-option [nzValue]="company.id" [nzLabel]="company.name!"></nz-option>
                 }
               </nz-select>
+          </div>
+          <div class="col-md-3">
+            <label for="purchaseDate" class="form-label">Purchase Date <span class="text-danger fw-bold">*</span></label> <br>
+            <nz-date-picker [(ngModel)]="purchaseCreateModel.purchaseDate" name="purchaseDate" id="purchaseDate" 
+              style="width: 100%;" />
+          </div> 
+          <div class="col-md-3">
+            <label for="paymentDate" class="form-label">Payment Date <span class="text-danger fw-bold">*</span></label> <br>
+            <nz-date-picker [(ngModel)]="purchaseCreateModel.paymentDate" name="paymentDate" id="paymentDate" 
+              style="width: 100%;" />
+          </div> 
+          <div class="col-md-3">
+            <label for="vendorId" class="form-label">Vendor <span class="text-danger fw-bold">*</span></label>
+             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Vendor" 
+              [(ngModel)]="purchaseCreateModel.vendorId" name="vendorId" id="vendorId" style="width: 100%;">
+                @for (vendor of vendors; track vendor.id) {
+                  <nz-option [nzValue]="vendor.id" [nzLabel]="vendor.name!"></nz-option>
+                }
+              </nz-select>
+          </div>
+          <nz-divider nzDashed [nzText]="text" nzOrientation="left" >
+            <ng-template #text>
+              <nz-icon nzType="plus" />
+              Purchase Items
+            </ng-template>              
+          </nz-divider>   
+          <div class="col-md-12">
+            
           </div>
         </form>
       </div>
