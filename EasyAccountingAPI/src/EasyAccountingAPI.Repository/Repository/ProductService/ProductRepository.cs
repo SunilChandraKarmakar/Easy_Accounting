@@ -107,5 +107,17 @@
                 .Select(s => new SelectModel { Id = s.Id, Name = s.Name })
                 .ToListAsync(cancellationToken);
         }
+
+        public async Task<IEnumerable<SelectModel>> GetProductsByCompanyIdAsync(int companyId, CancellationToken ct = default)
+        {
+            var getProducts = db.Products
+                .AsNoTracking()
+                .Where(b => b.CompanyId == companyId && !b.IsDeleted);
+
+            return await getProducts
+                .OrderBy(b => b.Name)
+                .Select(s => new SelectModel { Id = s.Id, Name = s.Name })
+                .ToListAsync(ct);
+        }
     }
 }

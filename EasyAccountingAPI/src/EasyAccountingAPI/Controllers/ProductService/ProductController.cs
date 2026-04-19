@@ -77,5 +77,13 @@
             var isDeleteProduct = await Mediator.Send(new DeleteProductCommand { Id = id });
             return Ok(isDeleteProduct);
         }
+
+        [HttpGet("{companyId}")]
+        [ProducesResponseType(typeof(IEnumerable<SelectModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<SelectModel>>> GetProductsByCompanyIdAsync(int companyId)
+        {
+            var products = await Mediator.Send(new SelectListProductByCompanyIdQuery { CompanyId = companyId });
+            return Ok(products);
+        }
     }
 }

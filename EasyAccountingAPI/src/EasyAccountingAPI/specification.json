@@ -2563,6 +2563,41 @@
         }
       }
     },
+    "/api/Product/GetProductsByCompanyId/{companyId}": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "operationId": "Product_GetProductsByCompanyId",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SelectModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Product/Update": {
       "put": {
         "tags": [

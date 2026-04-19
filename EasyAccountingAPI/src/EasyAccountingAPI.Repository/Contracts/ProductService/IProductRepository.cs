@@ -7,5 +7,6 @@
         Task<FilterPageResultModel<Product>> GetExpiredProductsByFilterAsync(FilterPageModel filterPageModel,
             string? userId, CancellationToken cancellationToken);
         Task<IEnumerable<SelectModel>> GetProductSelectList(string userId, CancellationToken cancellationToken);
+        Task<IEnumerable<SelectModel>> GetProductsByCompanyIdAsync(int companyId, CancellationToken ct = default);
     }
 }

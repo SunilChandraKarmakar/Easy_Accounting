@@ -8,10 +8,11 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { PurchaseCreateModel, PurchaseService, SelectModel, VendorService } from '../../../../../api/base-api';
+import { ProductService, PurchaseCreateModel, PurchaseItemCreateModel, PurchaseService, SelectModel, VendorService } from '../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 
 @Component({
   selector: 'app-purchase-item-create',
@@ -29,9 +30,10 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
     NzBreadCrumbModule, 
     NzDividerModule,
     NzSelectModule,
-    NzDatePickerModule
+    NzDatePickerModule,
+    NzInputNumberModule
   ],
-  providers: [PurchaseService, VendorService]
+  providers: [PurchaseService, VendorService, ProductService]
 })
 
 export class PurchaseItemCreateComponent implements OnInit {
@@ -43,14 +45,19 @@ export class PurchaseItemCreateComponent implements OnInit {
 
   // Purchase create model
   purchaseCreateModel: PurchaseCreateModel = new PurchaseCreateModel();
+  
+  // Purchase Item create model
+  purchaseItemCreateModel: PurchaseItemCreateModel = new PurchaseItemCreateModel();
 
   // Select list
   companies: SelectModel[] = [];
   vendors: SelectModel[] = [];
+  products: SelectModel[] = [];
 
   constructor(
     private purchaseService: PurchaseService, 
     private vendorService: VendorService,
+    private productService: ProductService,
     private spinnerService: NgxSpinnerService, 
     private toastrService: ToastrService,
     private router: Router) { }
@@ -79,6 +86,7 @@ export class PurchaseItemCreateComponent implements OnInit {
   onChangeCompany(companyId: number): void {
     if(companyId != undefined && companyId != null && companyId > 0) {
       this.getVendors(companyId);
+      this.getProductsByCompanyId(companyId);
     }
   }
 
@@ -93,6 +101,21 @@ export class PurchaseItemCreateComponent implements OnInit {
     (error: any) => {
       this.spinnerService.hide();
       this.toastrService.warning("Vendor dropdown is not load based on the selected company! Please, try again.", "Error.");
+      return;
+    })
+  }
+
+  // Get product dropdown list based on the company id
+  private getProductsByCompanyId(companyId: number): void {
+    this.spinnerService.show();
+    this.productService.getProductsByCompanyId(companyId).subscribe((result: SelectModel[]) => {
+      this.products = result;
+      this.spinnerService.hide();
+      return;
+    },
+    (error: any) => {
+      this.spinnerService.hide();
+      this.toastrService.error("Product dropdown is not load based on the company id! Please, try again.", "Error.");
       return;
     })
   }

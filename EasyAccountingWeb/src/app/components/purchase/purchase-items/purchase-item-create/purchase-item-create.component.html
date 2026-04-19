@@ -30,12 +30,12 @@
               </nz-select>
           </div>
           <div class="col-md-3">
-            <label for="purchaseDate" class="form-label">Purchase Date <span class="text-danger fw-bold">*</span></label> <br>
+            <label for="purchaseDate" class="form-label">Purchase Date <span class="text-danger fw-bold">*</span></label>
             <nz-date-picker [(ngModel)]="purchaseCreateModel.purchaseDate" name="purchaseDate" id="purchaseDate" 
               style="width: 100%;" />
           </div> 
           <div class="col-md-3">
-            <label for="paymentDate" class="form-label">Payment Date <span class="text-danger fw-bold">*</span></label> <br>
+            <label for="paymentDate" class="form-label">Payment Date <span class="text-danger fw-bold">*</span></label>
             <nz-date-picker [(ngModel)]="purchaseCreateModel.paymentDate" name="paymentDate" id="paymentDate" 
               style="width: 100%;" />
           </div> 
@@ -55,7 +55,81 @@
             </ng-template>              
           </nz-divider>   
           <div class="col-md-12">
-            
+            <div class="row">
+              <div class="col-md-6">
+
+              </div>
+              <div class="col-md-6">
+                <div class="card shadow">
+                  <div class="card-header">
+                    <div class="card-title text-center">
+                      Add Item
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <form class="row g-3" autocomplete="off">
+                      <div class="col-md-6">
+                        <label for="productId" class="form-label">Product <span class="text-danger fw-bold">*</span></label>
+                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Product" 
+                          [(ngModel)]="purchaseItemCreateModel.productId" name="productId" id="productId" style="width: 100%;">
+                            @for (product of products; track product.id) {
+                              <nz-option [nzValue]="product.id" [nzLabel]="product.name!"></nz-option>
+                            }
+                        </nz-select>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="qty" class="form-label">QTY <span class="text-danger fw-bold">*</span></label>
+                        <nz-input-number placeholder="0" nzSize="default" id="qty" name="qty" nzMin="1"
+                          [(ngModel)]="purchaseItemCreateModel.qty"
+                          nzAddonBefore="+"
+                          style="width: 100%;" />
+                      </div>
+                      <div class="col-md-6">
+                        <label for="unitPrice" class="form-label">Unit Price <span class="text-danger fw-bold">*</span></label>
+                        <nz-input-number placeholder="0" nzSize="default" id="unitPrice" name="unitPrice" nzMin="1"
+                          [(ngModel)]="purchaseItemCreateModel.unitPrice"
+                          nzAddonBefore="+"
+                          style="width: 100%;" />
+                      </div>
+                      <div class="col-md-6">
+                        <label for="sellPrice" class="form-label">Sell Price <span class="text-danger fw-bold">*</span></label>
+                        <nz-input-number placeholder="0" nzSize="default" id="sellPrice" name="sellPrice" nzMin="1"
+                          [(ngModel)]="purchaseItemCreateModel.sellPrice"
+                          nzAddonBefore="+"
+                          style="width: 100%;" />
+                      </div>
+                      <div class="col-md-6">
+                        <label for="expiryDate" class="form-label">Expiry Date <span class="text-danger fw-bold">*</span></label> 
+                        <nz-date-picker [(ngModel)]="purchaseItemCreateModel.expiryDate" name="expiryDate" id="expiryDate" 
+                          style="width: 100%;" />
+                      </div> 
+                      <div class="col-md-6">
+                        <label for="subTotal" class="form-label">Sub Total <span class="text-danger fw-bold">*</span></label>
+                        <nz-input-number placeholder="0" nzSize="default" id="subTotal" name="subTotal" nzMin="1"
+                          [(ngModel)]="purchaseItemCreateModel.subTotal"
+                          nzAddonBefore="+"
+                          style="width: 100%;"
+                          [nzReadOnly]="true" />
+                      </div>
+                    </form>
+                  </div>
+                  <div class="card-footer text-end">
+                    <button nz-button nzType="primary" class="btn-save" (click)="onClickSavePurchase()">
+                      <nz-icon nzType="plus" nzTheme="outline" />
+                      Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-9">
+            <label for="notes" class="form-label">Notes</label>
+            <nz-textarea-count [nzMaxCharacterCount]="1000">
+              <textarea rows="4" id="notes" name="notes" placeholder="Enter notes" 
+                [(ngModel)]="purchaseCreateModel.notes" nz-input>
+              </textarea>
+            </nz-textarea-count>
           </div>
         </form>
       </div>
