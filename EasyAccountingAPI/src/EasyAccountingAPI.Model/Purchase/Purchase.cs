@@ -28,6 +28,11 @@
         [Required(ErrorMessage = "Please, provide total amount.")]
         public decimal TotalAmount { get; set; }
 
+        [Required(ErrorMessage = "Please, provide payment status.")]
+        public int PaymentStatusId { get; set; }
+
+        public int? PaymentMethodId  { get; set; }
+        public decimal? PaymentAmount { get; set; }
         public string? Notes { get; set; }
         public string CreatedById { get; set; }
         public DateTime CreatedDateTime { get; set; }
@@ -38,6 +43,8 @@
 
         public Company Company { get; set; }
         public Vendor Vendor { get; set; }
+        public EnumTypeCollection PaymentStatus { get; set; }
+        public EnumTypeCollection PaymentMethod {  get; set; }
         public ICollection<PurchaseItem> PurchaseItems { get; set; }
     }
 }

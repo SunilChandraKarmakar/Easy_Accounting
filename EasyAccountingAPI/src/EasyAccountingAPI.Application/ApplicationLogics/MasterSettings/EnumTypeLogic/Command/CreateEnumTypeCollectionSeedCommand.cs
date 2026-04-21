@@ -94,7 +94,8 @@
                 return new List<EnumType>
                 {
                     new() { Id = 1, Name = "Global Status" },
-                    new() { Id = 2, Name = "Payment Status" }
+                    new() { Id = 2, Name = "Payment Status" },
+                    new() { Id = 2, Name = "Payment Method" }
                 };
             }
 
@@ -114,6 +115,15 @@
                         new() { Id = 3, Name = "Paid", EnumTypeId = 2 },
                         new() { Id = 4, Name = "Partial", EnumTypeId = 2 },
                         new() { Id = 5, Name = "Unpaid", EnumTypeId = 2 }
+                    },
+
+                    ["Payment Method"] = new()
+                    {
+                        new() { Id = 6, Name = "Bank Payment", EnumTypeId = 3 },
+                        new() { Id = 7, Name = "Cheque", EnumTypeId = 3 },
+                        new() { Id = 8, Name = "Credit Card", EnumTypeId = 3 },
+                        new() { Id = 9, Name = "PayPal", EnumTypeId = 3 },
+                        new() { Id = 10, Name = "Other", EnumTypeId = 3 }
                     }
                 };
             }
