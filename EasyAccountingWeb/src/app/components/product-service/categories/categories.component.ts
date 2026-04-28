@@ -12,6 +12,8 @@ import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { CategoryGridModel, CategoryService, FilterPageModel, FilterPageResultModelOfCategoryGridModel } from '../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { CheckPermissionDirective } from '../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-categories',
@@ -29,7 +31,8 @@ import { ToastrService } from 'ngx-toastr';
     NzInputModule, 
     NzIconModule, 
     NzBreadCrumbModule, 
-    NzPopconfirmModule
+    NzPopconfirmModule,
+    CheckPermissionDirective
   ],
   providers: [CategoryService]
 })
@@ -46,9 +49,14 @@ export class CategoriesComponent implements OnInit {
   constructor(
     private categoryService: CategoryService, 
     private spinnerService: NgxSpinnerService, 
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     // Initialize page filter model
     this.initializeFilterModel();
 

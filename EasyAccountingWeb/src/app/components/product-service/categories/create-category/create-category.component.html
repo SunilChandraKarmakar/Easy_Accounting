@@ -40,8 +40,13 @@
         </form>
       </div>
       <div class="card-footer text-end">
-        <button nz-button nzType="primary" class="btn-save" (click)="onClickSaveCategory()">
-          <nz-icon nzType="save" nzTheme="outline" />
+        <button 
+          nz-button 
+          nzType="primary" 
+          class="btn-save" 
+          (click)="onClickSaveCategory()"
+          *appCheckPermission="{ feature: 'Category', action: 'Create' }">
+            <nz-icon nzType="save" nzTheme="outline" />
           Save
         </button>
         <button nz-button nzType="primary" class="btn-cancel" routerLink="/app/categories">

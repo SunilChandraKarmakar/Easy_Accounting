@@ -40,7 +40,12 @@
         </form>
       </div>
       <div class="card-footer text-end">
-        <button nz-button nzType="primary" class="btn-save" (click)="onClickUpdateVariation()">
+        <button 
+          nz-button 
+          nzType="primary" 
+          class="btn-save" 
+          (click)="onClickUpdateVariation()"
+          *appCheckPermission="{ feature: 'Variation', action: 'Update' }">
           <nz-icon nzType="save" nzTheme="outline" />
           Update
         </button>

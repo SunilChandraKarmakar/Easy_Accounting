@@ -95,7 +95,7 @@
                 {
                     new() { Id = 1, Name = "Global Status" },
                     new() { Id = 2, Name = "Payment Status" },
-                    new() { Id = 2, Name = "Payment Method" }
+                    new() { Id = 3, Name = "Payment Method" }
                 };
             }
 

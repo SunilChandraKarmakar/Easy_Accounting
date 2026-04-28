@@ -11,6 +11,8 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { BrandCreateModel, BrandService, BrandViewModel, SelectModel } from '../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { CheckPermissionDirective } from '../../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-create-brand',
@@ -27,7 +29,8 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
     NzIconModule, 
     NzBreadCrumbModule, 
     NzDividerModule,
-    NzSelectModule
+    NzSelectModule,
+    CheckPermissionDirective
   ],
   providers: [BrandService]
 })
@@ -47,9 +50,13 @@ export class CreateBrandComponent implements OnInit {
     private brandService: BrandService, 
     private spinnerService: NgxSpinnerService, 
     private toastrService: ToastrService,
-    private router: Router) { }
+    private router: Router,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     this.getBrandById(this._brandId);
   }
 

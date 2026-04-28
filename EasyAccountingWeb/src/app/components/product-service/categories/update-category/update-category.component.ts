@@ -11,6 +11,8 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { CategoryService, CategoryUpdateModel, CategoryViewModel, SelectModel } from '../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { CheckPermissionDirective } from '../../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-update-category',
@@ -27,7 +29,8 @@ import { ToastrService } from 'ngx-toastr';
     NzIconModule, 
     NzBreadCrumbModule, 
     NzDividerModule,
-    NzSelectModule
+    NzSelectModule,
+    CheckPermissionDirective
   ],
   providers: [CategoryService]
 })
@@ -49,9 +52,13 @@ export class UpdateCategoryComponent implements OnInit {
     private spinnerService: NgxSpinnerService, 
     private toastrService: ToastrService,
     private router: Router,
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     this.getCategoryIdByUrl();
   }
 

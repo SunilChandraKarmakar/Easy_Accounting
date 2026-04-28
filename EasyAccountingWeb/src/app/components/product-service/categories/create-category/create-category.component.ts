@@ -11,6 +11,8 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { CategoryCreateModel, CategoryService, CategoryViewModel, SelectModel } from '../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { CheckPermissionDirective } from '../../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-create-category',
@@ -27,7 +29,8 @@ import { ToastrService } from 'ngx-toastr';
     NzIconModule, 
     NzBreadCrumbModule, 
     NzDividerModule,
-    NzSelectModule
+    NzSelectModule,
+    CheckPermissionDirective
   ],
   providers: [CategoryService]
 })
@@ -48,9 +51,14 @@ export class CreateCategoryComponent implements OnInit {
     private categoryService: CategoryService, 
     private spinnerService: NgxSpinnerService, 
     private toastrService: ToastrService,
-    private router: Router) { }
+    private router: Router,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     this.getCategoryById(this._categoryId);
   }
 

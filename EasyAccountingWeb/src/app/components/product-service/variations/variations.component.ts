@@ -13,6 +13,8 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { FilterPageModel, FilterPageResultModelOfVariationGridModel, VariationGridModel, VariationService } from '../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { CheckPermissionDirective } from '../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-variations',
@@ -31,7 +33,8 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
     NzIconModule, 
     NzBreadCrumbModule, 
     NzPopconfirmModule,
-    NzTagModule
+    NzTagModule,
+    CheckPermissionDirective
   ],
   providers: [VariationService]
 })
@@ -48,9 +51,14 @@ export class VariationsComponent implements OnInit {
   constructor(
     private variationService: VariationService, 
     private spinnerService: NgxSpinnerService, 
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService,
+    private accessControlService: AccessControlService) { }
 
  ngOnInit() {
+  
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     // Initialize page filter model
     this.initializeFilterModel();
 

@@ -1,6 +1,10 @@
 <nz-breadcrumb>
-  <nz-breadcrumb-item>Product & Service</nz-breadcrumb-item>
-  <nz-breadcrumb-item><a routerLink="/app/brands" class="breadcrumb-link">Brand</a></nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    Product & Service
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    <a routerLink="/app/brands" class="breadcrumb-link">Brand</a>
+  </nz-breadcrumb-item>
 </nz-breadcrumb>
 <div class="row mt-3">
   <div class="col-md-12">
@@ -19,9 +23,13 @@
             </nz-space-compact>
           </div>
           <div class="col-md-6 text-end">
-            <button nz-button nzType="primary" routerLink="/app/brand/create">
-              <nz-icon nzType="plus" nzTheme="outline" />
-              Create
+            <button 
+              nz-button 
+              nzType="primary" 
+              routerLink="/app/brand/create" 
+              *appCheckPermission="{ feature: 'Brand', action: 'Create' }">
+                <nz-icon nzType="plus" nzTheme="outline" />
+                Create
             </button>
           </div>
           <div class="col-md-12">
@@ -41,14 +49,30 @@
                     <td>{{ data.name }}</td>
                     <td>{{ data.companyName }}</td>
                     <td class="text-center action-cell">
-                      <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Edit" class="action-btn edit-btn"
-                        routerLink="/app/brand/update/{{ data.id }}">
+                      <button 
+                        nz-button 
+                        nzType="text" 
+                        nz-tooltip 
+                        nzTooltipTitle="Edit" 
+                        class="action-btn edit-btn"
+                        routerLink="/app/brand/update/{{ data.id }}"
+                        *appCheckPermission="{ feature: 'Brand', action: 'Update' }">
                         <nz-icon nzType="edit" />
                       </button>
                       <nz-divider nzType="vertical"></nz-divider>
-                      <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Delete" nzDanger class="action-btn delete-btn" 
-                        nz-popconfirm [nzPopconfirmTitle]="deleteTpl" [nzIcon]="iconTpl" (nzOnConfirm)="onClickDelete(data.id)" 
-                        (nzOnCancel)="cancel()">
+                      <button 
+                        nz-button 
+                        nzType="text" 
+                        nz-tooltip 
+                        nzTooltipTitle="Delete" 
+                        nzDanger 
+                        class="action-btn delete-btn" 
+                        nz-popconfirm 
+                        [nzPopconfirmTitle]="deleteTpl" 
+                        [nzIcon]="iconTpl" 
+                        (nzOnConfirm)="onClickDelete(data.id)" 
+                        (nzOnCancel)="cancel()"
+                        *appCheckPermission="{ feature: 'Brand', action: 'Delete' }">
                         <nz-icon nzType="delete" />
                       </button>
                       <ng-template #deleteTpl>

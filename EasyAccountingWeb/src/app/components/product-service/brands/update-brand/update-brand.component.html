@@ -31,9 +31,14 @@
         </form>
       </div>
       <div class="card-footer text-end">
-        <button nz-button nzType="primary" class="btn-save" (click)="onClickUpdateBrand()">
-          <nz-icon nzType="save" nzTheme="outline" />
-          Update
+        <button 
+          nz-button 
+          nzType="primary" 
+          class="btn-save" 
+          (click)="onClickUpdateBrand()"
+          *appCheckPermission="{ feature: 'Brand', action: 'Update' }">
+            <nz-icon nzType="save" nzTheme="outline" />
+            Update
         </button>
         <button nz-button nzType="primary" class="btn-cancel" routerLink="/app/brands">
           <nz-icon nzType="close" nzTheme="outline" />

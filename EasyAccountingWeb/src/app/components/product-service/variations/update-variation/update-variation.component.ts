@@ -11,6 +11,8 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { SelectModel, VariationService, VariationUpdateModel, VariationViewModel } from '../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { CheckPermissionDirective } from '../../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-update-variation',
@@ -27,7 +29,8 @@ import { ToastrService } from 'ngx-toastr';
     NzIconModule, 
     NzBreadCrumbModule, 
     NzDividerModule,
-    NzSelectModule
+    NzSelectModule,
+    CheckPermissionDirective
   ],
   providers: [VariationService]
 })
@@ -48,9 +51,14 @@ export class UpdateVariationComponent implements OnInit {
     private spinnerService: NgxSpinnerService, 
     private toastrService: ToastrService,
     private router: Router,
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     this.getVariationIdByUrl();
   }
 
