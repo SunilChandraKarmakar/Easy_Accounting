@@ -4,6 +4,7 @@
     {
         [HttpPost]
         [ProducesResponseType(typeof(FilterPageResultModel<InvoiceSettingGridModel>), StatusCodes.Status200OK)]
+        [CheckAuthorize("InvoiceSetting", "List")]
         public async Task<ActionResult<FilterPageResultModel<InvoiceSettingGridModel>>> GetFilterInvoiceSettingsAsync(
             GetInvoiceSettingsByFilterQuery getinvoiceSettingsByFilterQuery)
         {
@@ -28,6 +29,7 @@
 
         [HttpPost]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("InvoiceSetting", "Create")]
         public async Task<ActionResult<bool>> CreateAsync(CreateInvoiceSettingCommand createInvoiveSettingCommand)
         {
             if (ModelState.IsValid)
@@ -41,6 +43,7 @@
 
         [HttpPut]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("InvoiceSetting", "Update")]
         public async Task<ActionResult<bool>> UpdateAsync(UpdateInvoiceSettingCommand updateInvoiceSettingCommand)
         {
             if (ModelState.IsValid)
@@ -54,6 +57,7 @@
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("InvoiceSetting", "Delete")]
         public async Task<ActionResult<bool>> DeleteAsync(string id)
         {
             var isDeleteInvoiceSetting = await Mediator.Send(new DeleteInvoiceSettingCommand { Id = id });

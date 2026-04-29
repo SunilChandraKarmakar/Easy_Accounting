@@ -14,12 +14,16 @@
             <nz-space-compact nzSize="default">
               <nz-input-wrapper class="search-input">
                 <nz-icon nzInputAddonBefore nzType="search" />
-                <input nz-input (keyup)="onChangeApplyFilter($event)" placeholder="Search by name" />
+                <input nz-input (keyup)="onChangeApplyFilter($event)" placeholder="Search Module" />
               </nz-input-wrapper>              
             </nz-space-compact>
           </div>
           <div class="col-md-6 text-end">
-            <button nz-button nzType="primary" routerLink="/app/module/create">
+            <button 
+              nz-button 
+              nzType="primary" 
+              routerLink="/app/module/create"
+              *appCheckPermission="{ feature: 'Module', action: 'Create' }">
               <nz-icon nzType="plus" nzTheme="outline" />
               Create
             </button>
@@ -41,14 +45,29 @@
                       <span>{{ data.name }}</span> &nbsp;
                     </td>
                     <td class="text-center action-cell">
-                      <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Edit" class="action-btn edit-btn"
-                        routerLink="/app/module/update/{{ data.id }}">
+                      <button 
+                        nz-button 
+                        nzType="text" 
+                        nz-tooltip 
+                        nzTooltipTitle="Edit" 
+                        class="action-btn edit-btn"
+                        routerLink="/app/module/update/{{ data.id }}"
+                        *appCheckPermission="{ feature: 'Module', action: 'Update' }">
                         <nz-icon nzType="edit" />
                       </button>
                       <nz-divider nzType="vertical"></nz-divider>
-                      <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Delete" nzDanger class="action-btn delete-btn" 
-                        nz-popconfirm [nzPopconfirmTitle]="deleteTpl" [nzIcon]="iconTpl" (nzOnConfirm)="onClickDelete(data.id)" 
-                        (nzOnCancel)="cancel()">
+                      <button 
+                        nz-button 
+                        nzType="text" 
+                        nz-tooltip 
+                        nzTooltipTitle="Delete" 
+                        nzDanger class="action-btn delete-btn" 
+                        nz-popconfirm 
+                        [nzPopconfirmTitle]="deleteTpl" 
+                        [nzIcon]="iconTpl" 
+                        (nzOnConfirm)="onClickDelete(data.id)" 
+                        (nzOnCancel)="cancel()"
+                        *appCheckPermission="{ feature: 'Module', action: 'Delete' }">
                         <nz-icon nzType="delete" />
                       </button>
                       <ng-template #deleteTpl>

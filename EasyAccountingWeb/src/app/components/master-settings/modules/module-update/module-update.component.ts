@@ -9,13 +9,25 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { ModuleService, ModuleUpdateModel, ModuleViewModel } from '../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { CheckPermissionDirective } from '../../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-module-update',
   templateUrl: './module-update.component.html',
   styleUrls: ['./module-update.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule, NzButtonModule, NgxSpinnerModule, NzInputModule, NzIconModule, NzBreadCrumbModule, RouterLink],
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    NzButtonModule, 
+    NgxSpinnerModule, 
+    NzInputModule, 
+    NzIconModule, 
+    NzBreadCrumbModule, 
+    RouterLink,
+    CheckPermissionDirective
+  ],
   providers: [ModuleService]
 })
 
@@ -27,10 +39,18 @@ export class ModuleUpdateComponent implements OnInit {
   // Get module id
   private _moduleId: string | undefined;
 
-  constructor(private moduleService: ModuleService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService,
-    private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(
+    private moduleService: ModuleService, 
+    private spinnerService: NgxSpinnerService, 
+    private toastrService: ToastrService,
+    private router: Router, 
+    private activatedRoute: ActivatedRoute,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
 
     // Get module id by url
     this.getModuleIdByUrl();

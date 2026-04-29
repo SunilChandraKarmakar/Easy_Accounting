@@ -10,6 +10,8 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { ModuleCreateModel, ModuleService } from '../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { CheckPermissionDirective } from '../../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-module-create',
@@ -25,7 +27,9 @@ import { ToastrService } from 'ngx-toastr';
     NzInputModule, 
     NzIconModule, 
     NzBreadCrumbModule, 
-    NzDividerModule],
+    NzDividerModule,
+    CheckPermissionDirective
+  ],
   providers: [ModuleService]
 })
 
@@ -34,10 +38,18 @@ export class ModuleCreateComponent implements OnInit {
   // Module create model
   moduleCreateModel: ModuleCreateModel = new ModuleCreateModel();
 
-  constructor(private moduleService: ModuleService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService,
-    private router: Router) { }
+  constructor(
+    private moduleService: ModuleService, 
+    private spinnerService: NgxSpinnerService, 
+    private toastrService: ToastrService,
+    private router: Router,
+    private accessControlService: AccessControlService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    
+    // Set login user permission
+    this.accessControlService.setPermissions();
+   }
 
   // Module create form validation
   private getModuleCreateFromValidationResult(): boolean {

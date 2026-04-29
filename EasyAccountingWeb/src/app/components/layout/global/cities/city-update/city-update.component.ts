@@ -14,14 +14,29 @@ import { CityService, CityUpdateModel, CityViewModel } from '../../../../../../a
 import { ToastrService } from 'ngx-toastr';
 import { SelectModel } from '../../../../../shared/models/select-model';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { CheckPermissionDirective } from '../../../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-city-update',
   templateUrl: './city-update.component.html',
   styleUrls: ['./city-update.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule, NzButtonModule, NgxSpinnerModule, NzInputModule, NzIconModule, NzUploadModule,
-    NzTableModule, NzBreadCrumbModule, RouterLink, NzPopconfirmModule, NzSelectModule],
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    NzButtonModule, 
+    NgxSpinnerModule, 
+    NzInputModule, 
+    NzIconModule, 
+    NzUploadModule,
+    NzTableModule, 
+    NzBreadCrumbModule, 
+    RouterLink, 
+    NzPopconfirmModule, 
+    NzSelectModule,
+    CheckPermissionDirective
+  ],
   providers: [CityService]
 })
 
@@ -38,10 +53,19 @@ export class CityUpdateComponent implements OnInit {
   countries: SelectModel[] = [];
   cities: SelectModel[] = [];  
 
-  constructor(private cityService: CityService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService,
-    private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(
+    private cityService: CityService, 
+    private spinnerService: NgxSpinnerService, 
+    private toastrService: ToastrService,
+    private router: Router, 
+    private activatedRoute: ActivatedRoute,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     // Get city id by url
     this.getCityIdByUrl();
   }

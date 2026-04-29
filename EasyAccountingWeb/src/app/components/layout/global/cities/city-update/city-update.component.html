@@ -39,9 +39,14 @@
         </form>
       </div>
       <div class="card-footer text-end">
-        <button nz-button nzType="primary" class="btn-save" (click)="onClickUpdateCity()">
+        <button 
+          nz-button 
+          nzType="primary" 
+          class="btn-save" 
+          (click)="onClickUpdateCity()"
+          *appCheckPermission="{ feature: 'City', action: 'Update' }">
           <nz-icon nzType="save" nzTheme="outline" />
-          Save
+          Update
         </button>
         <button nz-button nzType="primary" class="btn-cancel" routerLink="/app/cities">
           <nz-icon nzType="close" nzTheme="outline" />

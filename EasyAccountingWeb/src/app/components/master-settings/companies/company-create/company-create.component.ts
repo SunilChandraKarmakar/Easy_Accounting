@@ -13,6 +13,8 @@ import { ToastrService } from 'ngx-toastr';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzUploadChangeParam, NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { CheckPermissionDirective } from '../../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-company-create',
@@ -31,7 +33,8 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
     NzDividerModule, 
     NzSelectModule, 
     NzUploadModule, 
-    NzCheckboxModule
+    NzCheckboxModule,
+    CheckPermissionDirective
   ],
   providers: [CompanyService, CityService]
 })
@@ -61,9 +64,14 @@ export class CompanyCreateComponent implements OnInit, OnDestroy {
     private spinnerService: NgxSpinnerService, 
     private toastrService: ToastrService,
     private router: Router, 
-    private cityService: CityService) { }
+    private cityService: CityService,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     // Get company by id
     this.getCompanyByIdAsync();  
   }

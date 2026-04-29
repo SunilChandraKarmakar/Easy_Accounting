@@ -14,6 +14,8 @@ import { FilterPageModel, FilterPageResultModelOfProductGridModel, ProductGridMo
 import { ToastrService } from 'ngx-toastr';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { CheckPermissionDirective } from '../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-products',
@@ -33,7 +35,8 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
     NzBreadCrumbModule, 
     NzPopconfirmModule,
     NzTagModule,
-    NzBadgeModule
+    NzBadgeModule,
+    CheckPermissionDirective
   ],
   providers: [ProductService]
 })
@@ -50,9 +53,14 @@ export class ProductsComponent implements OnInit {
   constructor(
     private productService: ProductService, 
     private spinnerService: NgxSpinnerService, 
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     // Initialize page filter model
     this.initializeFilterModel();
 

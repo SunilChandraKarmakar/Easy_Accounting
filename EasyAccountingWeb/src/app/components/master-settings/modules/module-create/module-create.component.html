@@ -22,7 +22,12 @@
         </form>
       </div>
       <div class="card-footer text-end">
-        <button nz-button nzType="primary" class="btn-save" (click)="onClickSaveModule()">
+        <button 
+          nz-button 
+          nzType="primary" 
+          class="btn-save" 
+          (click)="onClickSaveModule()"
+          *appCheckPermission="{ feature: 'Module', action: 'Create' }">
           <nz-icon nzType="save" nzTheme="outline" />
           Save
         </button>

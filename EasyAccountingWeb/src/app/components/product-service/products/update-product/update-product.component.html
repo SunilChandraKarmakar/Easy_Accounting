@@ -156,7 +156,12 @@
         }
       </div>
       <div class="card-footer text-end">
-        <button nz-button nzType="primary" class="btn-save" (click)="onClickUpdateProduct()">
+        <button 
+          nz-button 
+          nzType="primary" 
+          class="btn-save" 
+          (click)="onClickUpdateProduct()"
+          *appCheckPermission="{ feature: 'Product', action: 'Update' }">
           <nz-icon nzType="edit" nzTheme="outline" />
           Update
         </button>

@@ -88,7 +88,12 @@
         </form>
       </div>
       <div class="card-footer text-end">
-        <button nz-button nzType="primary" class="btn-save" (click)="onClickSaveInvoiceSetting()">
+        <button 
+          nz-button 
+          nzType="primary" 
+          class="btn-save" 
+          (click)="onClickSaveInvoiceSetting()"
+          *appCheckPermission="{ feature: 'Invoice Setting', action: 'Create' }">
           <nz-icon nzType="save" nzTheme="outline" />
           Save
         </button>

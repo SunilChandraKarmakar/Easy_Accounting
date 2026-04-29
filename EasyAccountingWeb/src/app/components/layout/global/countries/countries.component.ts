@@ -14,6 +14,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { CheckPermissionDirective } from '../../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-countries',
@@ -33,7 +34,8 @@ import { CheckPermissionDirective } from '../../../../identity-shared/directive/
     NzBadgeModule, 
     NzBreadCrumbModule, 
     NzPopconfirmModule,
-    CheckPermissionDirective],
+    CheckPermissionDirective
+  ],
   providers: [CountryService]
 })
 
@@ -46,9 +48,17 @@ export class CountriesComponent implements OnInit {
   // Filter page model
   filterPageModel: FilterPageModel = new FilterPageModel();
 
-  constructor(private countryService: CountryService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService) { }
+  constructor(
+    private countryService: CountryService, 
+    private spinnerService: NgxSpinnerService, 
+    private toastrService: ToastrService,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     // Initialize page filter model
     this.initializeFilterModel();
 

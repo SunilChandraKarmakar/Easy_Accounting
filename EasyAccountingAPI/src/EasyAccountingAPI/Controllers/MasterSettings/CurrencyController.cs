@@ -4,6 +4,7 @@
     {
         [HttpPost]
         [ProducesResponseType(typeof(FilterPageResultModel<CurrencyGridModel>), StatusCodes.Status200OK)]
+        [CheckAuthorize("Currency", "List")]
         public async Task<ActionResult<FilterPageResultModel<CurrencyGridModel>>> GetFilterCurrenciesAsync(
             GetCurrenciesByFilterQuery getCurrenciesByFilterQuery)
         {
@@ -25,6 +26,7 @@
 
         [HttpPost]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Currency", "Create")]
         public async Task<ActionResult<bool>> CreateAsync(CreateCurrencyCommand createCurrencyCommand)
         {
             if (ModelState.IsValid)
@@ -38,6 +40,7 @@
 
         [HttpPut]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Currency", "Update")]
         public async Task<ActionResult<bool>> UpdateAsync(UpdateCurrencyCommand updateCurrencyCommand)
         {
             if (ModelState.IsValid)
@@ -51,6 +54,7 @@
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Currency", "Delete")]  
         public async Task<ActionResult<bool>> DeleteAsync(string id)
         {
             var isDeleteCurrency = await Mediator.Send(new DeleteCurrencyCommand { Id = id });

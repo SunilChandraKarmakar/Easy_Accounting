@@ -137,7 +137,7 @@
 
                     ["Purchase"] = new()
                     {
-                        new() { Code = "SL", Name = "Storage Location", TableName = "Storage Locations", 
+                        new() { Code = "SL", Name = "Storage Location", TableName = "StorageLocations", 
                             ControllerName = "StorageLocation" },
                         new() { Code = "PI", Name = "Purchase", TableName = "Purchases", ControllerName = "Purchase" }
                     },

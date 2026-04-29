@@ -14,12 +14,16 @@
             <nz-space-compact nzSize="default">
               <nz-input-wrapper class="search-input">
                 <nz-icon nzInputAddonBefore nzType="search" />
-                <input nz-input (keyup)="onChangeApplyFilter($event)" placeholder="Search" />
+                <input nz-input (keyup)="onChangeApplyFilter($event)" placeholder="Search Company" />
               </nz-input-wrapper>              
             </nz-space-compact>
           </div>
           <div class="col-md-6 text-end">
-            <button nz-button nzType="primary" routerLink="/app/company/create">
+            <button 
+              nz-button 
+              nzType="primary" 
+              routerLink="/app/company/create"
+              *appCheckPermission="{ feature: 'Company', action: 'Create' }">
               <nz-icon nzType="plus" nzTheme="outline" />
               Create
             </button>
@@ -83,7 +87,8 @@
                         nz-tooltip
                         nzTooltipTitle="Edit"
                         class="action-btn edit-btn"
-                        routerLink="/app/company/update/{{ data.id }}">
+                        routerLink="/app/company/update/{{ data.id }}"
+                        *appCheckPermission="{ feature: 'Company', action: 'Update' }">
                         <nz-icon nzType="edit" />
                       </button>
                       <nz-divider nzType="vertical"></nz-divider>
@@ -98,7 +103,8 @@
                         [nzPopconfirmTitle]="deleteTpl"
                         [nzIcon]="iconTpl"
                         (nzOnConfirm)="onClickDelete(data.id)"
-                        (nzOnCancel)="cancel()">
+                        (nzOnCancel)="cancel()"
+                        *appCheckPermission="{ feature: 'Company', action: 'Delete' }">
                         <nz-icon nzType="delete" />
                       </button>
                       <ng-template #deleteTpl>

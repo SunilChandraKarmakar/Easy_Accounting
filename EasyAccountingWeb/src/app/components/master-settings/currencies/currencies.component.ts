@@ -13,14 +13,29 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { CurrencyGridModel, CurrencyService, FilterPageModel, FilterPageResultModelOfCurrencyGridModel } from '../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { CheckPermissionDirective } from '../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-currencies',
   templateUrl: './currencies.component.html',
   styleUrls: ['./currencies.component.css'],
   standalone: true,
-  imports: [NzButtonModule, NzDividerModule, NzTableModule, RouterLink, NgxSpinnerModule, NzSpaceModule, NzInputModule, NzIconModule, 
-    NzTagModule, NzBadgeModule, NzBreadCrumbModule, NzPopconfirmModule],
+  imports: [
+    NzButtonModule, 
+    NzDividerModule, 
+    NzTableModule, 
+    RouterLink, 
+    NgxSpinnerModule, 
+    NzSpaceModule, 
+    NzInputModule, 
+    NzIconModule, 
+    NzTagModule, 
+    NzBadgeModule, 
+    NzBreadCrumbModule, 
+    NzPopconfirmModule,
+    CheckPermissionDirective
+  ],
   providers: [CurrencyService]
 })
 
@@ -33,9 +48,17 @@ export class CurrenciesComponent implements OnInit {
   // Filter page model
   filterPageModel: FilterPageModel = new FilterPageModel();
 
-  constructor(private currencyService: CurrencyService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService) { }
+  constructor(
+    private currencyService: CurrencyService, 
+    private spinnerService: NgxSpinnerService, 
+    private toastrService: ToastrService,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     // Initialize page filter model
     this.initializeFilterModel();
 

@@ -15,14 +15,31 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { InvoiceSettingService, InvoiceSettingUpdateModel, InvoiceSettingViewModel, SelectModel } from '../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { CheckPermissionDirective } from '../../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-Invoice-setting-update',
   templateUrl: './Invoice-setting-update.component.html',
   styleUrls: ['./Invoice-setting-update.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule, NzButtonModule, RouterLink, NgxSpinnerModule, NzInputModule, NzIconModule, NzBreadCrumbModule, 
-    NzDividerModule, NzSelectModule, NzUploadModule, NzCheckboxModule, NzColorPickerModule, NzInputNumberModule],
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    NzButtonModule, 
+    RouterLink, 
+    NgxSpinnerModule, 
+    NzInputModule, 
+    NzIconModule, 
+    NzBreadCrumbModule, 
+    NzDividerModule,
+    NzSelectModule, 
+    NzUploadModule, 
+    NzCheckboxModule, 
+    NzColorPickerModule, 
+    NzInputNumberModule,
+    CheckPermissionDirective
+  ],
   providers: [InvoiceSettingService]
 })
 
@@ -37,10 +54,19 @@ export class InvoiceSettingUpdateComponent implements OnInit {
   // Get invoice setting id
   private _invoiceSettingId: string | undefined;
 
-  constructor(private invoiceSettingService: InvoiceSettingService, private spinnerService: NgxSpinnerService, 
-    private toastrService: ToastrService, private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(
+    private invoiceSettingService: InvoiceSettingService, 
+    private spinnerService: NgxSpinnerService, 
+    private toastrService: ToastrService, 
+    private router: Router, 
+    private activatedRoute: ActivatedRoute,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     // Get invoice setting id by url
     this.getInvoiceSettingIdByUrl();
   }

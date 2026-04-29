@@ -4,6 +4,7 @@
     {
         [HttpPost]
         [ProducesResponseType(typeof(FilterPageResultModel<ModuleGridModel>), StatusCodes.Status200OK)]
+        [CheckAuthorize("Module", "List")]
         public async Task<ActionResult<FilterPageResultModel<ModuleGridModel>>> GetFilterModulesAsync(
             GetModulesByFilterQuery getModulesByFilterQuery)
         {
@@ -25,6 +26,7 @@
 
         [HttpPost]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Module", "Create")]
         public async Task<ActionResult<bool>> CreateAsync(CreateModuleCommand createModuleCommand)
         {
             if (ModelState.IsValid)
@@ -38,6 +40,7 @@
 
         [HttpPut]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Module", "Update")]
         public async Task<ActionResult<bool>> UpdateAsync(UpdateModuleCommand updateModuleCommand)
         {
             if (ModelState.IsValid)
@@ -51,6 +54,7 @@
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Module", "Delete")]
         public async Task<ActionResult<bool>> DeleteAsync(string id)
         {
             var isDeleteModule = await Mediator.Send(new DeleteModuleCommand { Id = id });

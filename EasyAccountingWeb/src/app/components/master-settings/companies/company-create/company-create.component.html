@@ -236,7 +236,8 @@
           nz-button
           nzType="primary"
           class="btn-save"
-          (click)="onClickSaveCompany()">
+          (click)="onClickSaveCompany()"
+          *appCheckPermission="{ feature: 'Company', action: 'Create' }">
           <nz-icon nzType="save" nzTheme="outline"></nz-icon>
           Save
         </button>

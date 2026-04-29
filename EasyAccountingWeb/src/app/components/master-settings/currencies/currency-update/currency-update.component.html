@@ -35,7 +35,12 @@
         </form>
       </div>
       <div class="card-footer text-end">
-        <button nz-button nzType="primary" class="btn-save" (click)="onClickUpdateCurrency()">
+        <button 
+          nz-button 
+          nzType="primary" 
+          class="btn-save" 
+          (click)="onClickUpdateCurrency()"
+          *appCheckPermission="{ feature: 'Currency', action: 'Update' }">
           <nz-icon nzType="save" nzTheme="outline" />
           Update
         </button>

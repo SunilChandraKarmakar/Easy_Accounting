@@ -11,14 +11,27 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { CurrencyCreateModel, CurrencyService } from '../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { CheckPermissionDirective } from '../../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-currency-create',
   templateUrl: './currency-create.component.html',
   styleUrls: ['./currency-create.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule, NzButtonModule, RouterLink, NgxSpinnerModule, NzInputModule, NzIconModule, NzBreadCrumbModule, 
-    NzDividerModule, NzInputNumberModule],
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    NzButtonModule, 
+    RouterLink, 
+    NgxSpinnerModule, 
+    NzInputModule, 
+    NzIconModule, 
+    NzBreadCrumbModule, 
+    NzDividerModule, 
+    NzInputNumberModule,
+    CheckPermissionDirective
+  ],
   providers: [CurrencyService]
 })
 
@@ -27,10 +40,18 @@ export class CurrencyCreateComponent implements OnInit {
   // Currency create model
   currencyCreateModel: CurrencyCreateModel = new CurrencyCreateModel();
 
-  constructor(private currencyService: CurrencyService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService,
-    private router: Router) { }
+  constructor(
+    private currencyService: CurrencyService, 
+    private spinnerService: NgxSpinnerService, 
+    private toastrService: ToastrService,
+    private router: Router,
+    private accessControlService: AccessControlService) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    
+    // Set login user permission
+    this.accessControlService.setPermissions();
+  }
   
   // Currency create form validation
   private getCurrencyCreateFromValidationResult(): boolean {

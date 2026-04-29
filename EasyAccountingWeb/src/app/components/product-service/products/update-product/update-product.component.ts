@@ -14,6 +14,8 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { ProductUpdateModel, ProductService, ProductViewModel, SelectModel, CategoryService } from '../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { CheckPermissionDirective } from '../../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-update-product',
@@ -33,7 +35,8 @@ import { ToastrService } from 'ngx-toastr';
     NzSelectModule,
     NzCheckboxModule,
     NzDatePickerModule,
-    NzUploadModule
+    NzUploadModule,
+    CheckPermissionDirective
   ],
   providers: [ProductService, CategoryService]
 })
@@ -60,9 +63,14 @@ export class UpdateProductComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private categoryService: CategoryService) { }
+    private categoryService: CategoryService,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     // Get product id from route
     this._productId = this.activatedRoute.snapshot.paramMap.get('recordId') || "";
 

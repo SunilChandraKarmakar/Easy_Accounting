@@ -14,6 +14,8 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { ProductCreateModel, ProductService, ProductViewModel, SelectModel, ProductInventoryCreateModel, CategoryService } from '../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { CheckPermissionDirective } from '../../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-create-product',
@@ -33,7 +35,8 @@ import { ToastrService } from 'ngx-toastr';
     NzSelectModule,
     NzCheckboxModule,
     NzDatePickerModule,
-    NzUploadModule
+    NzUploadModule,
+    CheckPermissionDirective
   ],
   providers: [ProductService, CategoryService]
 })
@@ -62,9 +65,14 @@ export class CreateProductComponent implements OnInit {
     private spinnerService: NgxSpinnerService, 
     private toastrService: ToastrService,
     private router: Router,
-    private categoryService: CategoryService) { }
+    private categoryService: CategoryService,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     // Initialize product inventory model
     this.productCreateModel.productInventory = new ProductInventoryCreateModel();
     this.productCreateModel.haveProductInventory = false;

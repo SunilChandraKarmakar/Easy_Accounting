@@ -11,13 +11,26 @@ import { CityCreateModel, CityService, CityViewModel } from '../../../../../../a
 import { ToastrService } from 'ngx-toastr';
 import { SelectModel } from '../../../../../shared/models/select-model';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { CheckPermissionDirective } from '../../../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-city-create',
   templateUrl: './city-create.component.html',
   styleUrls: ['./city-create.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule, NzButtonModule, NgxSpinnerModule, NzInputModule, NzIconModule, NzBreadCrumbModule, NzSelectModule, RouterLink],
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    NzButtonModule, 
+    NgxSpinnerModule, 
+    NzInputModule, 
+    NzIconModule, 
+    NzBreadCrumbModule, 
+    NzSelectModule, 
+    RouterLink,
+    CheckPermissionDirective
+  ],
   providers: [CityService]
 })
 
@@ -32,10 +45,18 @@ export class CityCreateComponent implements OnInit {
   // City create model
   cityCreateModel: CityCreateModel = new CityCreateModel();
 
-  constructor(private cityService: CityService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService,
-    private router: Router) { }
+  constructor(
+    private cityService: CityService, 
+    private spinnerService: NgxSpinnerService, 
+    private toastrService: ToastrService,
+    private router: Router,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     // Get city by id
     this.getCityById();
   }

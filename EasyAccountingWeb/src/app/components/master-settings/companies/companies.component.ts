@@ -14,6 +14,8 @@ import { ToastrService } from 'ngx-toastr';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment.prod';
+import { CheckPermissionDirective } from '../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-companies',
@@ -31,7 +33,9 @@ import { environment } from '../../../../environments/environment.prod';
     NzIconModule, 
     NzBreadCrumbModule, 
     NzPopconfirmModule, 
-    NzTagModule],
+    NzTagModule,
+    CheckPermissionDirective
+  ],
   providers: [CompanyService]
 })
 
@@ -50,9 +54,14 @@ export class CompaniesComponent implements OnInit {
   constructor(
     private companyService: CompanyService, 
     private spinnerService: NgxSpinnerService, 
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     // Get application base url
     this.applicationBaseUrl = environment.coreBaseUrl;
 

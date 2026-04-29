@@ -13,6 +13,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { CheckPermissionDirective } from '../../../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-country-create',
@@ -31,7 +32,8 @@ import { CheckPermissionDirective } from '../../../../../identity-shared/directi
     NzTableModule, 
     NzBreadCrumbModule, 
     NzDividerModule,
-    CheckPermissionDirective],
+    CheckPermissionDirective
+  ],
   providers: [CountryService]
 })
 
@@ -40,10 +42,18 @@ export class CountryCreateComponent implements OnInit {
   // Country create model
   countryCreateModel: CountryCreateModel = new CountryCreateModel();
 
-  constructor(private countryService: CountryService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService,
-    private router: Router) { }
+  constructor(
+    private countryService: CountryService, 
+    private spinnerService: NgxSpinnerService, 
+    private toastrService: ToastrService,
+    private router: Router,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     // Initialize 0 index city for create
     this.initializeCities();
   }

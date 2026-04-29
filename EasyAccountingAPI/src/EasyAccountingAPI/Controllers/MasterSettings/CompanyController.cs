@@ -4,6 +4,7 @@
     {
         [HttpPost]
         [ProducesResponseType(typeof(FilterPageResultModel<CompanyGridModel>), StatusCodes.Status200OK)]
+        [CheckAuthorize("Company", "List")]
         public async Task<ActionResult<FilterPageResultModel<CompanyGridModel>>> GetFilterCompaniesAsync(
             GetCompaniesByFilterQuery getCompaniesByFilterQuery)
         {
@@ -30,6 +31,7 @@
 
         [HttpPost]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Company", "Create")]
         public async Task<ActionResult<bool>> CreateAsync([FromForm] CompanyCreateCommand createCompanyCommand)
         {
             if (ModelState.IsValid)
@@ -43,6 +45,7 @@
 
         [HttpPut]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Company", "Update")]
         public async Task<ActionResult<bool>> UpdateAsync([FromForm] CompanyUpdateCommand updateCompanyCommand)
         {
             if (ModelState.IsValid)
@@ -56,6 +59,7 @@
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [CheckAuthorize("Company", "Delete")]
         public async Task<ActionResult<bool>> DeleteAsync(string id)
         {
             var isDeleteCompany = await Mediator.Send(new DeleteCompanyCommand { Id = id });

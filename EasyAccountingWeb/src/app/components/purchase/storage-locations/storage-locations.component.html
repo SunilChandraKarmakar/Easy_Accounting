@@ -19,9 +19,13 @@
             </nz-space-compact>
           </div>
           <div class="col-md-6 text-end">
-            <button nz-button nzType="primary" routerLink="/app/storage-location/create">
-              <nz-icon nzType="plus" nzTheme="outline" />
-              Create
+            <button 
+              nz-button 
+              nzType="primary" 
+              routerLink="/app/storage-location/create"
+              *appCheckPermission="{ feature: 'Storage Location', action: 'Create' }">
+                <nz-icon nzType="plus" nzTheme="outline" />
+                Create
             </button>
           </div>
           <div class="col-md-12">
@@ -43,15 +47,31 @@
                     <td>{{ data.companyName }}</td>
                     <td>{{ data.capacity }}</td>
                     <td class="text-center action-cell">
-                      <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Edit" class="action-btn edit-btn"
-                        routerLink="/app/storage-location/update/{{ data.id }}">
+                      <button 
+                        nz-button 
+                        nzType="text"
+                        nz-tooltip 
+                        nzTooltipTitle="Edit" 
+                        class="action-btn edit-btn"
+                        routerLink="/app/storage-location/update/{{ data.id }}"
+                        *appCheckPermission="{ feature: 'Storage Location', action: 'Update' }">
                         <nz-icon nzType="edit" />
                       </button>
                       <nz-divider nzType="vertical"></nz-divider>
-                      <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Delete" nzDanger class="action-btn delete-btn" 
-                        nz-popconfirm [nzPopconfirmTitle]="deleteTpl" [nzIcon]="iconTpl" (nzOnConfirm)="onClickDelete(data.id)" 
-                        (nzOnCancel)="cancel()">
-                        <nz-icon nzType="delete" />
+                      <button 
+                      nz-button 
+                      nzType="text" 
+                      nz-tooltip 
+                      nzTooltipTitle="Delete" 
+                      nzDanger 
+                      class="action-btn delete-btn" 
+                      nz-popconfirm 
+                      [nzPopconfirmTitle]="deleteTpl" 
+                      [nzIcon]="iconTpl" 
+                      (nzOnConfirm)="onClickDelete(data.id)" 
+                      (nzOnCancel)="cancel()"
+                      *appCheckPermission="{ feature: 'Storage Location', action: 'Delete' }">
+                      <nz-icon nzType="delete" />
                       </button>
                       <ng-template #deleteTpl>
                         <div class="text-center">

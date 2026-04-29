@@ -13,6 +13,7 @@ import { CityService, CityUpdateModel, CountryService, CountryUpdateModel, Count
 import { ToastrService } from 'ngx-toastr';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { CheckPermissionDirective } from '../../../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-country-update',
@@ -31,7 +32,8 @@ import { CheckPermissionDirective } from '../../../../../identity-shared/directi
     NzBreadCrumbModule, 
     RouterLink, 
     NzPopconfirmModule,
-    CheckPermissionDirective],
+    CheckPermissionDirective
+  ],
   providers: [CountryService, CityService]
 })
 
@@ -50,10 +52,20 @@ export class CountryUpdateComponent implements OnInit {
     return `tmp-${Date.now()}-${this._cityTempId}`;
   }
 
-  constructor(private countryService: CountryService, private cityService: CityService, private spinnerService: NgxSpinnerService, private toastrService: ToastrService,
-    private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(
+    private countryService: CountryService, 
+    private cityService: CityService, 
+    private spinnerService: NgxSpinnerService, 
+    private toastrService: ToastrService,
+    private router: Router, 
+    private activatedRoute: ActivatedRoute,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     // Get country id by url
     this.getCountryIdByUrl();
   }

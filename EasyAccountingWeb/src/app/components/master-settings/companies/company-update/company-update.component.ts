@@ -14,6 +14,8 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzUploadChangeParam, NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload';
 import { CityService, CompanyService, CompanyUpdateModel, CompanyViewModel, FileParameter, SelectModel } from '../../../../../api/base-api';
 import { environment } from '../../../../../environments/environment.prod';
+import { CheckPermissionDirective } from '../../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-company-update',
@@ -32,7 +34,8 @@ import { environment } from '../../../../../environments/environment.prod';
     NzInputNumberModule,
     NzSelectModule,
     NzUploadModule,
-    NzCheckboxModule
+    NzCheckboxModule,
+    CheckPermissionDirective
   ],
   providers: [CompanyService, CityService]
 })
@@ -60,10 +63,14 @@ export class CompanyUpdateComponent implements OnInit, OnDestroy {
     private toastrService: ToastrService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private cityService: CityService
+    private cityService: CityService,
+    private accessControlService: AccessControlService
   ) {}
 
   ngOnInit(): void {
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     this.getCompanyIdByUrl();
   }
 

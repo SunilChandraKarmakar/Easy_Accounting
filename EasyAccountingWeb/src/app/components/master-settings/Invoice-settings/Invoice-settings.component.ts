@@ -14,15 +14,30 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { FilterPageModel, FilterPageResultModelOfInvoiceSettingGridModel, InvoiceSettingGridModel, InvoiceSettingService } from '../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
 import { NzColorPickerModule } from 'ng-zorro-antd/color-picker';
-import { presetColors } from 'ng-zorro-antd/core/color';
+import { CheckPermissionDirective } from '../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-Invoice-settings',
   templateUrl: './Invoice-settings.component.html',
   styleUrls: ['./Invoice-settings.component.css'],
   standalone: true,
-  imports: [CommonModule, NzButtonModule, NzDividerModule, NzTableModule, RouterLink, NgxSpinnerModule, NzSpaceModule, NzInputModule, 
-    NzIconModule, NzBreadCrumbModule, NzPopconfirmModule, NzTagModule, NzColorPickerModule],
+  imports: [
+    CommonModule, 
+    NzButtonModule, 
+    NzDividerModule, 
+    NzTableModule, 
+    RouterLink, 
+    NgxSpinnerModule, 
+    NzSpaceModule, 
+    NzInputModule, 
+    NzIconModule, 
+    NzBreadCrumbModule, 
+    NzPopconfirmModule, 
+    NzTagModule, 
+    NzColorPickerModule,
+    CheckPermissionDirective
+  ],
   providers: [InvoiceSettingService]
 })
 
@@ -35,10 +50,17 @@ export class InvoiceSettingsComponent implements OnInit {
   // Filter page model
   filterPageModel: FilterPageModel = new FilterPageModel();
   
-  constructor(private invoiceSettingService: InvoiceSettingService, private spinnerService: NgxSpinnerService, 
-    private toastrService: ToastrService) { }
+  constructor(
+    private invoiceSettingService: InvoiceSettingService, 
+    private spinnerService: NgxSpinnerService, 
+    private toastrService: ToastrService,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     // Initialize page filter model
     this.initializeFilterModel();
 

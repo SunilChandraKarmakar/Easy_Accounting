@@ -46,7 +46,12 @@
         </form>
       </div>
       <div class="card-footer text-end">
-        <button nz-button nzType="primary" class="btn-save" (click)="onClickSaveStorageLocation()">
+        <button 
+          nz-button 
+          nzType="primary" 
+          class="btn-save" 
+          (click)="onClickSaveStorageLocation()"
+          *appCheckPermission="{ feature: 'Storage Location', action: 'Create' }">
           <nz-icon nzType="save" nzTheme="outline" />
           Save
         </button>

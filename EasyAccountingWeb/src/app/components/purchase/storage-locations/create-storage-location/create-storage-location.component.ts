@@ -11,6 +11,8 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { SelectModel, StorageLocationCreateModel, StorageLocationService, StorageLocationViewModel } from '../../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { CheckPermissionDirective } from '../../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-create-storage-location',
@@ -27,7 +29,8 @@ import { ToastrService } from 'ngx-toastr';
     NzIconModule, 
     NzBreadCrumbModule, 
     NzDividerModule,
-    NzSelectModule
+    NzSelectModule,
+    CheckPermissionDirective
   ],
   providers: [StorageLocationService]
 })
@@ -47,9 +50,14 @@ export class CreateStorageLocationComponent implements OnInit {
     private storageLocationService: StorageLocationService, 
     private spinnerService: NgxSpinnerService, 
     private toastrService: ToastrService,
-    private router: Router) { }
+    private router: Router,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     this.getStorageLocationById(this._storageLocationId);
   }
 

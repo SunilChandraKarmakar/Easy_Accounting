@@ -15,14 +15,31 @@ import { InvoiceSettingCreateModel, InvoiceSettingService, InvoiceSettingViewMod
 import { ToastrService } from 'ngx-toastr';
 import { NzColor, NzColorPickerModule } from 'ng-zorro-antd/color-picker';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { CheckPermissionDirective } from '../../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-Invoice-setting-create',
   templateUrl: './Invoice-setting-create.component.html',
   styleUrls: ['./Invoice-setting-create.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule, NzButtonModule, RouterLink, NgxSpinnerModule, NzInputModule, NzIconModule, NzBreadCrumbModule, 
-    NzDividerModule, NzSelectModule, NzUploadModule, NzCheckboxModule, NzColorPickerModule, NzInputNumberModule],
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    NzButtonModule, 
+    RouterLink, 
+    NgxSpinnerModule, 
+    NzInputModule, 
+    NzIconModule, 
+    NzBreadCrumbModule, 
+    NzDividerModule, 
+    NzSelectModule, 
+    NzUploadModule, 
+    NzCheckboxModule, 
+    NzColorPickerModule, 
+    NzInputNumberModule,
+    CheckPermissionDirective
+  ],
   providers: [InvoiceSettingService]
 })
 
@@ -37,10 +54,17 @@ export class InvoiceSettingCreateComponent implements OnInit {
   // Invoice Setting create model
   invoiceSettingCreateModel: InvoiceSettingCreateModel = new InvoiceSettingCreateModel();
 
-  constructor(private invoiceSettingService: InvoiceSettingService, private spinnerService: NgxSpinnerService, 
-    private toastrService: ToastrService, private router: Router) { }
+  constructor(
+    private invoiceSettingService: InvoiceSettingService, 
+    private spinnerService: NgxSpinnerService, 
+    private toastrService: ToastrService, 
+    private router: Router,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
 
     // Invoice default color
     this.invoiceSettingCreateModel.invoiceColor = "#1677ff";

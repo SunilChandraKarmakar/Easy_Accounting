@@ -12,6 +12,8 @@ import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { FilterPageModel, FilterPageResultModelOfStorageLocationGridModel, StorageLocationGridModel, StorageLocationService } from '../../../../api/base-api';
 import { ToastrService } from 'ngx-toastr';
+import { CheckPermissionDirective } from '../../../identity-shared/directive/check-permission.directive';
+import { AccessControlService } from '../../../identity-shared/services/access-control.service';
 
 @Component({
   selector: 'app-storage-locations',
@@ -29,7 +31,9 @@ import { ToastrService } from 'ngx-toastr';
     NzInputModule, 
     NzIconModule, 
     NzBreadCrumbModule, 
-    NzPopconfirmModule],
+    NzPopconfirmModule,
+    CheckPermissionDirective
+  ],
   providers: [StorageLocationService]
 })
 
@@ -45,9 +49,14 @@ export class StorageLocationsComponent implements OnInit {
   constructor(
     private storageLocationService: StorageLocationService, 
     private spinnerService: NgxSpinnerService, 
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService,
+    private accessControlService: AccessControlService) { }
 
   ngOnInit() {
+
+    // Set login user permission
+    this.accessControlService.setPermissions();
+
     // Initialize page filter model
     this.initializeFilterModel();
 

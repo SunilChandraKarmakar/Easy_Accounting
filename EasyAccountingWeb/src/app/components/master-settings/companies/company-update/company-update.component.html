@@ -183,7 +183,12 @@
         </form>
       </div>
       <div class="card-footer text-end">
-        <button nz-button nzType="primary" class="btn-save" (click)="onClickUpdateCompany()">
+        <button 
+          nz-button 
+          nzType="primary" 
+          class="btn-save" 
+          (click)="onClickUpdateCompany()"
+          *appCheckPermission="{ feature: 'Company', action: 'Update' }">
           <nz-icon nzType="save" nzTheme="outline" />
           Update
         </button>

@@ -14,19 +14,31 @@
             <nz-space-compact nzSize="default">
               <nz-input-wrapper class="search-input">
                 <nz-icon nzInputAddonBefore nzType="search" />
-                <input nz-input (keyup)="onChangeApplyFilter($event)" placeholder="Search by company name | Terms | Footer" />
+                <input nz-input (keyup)="onChangeApplyFilter($event)" placeholder="Search Invoice Setting" />
               </nz-input-wrapper>              
             </nz-space-compact>
           </div>
           <div class="col-md-6 text-end">
-            <button nz-button nzType="primary" routerLink="/app/invoice-setting/create">
+            <button 
+              nz-button 
+              nzType="primary" 
+              routerLink="/app/invoice-setting/create"
+              *appCheckPermission="{ feature: 'Invoice Setting', action: 'Create' }">
               <nz-icon nzType="plus" nzTheme="outline" />
               Create
             </button>
           </div>
           <div class="col-md-12">
-            <nz-table #basicTable [nzData]="invoiceSettings" [nzBordered]="true" [nzOuterBordered]="true" [nzFrontPagination]="false" 
-              [nzTotal]="totalRecord" [nzSize]="'default'" [nzPaginationType]="'default'" [nzShowSizeChanger]="true" 
+            <nz-table 
+              #basicTable 
+              [nzData]="invoiceSettings" 
+              [nzBordered]="true" 
+              [nzOuterBordered]="true" 
+              [nzFrontPagination]="false" 
+              [nzTotal]="totalRecord" 
+              [nzSize]="'default'" 
+              [nzPaginationType]="'default'" 
+              [nzShowSizeChanger]="true" 
               (nzQueryParams)="onChangeQueryParams($event)">
               <thead>
                 <tr>
@@ -60,18 +72,32 @@
                       <p>
                         Hide Invoice Header <nz-tag nzColor="#2db7f5">Yes</nz-tag>
                       </p>
-                      <nz-tag nzColor="#f50">No</nz-tag>
-                      
+                      <nz-tag nzColor="#f50">No</nz-tag>                      
                     </td>
                     <td class="text-center action-cell">
-                      <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Edit" class="action-btn edit-btn"
-                        routerLink="/app/invoice-setting/update/{{ data.id }}">
+                      <button
+                        nz-button 
+                        nzType="text" 
+                        nz-tooltip 
+                        nzTooltipTitle="Edit" 
+                        class="action-btn edit-btn"
+                        routerLink="/app/invoice-setting/update/{{ data.id }}"
+                        *appCheckPermission="{ feature: 'Invoice Setting', action: 'Update' }">
                         <nz-icon nzType="edit" />
                       </button>
                       <nz-divider nzType="vertical"></nz-divider>
-                      <button nz-button nzType="text" nz-tooltip nzTooltipTitle="Delete" nzDanger class="action-btn delete-btn" 
-                        nz-popconfirm [nzPopconfirmTitle]="deleteTpl" [nzIcon]="iconTpl" (nzOnConfirm)="onClickDelete(data.id?.toString())" 
-                        (nzOnCancel)="cancel()">
+                      <button 
+                        nz-button 
+                        nzType="text" 
+                        nz-tooltip 
+                        nzTooltipTitle="Delete" 
+                        nzDanger class="action-btn delete-btn" 
+                        nz-popconfirm 
+                        [nzPopconfirmTitle]="deleteTpl" 
+                        [nzIcon]="iconTpl" 
+                        (nzOnConfirm)="onClickDelete(data.id?.toString())" 
+                        (nzOnCancel)="cancel()"
+                        *appCheckPermission="{ feature: 'Invoice Setting', action: 'Delete' }">
                         <nz-icon nzType="delete" />
                       </button>
                       <ng-template #deleteTpl>
